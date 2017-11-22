@@ -1,6 +1,31 @@
 #include "database.h"
-
-Database::Database(QObject *parent) : QObject(parent)
-{
-
+//Constructor
+Database::Database(QObject *parent)
+   : QObject(parent){
+   m_DBConnect.setInfo("QMYSQL",
+                       "90.176.65.85",
+                       8888,
+                       "budil",
+                       "budil",
+                       "weHUp3mvd9");
+}
+//Creates connection to DB
+bool Database::createConnection(){
+   if(m_DB.isOpen()){
+      return true;
+   }
+   if(m_DBConnect.connectDB(m_DB)){
+      return true;
+   }else{
+      m_DB.close();
+      return false;
+   }
+}
+//Getter
+DatabaseConnector& Database::getDatabaseConnector(){
+   return m_DBConnect;
+}
+//Getter
+QSqlDatabase& Database::getDatabase(){
+   return m_DB;
 }

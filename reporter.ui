@@ -1,24 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Reporter</class>
- <widget class="QMainWindow" name="Reporter" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="Reporter">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>1088</width>
+    <height>826</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Reporter</string>
   </property>
-  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  <property name="styleSheet">
+   <string notr="true">QWidget:window {					/* Borders around the code editor and debug window */
+	border: 0px solid #455A64;
+	background-color: #455A64;
+}
+
+QToolTip {
+	background-color: #455A64;
+	color: white;
+    padding: 5px;
+    border-radius: 0;
+    opacity: 200;
+}
+
+/* ==================== Dialog ==================== */
+QLabel {
+	background: #455A64;
+	color: white;	
+	font: 75 11pt &quot;DejaVu Sans Mono&quot;;			/* Not sure about this one */
+}
+
+QDialog, QListView {
+	background-color: #455A64;
+	color: white;
+	outline: 0;
+	border: 2px solid transparent;
+}
+
+QListView::item:hover {
+	color: #607D8B;
+	background: #607D8B;
+}
+
+
+QListView::item:selected {
+	color: #607D8B;
+	background: #607D8B;
+}
+
+/* === QTabBar === */
+QTabBar {
+	background: #455A64;
+}
+QPlainTextEdit{
+	background: #607D8B;
+	border: 1px solid #607D8B;
+	color: white;
+}
+QTableView{
+	background: #607D8B;
+	border: 1px solid #607D8B;
+	color: white;
+}
+QScrollArea{
+	background: #607D8B;
+	border: 1px solid #607D8B;
+	color: white;
+}
+QScrollArea{
+	background: #607D8B;
+	border: 1px solid #607D8B;
+	color: white;
+}
+
+
+QTabWidget::pane {
+	background: transparent;	/* Only at the very bottom of the tabs */
+}
+
+QTabBar::tab {
+	background: #455A64;
+	border: 0px solid #455A64;
+	border-bottom: 2px solid #455A64;
+	color: white;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+QTabBar::tab:hover {
+	background-color: #607D8B;
+	border: 0px solid #607D8B;
+	border-bottom: 2px solid #607D8B;
+	color: white;
+}
+
+QTabBar::tab:selected {
+	background-color: #607D8B;
+	border: 0px solid #607D8B;
+	border-top: none;
+	border-bottom: 2px solid #607D8B;
+	color: white;
+}
+
+QStackedWidget {
+	background: #455A64;	/* This covers a bunch of things, I was thinking about making it transparent, */
+							/* but I would have to find all the other elements... but QTabWidget::pane may be it */
+}
+
+
+/* === QGroupBox === */
+QGroupBox {
+    border: 1px solid #455A64;
+    background-color: #455A64;
+    margin-top: 1em;
+}
+
+QGroupBox::title {
+	color: white;
+    subcontrol-origin: margin;
+    left: 6px;
+    padding: 0 3px 0 3px;
+}
+
+QComboBox {
+	color: white;
+	background-color: #455A64;
+	selection-background-color: #607D8B;
+	outline: 0;
+}
+
+QComboBox QAbstractItemView
+{    
+    selection-background-color: #607D8B;
+	outline: 0;
+}
+
+/* === QCheckBox === */
+QCheckBox, QRadioButton {
+	color: white;
+}
+
+QCheckBox::indicator::unchecked  {
+	background-color: #455A64;
+	border: 1px solid #455A64;
+}
+
+QRadioButton::indicator::unchecked {
+	background-color: #455A64;
+	border: 1px solid #455A64;
+	border-radius: 4px;
+}
+
+QCheckBox::indicator::checked, QTreeView::indicator::checked {
+	background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 #455A64);
+	border: 1px solid #455A64;
+}
+
+QRadioButton::indicator::checked {
+	background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 #455A64);
+	border: 1px solid #455A64;
+	border-radius: 4px;
+}
+
+QCheckBox::indicator:disabled, QRadioButton::indicator:disabled, QTreeView::indicator:disabled {
+	background-color: #455A64;			/* Not sure what this looks like */
+}
+
+QCheckBox::indicator::checked:disabled, QRadioButton::indicator::checked:disabled, QTreeView::indicator::checked:disabled {  
+	background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #BBBBBB, stop:1 #455A64); /* Not sure what this looks like */
+}
+
+QTreeView {
+	background-color: #455A64;
+	color: white;
+	outline: 0;
+	border: 0;
+}
+
+QTreeView::item:hover {
+	background-color: #455A64;
+	color: white;
+}
+
+QTreeView::item:selected {
+	background-color: #607D8B;
+	color: white;
+}
+
+QTreeView QHeaderView:section {
+	background-color: #455A64;
+	color: white;
+	border: 0;
+}
+
+QTreeView::indicator:checked {
+	background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 #455A64);
+	border: 1px solid #607D8B ;
+	selection-background-color: #607D8B ;
+}
+
+QTreeView::indicator:unchecked {			/* This and the one above style the checkbox in the Options -&gt; Keyboard */
+	background-color: #455A64;				/* This is still a hover over in blue I can't get rid of */
+	border: 1px solid #455A64;
+	selection-background-color: #455A64;
+}
+/*
+QTreeView QScrollBar {
+	background-color: #607D8B
+}
+*/
+QTreeView::branch {
+	/* Skip - applies to everything */
+}
+
+QTreeView::branch:has-siblings:adjoins-item {
+	/* Skip - files */
+}
+
+QTreeView::branch:has-siblings:!adjoins-item {
+	/* Skip - applies to almost all on the left side */
+}
+
+QTreeView::branch:closed:has-children:has-siblings {
+	background: url('./images/rightarrowgray.png') center center no-repeat;
+}
+
+QTreeView::branch:has-children:!has-siblings:closed {
+	background: url('./images/rightarrowgray.png') center center no-repeat;
+}
+
+QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+	/* Skip - files */
+}
+
+QTreeView::branch:open:has-children:has-siblings {
+	background: url('./images/downarrowgray.png') center center no-repeat;
+}
+
+QTreeView::branch:open:has-children:!has-siblings {
+	background: url('./images/downarrowgray.png') center center no-repeat;
+}
+
+/* === QScrollBar:horizontal === */
+QScrollBar:horizontal {
+	background: #FDD835;				/* Background where slider is not */
+	height: 10px;
+	margin: 0;
+}
+
+QScrollBar:vertical {
+	background: #FDD835;				/* Background where slider is not */
+	width: 10px;
+	margin: 0;
+}
+
+QScrollBar::handle:horizontal {
+    background: #FDD835;					/* Slider color */
+    min-width: 16px;
+	border-radius: 5px;
+}
+
+QScrollBar::handle:vertical {
+    background: #FDD835;					/* Slider color */
+    min-height: 16px;
+	border-radius: 5px;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal,
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+	background: #FDD835;												/* Removes the dotted background */
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {	/* Hides the slider arrows */
+      border: #FDD835;
+      background: #FDD835;
+}
+
+QPushButton {
+	background-color: #FDD835;
+	color: black;
+	border: 1px solid #FDD835;
+	padding: 4px 22px;
+}
+
+QPushButton:hover {
+	color: #607D8B;
+}
+
+QPushButton:pressed {
+	color: #FFFFFF;
+}
+
+QLineEdit {
+	background: #607D8B;
+	border: 1px solid #607D8B;
+	color: white;
+}
+
+QSpinBox {
+	background: #607D8B;
+	border: 1px solid #607D8B;
+	color: white;
+}
+
+/*****************************************************************************
+Main Screen
+*****************************************************************************/
+QTreeView {
+	background-color: #455A64;
+}
+
+QMenu {
+	background-color: #FDD835;		/* File Menu Background color */
+	color: white;
+}
+
+QMenu::item:selected {
+	color: #607D8B;
+}
+
+QMenu::item:pressed {
+	color: #FFFFFF;
+}
+
+QMenu::separator {
+	height: 1px;
+	background: transparent;			/* Could change this to #546E7A and reduce the margin top and bottom to 1px */
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+/* === QMenuBar === */
+QMenuBar {
+	background-color: #455A64;
+	color: white;
+}
+
+QMenuBar::item {
+	background: transparent;
+}
+
+QMenuBar::item:disabled {
+	color: gray;
+}
+
+QMenuBar::item:selected {
+	color: #607D8B;
+}
+
+QMenuBar::item:pressed {
+	color: #FFFFFF;
+}
+
+QToolBar {
+	background: #FDD835;
+	border: 1px solid transparent;
+}
+
+QToolBar:handle {
+	background: transparent;
+	border-left: 2px dotted #80CBC4;	/* Fix the 4 handle dots so it doesn't look crappy */
+	color: transparent;
+}
+
+QToolBar::separator {
+	border: 0;
+}
+
+/* === QToolButton === */
+QToolButton:hover, QToolButton:pressed {
+	background-color: #607D8B;
+}
+
+QToolButton::menu-button {
+	background: url('./images/downarrowgray.png') center center no-repeat;
+	background-color: #FDD835;												
+}
+
+QToolButton::menu-button:hover, QToolButton::menu-button:pressed {
+	background-color: #FDD835;
+}
+
+QStatusBar {
+	background-color: #FDD835;
+}
+
+QLabel {
+	color: #FDD835;
+}
+
+QToolButton {
+	color: black;
+	background-color: #FDD835;
+}
+
+QToolButton:hover, QToolButton:pressed, QToolButton:checked {
+	background-color: #607D8B;
+}
+
+QToolButton:hover {
+	color: black;
+
+}
+
+QToolButton:checked, QToolButton:pressed {
+	color: #FFFFFF;
+}
+
+
+QToolButton {
+	border: 1px solid #FDD835;
+	margin: 1px;
+}
+
+QToolButton:hover {
+	background-color: #607D8B;
+	border: 1px solid #607D8B;
+}
+
+QToolButton[popupMode=&quot;1&quot;] {
+	padding-right: 20px;
+}
+
+QToolButton::menu-button {
+	border-left: 1px solid #FDD835;
+	background: transparent;
+    width: 16px;
+}
+
+QToolButton::menu-button:hover {
+	border-left: 1px solid #FDD835;
+	background: transparent;
+    width: 16px;
+}
+
+QStatusBar::item {
+	color: black;
+	background-color: #FDD835;
+}
+
+QAbstractScrollArea  {	/* Borders around the code editor and debug window */
+	border: 0;
+}
+
+/*****************************************************************************
+Play around with these settings
+*****************************************************************************/
+
+/* Force the dialog's buttons to follow the Windows guidelines. */
+QDialogButtonBox {
+    button-layout: 0;
+}
+
+QTabWidget::tab-bar {
+	left: 0px; /* Test this out on OS X, it will affect the tabs in the Options Dialog, on OS X they are centered */
+}</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1090</width>
+      <height>821</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="basic">
+     <attribute name="title">
+      <string>Tab 1</string>
+     </attribute>
+     <widget class="QWidget" name="dbWidget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>0</y>
+        <width>321</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <widget class="QLabel" name="dbName">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>301</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>TestDB</string>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="dbConnect">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>120</y>
+         <width>301</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>Connect</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="dbPassword">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>301</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="SQL">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+     <widget class="QTableView" name="queryTable">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>470</y>
+        <width>1061</width>
+        <height>311</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="toolButton">
+      <property name="geometry">
+       <rect>
+        <x>830</x>
+        <y>410</y>
+        <width>241</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>generate</string>
+      </property>
+     </widget>
+     <widget class="QPlainTextEdit" name="queryEdit">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>811</width>
+        <height>391</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="newQuery">
+      <property name="geometry">
+       <rect>
+        <x>830</x>
+        <y>10</y>
+        <width>241</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>new query</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="saveQuery">
+      <property name="geometry">
+       <rect>
+        <x>700</x>
+        <y>410</y>
+        <width>121</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>edit selected</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="queryNameEdit">
+      <property name="geometry">
+       <rect>
+        <x>830</x>
+        <y>60</y>
+        <width>241</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="queryParamEdit">
+      <property name="geometry">
+       <rect>
+        <x>830</x>
+        <y>100</y>
+        <width>241</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="clearQuery">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>410</y>
+        <width>121</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>clear</string>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="geometry">
+       <rect>
+        <x>830</x>
+        <y>140</y>
+        <width>241</width>
+        <height>261</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>241</width>
+         <height>261</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">	background: #607D8B;
+	border: 1px solid #607D8B;
+	color: white;</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QVBoxLayout" name="scrollLayout"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>
