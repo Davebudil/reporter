@@ -8,16 +8,15 @@ SQLquery::SQLquery(const QString & query,
      m_mParameter(param){
 
 }
+SQLquery::~SQLquery(){
+   delete m_Result;
+}
 //Getter for query member
 QString SQLquery::getQuery(){
    return m_Query;
 }
 QSqlQuery SQLquery::getResult(){
-   if(generateQuery()){
-      return m_Result;
-   }else{
-      return m_Result;
-   }
+   return *m_Result;
 }
 QString SQLquery::getName(){
    return m_Name;
@@ -41,11 +40,12 @@ void SQLquery::printValue(){
    qDebug() << "Query:" << m_Query;
 }
 //generates query result
-bool SQLquery::generateQuery(){
-   m_Result.exec(m_Query);
-   if(!m_Result.isActive()){
-      QMessageBox::critical(0, QObject::tr("SQL error"), m_Result.lastError().text());
-      m_Result.clear();
+bool SQLquery::generateQuery(const QSqlDatabase & db){
+   m_Result = new QSqlQuery(db);
+   m_Result->exec(m_Query);
+   if(!m_Result->isActive()){
+      QMessageBox::critical(0, QObject::tr("SQL error"), m_Result->lastError().text());
+      m_Result->clear();
       return false;
    }else{
       return true;

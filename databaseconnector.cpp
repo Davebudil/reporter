@@ -9,7 +9,7 @@ bool DatabaseConnector::connectDB(QSqlDatabase & db){
    if(!db.open()){
       QSqlDatabase::removeDatabase(db.connectionName());
    }
-   db = QSqlDatabase::addDatabase(m_dbType);
+   db = QSqlDatabase::addDatabase(m_dbType, "Default");
    db.setHostName(m_hostName);
    db.setPort(m_port);
    db.setDatabaseName(m_dbName);

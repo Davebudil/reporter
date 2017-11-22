@@ -46,6 +46,6 @@ void SQLStorage::printQueries(){
    }
 }
 
-void SQLStorage::generateQuery(const QString & name){
-   m_Queries[name]->generateQuery();
+void SQLStorage::generateQuery(const QString & name, const QSqlDatabase & db){
+   m_Queries[name]->generateQuery(db);
 }

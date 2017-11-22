@@ -11,6 +11,7 @@
 #include <QBoxLayout>
 #include <QToolButton>
 #include <QFont>
+#include <QtSql>
 
 namespace Ui{
    class Reporter;
