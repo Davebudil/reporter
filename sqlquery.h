@@ -12,6 +12,7 @@ class SQLquery{
    public:
       //constuctor
       explicit SQLquery(const QString & query, const QString & name, const QString & param);
+      ~SQLquery();
       //Getter for query member
       QString getQuery();
       QSqlQuery getResult();
@@ -24,15 +25,13 @@ class SQLquery{
       //print for debuggin
       void printValue();
       //Generate
-      bool generateQuery();
-
+      bool generateQuery(const QSqlDatabase & db);
    private:
       //query
       QString m_Query;
       QString m_Name;
       QString m_mParameter;
-      QSqlQuery m_Result;
-
+      QSqlQuery * m_Result;
 };
 
 #endif // SQLQUERY_H
