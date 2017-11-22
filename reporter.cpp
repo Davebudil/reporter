@@ -46,7 +46,7 @@ void Reporter::on_toolButton_clicked(){
 }
 //used to generate result from current selected query
 void Reporter::m_generateQuery(const QString & name){
-   m_mainSQL.getStorage().generateQuery(name);
+   m_mainSQL.getStorage().generateQuery(name,m_mainSQL.getDatabase().getDatabase());
 }
 //Function to add new query
 void Reporter::on_newQuery_clicked(){

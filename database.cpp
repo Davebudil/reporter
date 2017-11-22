@@ -3,11 +3,11 @@
 Database::Database(QObject *parent)
    : QObject(parent){
    m_DBConnect.setInfo("QMYSQL",
-                       "90.176.65.85",
-                       8888,
+                       "localhost",
+                       3306,
                        "budil",
-                       "budil",
-                       "weHUp3mvd9");
+                       "root",
+                       "Blizazrd5");
 }
 //Creates connection to DB
 bool Database::createConnection(){
