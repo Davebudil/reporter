@@ -5,11 +5,14 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = reporter
 TEMPLATE = app
+
+QTPLUGIN += QSQLMYSQL
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -25,10 +28,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        reporter.cpp
+        reporter.cpp \
+    databaseconnector.cpp \
+    sqlquery.cpp \
+    sqlstorage.cpp \
+    sqlcontrol.cpp \
+    database.cpp \
+    sqlparameter.cpp \
+    setup.cpp
 
 HEADERS += \
-        reporter.h
+        reporter.h \
+    databaseconnector.h \
+    sqlquery.h \
+    sqlstorage.h \
+    sqlcontrol.h \
+    database.h \
+    sqlparameter.h \
+    setup.h
 
 FORMS += \
         reporter.ui

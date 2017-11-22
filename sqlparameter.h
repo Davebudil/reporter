@@ -3,15 +3,22 @@
 
 #include <QObject>
 
-class SQLParameter : public QObject
-{
-    Q_OBJECT
-public:
-    explicit SQLParameter(QObject *parent = nullptr);
+class SQLParameter{
+   public:
+      //Constructor
+      explicit SQLParameter(const QString & name);
+      //Getter for parameter member
+      QStringList getParameters();
+      //Setter for paremeter member
+      void addParameter(const QString & parameter);
+      //Getter for name member
+      QString getName();
 
-signals:
-
-public slots:
+   private:
+      //parameter
+      QStringList m_Parameters;
+      //name
+      QString m_Name;
 };
 
 #endif // SQLPARAMETER_H
