@@ -1,10 +1,14 @@
 #include "reporter.h"
 #include "ui_reporter.h"
 
+//poznamky:TODO - knihovna na grid -> pocitani a tak, export template-> funkce, xslwrite, vyuzit, upravovani.
+//CSV -> priorita, generovani, nemusi byt posta, dobre padat
+
 //Constructor
 Reporter::Reporter(QWidget *parent)
    : QMainWindow(parent),
-     ui(new Ui::Reporter){
+     ui(new Ui::Reporter),
+     m_paramKey(0){
    ui->setupUi(this);
    ui->queryNameEdit->setText("Query Name");
    ui->queryParamEdit->setText("Master name");
@@ -63,12 +67,13 @@ void Reporter::m_saveQuery(){
    QString queryText;
    QString queryName;
    QString paramName;
+
    queryText = ui->queryEdit->toPlainText();
    queryName = ui->queryNameEdit->text();
    paramName = ui->queryParamEdit->text();
+
    if(m_nameKey.isEmpty()){
       QMessageBox::critical(this,QObject::tr("Text error"), "No query selected.");
-      return;
    }else{
       if(m_mainSQL.getStorage().addQuery(queryText,queryName,paramName, false)){
          tmp = ui->scrollAreaWidgetContents->findChild<QToolButton *>(m_nameKey);
@@ -76,13 +81,13 @@ void Reporter::m_saveQuery(){
          tmp->setText(queryName);
          m_mainSQL.getStorage().getQueries().remove(m_nameKey);
          m_nameKey = queryName;
-         m_Serialize();
+         m_serializeQueries();
       }else{
          m_mainSQL.getStorage().getQueries()[m_nameKey]->setParam(paramName);
          m_mainSQL.getStorage().getQueries()[m_nameKey]->setQuery(queryText);
          ui->queryEdit->document()->setPlainText(queryText);
          ui->queryParamEdit->setText(paramName);
-         m_Serialize();
+         m_serializeQueries();
       }
    }
 }
@@ -115,7 +120,12 @@ void Reporter::m_addQuery(const QString & queryText,
                                  "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
                                  "} QToolButton { border: 1px solid #FDD835; margin: 1px; } "
                                  "QToolButton:hover { background-color: #607D8B; border: 1px "
-                                 "solid #607D8B; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } QToolButton::menu-button { border-left: 1px solid #FDD835; background: transparent; width: 16px; } QToolButton::menu-button:hover { border-left: 1px solid #FDD835; background: transparent; width: 16px; } QStatusBar::item { color: black; background-color: #FDD835; } QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                                 "solid #607D8B; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                                 "QToolButton::menu-button { border-left: 1px solid #FDD835; background: "
+                                 "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                                 "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                                 "QStatusBar::item { color: black; background-color: #FDD835; } "
+                                 "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
          newQuery->setObjectName(queryName);
          ui->scrollLayout->addWidget(newQuery);
          connect(newQuery, &QToolButton::clicked, this, &Reporter::m_scrollQueryClicked);
@@ -123,16 +133,91 @@ void Reporter::m_addQuery(const QString & queryText,
          ui->queryNameEdit->clear();
          ui->queryParamEdit->clear();
          m_nameKey = "";
-         m_Serialize();
+         m_serializeQueries();
       }
    }else{
       QMessageBox::critical(0, QObject::tr("Text error"), "No text entered.");
    }
 }
+
+void Reporter::m_addParameters(const QStringList & params, const qint32 & count){
+   if(m_mainSQL.getStorage().addParam(params,count)){
+      QToolButton * newParameter = new QToolButton;
+      newParameter->setText(params.at(0));
+      newParameter->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                                  "background-color: #607D8B; } QToolButton::menu-button "
+                                  "{ background: url('./images/downarrowgray.png') "
+                                  "center center no-repeat; background-color: #FDD835; "
+                                  "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                                  "{ background-color: #FDD835; } QStatusBar { background-color: "
+                                  "#FDD835; } QLabel { color: #FDD835; } QToolButton "
+                                  "{ color: black; background-color: #FDD835; "
+                                  "} QToolButton:hover, QToolButton:pressed, "
+                                  "QToolButton:checked { background-color: "
+                                  "#607D8B; } QToolButton:hover { color: black; } "
+                                  "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                                  "} QToolButton { border: 1px solid #FDD835; margin: 1px; } "
+                                  "QToolButton:hover { background-color: #607D8B; border: 1px "
+                                  "solid #607D8B; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                                  "QToolButton::menu-button { border-left: 1px solid #FDD835; background: "
+                                  "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                                  "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                                  "QStatusBar::item { color: black; background-color: #FDD835; } "
+                                  "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+      newParameter->setObjectName(QString::number(m_paramKey++));
+      ui->scrollLayout_2->addWidget(newParameter);
+      connect(newParameter, &QToolButton::clicked, this, &Reporter::m_scrollParamClicked);
+      m_clearParam();
+      m_selectedParam = -1;
+      m_serializeParameters();
+   }
+}
+
+void Reporter::m_scrollParamClicked(){
+   QObject * senderObj = sender();
+   qint32 paramCount;
+   QString senderObjID = senderObj->objectName();
+
+   m_selectedParam = senderObjID.toInt();
+   paramCount = m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getCount();
+   m_clearParam();
+
+   if(paramCount > 0){
+      ui->param1->setText(m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getParameters().at(0));
+   }
+   if(paramCount > 1){
+      ui->param2->setText(m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getParameters().at(1));
+   }
+   if(paramCount > 2){
+      ui->param3->setText(m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getParameters().at(2));
+   }
+   if(paramCount > 3){
+      ui->param4->setText(m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getParameters().at(3));
+   }
+   if(paramCount > 4){
+      ui->param5->setText(m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getParameters().at(4));
+   }
+}
+
+void Reporter::m_saveParameter(){
+   QStringList parameters;
+   qint32 tmpCount;
+
+   m_createParamList(parameters,tmpCount);
+   if(tmpCount == 0 || m_selectedParam == -1){
+      QMessageBox::critical(this,QObject::tr("Text error"), "No parameter selected.");
+   }else{
+      m_mainSQL.getStorage().getParameters()[m_selectedParam]->editInfo(parameters, tmpCount);
+      tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString::number(m_selectedParam));
+      tmp->setText(parameters.at(0));
+      m_serializeParameters();
+   }
+}
+
 //Sets up default settings of the app
 void Reporter::defaultSettings(){
-//   m_ConnectDB();
    m_Deserialize();
+   m_ConnectDB();
 }
 //Load the default query
 void Reporter::m_defaultQuery(){
@@ -149,6 +234,7 @@ void Reporter::m_scrollQueryClicked(){
    QObject * senderObj = sender();
    QString senderObjname = senderObj->objectName();
    m_nameKey = senderObjname;
+
    ui->queryEdit->document()->setPlainText(m_mainSQL.getStorage().getQueries()[senderObjname]->getQuery());
    ui->queryNameEdit->setText(m_mainSQL.getStorage().getQueries()[senderObjname]->getName());
    ui->queryParamEdit->setText(m_mainSQL.getStorage().getQueries()[senderObjname]->getParam());
@@ -163,25 +249,93 @@ void Reporter::m_ConnectDB(){
    }
 }
 //Serialization
-void Reporter::m_Serialize(){
+void Reporter::m_serializeQueries(){
    QStringList tmpSerialize = m_mainSQL.loadList();
-   m_Setup.serialize(tmpSerialize);
+   m_Setup.serializeQueries(tmpSerialize);
+}
+void Reporter::m_serializeParameters(){
+   QVector<qint32> tmpCount;
+   QStringList tmpSerialize = m_loadParameters(tmpCount);
+   m_Setup.serializeParameters(tmpSerialize,tmpCount);
 }
 //Deserialization
 void Reporter::m_Deserialize(){
-   QStringList tmpDeserialize;
-   m_Setup.deserialize(tmpDeserialize);
-   for(int i = 0; i + 2 < tmpDeserialize.size(); i+=3){
-      m_addQuery(tmpDeserialize.at(i),tmpDeserialize.at(i+1),tmpDeserialize.at(i+2));
+   QStringList tmpDeserializeQueries;
+
+   m_Setup.deserializeQueries(tmpDeserializeQueries);
+   for(qint32 i = 0; i + 2 < tmpDeserializeQueries.size(); i+=3){
+      m_addQuery(tmpDeserializeQueries.at(i),tmpDeserializeQueries.at(i+1),tmpDeserializeQueries.at(i+2));
+   }
+
+   QStringList tmpDeserializeParameters;
+   QVector<qint32> tmpDeserializeCounts;
+   qint32 drivingI = 0;
+
+   m_Setup.deserializeParameters(tmpDeserializeParameters,tmpDeserializeCounts);
+   for(auto it : tmpDeserializeCounts){
+      qint32 tmpInt = it;
+      QStringList tmpList;
+
+      for(qint32 i = tmpInt; i > 0; i--){
+         tmpList << tmpDeserializeParameters.at(drivingI);
+         drivingI++;
+      }
+      m_addParameters(tmpList,tmpInt);
+   }
+}
+void Reporter::on_paramNew_clicked()
+{
+   QStringList tmp;
+   qint32 tmpCount = 0;
+
+   m_createParamList(tmp, tmpCount);
+   if(tmpCount != 0){
+      m_addParameters(tmp, tmpCount);
+   }else{
+      QMessageBox::warning(this, "Text error", "No parameters entered.");
    }
 }
 
+void Reporter::on_paramEdit_clicked()
+{
+   m_saveParameter();
+}
 
+QStringList Reporter::m_loadParameters(QVector<qint32> & count){
+   QStringList tmp;
+   for(qint32 i = 0; i < m_paramKey; ++i){
+      count.append(m_mainSQL.getStorage().getParameters()[i]->getCount());
+      tmp+=m_mainSQL.getStorage().getParameters()[i]->getParameters();
+   }
+   return tmp;
+}
 
-
-
-
-
-
-
-
+void Reporter::m_createParamList(QStringList & tmp, qint32 & tmpCount){
+   if(!(ui->param1->text().isEmpty())){
+      tmp.append(ui->param1->text());
+      tmpCount++;
+   }
+   if(!(ui->param2->text().isEmpty())){
+      tmp.append(ui->param2->text());
+      tmpCount++;
+   }
+   if(!(ui->param3->text().isEmpty())){
+      tmp.append(ui->param3->text());
+      tmpCount++;
+   }
+   if(!(ui->param4->text().isEmpty())){
+      tmp.append(ui->param4->text());
+      tmpCount++;
+   }
+   if(!(ui->param5->text().isEmpty())){
+      tmp.append(ui->param5->text());
+      tmpCount++;
+   }
+}
+void Reporter::m_clearParam(){
+   ui->param1->clear();
+   ui->param2->clear();
+   ui->param3->clear();
+   ui->param4->clear();
+   ui->param5->clear();
+}

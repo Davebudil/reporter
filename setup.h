@@ -20,9 +20,11 @@ class Setup : public QObject{
       //loads .ini settings file
       bool loadIni();
       //serializes
-      bool serialize(const QStringList & queries);
+      bool serializeQueries(const QStringList & queries);
+      bool serializeParameters(const QStringList & parameters, const QVector<qint32> & count);
       //deserializes
-      bool deserialize(QStringList & queries);
+      bool deserializeQueries(QStringList & queries);
+      bool deserializeParameters(QStringList & parameters, QVector<qint32> & count);
       //cleans up after applicaton
       bool cleanUp();
       //setter
@@ -35,8 +37,10 @@ class Setup : public QObject{
    public slots:
 
    private:
-      bool m_SerializeQueries();
-      bool m_DeserializeQueries();
+      bool m_serializeQueries(const QStringList & queries);
+      bool m_deserializeQueries(QStringList & queries);
+      bool m_serializeParameters(const QStringList & parameters, const QVector<qint32> & count);
+      bool m_deserializeParameters(QStringList & parameters, QVector<qint32> & count);
       QString m_filePath;
 
 };

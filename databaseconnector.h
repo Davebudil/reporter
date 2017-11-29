@@ -17,7 +17,7 @@ class DatabaseConnector : public QObject{
       //Sets info
       void setInfo(const QString & dbType,
                    const QString & host,
-                   const int port,
+                   const qint32 port,
                    const QString & dbName,
                    const QString & usrName,
                    const QString & usrPass);
@@ -30,7 +30,7 @@ class DatabaseConnector : public QObject{
    private:
       QString m_dbType;
       QString m_hostName;
-      int m_port;
+      qint32 m_port;
       QString m_dbName;
       QString m_usrName;
       QString m_usrPasswrd;

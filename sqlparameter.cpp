@@ -1,7 +1,13 @@
 #include "sqlparameter.h"
 
-SQLParameter::SQLParameter(const QString & name)
-   : m_Name(name){
+SQLParameter::SQLParameter(const QStringList & parameters, const qint32 & count)
+   : m_Parameters(parameters),
+     m_paramCount(count){
+}
+
+void SQLParameter::editInfo(const QStringList & param, const qint32 & count){
+   m_Parameters = param;
+   m_paramCount = count;
 }
 
 
@@ -9,11 +15,18 @@ QStringList SQLParameter::getParameters(){
    return m_Parameters;
 }
 
-void SQLParameter::addParameter(const QString & parameter){
-   m_Parameters << parameter;
-}
-
 QString SQLParameter::getName(){
    return m_Name;
+}
+
+qint32 SQLParameter::getCount(){
+   return m_paramCount;
+}
+
+void SQLParameter::printParams(){
+   for(auto it : m_Parameters){
+      QString tmp = it;
+      qDebug() << tmp;
+   }
 }
 

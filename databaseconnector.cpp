@@ -20,7 +20,7 @@ bool DatabaseConnector::connectDB(QSqlDatabase & db){
 //Sets info used during connection
 void DatabaseConnector::setInfo(const QString &dbType,
                                 const QString &host,
-                                const int port,
+                                const qint32 port,
                                 const QString &dbName,
                                 const QString &usrName,
                                 const QString &usrPass){
