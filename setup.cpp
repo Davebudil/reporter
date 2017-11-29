@@ -7,14 +7,63 @@ Setup::Setup(QObject *parent)
 Setup::~Setup(){}
 //loads .ini settings file
 bool Setup::loadIni(){
-
+   return true; //TMP
 }
+
+bool Setup::serializeQueries(const QStringList &queries){
+   return m_serializeQueries(queries);
+}
+bool Setup::deserializeQueries(QStringList &queries){
+   return m_deserializeQueries(queries);
+}
+bool Setup::serializeParameters(const QStringList &parameters, const QVector<qint32> & count){
+   return m_serializeParameters(parameters, count);
+}
+bool Setup::deserializeParameters(QStringList & parameters, QVector<qint32> & count){
+   QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterParameters.dat");
+   if(loadFile.open(QIODevice::ReadOnly)){
+      QDataStream in(&loadFile);
+      qint32 tmpInt;
+      while(!in.atEnd()){
+         in >> tmpInt;
+         count.append(tmpInt);
+         for(qint32 i = 0; i < tmpInt; ++i){
+            QString tmpString;
+            in >> tmpString;
+            parameters << tmpString;
+         }
+      }
+      return true;
+   }
+   return false;
+}
+
+bool Setup::m_serializeParameters(const QStringList & param, const QVector<qint32> & count){
+   QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterParameters.dat");
+   if(loadFile.open(QIODevice::ReadWrite | QIODevice::Truncate)){
+      QDataStream out(&loadFile);
+      qint32 drivingI = 0;
+      for(auto it : count){
+         qint32 tmpInt = it;
+         out << tmpInt;
+         for(qint32 i = it; i > 0; i--){
+            QString tmpString = param.at(drivingI);
+            out << tmpString;
+            drivingI++;
+         }
+      }
+      return true;
+   }
+   return false;
+}
+
+
 //serializes
-bool Setup::serialize(const QStringList & queries){
+bool Setup::m_serializeQueries(const QStringList & queries){
    QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterQueries.dat");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
-      for(int i = 0; i < queries.size(); ++i){
+      for(qint32 i = 0; i < queries.size(); ++i){
          QString tmp = queries.at(i);
          out << tmp;
       }
@@ -23,7 +72,7 @@ bool Setup::serialize(const QStringList & queries){
    return false;
 }
 //deserializes
-bool Setup::deserialize(QStringList & queries){
+bool Setup::m_deserializeQueries(QStringList & queries){
    QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterQueries.dat");
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
@@ -38,7 +87,7 @@ bool Setup::deserialize(QStringList & queries){
 }
 //cleans up
 bool Setup::cleanUp(){
-
+   return true; //TMP
 }
 //setter
 void Setup::setFilePath(const QString & path){

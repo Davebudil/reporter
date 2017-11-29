@@ -5,11 +5,15 @@ SQLStorage::SQLStorage(QObject *parent)
 
 }
 
+SQLStorage::~SQLStorage(){
+   //DELETE MAP CONTENT
+}
+
 QMap<QString, SQLquery*> SQLStorage::getQueries(){
    return m_Queries;
 }
 
-QList<SQLParameter> SQLStorage::getParameters(){
+QList<SQLParameter*> SQLStorage::getParameters(){
    return m_Parameters;
 }
 
@@ -21,6 +25,10 @@ bool SQLStorage::m_loadParameters(){
 }
 QSqlQuery SQLStorage::getResultQuery(){
    return m_Query;
+}
+
+void SQLStorage::m_paramSetup(){
+
 }
 
 bool SQLStorage::addQuery(const QString & query, const QString & name, const QString & param, bool display){
@@ -46,6 +54,20 @@ void SQLStorage::printQueries(){
    }
 }
 
+void SQLStorage::printParams(){
+   for(auto & it : m_Parameters){
+      it->printParams();
+   }
+}
+
 void SQLStorage::generateQuery(const QString & name, const QSqlDatabase & db){
+   m_paramSetup();
    m_Queries[name]->generateQuery(db);
+}
+
+bool SQLStorage::addParam(const QStringList & param, const qint32 & count){
+   SQLParameter * tmp = new SQLParameter(param, count);
+   m_Parameters.append(tmp);
+   //first version, in future possibly return false based on errors
+   return true;
 }

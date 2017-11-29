@@ -14,14 +14,17 @@ class SQLStorage : public QObject{
    public:
       //Constructor
       explicit SQLStorage(QObject *parent = nullptr);
+      ~SQLStorage();
       //Used to get list of queries member
       QMap<QString, SQLquery*> getQueries();
       //used to get list of parameters member
-      QList<SQLParameter> getParameters();
+      QList<SQLParameter*> getParameters();
       //getter
       QSqlQuery getResultQuery();
       bool addQuery(const QString & query, const QString & name, const QString & param, bool display);
+      bool addParam(const QStringList & param, const qint32 & count);
       void printQueries();
+      void printParams();
       void generateQuery(const QString & name, const QSqlDatabase & db);
    signals:
 
@@ -35,9 +38,11 @@ class SQLStorage : public QObject{
       //list used to store queries
       QMap<QString, SQLquery*> m_Queries;
       //param used to store parameters
-      QList<SQLParameter> m_Parameters;
+      QList<SQLParameter*> m_Parameters;
       //query used during SQL
       QSqlQuery m_Query;
+      //
+      void m_paramSetup();
 };
 
 #endif // SQLSTORAGE_H
