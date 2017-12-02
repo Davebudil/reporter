@@ -46,6 +46,10 @@ class Reporter : public QMainWindow{
 
       void on_paramEdit_clicked();
 
+      void on_paramDelete_clicked();
+
+      void on_queryDelete_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -58,6 +62,8 @@ class Reporter : public QMainWindow{
       void m_displaySQLResult(const QString & name);
       //used to generate result from current selected query
       void m_generateQuery(const QString & name);
+      //function to execute query
+      void m_executeQuery(const QString & name);
       //function to add query
       void m_addQuery(const QString & queryText, const QString & queryName, const QString & paramName);
       //functions to determine which button was clicked and select the stored data based on it
@@ -68,6 +74,9 @@ class Reporter : public QMainWindow{
       //Function to save selected data
       void m_saveQuery();
       void m_saveParameter();
+      //functions to delete selected data
+      void m_deleteParam();
+      void m_deleteQuery();
       //Serialization
       void m_serializeQueries();
       void m_serializeParameters();
@@ -83,6 +92,7 @@ class Reporter : public QMainWindow{
       void m_createParamList(QStringList & tmp, qint32 & tmpCount);
       QStringList m_loadParameters(QVector<qint32> & count);
       void m_clearParam();
+      void m_clearQuery();
 };
 
 #endif // REPORTER_H

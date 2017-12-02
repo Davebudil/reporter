@@ -8,27 +8,17 @@ SQLStorage::SQLStorage(QObject *parent)
 SQLStorage::~SQLStorage(){
    //DELETE MAP CONTENT
 }
-
-QMap<QString, SQLquery*> SQLStorage::getQueries(){
+//Getters
+QMap<QString, SQLquery*> & SQLStorage::getQueries(){
    return m_Queries;
 }
 
-QList<SQLParameter*> SQLStorage::getParameters(){
+QMap<qint32, SQLParameter*> & SQLStorage::getParameters(){
    return m_Parameters;
 }
 
-bool SQLStorage::m_loadQueries(){
-   return true;
-}
-bool SQLStorage::m_loadParameters(){
-   return true;
-}
 QSqlQuery SQLStorage::getResultQuery(){
    return m_Query;
-}
-
-void SQLStorage::m_paramSetup(){
-
 }
 
 bool SQLStorage::addQuery(const QString & query, const QString & name, const QString & param, bool display){
@@ -61,13 +51,15 @@ void SQLStorage::printParams(){
 }
 
 void SQLStorage::generateQuery(const QString & name, const QSqlDatabase & db){
-   m_paramSetup();
    m_Queries[name]->generateQuery(db);
 }
+void SQLStorage::executeQuery(const QString &name){
+   m_Queries[name]->executeQuery();
+}
 
-bool SQLStorage::addParam(const QStringList & param, const qint32 & count){
+bool SQLStorage::addParam(const QStringList & param, const qint32 & count, const qint32 & id){
    SQLParameter * tmp = new SQLParameter(param, count);
-   m_Parameters.append(tmp);
+   m_Parameters[id] = tmp;
    //first version, in future possibly return false based on errors
    return true;
 }
