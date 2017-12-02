@@ -5,7 +5,8 @@ SQLquery::SQLquery(const QString & query,
                    const QString & param)
    : m_Query(query),
      m_Name(name),
-     m_mParameter(param){
+     m_mParameter(param),
+     m_Active(false){
 
 }
 SQLquery::~SQLquery(){
@@ -40,16 +41,19 @@ void SQLquery::printValue(){
    qDebug() << "Query:" << m_Query;
 }
 //generates query result
-bool SQLquery::generateQuery(const QSqlDatabase & db){
+void SQLquery::generateQuery(const QSqlDatabase & db){
    m_Result = new QSqlQuery(db);
-   m_Result->exec(m_Query);
+   m_Result->prepare(m_Query);
+}
+//executes set query and checks for validity of SQL syntax
+void SQLquery::executeQuery(){
+   m_Result->exec();
    if(!m_Result->isActive()){
       QMessageBox::critical(0, QObject::tr("SQL error"), m_Result->lastError().text());
       m_Result->clear();
-      return false;
-   }else{
-      return true;
    }
-
-
+}
+//B
+void SQLquery::bindParameter(const QString & parameter, const QString & value){
+   m_Result->bindValue(parameter, value);
 }

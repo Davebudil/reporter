@@ -25,13 +25,19 @@ class SQLquery{
       //print for debuggin
       void printValue();
       //Generate
-      bool generateQuery(const QSqlDatabase & db);
+      void generateQuery(const QSqlDatabase & db);
+      //binds time Parameters
+      void bindParameter(const QString & parameter, const QString & value);
+      //function that executes the query
+      void executeQuery();
+
    private:
       //query
       QString m_Query;
       QString m_Name;
       QString m_mParameter;
       QSqlQuery * m_Result;
+      bool m_Active;
 };
 
 #endif // SQLQUERY_H

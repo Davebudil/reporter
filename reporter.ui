@@ -14,14 +14,14 @@
    <string>Reporter</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget:window {					/* Borders around the code editor and debug window */
-	border: 0px solid #455A64;
-	background-color: #455A64;
+   <string notr="true">QWidget:window {          /* Borders around the code editor and debug window */
+  border: 0px solid white;
+  background-color: white;
 }
 
 QToolTip {
-	background-color: #455A64;
-	color: white;
+  background-color: white;
+  color: black;
     padding: 5px;
     border-radius: 0;
     opacity: 200;
@@ -29,427 +29,427 @@ QToolTip {
 
 /* ==================== Dialog ==================== */
 QLabel {
-	background: #455A64;
-	color: white;	
-	font: 75 11pt &quot;DejaVu Sans Mono&quot;;			/* Not sure about this one */
+  background: white;
+  color: black; 
+  font: 75 11pt &quot;DejaVu Sans Mono&quot;;     /* Not sure about this one */
 }
 
 QDialog, QListView {
-	background-color: #455A64;
-	color: white;
-	outline: 0;
-	border: 2px solid transparent;
+  background-color: white;
+  color: black;
+  outline: 0;
+  border: 2px solid transparent;
 }
 
 QListView::item:hover {
-	color: #607D8B;
-	background: #607D8B;
+  color: #F5F5F5;
+  background: #F5F5F5;
 }
 
 
 QListView::item:selected {
-	color: #607D8B;
-	background: #607D8B;
+  color: #F5F5F5;
+  background: #F5F5F5;
 }
 
 /* === QTabBar === */
 QTabBar {
-	background: #455A64;
+  background: white;
 }
 QPlainTextEdit{
-	background: #607D8B;
-	border: 1px solid #607D8B;
-	color: white;
+  background: #F5F5F5;
+  border: 1px solid #F5F5F5;
+  color: black;
 }
 QTableView{
-	background: #607D8B;
-	border: 1px solid #607D8B;
-	color: white;
+  background: #F5F5F5;
+  border: 1px solid #F5F5F5;
+  color: black;
 }
 QScrollArea{
-	background: #607D8B;
-	border: 1px solid #607D8B;
-	color: white;
+  background: #F5F5F5;
+  border: 1px solid #F5F5F5;
+  color: black;
 }
 QScrollArea{
-	background: #607D8B;
-	border: 1px solid #607D8B;
-	color: white;
+  background: #F5F5F5;
+  border: 1px solid #F5F5F5;
+  color: black;
 }
 
 
 QTabWidget::pane {
-	background: transparent;	/* Only at the very bottom of the tabs */
+  background: transparent;  /* Only at the very bottom of the tabs */
 }
 
 QTabBar::tab {
-	background: #455A64;
-	border: 0px solid #455A64;
-	border-bottom: 2px solid #455A64;
-	color: white;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 3px;
-	padding-bottom: 3px;
+  background: white;
+  border: 0px solid white;
+  border-bottom: 2px solid white;
+  color: black;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 QTabBar::tab:hover {
-	background-color: #607D8B;
-	border: 0px solid #607D8B;
-	border-bottom: 2px solid #607D8B;
-	color: white;
+  background-color: #F5F5F5;
+  border: 0px solid #F5F5F5;
+  border-bottom: 2px solid #F5F5F5;
+  color: black;
 }
 
 QTabBar::tab:selected {
-	background-color: #607D8B;
-	border: 0px solid #607D8B;
-	border-top: none;
-	border-bottom: 2px solid #607D8B;
-	color: white;
+  background-color: #F5F5F5;
+  border: 0px solid #F5F5F5;
+  border-top: none;
+  border-bottom: 2px solid #F5F5F5;
+  color: black;
 }
 
 QStackedWidget {
-	background: #455A64;	/* This covers a bunch of things, I was thinking about making it transparent, */
-							/* but I would have to find all the other elements... but QTabWidget::pane may be it */
+  background: white;  /* This covers a bunch of things, I was thinking about making it transparent, */
+              /* but I would have to find all the other elements... but QTabWidget::pane may be it */
 }
 
 
 /* === QGroupBox === */
 QGroupBox {
-    border: 1px solid #455A64;
-    background-color: #455A64;
+    border: 1px solid white;
+    background-color: white;
     margin-top: 1em;
 }
 
 QGroupBox::title {
-	color: white;
+  color: black;
     subcontrol-origin: margin;
     left: 6px;
     padding: 0 3px 0 3px;
 }
 
 QComboBox {
-	color: white;
-	background-color: #455A64;
-	selection-background-color: #607D8B;
-	outline: 0;
+  color: black;
+  background-color: white;
+  selection-background-color: #F5F5F5;
+  outline: 0;
 }
 
 QComboBox QAbstractItemView
 {    
-    selection-background-color: #607D8B;
-	outline: 0;
+    selection-background-color: #F5F5F5;
+  outline: 0;
 }
 
 /* === QCheckBox === */
 QCheckBox, QRadioButton {
-	color: white;
+  color: black;
 }
 
 QCheckBox::indicator::unchecked  {
-	background-color: #455A64;
-	border: 1px solid #455A64;
+  background-color: white;
+  border: 1px solid white;
 }
 
 QRadioButton::indicator::unchecked {
-	background-color: #455A64;
-	border: 1px solid #455A64;
-	border-radius: 4px;
+  background-color: white;
+  border: 1px solid white;
+  border-radius: 4px;
 }
 
 QCheckBox::indicator::checked, QTreeView::indicator::checked {
-	background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 #455A64);
-	border: 1px solid #455A64;
+  background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 white);
+  border: 1px solid white;
 }
 
 QRadioButton::indicator::checked {
-	background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 #455A64);
-	border: 1px solid #455A64;
-	border-radius: 4px;
+  background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 white);
+  border: 1px solid white;
+  border-radius: 4px;
 }
 
 QCheckBox::indicator:disabled, QRadioButton::indicator:disabled, QTreeView::indicator:disabled {
-	background-color: #455A64;			/* Not sure what this looks like */
+  background-color: white;      /* Not sure what this looks like */
 }
 
 QCheckBox::indicator::checked:disabled, QRadioButton::indicator::checked:disabled, QTreeView::indicator::checked:disabled {  
-	background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #BBBBBB, stop:1 #455A64); /* Not sure what this looks like */
+  background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #BBBBBB, stop:1 white); /* Not sure what this looks like */
 }
 
 QTreeView {
-	background-color: #455A64;
-	color: white;
-	outline: 0;
-	border: 0;
+  background-color: white;
+  color: black;
+  outline: 0;
+  border: 0;
 }
 
 QTreeView::item:hover {
-	background-color: #455A64;
-	color: white;
+  background-color: white;
+  color: black;
 }
 
 QTreeView::item:selected {
-	background-color: #607D8B;
-	color: white;
+  background-color: #F5F5F5;
+  color: black;
 }
 
 QTreeView QHeaderView:section {
-	background-color: #455A64;
-	color: white;
-	border: 0;
+  background-color: white;
+  color: black;
+  border: 0;
 }
 
 QTreeView::indicator:checked {
-	background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 #455A64);
-	border: 1px solid #607D8B ;
-	selection-background-color: #607D8B ;
+  background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 white);
+  border: 1px solid #F5F5F5 ;
+  selection-background-color: #F5F5F5 ;
 }
 
-QTreeView::indicator:unchecked {			/* This and the one above style the checkbox in the Options -&gt; Keyboard */
-	background-color: #455A64;				/* This is still a hover over in blue I can't get rid of */
-	border: 1px solid #455A64;
-	selection-background-color: #455A64;
+QTreeView::indicator:unchecked {      /* This and the one above style the checkbox in the Options -&gt; Keyboard */
+  background-color: white;        /* This is still a hover over in blue I can't get rid of */
+  border: 1px solid white;
+  selection-background-color: white;
 }
 /*
 QTreeView QScrollBar {
-	background-color: #607D8B
+  background-color: #F5F5F5
 }
 */
 QTreeView::branch {
-	/* Skip - applies to everything */
+  /* Skip - applies to everything */
 }
 
 QTreeView::branch:has-siblings:adjoins-item {
-	/* Skip - files */
+  /* Skip - files */
 }
 
 QTreeView::branch:has-siblings:!adjoins-item {
-	/* Skip - applies to almost all on the left side */
+  /* Skip - applies to almost all on the left side */
 }
 
 QTreeView::branch:closed:has-children:has-siblings {
-	background: url('./images/rightarrowgray.png') center center no-repeat;
+  background: url('./images/rightarrowgray.png') center center no-repeat;
 }
 
 QTreeView::branch:has-children:!has-siblings:closed {
-	background: url('./images/rightarrowgray.png') center center no-repeat;
+  background: url('./images/rightarrowgray.png') center center no-repeat;
 }
 
 QTreeView::branch:!has-children:!has-siblings:adjoins-item {
-	/* Skip - files */
+  /* Skip - files */
 }
 
 QTreeView::branch:open:has-children:has-siblings {
-	background: url('./images/downarrowgray.png') center center no-repeat;
+  background: url('./images/downarrowgray.png') center center no-repeat;
 }
 
 QTreeView::branch:open:has-children:!has-siblings {
-	background: url('./images/downarrowgray.png') center center no-repeat;
+  background: url('./images/downarrowgray.png') center center no-repeat;
 }
 
 /* === QScrollBar:horizontal === */
 QScrollBar:horizontal {
-	background: #FDD835;				/* Background where slider is not */
-	height: 10px;
-	margin: 0;
+  background: #f44336;        /* Background where slider is not */
+  height: 10px;
+  margin: 0;
 }
 
 QScrollBar:vertical {
-	background: #FDD835;				/* Background where slider is not */
-	width: 10px;
-	margin: 0;
+  background: #f44336;        /* Background where slider is not */
+  width: 10px;
+  margin: 0;
 }
 
 QScrollBar::handle:horizontal {
-    background: #FDD835;					/* Slider color */
+    background: #f44336;          /* Slider color */
     min-width: 16px;
-	border-radius: 5px;
+  border-radius: 5px;
 }
 
 QScrollBar::handle:vertical {
-    background: #FDD835;					/* Slider color */
+    background: #f44336;          /* Slider color */
     min-height: 16px;
-	border-radius: 5px;
+  border-radius: 5px;
 }
 
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal,
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-	background: #FDD835;												/* Removes the dotted background */
+  background: #f44336;                        /* Removes the dotted background */
 }
 
 QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,
-QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {	/* Hides the slider arrows */
-      border: #FDD835;
-      background: #FDD835;
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {  /* Hides the slider arrows */
+      border: #f44336;
+      background: #f44336;
 }
 
 QPushButton {
-	background-color: #FDD835;
-	color: black;
-	border: 1px solid #FDD835;
-	padding: 4px 22px;
+  background-color: #f44336;
+  color: black;
+  border: 1px solid #f44336;
+  padding: 4px 22px;
 }
 
 QPushButton:hover {
-	color: #607D8B;
+  color: #F5F5F5;
 }
 
 QPushButton:pressed {
-	color: #FFFFFF;
+  color: #FFFFFF;
 }
 
 QLineEdit {
-	background: #607D8B;
-	border: 1px solid #607D8B;
-	color: white;
+  background: #F5F5F5;
+  border: 1px solid #F5F5F5;
+  color: black;
 }
 
 QSpinBox {
-	background: #607D8B;
-	border: 1px solid #607D8B;
-	color: white;
+  background: #F5F5F5;
+  border: 1px solid #F5F5F5;
+  color: black;
 }
 
 /*****************************************************************************
 Main Screen
 *****************************************************************************/
 QTreeView {
-	background-color: #455A64;
+  background-color: white;
 }
 
 QMenu {
-	background-color: #FDD835;		/* File Menu Background color */
-	color: white;
+  background-color: #f44336;    /* File Menu Background color */
+  color: black;
 }
 
 QMenu::item:selected {
-	color: #607D8B;
+  color: #F5F5F5;
 }
 
 QMenu::item:pressed {
-	color: #FFFFFF;
+  color: #FFFFFF;
 }
 
 QMenu::separator {
-	height: 1px;
-	background: transparent;			/* Could change this to #546E7A and reduce the margin top and bottom to 1px */
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-top: 5px;
-	margin-bottom: 5px;
+  height: 1px;
+  background: transparent;      /* Could change this to #546E7A and reduce the margin top and bottom to 1px */
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 /* === QMenuBar === */
 QMenuBar {
-	background-color: #455A64;
-	color: white;
+  background-color: white;
+  color: black;
 }
 
 QMenuBar::item {
-	background: transparent;
+  background: transparent;
 }
 
 QMenuBar::item:disabled {
-	color: gray;
+  color: gray;
 }
 
 QMenuBar::item:selected {
-	color: #607D8B;
+  color: #F5F5F5;
 }
 
 QMenuBar::item:pressed {
-	color: #FFFFFF;
+  color: #FFFFFF;
 }
 
 QToolBar {
-	background: #FDD835;
-	border: 1px solid transparent;
+  background: #f44336;
+  border: 1px solid transparent;
 }
 
 QToolBar:handle {
-	background: transparent;
-	border-left: 2px dotted #80CBC4;	/* Fix the 4 handle dots so it doesn't look crappy */
-	color: transparent;
+  background: transparent;
+  border-left: 2px dotted #80CBC4;  /* Fix the 4 handle dots so it doesn't look crappy */
+  color: transparent;
 }
 
 QToolBar::separator {
-	border: 0;
+  border: 0;
 }
 
 /* === QToolButton === */
 QToolButton:hover, QToolButton:pressed {
-	background-color: #607D8B;
+  background-color: #F5F5F5;
 }
 
 QToolButton::menu-button {
-	background: url('./images/downarrowgray.png') center center no-repeat;
-	background-color: #FDD835;												
+  background: url('./images/downarrowgray.png') center center no-repeat;
+  background-color: #f44336;                        
 }
 
 QToolButton::menu-button:hover, QToolButton::menu-button:pressed {
-	background-color: #FDD835;
+  background-color: #f44336;
 }
 
 QStatusBar {
-	background-color: #FDD835;
+  background-color: #f44336;
 }
 
 QLabel {
-	color: #FDD835;
+  color: black;
 }
 
 QToolButton {
-	color: black;
-	background-color: #FDD835;
+  color: white;
+  background-color: #f44336;
 }
 
 QToolButton:hover, QToolButton:pressed, QToolButton:checked {
-	background-color: #607D8B;
+  background-color: #F5F5F5;
 }
 
 QToolButton:hover {
-	color: black;
+  color: black;
 
 }
 
 QToolButton:checked, QToolButton:pressed {
-	color: #FFFFFF;
+  color: #FFFFFF;
 }
 
 
 QToolButton {
-	border: 1px solid #FDD835;
-	margin: 1px;
+  border: 1px solid #f44336;
+  margin: 1px;
 }
 
 QToolButton:hover {
-	background-color: #607D8B;
-	border: 1px solid #607D8B;
+  background-color: #F5F5F5;
+  border: 1px solid #F5F5F5;
 }
 
 QToolButton[popupMode=&quot;1&quot;] {
-	padding-right: 20px;
+  padding-right: 20px;
 }
 
 QToolButton::menu-button {
-	border-left: 1px solid #FDD835;
-	background: transparent;
+  border-left: 1px solid #f44336;
+  background: transparent;
     width: 16px;
 }
 
 QToolButton::menu-button:hover {
-	border-left: 1px solid #FDD835;
-	background: transparent;
+  border-left: 1px solid #f44336;
+  background: transparent;
     width: 16px;
 }
 
 QStatusBar::item {
-	color: black;
-	background-color: #FDD835;
+  color: white;
+  background-color: #f44336;
 }
 
-QAbstractScrollArea  {	/* Borders around the code editor and debug window */
-	border: 0;
+QAbstractScrollArea  {  /* Borders around the code editor and debug window */
+  border: 0;
 }
 
 /*****************************************************************************
@@ -462,7 +462,7 @@ QDialogButtonBox {
 }
 
 QTabWidget::tab-bar {
-	left: 0px; /* Test this out on OS X, it will affect the tabs in the Options Dialog, on OS X they are centered */
+  left: 0px; /* Test this out on OS X, it will affect the tabs in the Options Dialog, on OS X they are centered */
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -561,9 +561,9 @@ QTabWidget::tab-bar {
       <widget class="QToolButton" name="paramNew">
        <property name="geometry">
         <rect>
-         <x>400</x>
+         <x>490</x>
          <y>10</y>
-         <width>111</width>
+         <width>91</width>
          <height>51</height>
         </rect>
        </property>
@@ -576,7 +576,7 @@ QTabWidget::tab-bar {
         <rect>
          <x>290</x>
          <y>10</y>
-         <width>101</width>
+         <width>91</width>
          <height>51</height>
         </rect>
        </property>
@@ -659,9 +659,9 @@ QTabWidget::tab-bar {
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">	background: #607D8B;
-	border: 1px solid #607D8B;
-	color: white;</string>
+         <string notr="true">	background:#F5F5F5;
+	border: 1px solid #F5F5F5;
+	color: black;</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
@@ -669,6 +669,19 @@ QTabWidget::tab-bar {
          </item>
         </layout>
        </widget>
+      </widget>
+      <widget class="QToolButton" name="paramDelete">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>10</y>
+         <width>91</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Delete</string>
+       </property>
       </widget>
      </widget>
     </widget>
@@ -817,9 +830,9 @@ QTabWidget::tab-bar {
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">	background: #607D8B;
-	border: 1px solid #607D8B;
-	color: white;</string>
+        <string notr="true">	background:#F5F5F5;
+	border: 1px solid #F5F5F5;
+	color: black;</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
@@ -827,6 +840,22 @@ QTabWidget::tab-bar {
         </item>
        </layout>
       </widget>
+     </widget>
+     <widget class="QToolButton" name="queryDelete">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>410</y>
+        <width>121</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Delete</string>
+      </property>
      </widget>
     </widget>
    </widget>

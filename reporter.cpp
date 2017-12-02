@@ -45,9 +45,14 @@ void Reporter::on_toolButton_clicked(){
 
    }else{
       m_generateQuery(m_nameKey);
+      m_executeQuery(m_nameKey);
       m_displaySQLResult(m_nameKey);
    }
 }
+void Reporter::m_executeQuery(const QString & name){
+   m_mainSQL.getStorage().executeQuery(name);
+}
+
 //used to generate result from current selected query
 void Reporter::m_generateQuery(const QString & name){
    m_mainSQL.getStorage().generateQuery(name,m_mainSQL.getDatabase().getDatabase());
@@ -61,6 +66,14 @@ void Reporter::on_newQuery_clicked(){
 //Function to save the edit of current query
 void Reporter::on_saveQuery_clicked(){
    m_saveQuery();
+}
+void Reporter::m_deleteQuery(){
+   m_mainSQL.getStorage().getQueries().remove(m_nameKey);
+   tmp = ui->scrollAreaWidgetContents->findChild<QToolButton *>(m_nameKey);
+   delete tmp;
+   m_clearQuery();
+   m_serializeQueries();
+   m_nameKey = "";
 }
 //Function to save query
 void Reporter::m_saveQuery(){
@@ -107,31 +120,29 @@ void Reporter::m_addQuery(const QString & queryText,
          newQuery->setText(queryName);
          //Ugly design settings ignore please
          newQuery->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                                 "background-color: #607D8B; } QToolButton::menu-button "
+                                 "background-color: #f44336; } QToolButton::menu-button "
                                  "{ background: url('./images/downarrowgray.png') "
-                                 "center center no-repeat; background-color: #FDD835; "
+                                 "center center no-repeat; background-color: #f44336; "
                                  "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                                 "{ background-color: #FDD835; } QStatusBar { background-color: "
-                                 "#FDD835; } QLabel { color: #FDD835; } QToolButton "
-                                 "{ color: black; background-color: #FDD835; "
+                                 "{ background-color: #f44336; } QStatusBar { background-color: "
+                                 "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                                 "{ color: white; background-color: #f44336; "
                                  "} QToolButton:hover, QToolButton:pressed, "
                                  "QToolButton:checked { background-color: "
                                  "#607D8B; } QToolButton:hover { color: black; } "
                                  "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                                 "} QToolButton { border: 1px solid #FDD835; margin: 1px; } "
-                                 "QToolButton:hover { background-color: #607D8B; border: 1px "
-                                 "solid #607D8B; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                                 "QToolButton::menu-button { border-left: 1px solid #FDD835; background: "
+                                 "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                                 "QToolButton:hover { background-color: white; color: black; border: 1px "
+                                 "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                                 "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
                                  "transparent; width: 16px; } QToolButton::menu-button:hover { "
                                  "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                                 "QStatusBar::item { color: black; background-color: #FDD835; } "
+                                 "QStatusBar::item { color: black; background-color: #f44336; } "
                                  "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
          newQuery->setObjectName(queryName);
          ui->scrollLayout->addWidget(newQuery);
          connect(newQuery, &QToolButton::clicked, this, &Reporter::m_scrollQueryClicked);
-         ui->queryEdit->clear();
-         ui->queryNameEdit->clear();
-         ui->queryParamEdit->clear();
+         m_clearQuery();
          m_nameKey = "";
          m_serializeQueries();
       }
@@ -141,29 +152,29 @@ void Reporter::m_addQuery(const QString & queryText,
 }
 
 void Reporter::m_addParameters(const QStringList & params, const qint32 & count){
-   if(m_mainSQL.getStorage().addParam(params,count)){
+   if(m_mainSQL.getStorage().addParam(params,count,m_paramKey)){
       QToolButton * newParameter = new QToolButton;
       newParameter->setText(params.at(0));
       newParameter->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                                  "background-color: #607D8B; } QToolButton::menu-button "
-                                  "{ background: url('./images/downarrowgray.png') "
-                                  "center center no-repeat; background-color: #FDD835; "
-                                  "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                                  "{ background-color: #FDD835; } QStatusBar { background-color: "
-                                  "#FDD835; } QLabel { color: #FDD835; } QToolButton "
-                                  "{ color: black; background-color: #FDD835; "
-                                  "} QToolButton:hover, QToolButton:pressed, "
-                                  "QToolButton:checked { background-color: "
-                                  "#607D8B; } QToolButton:hover { color: black; } "
-                                  "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                                  "} QToolButton { border: 1px solid #FDD835; margin: 1px; } "
-                                  "QToolButton:hover { background-color: #607D8B; border: 1px "
-                                  "solid #607D8B; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                                  "QToolButton::menu-button { border-left: 1px solid #FDD835; background: "
-                                  "transparent; width: 16px; } QToolButton::menu-button:hover { "
-                                  "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                                  "QStatusBar::item { color: black; background-color: #FDD835; } "
-                                  "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
       newParameter->setObjectName(QString::number(m_paramKey++));
       ui->scrollLayout_2->addWidget(newParameter);
       connect(newParameter, &QToolButton::clicked, this, &Reporter::m_scrollParamClicked);
@@ -179,29 +190,29 @@ void Reporter::m_scrollParamClicked(){
    QString senderObjID = senderObj->objectName();
 
    m_selectedParam = senderObjID.toInt();
-   paramCount = m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getCount();
+   paramCount = m_mainSQL.getStorage().getParameters()[m_selectedParam]->getCount();
    m_clearParam();
 
    if(paramCount > 0){
-      ui->param1->setText(m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getParameters().at(0));
+      ui->param1->setText(m_mainSQL.getStorage().getParameters()[m_selectedParam]->getParameters().at(0));
    }
    if(paramCount > 1){
-      ui->param2->setText(m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getParameters().at(1));
+      ui->param2->setText(m_mainSQL.getStorage().getParameters()[m_selectedParam]->getParameters().at(1));
    }
    if(paramCount > 2){
-      ui->param3->setText(m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getParameters().at(2));
+      ui->param3->setText(m_mainSQL.getStorage().getParameters()[m_selectedParam]->getParameters().at(2));
    }
    if(paramCount > 3){
-      ui->param4->setText(m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getParameters().at(3));
+      ui->param4->setText(m_mainSQL.getStorage().getParameters()[m_selectedParam]->getParameters().at(3));
    }
    if(paramCount > 4){
-      ui->param5->setText(m_mainSQL.getStorage().getParameters().at(m_selectedParam)->getParameters().at(4));
+      ui->param5->setText(m_mainSQL.getStorage().getParameters()[m_selectedParam]->getParameters().at(4));
    }
 }
 
 void Reporter::m_saveParameter(){
    QStringList parameters;
-   qint32 tmpCount;
+   qint32 tmpCount = 0;
 
    m_createParamList(parameters,tmpCount);
    if(tmpCount == 0 || m_selectedParam == -1){
@@ -212,6 +223,15 @@ void Reporter::m_saveParameter(){
       tmp->setText(parameters.at(0));
       m_serializeParameters();
    }
+}
+
+void Reporter::m_deleteParam(){
+   m_mainSQL.getStorage().getParameters().remove(m_selectedParam);
+   tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString::number(m_selectedParam));
+   delete tmp;
+   m_selectedParam = -1;
+   m_clearParam();
+   m_serializeParameters();
 }
 
 //Sets up default settings of the app
@@ -303,9 +323,9 @@ void Reporter::on_paramEdit_clicked()
 
 QStringList Reporter::m_loadParameters(QVector<qint32> & count){
    QStringList tmp;
-   for(qint32 i = 0; i < m_paramKey; ++i){
-      count.append(m_mainSQL.getStorage().getParameters()[i]->getCount());
-      tmp+=m_mainSQL.getStorage().getParameters()[i]->getParameters();
+   for(auto it : m_mainSQL.getStorage().getParameters()){
+      count.append(it->getCount());
+      tmp+=it->getParameters();
    }
    return tmp;
 }
@@ -332,10 +352,27 @@ void Reporter::m_createParamList(QStringList & tmp, qint32 & tmpCount){
       tmpCount++;
    }
 }
+//Clears param text input
 void Reporter::m_clearParam(){
    ui->param1->clear();
    ui->param2->clear();
    ui->param3->clear();
    ui->param4->clear();
    ui->param5->clear();
+}
+//Clears query text input
+void Reporter::m_clearQuery(){
+   ui->queryEdit->clear();
+   ui->queryNameEdit->clear();
+   ui->queryParamEdit->clear();
+}
+
+void Reporter::on_paramDelete_clicked()
+{
+   m_deleteParam();
+}
+
+void Reporter::on_queryDelete_clicked()
+{
+   m_deleteQuery();
 }
