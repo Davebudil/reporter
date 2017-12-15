@@ -21,21 +21,55 @@ QSqlQuery SQLStorage::getResultQuery(){
    return m_Query;
 }
 
-bool SQLStorage::addQuery(const QString & query, const QString & name, const QString & param, bool display){
-   SQLquery * tmp = new SQLquery(query,name,param);
+bool SQLStorage::addQuery(const QString & query, const QString & name, const QString & param, bool display, bool mode){
+   SQLquery * tmp = new SQLquery(query,name,param,(param.isEmpty()));
    if(m_Queries.contains(name)){
       if(display){
-         QMessageBox::warning(0,"New Query Error", "Query with this name already exists.");
+         QMessageBox::warning(0,QObject::tr("New Query Error"), "Query with this name already exists.");
          return false;
       }
       return false;
    }
-   if((param != "0") && (!m_Queries.contains(param))){
-      QMessageBox::warning(0,"New Query Error", "No query with specified master param name exists.");
+   if(((!param.isEmpty()) && (!m_Queries.contains(param))) && mode){
+      QMessageBox::warning(0,QObject::tr("New Query Error"), "No query with specified master param name exists.");
       return false;
    }
    m_Queries[name] = tmp;
+   if(m_Queries[name]->getIsMaster() && mode){
+      masterQuery(name,tmp->getParam());
+   }
    return true;
+}
+
+bool SQLStorage::masterQuery(const QString & detail, const QString & master){
+   if(m_Queries[detail]->getIsMaster()){
+      return false;
+   }else{
+      QString detailQuery;
+      QString masterQuery;
+      QString tmp;
+      QString tempDetail;
+      qint32 index;
+      detailQuery = m_Queries[detail]->getQuery();
+      masterQuery = m_Queries[master]->getQuery();
+      index = detailQuery.lastIndexOf("WHERE", -1, Qt::CaseInsensitive) -1;
+      tempDetail = "JOIN\n";
+      tempDetail += '(' + QString(masterQuery);
+      tempDetail += ") AS T2\n";
+      detailQuery.insert(index + 1, tempDetail);
+      index = detailQuery.lastIndexOf("AS T2\nWHERE", -1, Qt::CaseInsensitive) + 11;
+      tmp = detailQuery.mid(index);
+      tmp.replace(":","T2.");
+      detailQuery.remove(index, 999);
+      detailQuery.append(tmp);
+      m_Queries[detail]->setFinal(detailQuery);
+      return true;
+   }
+}
+void SQLStorage::setParameter(const QString & parameter, const QString & value, const QString & queryName){
+   qDebug() << parameter;
+   qDebug() << value;
+   m_Queries[queryName]->bindParameter(parameter, value);
 }
 
 void SQLStorage::printQueries(){
@@ -49,7 +83,6 @@ void SQLStorage::printParams(){
       it->printParams();
    }
 }
-
 void SQLStorage::generateQuery(const QString & name, const QSqlDatabase & db){
    m_Queries[name]->generateQuery(db);
 }

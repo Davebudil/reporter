@@ -2,12 +2,12 @@
 
 SQLquery::SQLquery(const QString & query,
                    const QString & name,
-                   const QString & param)
+                   const QString & param,
+                   bool master)
    : m_Query(query),
      m_Name(name),
      m_mParameter(param),
-     m_Active(false){
-
+     m_Master(master){
 }
 SQLquery::~SQLquery(){
    delete m_Result;
@@ -25,6 +25,12 @@ QString SQLquery::getName(){
 QString SQLquery::getParam(){
    return m_mParameter;
 }
+QString SQLquery::getFinal(){
+   return m_finalString;
+}
+bool SQLquery::getIsMaster(){
+   return m_Master;
+}
 //Setter for query member
 void SQLquery::setQuery(const QString & query){
    m_Query = query;
@@ -35,15 +41,26 @@ void SQLquery::setName(const QString &name){
 void SQLquery::setParam(const QString & param){
    m_mParameter = param;
 }
+void SQLquery::setFinal(const QString & finalString){
+   m_finalString = finalString;
+}
 //Debug function
 void SQLquery::printValue(){
    qDebug() << "Name:" << m_Name;
    qDebug() << "Query:" << m_Query;
+   qDebug() << "FinalQuery:" << m_finalString;
+   qDebug() << "MasterBool:" << m_Master;
 }
 //generates query result
 void SQLquery::generateQuery(const QSqlDatabase & db){
    m_Result = new QSqlQuery(db);
-   m_Result->prepare(m_Query);
+   if(m_Master){
+//      qDebug() << "Execute Classic"; //debug
+      m_Result->prepare(m_Query);
+   }else{
+//      qDebug() << "Execute Final"; //debug
+      m_Result->prepare(m_finalString);
+   }
 }
 //executes set query and checks for validity of SQL syntax
 void SQLquery::executeQuery(){
@@ -53,7 +70,12 @@ void SQLquery::executeQuery(){
       m_Result->clear();
    }
 }
-//B
+//Binds parameter to value
 void SQLquery::bindParameter(const QString & parameter, const QString & value){
    m_Result->bindValue(parameter, value);
 }
+//Gets the number of result rows
+qint32 SQLquery::getQueryResultRows(){
+   return m_Result->size();
+}
+

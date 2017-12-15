@@ -21,8 +21,10 @@ class SQLStorage : public QObject{
       QMap<qint32, SQLParameter*>  & getParameters();
       //getter
       QSqlQuery getResultQuery();
-      bool addQuery(const QString & query, const QString & name, const QString & param, bool display);
+      bool addQuery(const QString & query, const QString & name, const QString & param, bool display, bool mode);
       bool addParam(const QStringList & param, const qint32 & count, const qint32 & id);
+      bool masterQuery(const QString & detail, const QString & master);
+      void setParameter(const QString & parameter, const QString & value, const QString & queryName);
       void printQueries();
       void printParams();
       void generateQuery(const QString & name, const QSqlDatabase & db);
