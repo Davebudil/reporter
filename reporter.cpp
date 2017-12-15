@@ -49,6 +49,7 @@ void Reporter::on_toolButton_clicked(){
       m_displaySQLResult(m_nameKey);
    }
 }
+
 void Reporter::m_executeQuery(const QString & name){
    m_mainSQL.getStorage().executeQuery(name);
 }
@@ -61,7 +62,8 @@ void Reporter::m_generateQuery(const QString & name){
 void Reporter::on_newQuery_clicked(){
    m_addQuery(ui->queryEdit->toPlainText(),
               ui->queryNameEdit->text(),
-              ui->queryParamEdit->text());
+              ui->queryParamEdit->text(),
+              true);
 }
 //Function to save the edit of current query
 void Reporter::on_saveQuery_clicked(){
@@ -85,37 +87,40 @@ void Reporter::m_saveQuery(){
    queryName = ui->queryNameEdit->text();
    paramName = ui->queryParamEdit->text();
 
-   if(m_nameKey.isEmpty()){
-      QMessageBox::critical(this,QObject::tr("Text error"), "No query selected.");
+   if((!m_mainSQL.getStorage().getQueries().contains(paramName)) && (!paramName.isEmpty())){
+      QMessageBox::critical(this,QObject::tr("New Query Error"), "No query with specified master param name exists.");
+   }else if(m_nameKey.isEmpty()){
+      QMessageBox::critical(this,QObject::tr("Query Edit Error"), "No query selected.");
    }else{
-      if(m_mainSQL.getStorage().addQuery(queryText,queryName,paramName, false)){
+      if(m_mainSQL.getStorage().addQuery(queryText,queryName,paramName, false, false)){
          tmp = ui->scrollAreaWidgetContents->findChild<QToolButton *>(m_nameKey);
          tmp->setObjectName(queryName);
          tmp->setText(queryName);
          m_mainSQL.getStorage().getQueries().remove(m_nameKey);
          m_nameKey = queryName;
-         m_serializeQueries();
       }else{
          m_mainSQL.getStorage().getQueries()[m_nameKey]->setParam(paramName);
          m_mainSQL.getStorage().getQueries()[m_nameKey]->setQuery(queryText);
          ui->queryEdit->document()->setPlainText(queryText);
          ui->queryParamEdit->setText(paramName);
-         m_serializeQueries();
       }
    }
+   m_serializeQueries();
+   m_loadMaster();
 }
 //function to add query
 void Reporter::m_addQuery(const QString & queryText,
                           const QString & queryName,
-                          const QString & paramName){
+                          const QString & paramName,
+                          bool mode){
    QString param;
    if(paramName.isEmpty() || paramName.isNull()){
-      param = "0";
+      param = "";
    }else{
       param = paramName;
    }
    if(!queryText.isEmpty() && !queryName.isEmpty()){
-      if(m_mainSQL.getStorage().addQuery(queryText,queryName,param, true)){
+      if(m_mainSQL.getStorage().addQuery(queryText,queryName,param, true, mode)){
          QToolButton * newQuery = new QToolButton;
          newQuery->setText(queryName);
          //Ugly design settings ignore please
@@ -236,8 +241,9 @@ void Reporter::m_deleteParam(){
 
 //Sets up default settings of the app
 void Reporter::defaultSettings(){
-   m_Deserialize();
    m_ConnectDB();
+   m_Deserialize();
+   m_loadMaster();
 }
 //Load the default query
 void Reporter::m_defaultQuery(){
@@ -284,7 +290,7 @@ void Reporter::m_Deserialize(){
 
    m_Setup.deserializeQueries(tmpDeserializeQueries);
    for(qint32 i = 0; i + 2 < tmpDeserializeQueries.size(); i+=3){
-      m_addQuery(tmpDeserializeQueries.at(i),tmpDeserializeQueries.at(i+1),tmpDeserializeQueries.at(i+2));
+      m_addQuery(tmpDeserializeQueries.at(i),tmpDeserializeQueries.at(i+1),tmpDeserializeQueries.at(i+2), false);
    }
 
    QStringList tmpDeserializeParameters;
@@ -319,6 +325,14 @@ void Reporter::on_paramNew_clicked()
 void Reporter::on_paramEdit_clicked()
 {
    m_saveParameter();
+}
+
+void Reporter::m_loadMaster(){
+   for(auto & it : m_mainSQL.getStorage().getQueries()){
+      if(!it->getIsMaster()){
+         m_mainSQL.getStorage().masterQuery(it->getName(),it->getParam());
+      }
+   }
 }
 
 QStringList Reporter::m_loadParameters(QVector<qint32> & count){

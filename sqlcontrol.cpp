@@ -29,7 +29,7 @@ SQLStorage & SQLControl::getStorage(){
 Database & SQLControl::getDatabase(){
    return m_DB;
 }
-
+//Loads query data to stringlist
 QStringList SQLControl::loadList(){
    QStringList tmpQueries;
    for(auto it: m_Storage.getQueries()){
@@ -38,4 +38,9 @@ QStringList SQLControl::loadList(){
       tmpQueries.append(it->getParam());
    }
    return tmpQueries;
+}
+
+void SQLControl::setTimeParameters(const QDate &from, const QDate &to, const QString &queryName){
+   m_Storage.getQueries()[queryName]->bindParameter(":TIMEFROM",from.toString());
+   m_Storage.getQueries()[queryName]->bindParameter(":TIMETO", to.toString());
 }

@@ -24,10 +24,7 @@ class SQLControl : public QObject
       QStringList loadList();
       //Sets model to display the query result in table
       void setQueryModel(const QString & name);
-
-   signals:
-
-   public slots:
+      void setTimeParameters(const QDate & from, const QDate & to, const QString & queryName);
 
    private:
       Database m_DB;

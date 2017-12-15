@@ -12,6 +12,7 @@
 #include <QToolButton>
 #include <QFont>
 #include <QtSql>
+#include <QDateTime>
 
 namespace Ui{
    class Reporter;
@@ -65,7 +66,7 @@ class Reporter : public QMainWindow{
       //function to execute query
       void m_executeQuery(const QString & name);
       //function to add query
-      void m_addQuery(const QString & queryText, const QString & queryName, const QString & paramName);
+      void m_addQuery(const QString & queryText, const QString & queryName, const QString & paramName, bool mode);
       //functions to determine which button was clicked and select the stored data based on it
       void m_scrollQueryClicked();
       void m_scrollParamClicked();
@@ -91,6 +92,7 @@ class Reporter : public QMainWindow{
       //utility function to get text from parameters input boxes
       void m_createParamList(QStringList & tmp, qint32 & tmpCount);
       QStringList m_loadParameters(QVector<qint32> & count);
+      void m_loadMaster();
       void m_clearParam();
       void m_clearQuery();
 };
