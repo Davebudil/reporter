@@ -36,6 +36,7 @@ QStringList SQLControl::loadList(){
       tmpQueries.append(it->getQuery());
       tmpQueries.append(it->getName());
       tmpQueries.append(it->getParam());
+      tmpQueries.append(QString::number(it->getActive()));
    }
    return tmpQueries;
 }

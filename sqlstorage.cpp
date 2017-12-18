@@ -21,8 +21,8 @@ QSqlQuery SQLStorage::getResultQuery(){
    return m_Query;
 }
 
-bool SQLStorage::addQuery(const QString & query, const QString & name, const QString & param, bool display, bool mode){
-   SQLquery * tmp = new SQLquery(query,name,param,(param.isEmpty()));
+bool SQLStorage::addQuery(const QString & query, const QString & name, const QString & param, bool active, bool display, bool mode){
+   SQLquery * tmp = new SQLquery(query,name,param,(param.isEmpty()), active);
    if(m_Queries.contains(name)){
       if(display){
          QMessageBox::warning(0,QObject::tr("New Query Error"), "Query with this name already exists.");
@@ -60,8 +60,13 @@ bool SQLStorage::masterQuery(const QString & detail, const QString & master){
       index = detailQuery.lastIndexOf("AS T2\nWHERE", -1, Qt::CaseInsensitive) + 11;
       tmp = detailQuery.mid(index);
       tmp.replace(":","T2.");
-      detailQuery.remove(index, 999);
-      detailQuery.append(tmp);
+      detailQuery.remove(index, 111);
+      detailQuery.insert(index, tmp);
+      if((index = masterQuery.lastIndexOf("\nORDER BY ")) != -1){
+         tmp = masterQuery.mid(index + 1);
+         detailQuery += '\n';
+         detailQuery.append(tmp);
+      }
       m_Queries[detail]->setFinal(detailQuery);
       return true;
    }

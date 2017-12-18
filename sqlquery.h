@@ -14,7 +14,8 @@ class SQLquery{
       explicit SQLquery(const QString & query,
                         const QString & name,
                         const QString & param,
-                        bool master);
+                        bool master,
+                        bool active);
       ~SQLquery();
       //Getter for query member
       QString getQuery();
@@ -24,11 +25,13 @@ class SQLquery{
       QString getFinal();
       qint32 getQueryResultRows();
       bool getIsMaster();
+      bool getActive();
       //Setters for members
       void setQuery(const QString & query);
       void setName(const QString & name);
       void setParam(const QString & param);
       void setFinal(const QString & finalString);
+      void setActive(bool active);
       //print for debugging
       void printValue();
       //Generate
@@ -47,6 +50,7 @@ class SQLquery{
       QString m_finalString;
       QSqlQuery * m_Result;
       bool m_Master;
+      bool m_isActive;
 };
 
 #endif // SQLQUERY_H

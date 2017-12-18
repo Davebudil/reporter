@@ -8,7 +8,8 @@
 Reporter::Reporter(QWidget *parent)
    : QMainWindow(parent),
      ui(new Ui::Reporter),
-     m_paramKey(0){
+     m_paramKey(0),
+     m_queryActive(false){
    ui->setupUi(this);
    ui->queryNameEdit->setText("Query Name");
    ui->queryParamEdit->setText("Master name");
@@ -63,7 +64,8 @@ void Reporter::on_newQuery_clicked(){
    m_addQuery(ui->queryEdit->toPlainText(),
               ui->queryNameEdit->text(),
               ui->queryParamEdit->text(),
-              true);
+              true,
+              m_queryActive);
 }
 //Function to save the edit of current query
 void Reporter::on_saveQuery_clicked(){
@@ -92,7 +94,7 @@ void Reporter::m_saveQuery(){
    }else if(m_nameKey.isEmpty()){
       QMessageBox::critical(this,QObject::tr("Query Edit Error"), "No query selected.");
    }else{
-      if(m_mainSQL.getStorage().addQuery(queryText,queryName,paramName, false, false)){
+      if(m_mainSQL.getStorage().addQuery(queryText,queryName,paramName, m_queryActive, false, false)){
          tmp = ui->scrollAreaWidgetContents->findChild<QToolButton *>(m_nameKey);
          tmp->setObjectName(queryName);
          tmp->setText(queryName);
@@ -101,6 +103,7 @@ void Reporter::m_saveQuery(){
       }else{
          m_mainSQL.getStorage().getQueries()[m_nameKey]->setParam(paramName);
          m_mainSQL.getStorage().getQueries()[m_nameKey]->setQuery(queryText);
+         m_mainSQL.getStorage().getQueries()[m_nameKey]->setActive(m_queryActive);
          ui->queryEdit->document()->setPlainText(queryText);
          ui->queryParamEdit->setText(paramName);
       }
@@ -112,7 +115,8 @@ void Reporter::m_saveQuery(){
 void Reporter::m_addQuery(const QString & queryText,
                           const QString & queryName,
                           const QString & paramName,
-                          bool mode){
+                          bool mode,
+                          bool active){
    QString param;
    if(paramName.isEmpty() || paramName.isNull()){
       param = "";
@@ -120,7 +124,7 @@ void Reporter::m_addQuery(const QString & queryText,
       param = paramName;
    }
    if(!queryText.isEmpty() && !queryName.isEmpty()){
-      if(m_mainSQL.getStorage().addQuery(queryText,queryName,param, true, mode)){
+      if(m_mainSQL.getStorage().addQuery(queryText,queryName,param, active, true, mode)){
          QToolButton * newQuery = new QToolButton;
          newQuery->setText(queryName);
          //Ugly design settings ignore please
@@ -254,6 +258,7 @@ void Reporter::on_clearQuery_clicked(){
    ui->queryEdit->clear();
    ui->queryNameEdit->clear();
    ui->queryParamEdit->clear();
+   ui->queryActive->setChecked(false);
 }
 //function to determine which button was clicked and select the stored query based on it
 void Reporter::m_scrollQueryClicked(){
@@ -264,6 +269,7 @@ void Reporter::m_scrollQueryClicked(){
    ui->queryEdit->document()->setPlainText(m_mainSQL.getStorage().getQueries()[senderObjname]->getQuery());
    ui->queryNameEdit->setText(m_mainSQL.getStorage().getQueries()[senderObjname]->getName());
    ui->queryParamEdit->setText(m_mainSQL.getStorage().getQueries()[senderObjname]->getParam());
+   ui->queryActive->setChecked(m_mainSQL.getStorage().getQueries()[senderObjname]->getActive());
 }
 //Setup connection to DB
 void Reporter::m_ConnectDB(){
@@ -289,8 +295,12 @@ void Reporter::m_Deserialize(){
    QStringList tmpDeserializeQueries;
 
    m_Setup.deserializeQueries(tmpDeserializeQueries);
-   for(qint32 i = 0; i + 2 < tmpDeserializeQueries.size(); i+=3){
-      m_addQuery(tmpDeserializeQueries.at(i),tmpDeserializeQueries.at(i+1),tmpDeserializeQueries.at(i+2), false);
+   for(qint32 i = 0; i + 3 < tmpDeserializeQueries.size(); i+=4){
+      m_addQuery(tmpDeserializeQueries.at(i),
+                 tmpDeserializeQueries.at(i+1),
+                 tmpDeserializeQueries.at(i+2),
+                 false,
+                 (tmpDeserializeQueries.at(i+3) == "0" ? false : true));
    }
 
    QStringList tmpDeserializeParameters;
@@ -379,6 +389,7 @@ void Reporter::m_clearQuery(){
    ui->queryEdit->clear();
    ui->queryNameEdit->clear();
    ui->queryParamEdit->clear();
+   ui->queryActive->setChecked(false);
 }
 
 void Reporter::on_paramDelete_clicked()
@@ -389,4 +400,9 @@ void Reporter::on_paramDelete_clicked()
 void Reporter::on_queryDelete_clicked()
 {
    m_deleteQuery();
+}
+
+void Reporter::on_queryActive_stateChanged(int state)
+{
+   m_queryActive = state;
 }
