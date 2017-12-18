@@ -3,11 +3,13 @@
 SQLquery::SQLquery(const QString & query,
                    const QString & name,
                    const QString & param,
-                   bool master)
+                   bool master,
+                   bool active)
    : m_Query(query),
      m_Name(name),
      m_mParameter(param),
-     m_Master(master){
+     m_Master(master),
+     m_isActive(active){
 }
 SQLquery::~SQLquery(){
    delete m_Result;
@@ -31,6 +33,9 @@ QString SQLquery::getFinal(){
 bool SQLquery::getIsMaster(){
    return m_Master;
 }
+bool SQLquery::getActive(){
+   return m_isActive;
+}
 //Setter for query member
 void SQLquery::setQuery(const QString & query){
    m_Query = query;
@@ -43,6 +48,9 @@ void SQLquery::setParam(const QString & param){
 }
 void SQLquery::setFinal(const QString & finalString){
    m_finalString = finalString;
+}
+void SQLquery::setActive(bool active){
+   m_isActive = active;
 }
 //Debug function
 void SQLquery::printValue(){

@@ -51,6 +51,8 @@ class Reporter : public QMainWindow{
 
       void on_queryDelete_clicked();
 
+      void on_queryActive_stateChanged(int state);
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -59,6 +61,7 @@ class Reporter : public QMainWindow{
       qint32 m_selectedParam;
       qint32 m_paramKey;
       QToolButton * tmp;
+      bool m_queryActive;
       //Print query result to the table
       void m_displaySQLResult(const QString & name);
       //used to generate result from current selected query
@@ -66,7 +69,7 @@ class Reporter : public QMainWindow{
       //function to execute query
       void m_executeQuery(const QString & name);
       //function to add query
-      void m_addQuery(const QString & queryText, const QString & queryName, const QString & paramName, bool mode);
+      void m_addQuery(const QString & queryText, const QString & queryName, const QString & paramName, bool mode, bool active);
       //functions to determine which button was clicked and select the stored data based on it
       void m_scrollQueryClicked();
       void m_scrollParamClicked();
