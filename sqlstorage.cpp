@@ -2,11 +2,11 @@
 //Constructor
 SQLStorage::SQLStorage(QObject *parent)
    : QObject(parent){
-
 }
 
 SQLStorage::~SQLStorage(){
-   //DELETE MAP CONTENT
+   qDeleteAll(m_Queries);
+   qDeleteAll(m_Parameters);
 }
 //Getters
 QMap<QString, SQLquery*> & SQLStorage::getQueries(){

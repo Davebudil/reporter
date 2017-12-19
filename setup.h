@@ -22,9 +22,19 @@ class Setup : public QObject{
       //serializes
       bool serializeQueries(const QStringList & queries);
       bool serializeParameters(const QStringList & parameters, const QVector<qint32> & count);
+      bool serializeScheduleShift();
+      bool serializeScheduleDaily();
+      bool serializeScheduleWeekly();
+      bool serializeScheduleMonthly();
+      bool serializeScheduleCustom();
       //deserializes
       bool deserializeQueries(QStringList & queries);
       bool deserializeParameters(QStringList & parameters, QVector<qint32> & count);
+      bool deserializeScheduleShift();
+      bool deserializeScheduleDaily();
+      bool deserializeScheduleWeekly();
+      bool deserializeScheduleMonthly();
+      bool deserializeScheduleCustom();
       //cleans up after applicaton
       bool cleanUp();
       //setter

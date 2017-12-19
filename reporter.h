@@ -2,9 +2,6 @@
 #define REPORTER_H
 
 #include <QMainWindow>
-#include <QList>
-#include <sqlcontrol.h>
-#include <setup.h>
 #include <QDebug>
 #include <QMap>
 #include <QWidget>
@@ -13,6 +10,14 @@
 #include <QFont>
 #include <QtSql>
 #include <QDateTime>
+#include <QMenuBar>
+#include <QMenu>
+#include <QList>
+#include <sqlcontrol.h>
+#include <setup.h>
+#include <scheduling.h>
+#include <log.h>
+#include <export.h>
 
 namespace Ui{
    class Reporter;
@@ -53,15 +58,22 @@ class Reporter : public QMainWindow{
 
       void on_queryActive_stateChanged(int state);
 
+      void on_monthlyDays_activated(int index);
+
+      void on_weeklyDays_activated(int index);
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
       Setup m_Setup;
+      Log m_Log;
+      Export m_Export;
       QString m_nameKey;
       qint32 m_selectedParam;
       qint32 m_paramKey;
       QToolButton * tmp;
       bool m_queryActive;
+      qint32 m_daysWeeklyIndex;
       //Print query result to the table
       void m_displaySQLResult(const QString & name);
       //used to generate result from current selected query
@@ -98,6 +110,7 @@ class Reporter : public QMainWindow{
       void m_loadMaster();
       void m_clearParam();
       void m_clearQuery();
+      void m_loadSchedule();
 };
 
 #endif // REPORTER_H
