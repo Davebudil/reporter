@@ -18,6 +18,8 @@ Reporter::Reporter(QWidget *parent)
    ui->dbPassword->setText(m_mainSQL.getPassword());
    QFont newFont("DejaVu Sans Mono", 11, QFont::Normal, true);
    setFont(newFont);
+   ui->weeklyDays->setMaximumHeight(100);
+   ui->monthlyDays->setMaximumHeight(100);
 }
 //Destructor
 Reporter::~Reporter(){
@@ -165,25 +167,25 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
       QToolButton * newParameter = new QToolButton;
       newParameter->setText(params.at(0));
       newParameter->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                              "background-color: #f44336; } QToolButton::menu-button "
-                              "{ background: url('./images/downarrowgray.png') "
-                              "center center no-repeat; background-color: #f44336; "
-                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                              "{ background-color: #f44336; } QStatusBar { background-color: "
-                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
-                              "{ color: white; background-color: #f44336; "
-                              "} QToolButton:hover, QToolButton:pressed, "
-                              "QToolButton:checked { background-color: "
-                              "#607D8B; } QToolButton:hover { color: black; } "
-                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
-                              "QToolButton:hover { background-color: white; color: black; border: 1px "
-                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
-                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
-                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                              "QStatusBar::item { color: black; background-color: #f44336; } "
-                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                                  "background-color: #f44336; } QToolButton::menu-button "
+                                  "{ background: url('./images/downarrowgray.png') "
+                                  "center center no-repeat; background-color: #f44336; "
+                                  "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                                  "{ background-color: #f44336; } QStatusBar { background-color: "
+                                  "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                                  "{ color: white; background-color: #f44336; "
+                                  "} QToolButton:hover, QToolButton:pressed, "
+                                  "QToolButton:checked { background-color: "
+                                  "#607D8B; } QToolButton:hover { color: black; } "
+                                  "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                                  "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                                  "QToolButton:hover { background-color: white; color: black; border: 1px "
+                                  "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                                  "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                                  "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                                  "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                                  "QStatusBar::item { color: black; background-color: #f44336; } "
+                                  "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
       newParameter->setObjectName(QString::number(m_paramKey++));
       ui->scrollLayout_2->addWidget(newParameter);
       connect(newParameter, &QToolButton::clicked, this, &Reporter::m_scrollParamClicked);
@@ -248,6 +250,7 @@ void Reporter::defaultSettings(){
    m_ConnectDB();
    m_Deserialize();
    m_loadMaster();
+   m_loadSchedule();
 }
 //Load the default query
 void Reporter::m_defaultQuery(){
@@ -319,6 +322,11 @@ void Reporter::m_Deserialize(){
       m_addParameters(tmpList,tmpInt);
    }
 }
+
+void Reporter::m_loadSchedule(){
+
+}
+
 void Reporter::on_paramNew_clicked()
 {
    QStringList tmp;
@@ -392,17 +400,22 @@ void Reporter::m_clearQuery(){
    ui->queryActive->setChecked(false);
 }
 
-void Reporter::on_paramDelete_clicked()
-{
+void Reporter::on_paramDelete_clicked(){
    m_deleteParam();
 }
 
-void Reporter::on_queryDelete_clicked()
-{
+void Reporter::on_queryDelete_clicked(){
    m_deleteQuery();
 }
 
-void Reporter::on_queryActive_stateChanged(int state)
-{
+void Reporter::on_queryActive_stateChanged(int state){
    m_queryActive = state;
+}
+
+void Reporter::on_monthlyDays_activated(int index){
+
+}
+
+void Reporter::on_weeklyDays_activated(int index){
+
 }

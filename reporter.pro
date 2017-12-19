@@ -35,7 +35,15 @@ SOURCES += \
     sqlcontrol.cpp \
     database.cpp \
     sqlparameter.cpp \
-    setup.cpp
+    setup.cpp \
+    scheduling.cpp \
+    shiftschedule.cpp \
+    dailyschedule.cpp \
+    weeklyschedule.cpp \
+    monthlyschedule.cpp \
+    customschedule.cpp \
+    log.cpp \
+    export.cpp
 
 HEADERS += \
         reporter.h \
@@ -45,7 +53,15 @@ HEADERS += \
     sqlcontrol.h \
     database.h \
     sqlparameter.h \
-    setup.h
+    setup.h \
+    scheduling.h \
+    shiftschedule.h \
+    dailyschedule.h \
+    weeklyschedule.h \
+    monthlyschedule.h \
+    customschedule.h \
+    log.h \
+    export.h
 
 FORMS += \
         reporter.ui
