@@ -155,6 +155,9 @@ class Reporter : public QMainWindow{
       void m_editWeeklyDays();
       void m_editActiveShiftDays();
       void m_editActiveDailyDays();
+      void m_serializeSchedule();
+      void m_deserializeSchedule();
+      void m_serializeGlobal();
 };
 
 #endif // REPORTER_H

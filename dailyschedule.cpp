@@ -13,9 +13,8 @@ DailySchedule::DailySchedule()
    std::fill_n(m_Days, 7, false);
 }
 DailySchedule::~DailySchedule(){
-   delete m_Days;
+   delete[] m_Days;
 }
-
 QString DailySchedule::getCsvTemplatePath() const{
     return m_csvTemplatePath;
 }
@@ -36,6 +35,22 @@ bool DailySchedule::getActive() const{
 }
 bool * DailySchedule::getDays() const{
    return m_Days;
+}
+QStringList DailySchedule::prepareSerialization(){
+   QStringList valueList;
+   valueList.append(QString::number(m_Active));
+   valueList.append(QString::number(m_csvAttach));
+   valueList.append(QString::number(m_xlsAttach));
+   valueList.append(m_AttachName);
+   valueList.append(m_SubjName);
+   valueList.append(m_xlsTemplatePath);
+   valueList.append(m_csvTemplatePath);
+   valueList.append(m_emailTemplatePath);
+   valueList.append(QString(m_Time.toString()));
+   for(qint32 i = 0; i < 7; ++i){
+      valueList.append(QString::number(m_Days[i]));
+   }
+   return valueList;
 }
 void DailySchedule::setCsvTemplatePath(const QString & csvTemplatePath){
     m_csvTemplatePath = csvTemplatePath;

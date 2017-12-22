@@ -17,24 +17,25 @@ class Setup : public QObject{
       explicit Setup(QObject *parent = nullptr);
       //Destructor
       ~Setup();
-      //loads .ini settings file
+      //.ini file
       bool loadIni();
+      bool saveIni();
       //serializes
       bool serializeQueries(const QStringList & queries);
       bool serializeParameters(const QStringList & parameters, const QVector<qint32> & count);
-      bool serializeScheduleShift();
-      bool serializeScheduleDaily();
-      bool serializeScheduleWeekly();
-      bool serializeScheduleMonthly();
-      bool serializeScheduleCustom();
+      bool serializeSchedule(const QStringList & shift,
+                             const QStringList & day,
+                             const QStringList & weekly,
+                             const QStringList & monthly);
+      bool serializeGlobal(const QStringList & global);
       //deserializes
       bool deserializeQueries(QStringList & queries);
       bool deserializeParameters(QStringList & parameters, QVector<qint32> & count);
-      bool deserializeScheduleShift();
-      bool deserializeScheduleDaily();
-      bool deserializeScheduleWeekly();
-      bool deserializeScheduleMonthly();
-      bool deserializeScheduleCustom();
+      bool deserializeSchedule(QStringList & shift,
+                               QStringList & day,
+                               QStringList & weekly,
+                               QStringList & monthly);
+      bool deserializeGlobal(QStringList & global);
       //cleans up after applicaton
       bool cleanUp();
       //setter
