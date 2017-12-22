@@ -1,5 +1,6 @@
 #ifndef SCHEDULING_H
 #define SCHEDULING_H
+#include <QObject>
 #include <shiftschedule.h>
 #include <dailyschedule.h>
 #include <weeklyschedule.h>
@@ -16,6 +17,8 @@ class Scheduling{
       WeeklySchedule & getWeekly();
       MonthlySchedule & getMonthly();
       CustomSchedule & getCustom();
+      QString getGlobalEmail() const;
+      void setGlobalEmail(const QString & GlobalEmail);
 
    private:
       ShiftSchedule m_Shift;
@@ -23,6 +26,7 @@ class Scheduling{
       WeeklySchedule m_Weekly;
       MonthlySchedule m_Monthly;
       CustomSchedule m_Custom;
+      QString m_GlobalEmail;
 };
 
 #endif // SCHEDULING_H

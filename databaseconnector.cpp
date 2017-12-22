@@ -32,6 +32,6 @@ void DatabaseConnector::setInfo(const QString &dbType,
    m_usrPasswrd = usrPass;
 }
 //Getter for password
-QString DatabaseConnector::getPassword(){
+QString DatabaseConnector::getPassword() const{
    return m_usrPasswrd;
 }

@@ -22,10 +22,10 @@ bool Database::createConnection(){
    }
 }
 //Getter
-DatabaseConnector& Database::getDatabaseConnector(){
+DatabaseConnector & Database::getDatabaseConnector(){
    return m_DBConnect;
 }
 //Getter
-QSqlDatabase& Database::getDatabase(){
+QSqlDatabase & Database::getDatabase(){
    return m_DB;
 }

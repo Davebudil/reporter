@@ -645,7 +645,7 @@ QTabWidget::tab-bar {
        </rect>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="Shift">
        <attribute name="title">
@@ -664,7 +664,7 @@ QTabWidget::tab-bar {
          <string>Active</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="mondayActive">
+       <widget class="QCheckBox" name="shiftMondayActive">
         <property name="geometry">
          <rect>
           <x>100</x>
@@ -677,7 +677,7 @@ QTabWidget::tab-bar {
          <string>Mon</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="tuesdayActive">
+       <widget class="QCheckBox" name="shiftTuesdayActive">
         <property name="geometry">
          <rect>
           <x>155</x>
@@ -690,10 +690,10 @@ QTabWidget::tab-bar {
          <string>Tue</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="thursdayActive">
+       <widget class="QCheckBox" name="shiftThursdayActive">
         <property name="geometry">
          <rect>
-          <x>205</x>
+          <x>260</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -703,10 +703,10 @@ QTabWidget::tab-bar {
          <string>Thu</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="wednesdayActive">
+       <widget class="QCheckBox" name="shiftWednesdayActive">
         <property name="geometry">
          <rect>
-          <x>255</x>
+          <x>205</x>
           <y>70</y>
           <width>55</width>
           <height>24</height>
@@ -716,7 +716,7 @@ QTabWidget::tab-bar {
          <string>Wed</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="fridayActive">
+       <widget class="QCheckBox" name="shiftFridayActive">
         <property name="geometry">
          <rect>
           <x>310</x>
@@ -729,7 +729,7 @@ QTabWidget::tab-bar {
          <string>Fri</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="saturdayActive">
+       <widget class="QCheckBox" name="shiftSaturdayActive">
         <property name="geometry">
          <rect>
           <x>360</x>
@@ -742,7 +742,7 @@ QTabWidget::tab-bar {
          <string>Sat</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="sundayActive">
+       <widget class="QCheckBox" name="shiftSundayActive">
         <property name="geometry">
          <rect>
           <x>410</x>
@@ -755,7 +755,7 @@ QTabWidget::tab-bar {
          <string>Sun</string>
         </property>
        </widget>
-       <widget class="QTimeEdit" name="timeEdit">
+       <widget class="QTimeEdit" name="shiftTo">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -765,7 +765,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QTimeEdit" name="timeEdit_2">
+       <widget class="QTimeEdit" name="shiftFrom">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -981,6 +981,26 @@ QTabWidget::tab-bar {
          <string>Br</string>
         </property>
        </widget>
+       <widget class="QTimeEdit" name="shiftTo_2">
+        <property name="geometry">
+         <rect>
+          <x>260</x>
+          <y>37</y>
+          <width>81</width>
+          <height>27</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QTimeEdit" name="shiftFrom_2">
+        <property name="geometry">
+         <rect>
+          <x>260</x>
+          <y>7</y>
+          <width>81</width>
+          <height>27</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="Daily">
        <attribute name="title">
@@ -999,7 +1019,7 @@ QTabWidget::tab-bar {
          <string>Email template</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftEmail_2">
+       <widget class="QLineEdit" name="dailyEmail">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1009,7 +1029,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftXLS_2">
+       <widget class="QLineEdit" name="dailyXLS">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1032,7 +1052,7 @@ QTabWidget::tab-bar {
          <string>Subject</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftAttach_2">
+       <widget class="QLineEdit" name="dailyAttach">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1042,7 +1062,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QCheckBox" name="shiftAttachCSV_2">
+       <widget class="QCheckBox" name="dailyAttachCSV">
         <property name="geometry">
          <rect>
           <x>290</x>
@@ -1068,7 +1088,7 @@ QTabWidget::tab-bar {
          <string>XLS template</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="shiftActive_3">
+       <widget class="QCheckBox" name="dailyActive">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1094,7 +1114,7 @@ QTabWidget::tab-bar {
          <string>Attachment Name</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftCSV_2">
+       <widget class="QLineEdit" name="dailyCSV">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1104,7 +1124,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftSubj_2">
+       <widget class="QLineEdit" name="dailySubj">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1114,7 +1134,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QCheckBox" name="shiftAttachXLS_2">
+       <widget class="QCheckBox" name="dailyAttachXLS">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1140,7 +1160,7 @@ QTabWidget::tab-bar {
          <string>CSV template</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="saturdayActive_2">
+       <widget class="QCheckBox" name="dailySaturdayActive">
         <property name="geometry">
          <rect>
           <x>360</x>
@@ -1153,7 +1173,7 @@ QTabWidget::tab-bar {
          <string>Sat</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="tuesdayActive_2">
+       <widget class="QCheckBox" name="dailyTuesdayActive">
         <property name="geometry">
          <rect>
           <x>155</x>
@@ -1166,10 +1186,10 @@ QTabWidget::tab-bar {
          <string>Tue</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="wednesdayActive_2">
+       <widget class="QCheckBox" name="dailyWednesdayActive">
         <property name="geometry">
          <rect>
-          <x>255</x>
+          <x>205</x>
           <y>70</y>
           <width>55</width>
           <height>24</height>
@@ -1179,7 +1199,7 @@ QTabWidget::tab-bar {
          <string>Wed</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="sundayActive_2">
+       <widget class="QCheckBox" name="dailySundayActive">
         <property name="geometry">
          <rect>
           <x>410</x>
@@ -1192,7 +1212,7 @@ QTabWidget::tab-bar {
          <string>Sun</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="mondayActive_2">
+       <widget class="QCheckBox" name="dailyMondayActive">
         <property name="geometry">
          <rect>
           <x>100</x>
@@ -1205,7 +1225,7 @@ QTabWidget::tab-bar {
          <string>Mon</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="fridayActive_2">
+       <widget class="QCheckBox" name="dailyFridayActive">
         <property name="geometry">
          <rect>
           <x>310</x>
@@ -1218,10 +1238,10 @@ QTabWidget::tab-bar {
          <string>Fri</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="thursdayActive_2">
+       <widget class="QCheckBox" name="dailyThursdayActive">
         <property name="geometry">
          <rect>
-          <x>205</x>
+          <x>260</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -1231,7 +1251,7 @@ QTabWidget::tab-bar {
          <string>Thu</string>
         </property>
        </widget>
-       <widget class="QTimeEdit" name="timeEdit_3">
+       <widget class="QTimeEdit" name="dailyTime">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1311,7 +1331,7 @@ QTabWidget::tab-bar {
          <string>CSV template</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftXLS_3">
+       <widget class="QLineEdit" name="weeklyXLS">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1321,7 +1341,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftAttach_3">
+       <widget class="QLineEdit" name="weeklyAttach">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1357,7 +1377,7 @@ QTabWidget::tab-bar {
          <string>Attachment Name</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftCSV_3">
+       <widget class="QLineEdit" name="weeklyCSV">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1367,7 +1387,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftEmail_3">
+       <widget class="QLineEdit" name="weeklyEmail">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1377,7 +1397,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QCheckBox" name="shiftActive_4">
+       <widget class="QCheckBox" name="weeklyActive">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1390,7 +1410,7 @@ QTabWidget::tab-bar {
          <string>Active</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftSubj_3">
+       <widget class="QLineEdit" name="weeklySubj">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1413,7 +1433,7 @@ QTabWidget::tab-bar {
          <string>Subject</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="shiftAttachXLS_3">
+       <widget class="QCheckBox" name="weeklyAttachXLS">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1439,7 +1459,7 @@ QTabWidget::tab-bar {
          <string>XLS template</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="shiftAttachCSV_3">
+       <widget class="QCheckBox" name="weeklyAttachCSV">
         <property name="geometry">
          <rect>
           <x>290</x>
@@ -1452,7 +1472,7 @@ QTabWidget::tab-bar {
          <string>Attach CSV</string>
         </property>
        </widget>
-       <widget class="QTimeEdit" name="timeEdit_4">
+       <widget class="QTimeEdit" name="weeklyTime">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1596,7 +1616,7 @@ QTabWidget::tab-bar {
          <string>CSV template</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftXLS_4">
+       <widget class="QLineEdit" name="monthlyXLS">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1606,7 +1626,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftAttach_4">
+       <widget class="QLineEdit" name="monthlyAttach">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1642,7 +1662,7 @@ QTabWidget::tab-bar {
          <string>Attachment Name</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftCSV_4">
+       <widget class="QLineEdit" name="monthlyCSV">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1652,7 +1672,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftEmail_4">
+       <widget class="QLineEdit" name="monthlyEmail">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1662,7 +1682,7 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QCheckBox" name="shiftActive_5">
+       <widget class="QCheckBox" name="monthlyActive">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1675,7 +1695,7 @@ QTabWidget::tab-bar {
          <string>Active</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="shiftSubj_4">
+       <widget class="QLineEdit" name="monthlySubj">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1698,7 +1718,7 @@ QTabWidget::tab-bar {
          <string>Subject</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="shiftAttachXLS_4">
+       <widget class="QCheckBox" name="monthlyAttachXLS">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1724,7 +1744,7 @@ QTabWidget::tab-bar {
          <string>XLS template</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="shiftAttachCSV_4">
+       <widget class="QCheckBox" name="monthlyAttachCSV">
         <property name="geometry">
          <rect>
           <x>290</x>
@@ -1763,7 +1783,7 @@ QTabWidget::tab-bar {
          <string>Hour</string>
         </property>
        </widget>
-       <widget class="QTimeEdit" name="timeEdit_5">
+       <widget class="QTimeEdit" name="monthlyTIme">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -2210,7 +2230,7 @@ QTabWidget::tab-bar {
       <property name="geometry">
        <rect>
         <x>710</x>
-        <y>8</y>
+        <y>9</y>
         <width>61</width>
         <height>22</height>
        </rect>
@@ -2219,17 +2239,17 @@ QTabWidget::tab-bar {
        <string>Save</string>
       </property>
      </widget>
-     <widget class="QToolButton" name="saveEmailAdress_7">
+     <widget class="QToolButton" name="saveScheduling">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>320</y>
-        <width>61</width>
+        <width>141</width>
         <height>41</height>
        </rect>
       </property>
       <property name="text">
-       <string>Save</string>
+       <string> Save Schedule</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_5">

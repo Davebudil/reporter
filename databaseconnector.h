@@ -22,7 +22,7 @@ class DatabaseConnector : public QObject{
                    const QString & usrName,
                    const QString & usrPass);
       //getter
-      QString getPassword();
+      QString getPassword() const;
    signals:
 
    public slots:

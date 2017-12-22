@@ -11,20 +11,20 @@ void SQLParameter::editInfo(const QStringList & param, const qint32 & count){
 }
 
 
-QStringList SQLParameter::getParameters(){
+QStringList SQLParameter::getParameters() const{
    return m_Parameters;
 }
 
-QString SQLParameter::getName(){
+QString SQLParameter::getName() const{
    return m_Name;
 }
 
-qint32 SQLParameter::getCount(){
+qint32 SQLParameter::getCount() const{
    return m_paramCount;
 }
 
-void SQLParameter::printParams(){
-   for(auto it : m_Parameters){
+void SQLParameter::printParams() const{
+   for(auto & it : m_Parameters){
       QString tmp = it;
       qDebug() << tmp;
    }

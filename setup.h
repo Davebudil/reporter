@@ -40,7 +40,7 @@ class Setup : public QObject{
       //setter
       void setFilePath(const QString & path);
       //getter
-      QString getFilePath();
+      QString getFilePath() const;
 
    signals:
 

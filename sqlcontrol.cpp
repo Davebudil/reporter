@@ -19,7 +19,7 @@ void SQLControl::setQueryModel(const QString & name){
 QString SQLControl::getPassword(){
    return m_DB.getDatabaseConnector().getPassword();
 }
-QSqlQueryModel * SQLControl::getModel(){
+QSqlQueryModel * SQLControl::getModel() const{
    return m_queryModel;
 }
 
