@@ -18,6 +18,7 @@
 #include <scheduling.h>
 #include <log.h>
 #include <export.h>
+#include <QFileDialog>
 
 namespace Ui{
    class Reporter;
@@ -58,9 +59,35 @@ class Reporter : public QMainWindow{
 
       void on_queryActive_stateChanged(int state);
 
-      void on_monthlyDays_activated(int index);
+      void on_tabWidget_2_tabBarClicked(int index);
 
-      void on_weeklyDays_activated(int index);
+      void on_saveScheduling_clicked();
+
+      void on_shiftBrEMAIL_clicked();
+
+      void on_shiftBrXLS_clicked();
+
+      void on_shiftBrCSV_clicked();
+
+      void on_dailyBrEMAIL_clicked();
+
+      void on_dailyBrXLS_clicked();
+
+      void on_dailyBrCSV_clicked();
+
+      void on_weeklyBrEMAIL_clicked();
+
+      void on_weeklyBrXLS_clicked();
+
+      void on_weeklyBrCSV_clicked();
+
+      void on_monthlyBrEMAIL_clicked();
+
+      void on_monthlyBrXLS_clicked();
+
+      void on_monthlyBrCSV_clicked();
+
+      void on_saveEmailAdress_clicked();
 
    private:
       Ui::Reporter *ui;
@@ -68,12 +95,13 @@ class Reporter : public QMainWindow{
       Setup m_Setup;
       Log m_Log;
       Export m_Export;
+      Scheduling m_Schedule;
       QString m_nameKey;
       qint32 m_selectedParam;
       qint32 m_paramKey;
       QToolButton * tmp;
-      bool m_queryActive;
       qint32 m_daysWeeklyIndex;
+      bool m_queryActive;
       //Print query result to the table
       void m_displaySQLResult(const QString & name);
       //used to generate result from current selected query
@@ -111,6 +139,22 @@ class Reporter : public QMainWindow{
       void m_clearParam();
       void m_clearQuery();
       void m_loadSchedule();
+      void m_displayShift();
+      void m_displayDay();
+      void m_displayWeekly();
+      void m_displayMonthly();
+      void m_displayCustom();
+      void m_editShift();
+      void m_editDay();
+      void m_editWeekly();
+      void m_editMonthly();
+      void m_editCustom();
+      void m_loadActiveShiftDays();
+      void m_loadActiveDailyDays();
+      void m_loadWeeklyDays();
+      void m_editWeeklyDays();
+      void m_editActiveShiftDays();
+      void m_editActiveDailyDays();
 };
 
 #endif // REPORTER_H

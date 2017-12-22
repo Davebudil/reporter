@@ -94,6 +94,6 @@ void Setup::setFilePath(const QString & path){
    m_filePath = path;
 }
 //getter
-QString Setup::getFilePath(){
+QString Setup::getFilePath() const{
    return m_filePath;
 }

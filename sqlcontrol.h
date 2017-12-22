@@ -17,7 +17,7 @@ class SQLControl : public QObject
       ~SQLControl();
       //Getters
       QString getPassword();
-      QSqlQueryModel * getModel();
+      QSqlQueryModel * getModel() const;
       Database & getDatabase();
       SQLStorage & getStorage();
       //loads list of queries info

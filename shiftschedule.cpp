@@ -1,6 +1,95 @@
 #include "shiftschedule.h"
 
 ShiftSchedule::ShiftSchedule()
-{
-
+              :m_Active(false),
+               m_csvAttach(false),
+               m_xlsAttach(false),
+               m_AttachName("default"),
+               m_SubjName("default"),
+               m_emailTemplatePath("default"),
+               m_xlsTemplatePath("default"),
+               m_csvTemplatePath("default"){
+   m_Days = new bool[7];
+   std::fill_n(m_Days, 7, false);
+}
+ShiftSchedule::~ShiftSchedule(){
+   delete m_Days;
+}
+QString ShiftSchedule::getAttachName() const{
+   return m_AttachName;
+}
+QString ShiftSchedule::getXlsTemplatePath() const{
+   return m_xlsTemplatePath;
+}
+QString ShiftSchedule::getCsvTemplatePath() const{
+   return m_csvTemplatePath;
+}
+bool ShiftSchedule::getActive() const{
+   return m_Active;
+}
+bool * ShiftSchedule::getDays() const{
+   return m_Days;
+}
+void ShiftSchedule::setAttachName(const QString & AttachName){
+   m_AttachName = AttachName;
+}
+void ShiftSchedule::setActive(bool Active){
+   m_Active = Active;
+}
+void ShiftSchedule::setXlsTemplatePath(const QString & xlsTemplatePath){
+   m_xlsTemplatePath = xlsTemplatePath;
+}
+void ShiftSchedule::setCsvTemplatePath(const QString & csvTemplatePath){
+   m_csvTemplatePath = csvTemplatePath;
+}
+void ShiftSchedule::setDays(const qint32 day, bool value){
+   m_Days[day] = value;
+}
+bool ShiftSchedule::getXlsAttach() const{
+    return m_xlsAttach;
+}
+void ShiftSchedule::setXlsAttach(bool xlsAttach){
+    m_xlsAttach = xlsAttach;
+}
+bool ShiftSchedule::getCsvAttach() const{
+    return m_csvAttach;
+}
+void ShiftSchedule::setCsvAttach(bool csvAttach){
+    m_csvAttach = csvAttach;
+}
+QString ShiftSchedule::getSubjName() const{
+   return m_SubjName;
+}
+void ShiftSchedule::setSubjName(const QString & SubjName){
+   m_SubjName = SubjName;
+}
+QTime ShiftSchedule::getFrom0() const{
+   return m_From0;
+}
+void ShiftSchedule::setFrom0(const QTime & From0){
+   m_From0 = From0;
+}
+QTime ShiftSchedule::getTo0() const{
+   return m_To0;
+}
+void ShiftSchedule::setTo0(const QTime & To0){
+   m_To0 = To0;
+}
+QTime ShiftSchedule::getFrom1() const{
+   return m_From1;
+}
+void ShiftSchedule::setFrom1(const QTime & From1){
+   m_From1 = From1;
+}
+QTime ShiftSchedule::getTo1() const{
+   return m_To1;
+}
+void ShiftSchedule::setTo1(const QTime & To1){
+   m_To1 = To1;
+}
+QString ShiftSchedule::getEmailTemplatePath() const{
+   return m_emailTemplatePath;
+}
+void ShiftSchedule::setEmailTemplatePath(const QString & emailTemplatePath){
+   m_emailTemplatePath = emailTemplatePath;
 }
