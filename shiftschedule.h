@@ -20,6 +20,7 @@ class ShiftSchedule{
       bool * getDays() const;
       bool getCsvAttach() const;
       bool getXlsAttach() const;
+      QStringList prepareSerialization();
 
       void setAttachName(const QString & AttachName);
       void setActive(bool Active);

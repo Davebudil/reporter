@@ -19,6 +19,7 @@ class MonthlySchedule
       bool getActive() const;
       bool getCsvAttach() const;
       bool getXlsAttach() const;
+      QStringList prepareSerialization();
 
       void setCsvTemplatePath(const QString & csvTemplatePath);
       void setXlsTemplatePath(const QString & xlsTemplatePath);

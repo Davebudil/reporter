@@ -7,6 +7,8 @@ SQLStorage::SQLStorage(QObject *parent)
 SQLStorage::~SQLStorage(){
    qDeleteAll(m_Queries);
    qDeleteAll(m_Parameters);
+   m_Queries.clear();
+   m_Parameters.clear();
 }
 //Getters
 QMap<QString, SQLquery*> & SQLStorage::getQueries(){

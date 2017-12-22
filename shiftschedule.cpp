@@ -13,7 +13,7 @@ ShiftSchedule::ShiftSchedule()
    std::fill_n(m_Days, 7, false);
 }
 ShiftSchedule::~ShiftSchedule(){
-   delete m_Days;
+   delete[] m_Days;
 }
 QString ShiftSchedule::getAttachName() const{
    return m_AttachName;
@@ -46,7 +46,27 @@ void ShiftSchedule::setDays(const qint32 day, bool value){
    m_Days[day] = value;
 }
 bool ShiftSchedule::getXlsAttach() const{
-    return m_xlsAttach;
+   return m_xlsAttach;
+}
+
+QStringList ShiftSchedule::prepareSerialization(){
+   QStringList valueList;
+   valueList.append(QString::number(m_Active));
+   valueList.append(QString::number(m_csvAttach));
+   valueList.append(QString::number(m_xlsAttach));
+   valueList.append(m_AttachName);
+   valueList.append(m_SubjName);
+   valueList.append(m_xlsTemplatePath);
+   valueList.append(m_csvTemplatePath);
+   valueList.append(m_emailTemplatePath);
+   valueList.append(QString(m_From0.toString()));
+   valueList.append(QString(m_To0.toString()));
+   valueList.append(QString(m_From1.toString()));
+   valueList.append(QString(m_To1.toString()));
+   for(qint32 i = 0; i < 7; ++i){
+      valueList.append(QString::number(m_Days[i]));
+   }
+   return valueList;
 }
 void ShiftSchedule::setXlsAttach(bool xlsAttach){
     m_xlsAttach = xlsAttach;

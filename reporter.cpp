@@ -9,6 +9,7 @@ Reporter::Reporter(QWidget *parent)
    : QMainWindow(parent),
      ui(new Ui::Reporter),
      m_paramKey(0),
+     tmp(nullptr),
      m_queryActive(false){
    ui->setupUi(this);
    ui->queryNameEdit->setText("Query Name");
@@ -24,9 +25,6 @@ Reporter::Reporter(QWidget *parent)
 //Destructor
 Reporter::~Reporter(){
    delete ui;
-   if(tmp){
-      delete tmp;
-   }
 }
 //Function to connect to DB triggered by click connect button
 void Reporter::on_dbConnect_clicked(){
@@ -294,6 +292,12 @@ void Reporter::m_serializeParameters(){
    QVector<qint32> tmpCount;
    QStringList tmpSerialize = m_loadParameters(tmpCount);
    m_Setup.serializeParameters(tmpSerialize,tmpCount);
+}
+void Reporter::m_serializeSchedule(){
+   m_Setup.serializeSchedule(m_Schedule.getShift().prepareSerialization(),
+                             m_Schedule.getDaily().prepareSerialization(),
+                             m_Schedule.getWeekly().prepareSerialization(),
+                             m_Schedule.getMonthly().prepareSerialization());
 }
 //Deserialization
 void Reporter::m_Deserialize(){
@@ -589,6 +593,7 @@ void Reporter::on_saveScheduling_clicked(){
    m_editWeekly();
    m_editMonthly();
    m_editCustom();
+   m_serializeSchedule();
 }
 void Reporter::on_shiftBrEMAIL_clicked(){
    ui->shiftEmail->setText(QFileDialog::getOpenFileName(this, tr("Select Email Template")));
@@ -628,5 +633,4 @@ void Reporter::on_monthlyBrCSV_clicked(){
 }
 void Reporter::on_saveEmailAdress_clicked(){
    m_Schedule.setGlobalEmail(ui->emailAdress->text());
-   qDebug() << m_Schedule.getGlobalEmail();
 }

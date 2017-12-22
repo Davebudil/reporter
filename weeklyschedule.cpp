@@ -57,7 +57,20 @@ void WeeklySchedule::setActive(bool Active){
    m_Active = Active;
 }
 bool WeeklySchedule::getXlsAttach() const{
-    return m_xlsAttach;
+   return m_xlsAttach;
+}
+QStringList WeeklySchedule::prepareSerialization(){
+   QStringList valueList;
+   valueList.append(QString::number(m_Active));
+   valueList.append(QString::number(m_csvAttach));
+   valueList.append(QString::number(m_xlsAttach));
+   valueList.append(m_AttachName);
+   valueList.append(m_SubjName);
+   valueList.append(m_xlsTemplatePath);
+   valueList.append(m_csvTemplatePath);
+   valueList.append(m_emailTemplatePath);
+   valueList.append(QString(m_Time.toString()));
+   return valueList;
 }
 void WeeklySchedule::setXlsAttach(bool xlsAttach){
     m_xlsAttach = xlsAttach;

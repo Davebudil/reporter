@@ -2,9 +2,9 @@
 
 MonthlySchedule::MonthlySchedule()
                 :m_Active(false),
-                 m_Day(0),
                  m_csvAttach(false),
                  m_xlsAttach(false),
+                 m_Day(0),
                  m_AttachName("default"),
                  m_SubjName("default"),
                  m_xlsTemplatePath("default"),
@@ -35,6 +35,20 @@ qint32 MonthlySchedule::getDay() const{
 }
 bool MonthlySchedule::getActive() const{
     return m_Active;
+}
+QStringList MonthlySchedule::prepareSerialization(){
+   QStringList valueList;
+   valueList.append(QString::number(m_Active));
+   valueList.append(QString::number(m_csvAttach));
+   valueList.append(QString::number(m_xlsAttach));
+   valueList.append(m_AttachName);
+   valueList.append(m_SubjName);
+   valueList.append(m_xlsTemplatePath);
+   valueList.append(m_csvTemplatePath);
+   valueList.append(m_emailTemplatePath);
+   valueList.append(QString(m_Time.toString()));
+   valueList.append(QString::number(m_Day));
+   return valueList;
 }
 void MonthlySchedule::setCsvTemplatePath(const QString & csvTemplatePath){
     m_csvTemplatePath = csvTemplatePath;

@@ -8,7 +8,6 @@
 #include <customschedule.h>
 
 class Scheduling{
-
    public:
       Scheduling();
       ~Scheduling();
