@@ -115,9 +115,35 @@ bool Setup::deserializeParameters(QStringList & parameters, QVector<qint32> & co
    return false;
 }
 
-bool Setup::deserializeSchedule(QStringList & shift, QStringList & day, QStringList & weekly, QStringList & monthly)
-{
-
+bool Setup::deserializeSchedule(QStringList & shift,
+                                QStringList & day,
+                                QStringList & weekly,
+                                QStringList & monthly){
+   QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterSchedule.dat");
+   if(loadFile.open(QIODevice::ReadOnly)){
+      QDataStream in(&loadFile);
+      while(!in.atEnd()){
+         QString tmp;
+         for(qint32 i = 0; i < 19; ++i){
+            in >> tmp;
+            shift << tmp;
+         }
+         for(qint32 i = 0; i < 16; ++i){
+            in >> tmp;
+            day << tmp;
+         }
+         for(qint32 i = 0; i < 10; ++i){
+            in >> tmp;
+            weekly << tmp;
+         }
+         for(qint32 i = 0; i < 10; ++i){
+            in >> tmp;
+            monthly << tmp;
+         }
+      }
+      return true;
+   }
+   return false;
 }
 //cleans up
 bool Setup::cleanUp(){

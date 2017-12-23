@@ -20,6 +20,7 @@ class WeeklySchedule
       bool getCsvAttach() const;
       bool getXlsAttach() const;
       QStringList prepareSerialization();
+      void deserializeList(const QStringList & list);
 
       void setAttachName(const QString & AttachName);
       void setSubjName(const QString & SubjName);
