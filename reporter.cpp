@@ -249,6 +249,7 @@ void Reporter::m_deleteParam(){
 void Reporter::defaultSettings(){
    m_ConnectDB();
    m_Deserialize();
+   m_deserializeSchedule();
    m_loadMaster();
    m_loadSchedule();
 }
@@ -328,7 +329,27 @@ void Reporter::m_Deserialize(){
       m_addParameters(tmpList,tmpInt);
    }
 }
+void Reporter::m_deserializeSchedule(){
+   QStringList shift;
+   QStringList day;
+   QStringList weekly;
+   QStringList monthly;
 
+   m_Setup.deserializeSchedule(shift, day, weekly, monthly);
+   m_Schedule.getShift().deserializeList(shift);
+   m_Schedule.getDaily().deserializeList(day);
+   m_Schedule.getWeekly().deserializeList(weekly);
+   m_Schedule.getMonthly().deserializeList(monthly);
+}
+
+void Reporter::m_saveSchedule(){
+   m_editShift();
+   m_editDay();
+   m_editWeekly();
+   m_editMonthly();
+   m_editCustom();
+   m_serializeSchedule();
+}
 void Reporter::m_loadSchedule(){
    m_displayShift();
    m_displayDay();
@@ -337,8 +358,7 @@ void Reporter::m_loadSchedule(){
    m_displayCustom();
 }
 
-void Reporter::on_paramNew_clicked()
-{
+void Reporter::on_paramNew_clicked(){
    QStringList tmp;
    qint32 tmpCount = 0;
 
@@ -350,8 +370,7 @@ void Reporter::on_paramNew_clicked()
    }
 }
 
-void Reporter::on_paramEdit_clicked()
-{
+void Reporter::on_paramEdit_clicked(){
    m_saveParameter();
 }
 
@@ -521,7 +540,7 @@ void Reporter::m_editShift(){
    m_Schedule.getShift().setFrom0(ui->shiftFrom->time());
    m_Schedule.getShift().setTo0(ui->shiftTo->time());
    m_Schedule.getShift().setFrom1(ui->shiftFrom_2->time());
-   m_Schedule.getShift().setTo0(ui->shiftTo_2->time());
+   m_Schedule.getShift().setTo1(ui->shiftTo_2->time());
    m_Schedule.getShift().setCsvAttach(ui->shiftAttachCSV->isChecked());
    m_Schedule.getShift().setXlsAttach(ui->shiftAttachXLS->isChecked());
    m_Schedule.getShift().setEmailTemplatePath(ui->shiftEmail->text());
@@ -567,6 +586,7 @@ void Reporter::m_editCustom(){
 //work in progress, in future maybe
 }
 void Reporter::on_tabWidget_2_tabBarClicked(int index){
+   m_saveSchedule();
    switch(index){
       case 0:
          m_displayShift();
@@ -588,12 +608,7 @@ void Reporter::on_tabWidget_2_tabBarClicked(int index){
    }
 }
 void Reporter::on_saveScheduling_clicked(){
-   m_editShift();
-   m_editDay();
-   m_editWeekly();
-   m_editMonthly();
-   m_editCustom();
-   m_serializeSchedule();
+   m_saveSchedule();
 }
 void Reporter::on_shiftBrEMAIL_clicked(){
    ui->shiftEmail->setText(QFileDialog::getOpenFileName(this, tr("Select Email Template")));

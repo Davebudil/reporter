@@ -21,6 +21,7 @@ class ShiftSchedule{
       bool getCsvAttach() const;
       bool getXlsAttach() const;
       QStringList prepareSerialization();
+      void deserializeList(const QStringList & list);
 
       void setAttachName(const QString & AttachName);
       void setActive(bool Active);

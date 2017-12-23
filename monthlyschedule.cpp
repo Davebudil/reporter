@@ -50,6 +50,18 @@ QStringList MonthlySchedule::prepareSerialization(){
    valueList.append(QString::number(m_Day));
    return valueList;
 }
+void MonthlySchedule::deserializeList(const QStringList & list){
+   m_Active = (list.at(0) == "0" ? false : true);
+   m_csvAttach = (list.at(1) == "0" ? false : true);
+   m_xlsAttach = (list.at(2) == "0" ? false : true);
+   m_AttachName = list.at(3);
+   m_SubjName = list.at(4);
+   m_xlsTemplatePath = list.at(5);
+   m_csvTemplatePath = list.at(6);
+   m_emailTemplatePath = list.at(7);
+   m_Time = QTime::fromString(list.at(8));
+   m_Day = QString(list.at(9)).toInt();
+}
 void MonthlySchedule::setCsvTemplatePath(const QString & csvTemplatePath){
     m_csvTemplatePath = csvTemplatePath;
 }

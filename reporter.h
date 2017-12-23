@@ -158,6 +158,7 @@ class Reporter : public QMainWindow{
       void m_serializeSchedule();
       void m_deserializeSchedule();
       void m_serializeGlobal();
+      void m_saveSchedule();
 };
 
 #endif // REPORTER_H

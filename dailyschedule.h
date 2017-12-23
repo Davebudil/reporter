@@ -19,6 +19,7 @@ class DailySchedule{
       bool getXlsAttach() const;
       bool getCsvAttach() const;
       QStringList prepareSerialization();
+      void deserializeList(const QStringList & list);
 
       void setCsvTemplatePath(const QString & csvTemplatePath);
       void setXlsTemplatePath(const QString & xlsTemplatePath);
