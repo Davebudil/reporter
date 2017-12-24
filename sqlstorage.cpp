@@ -85,6 +85,12 @@ void SQLStorage::printQueries(){
    }
 }
 
+void SQLStorage::printQueryText(){
+   for(auto & it : m_Queries){
+      qDebug() << it->getnResult();
+   }
+}
+
 void SQLStorage::printParams(){
    for(auto & it : m_Parameters){
       it->printParams();

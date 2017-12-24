@@ -50,6 +50,7 @@ void Reporter::on_toolButton_clicked(){
       m_generateQuery(m_nameKey);
       m_executeQuery(m_nameKey);
       m_displaySQLResult(m_nameKey);
+      m_mainSQL.getStorage().printQueryText();
    }
 }
 
@@ -492,7 +493,7 @@ void Reporter::m_displayMonthly(){
    ui->monthlyEmail->setText(m_Schedule.getMonthly().getEmailTemplatePath());
 }
 void Reporter::m_displayCustom(){
-//work in progress, in future maybe
+   //work in progress, in future maybe
 }
 void Reporter::m_loadActiveShiftDays(){
    ui->shiftMondayActive->setChecked(m_Schedule.getShift().getDays()[0]);
@@ -583,7 +584,7 @@ void Reporter::m_editMonthly(){
 }
 
 void Reporter::m_editCustom(){
-//work in progress, in future maybe
+   //work in progress, in future maybe
 }
 void Reporter::on_tabWidget_2_tabBarClicked(int index){
    m_saveSchedule();
