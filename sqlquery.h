@@ -20,6 +20,7 @@ class SQLquery{
       //Getter for query member
       QString getQuery();
       QSqlQuery getResult();
+      QString getnResult();
       QString getName();
       QString getParam();
       QString getFinal();
@@ -40,7 +41,6 @@ class SQLquery{
       void bindParameter(const QString & parameter, const QString & value);
       //function that executes the query
       void executeQuery();
-      //makes master-detail connection
 
    private:
       //query
@@ -49,6 +49,7 @@ class SQLquery{
       QString m_mParameter;
       QString m_finalString;
       QSqlQuery * m_Result;
+      QSqlQuery * m_nResult;
       bool m_Master;
       bool m_isActive;
 };

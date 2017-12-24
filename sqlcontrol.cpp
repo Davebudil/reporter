@@ -41,7 +41,6 @@ QStringList SQLControl::loadList(){
    }
    return tmpQueries;
 }
-
 void SQLControl::setTimeParameters(const QDate &from, const QDate &to, const QString &queryName){
    m_Storage.getQueries()[queryName]->bindParameter(":TIMEFROM",from.toString());
    m_Storage.getQueries()[queryName]->bindParameter(":TIMETO", to.toString());
