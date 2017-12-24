@@ -43,7 +43,10 @@ SOURCES += \
     monthlyschedule.cpp \
     customschedule.cpp \
     log.cpp \
-    export.cpp
+    export.cpp \
+    exportxls.cpp \
+    exportcsv.cpp \
+    exporthtml.cpp
 
 HEADERS += \
         reporter.h \
@@ -61,7 +64,10 @@ HEADERS += \
     monthlyschedule.h \
     customschedule.h \
     log.h \
-    export.h
+    export.h \
+    exportxls.h \
+    exportcsv.h \
+    exporthtml.h
 
 FORMS += \
         reporter.ui

@@ -18,6 +18,8 @@ class Scheduling{
       CustomSchedule & getCustom();
       QString getGlobalEmail() const;
       void setGlobalEmail(const QString & GlobalEmail);
+      void serializeGlobal(const QStringList & global);
+      void deserializeGlobal(const QStringList & global);
 
    private:
       ShiftSchedule m_Shift;

@@ -51,6 +51,18 @@ bool Setup::serializeSchedule(const QStringList & shift,
    }
    return false;
 }
+bool Setup::serializeGlobal(const QStringList & global){
+   QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterGlobal.dat");
+   if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
+      QDataStream out(&loadFile);
+      for(qint32 i = 0; i < queries.size(); ++i){
+         QString tmp = global.at(i);
+         out << tmp;
+      }
+      return true;
+   }
+   return false;
+}
 bool Setup::m_serializeParameters(const QStringList & param, const QVector<qint32> & count){
    QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterParameters.dat");
    if(loadFile.open(QIODevice::ReadWrite | QIODevice::Truncate)){
@@ -140,6 +152,19 @@ bool Setup::deserializeSchedule(QStringList & shift,
             in >> tmp;
             monthly << tmp;
          }
+      }
+      return true;
+   }
+   return false;
+}
+bool Setup::deserializeGlobal(QStringList & global){
+   QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterGlobal.dat");
+   if(loadFile.open(QIODevice::ReadOnly)){
+      QDataStream in(&loadFile);
+      while(!in.atEnd()){
+         QString tmp;
+         in >> tmp;
+         global << tmp;
       }
       return true;
    }
