@@ -89,6 +89,14 @@ void SQLquery::executeQuery(){
       m_Result->clear();
    }
 }
+
+QStringList SQLquery::queryList(){
+   QStringList queryData;
+   queryData.append(m_Name);
+   queryData.append(m_mParameter);
+   queryData.append(m_nResult->lastQuery());
+   return queryData;
+}
 //Binds parameter to value
 void SQLquery::bindParameter(const QString & parameter, const QString & value){
    m_Result->bindValue(parameter, value);

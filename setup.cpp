@@ -55,8 +55,8 @@ bool Setup::serializeGlobal(const QStringList & global){
    QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterGlobal.dat");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
-      for(qint32 i = 0; i < queries.size(); ++i){
-         QString tmp = global.at(i);
+      for(auto & it : global){
+         QString tmp = it;
          out << tmp;
       }
       return true;
@@ -86,8 +86,8 @@ bool Setup::m_serializeQueries(const QStringList & queries){
    QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterQueries.dat");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
-      for(qint32 i = 0; i < queries.size(); ++i){
-         QString tmp = queries.at(i);
+      for(auto & it : queries){
+         QString tmp = it;
          out << tmp;
       }
       return true;
