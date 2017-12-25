@@ -650,3 +650,22 @@ void Reporter::on_monthlyBrCSV_clicked(){
 void Reporter::on_saveEmailAdress_clicked(){
    m_Schedule.setGlobalEmail(ui->emailAdress->text());
 }
+void Reporter::on_toolButton_2_clicked(){
+   //TESTING
+   QList<std::pair<QString, QString>> tmp;
+   QList<QStringList> tmpQueries;
+   m_generateQuery(m_nameKey);
+   m_executeQuery(m_nameKey);
+   tmp.append(std::make_pair("CURRENT_DATE","15.12.2017"));
+   tmp.append(std::make_pair("DateTimeFromTo", "Od datumu A po datum B"));
+   tmp.append(std::make_pair("vygeneroval", "David BUDIL"));
+   tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
+   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
+      tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
+   }
+
+   m_Export.getXLS().generateFile(m_Schedule.getShift().getXlsTemplatePath(),
+                                  m_Schedule.getShift().getXlsTemplatePath(),
+                                  tmp,
+                                  tmpQueries);
+}

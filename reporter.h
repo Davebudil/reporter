@@ -19,6 +19,7 @@
 #include <log.h>
 #include <export.h>
 #include <QFileDialog>
+#include <QPair>
 
 namespace Ui{
    class Reporter;
@@ -88,6 +89,8 @@ class Reporter : public QMainWindow{
       void on_monthlyBrCSV_clicked();
 
       void on_saveEmailAdress_clicked();
+
+      void on_toolButton_2_clicked();
 
    private:
       Ui::Reporter *ui;

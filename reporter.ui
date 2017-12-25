@@ -494,7 +494,7 @@ QTabWidget::tab-bar {
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="basic">
      <attribute name="title">
@@ -2459,6 +2459,22 @@ QTabWidget::tab-bar {
       </property>
       <property name="text">
        <string>Active</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="toolButton_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>310</y>
+        <width>181</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>generateTest</string>
       </property>
      </widget>
     </widget>
