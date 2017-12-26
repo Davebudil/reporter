@@ -42,16 +42,7 @@ void Reporter::m_displaySQLResult(const QString & name){
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
-   if(!m_mainSQL.getDatabase().getDatabase().open()){
-      QMessageBox::critical(0, QObject::tr("Database error"),
-                            "Not connected to database");
-
-   }else{
-      m_generateQuery(m_nameKey);
-      m_executeQuery(m_nameKey);
-      m_displaySQLResult(m_nameKey);
-      m_mainSQL.getStorage().printQueryText();
-   }
+   m_testingQueryGen();
 }
 
 void Reporter::m_executeQuery(const QString & name){
@@ -350,6 +341,54 @@ void Reporter::m_saveSchedule(){
    m_editMonthly();
    m_editCustom();
    m_serializeSchedule();
+}
+
+void Reporter::m_generateXLS(){
+   //TESTING
+   QList<std::pair<QString, QString>> tmp;
+   QList<QStringList> tmpQueries;
+   m_generateQuery(m_nameKey);
+   m_executeQuery(m_nameKey);
+   tmp.append(std::make_pair("CURRENT_DATE","15.12.2017"));
+   tmp.append(std::make_pair("DateTimeFromTo", "Od datumu A po datum B"));
+   tmp.append(std::make_pair("vygeneroval", "David BUDIL"));
+   tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
+   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
+      m_generateQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+      m_executeQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+      tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
+   }
+
+   m_Export.getXLS().generateFile(m_Schedule.getShift().getXlsTemplatePath(),
+                                  m_Schedule.getShift().getXlsTemplatePath(),
+                                  tmp,
+                                  tmpQueries);
+}
+
+void Reporter::m_generateTemplateXLS(){
+   m_testingQueryGen();
+   QXlsx::Document xlsx;
+   QSqlQuery tmpModel = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResultQuery();
+   QSqlRecord rec = tmpModel.record();
+   for(qint32 i = 0; i < rec.count(); ++i){
+      QString tmp = rec.fieldName(i);
+      xlsx.write(1, i + 1, tmp);
+   }
+   xlsx.saveAs("/home/dave/Documents/sielaff/project/reporter/reporter/templateFieldNamesXLSX.xlsx");
+   QDesktopServices::openUrl(QUrl("/home/dave/Documents/sielaff/project/reporter/reporter/templateFieldNamesXLSX.xlsx"));
+}
+
+void Reporter::m_testingQueryGen(){
+   if(!m_mainSQL.getDatabase().getDatabase().open()){
+      QMessageBox::critical(0, QObject::tr("Database error"),
+                            "Not connected to database");
+
+   }else{
+      m_generateQuery(m_nameKey);
+      m_executeQuery(m_nameKey);
+      m_displaySQLResult(m_nameKey);
+//      m_mainSQL.getStorage().printQueryText();
+   }
 }
 void Reporter::m_loadSchedule(){
    m_displayShift();
@@ -651,21 +690,9 @@ void Reporter::on_saveEmailAdress_clicked(){
    m_Schedule.setGlobalEmail(ui->emailAdress->text());
 }
 void Reporter::on_toolButton_2_clicked(){
-   //TESTING
-   QList<std::pair<QString, QString>> tmp;
-   QList<QStringList> tmpQueries;
-   m_generateQuery(m_nameKey);
-   m_executeQuery(m_nameKey);
-   tmp.append(std::make_pair("CURRENT_DATE","15.12.2017"));
-   tmp.append(std::make_pair("DateTimeFromTo", "Od datumu A po datum B"));
-   tmp.append(std::make_pair("vygeneroval", "David BUDIL"));
-   tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
-   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
-      tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
-   }
+   m_generateXLS();
+}
 
-   m_Export.getXLS().generateFile(m_Schedule.getShift().getXlsTemplatePath(),
-                                  m_Schedule.getShift().getXlsTemplatePath(),
-                                  tmp,
-                                  tmpQueries);
+void Reporter::on_toolButton_3_clicked(){
+   m_generateTemplateXLS();
 }

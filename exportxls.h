@@ -6,6 +6,8 @@
 #include <QTextStream>
 #include <QFile>
 #include <QMessageBox>
+#include <QDesktopServices>
+#include <QUrl>
 
 class ExportXLS{
    public:
