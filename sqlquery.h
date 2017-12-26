@@ -20,6 +20,7 @@ class SQLquery{
       //Getter for query member
       QString getQuery();
       QSqlQuery getResult();
+      QSqlQuery getResultQuery();
       QString getnResult();
       QString getName();
       QString getParam();

@@ -5,6 +5,9 @@
 #include <QDataStream>
 #include <QTextStream>
 #include <QFile>
+#include <QMessageBox>
+#include <QDesktopServices>
+#include <QUrl>
 
 class ExportXLS{
    public:
@@ -13,6 +16,8 @@ class ExportXLS{
                         const QString & genPath,
                         const QList<std::pair<QString, QString>> constants,
                         const QList<QStringList> queries);
+      bool readResult();
+      bool editIni();
 };
 
 #endif // EXPORTXLS_H

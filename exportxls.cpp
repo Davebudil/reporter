@@ -24,7 +24,27 @@ bool ExportXLS::generateFile(const QString & templatePath,
          out << it.at(1) << "\n";
          out << it.at(2) << "\n";
       }
+      QDesktopServices::openUrl(QUrl("/home/dave/Documents/sielaff/project/reporter/reporter/ask_attachment_source.txt"));
       return true;
    }
+   return false;
+}
+bool ExportXLS::readResult(){
+   QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ask_ attachment_final.txt");
+   if(loadFile.open(QIODevice::ReadOnly)){
+      QDataStream in(&loadFile);
+      QStringList tmp;
+      while(!in.atEnd()){
+         in >> tmp;
+      }
+      if(tmp.at(0) == "0"){
+         QMessageBox::information(0,QObject::tr("Export Result"),QObject::tr("Export to xls file successful."));
+         return true;
+      }else{
+         QMessageBox::information(0,QObject::tr("Export Error"),QObject::tr("Export to xls file failed."));
+         return false;
+      }
+   }
+   QMessageBox::critical(0,QObject::tr("File Error"),QObject::tr("Failed to generate output file."));
    return false;
 }

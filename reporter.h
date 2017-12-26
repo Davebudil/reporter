@@ -20,6 +20,8 @@
 #include <export.h>
 #include <QFileDialog>
 #include <QPair>
+#include <xlsxdocument.h>
+#include <QDesktopServices>
 
 namespace Ui{
    class Reporter;
@@ -92,6 +94,8 @@ class Reporter : public QMainWindow{
 
       void on_toolButton_2_clicked();
 
+      void on_toolButton_3_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -162,6 +166,9 @@ class Reporter : public QMainWindow{
       void m_deserializeSchedule();
       void m_serializeGlobal();
       void m_saveSchedule();
+      void m_generateXLS();
+      void m_generateTemplateXLS();
+      void m_testingQueryGen();
 };
 
 #endif // REPORTER_H

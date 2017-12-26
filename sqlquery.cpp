@@ -23,6 +23,10 @@ QString SQLquery::getQuery(){
 QSqlQuery SQLquery::getResult(){
    return *m_Result;
 }
+
+QSqlQuery SQLquery::getResultQuery(){
+   return *m_nResult;
+}
 QString SQLquery::getnResult(){
    QString tmp = m_nResult->lastQuery();
    tmp.replace(QRegExp("[\\n\\t\\r]"), " ");
