@@ -22,6 +22,7 @@
 #include <QPair>
 #include <xlsxdocument.h>
 #include <QDesktopServices>
+#include <QHotkey>
 
 namespace Ui{
    class Reporter;
@@ -41,6 +42,8 @@ class Reporter : public QMainWindow{
       void defaultSettings();
 
    private slots:
+      //Shows or hides application
+      void m_showHide();
       //Function to connect to DB triggered by click connect button
       void on_dbConnect_clicked();
       //Function to Generate selected query and print results to table
@@ -107,6 +110,7 @@ class Reporter : public QMainWindow{
       qint32 m_selectedParam;
       qint32 m_paramKey;
       QToolButton * tmp;
+      QHotkey * m_shwHide;
       qint32 m_daysWeeklyIndex;
       bool m_queryActive;
       //Print query result to the table
