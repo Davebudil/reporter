@@ -76,10 +76,14 @@ void SQLquery::generateQuery(const QSqlDatabase & db){
    m_nResult = new QSqlQuery(db);
    if(m_Master){
       //      qDebug() << "Execute Classic"; //debug
+      m_Result->setForwardOnly(true);
+      m_nResult->setForwardOnly(true);
       m_Result->prepare(m_Query);
       m_nResult->prepare(m_Query);
    }else{
       //      qDebug() << "Execute Final"; //debug
+      m_Result->setForwardOnly(true);
+      m_nResult->setForwardOnly(true);
       m_Result->prepare(m_finalString);
       m_nResult->prepare(m_Query);
    }
