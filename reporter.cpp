@@ -1,7 +1,7 @@
 #include "reporter.h"
 #include "ui_reporter.h"
 
-//poznamky:TODO - knihovna na grid -> pocitani a tak, export template-> funkce, xslwrite, vyuzit, upravovani.
+//poznamky:TODO - knihovna na grid -> pocitani a tak, export template -> funkce, xslwrite, vyuzit, upravovani.
 //CSV -> priorita, generovani, nemusi byt posta, dobre padat
 
 //Constructor
@@ -343,8 +343,17 @@ void Reporter::m_saveSchedule(){
    m_serializeSchedule();
 }
 
+void Reporter::m_generateCSV(){
+   //TESTING FOR SHIFT
+   QSqlQuery generateCSV;
+   generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResultQuery();
+   m_Export.getCSV().generateFile(m_Schedule.getShift().getCsvTemplatePath(),
+                                  m_Schedule.getShift().getAttachName(),
+                                  generateCSV);
+}
+
 void Reporter::m_generateXLS(){
-   //TESTING
+   //TESTING FOR SHIFT
    QList<std::pair<QString, QString>> tmp;
    QList<QStringList> tmpQueries;
    m_generateQuery(m_nameKey);
@@ -360,7 +369,7 @@ void Reporter::m_generateXLS(){
    }
 
    m_Export.getXLS().generateFile(m_Schedule.getShift().getXlsTemplatePath(),
-                                  m_Schedule.getShift().getXlsTemplatePath(),
+                                  m_Schedule.getShift().getAttachName(),
                                   tmp,
                                   tmpQueries);
 }
@@ -691,6 +700,7 @@ void Reporter::on_saveEmailAdress_clicked(){
 }
 void Reporter::on_toolButton_2_clicked(){
    m_generateXLS();
+   m_generateCSV();
 }
 
 void Reporter::on_toolButton_3_clicked(){

@@ -166,6 +166,7 @@ class Reporter : public QMainWindow{
       void m_deserializeSchedule();
       void m_serializeGlobal();
       void m_saveSchedule();
+      void m_generateCSV();
       void m_generateXLS();
       void m_generateTemplateXLS();
       void m_testingQueryGen();
