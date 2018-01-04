@@ -21,10 +21,20 @@ Reporter::Reporter(QWidget *parent)
    setFont(newFont);
    ui->weeklyDays->setMaximumHeight(100);
    ui->monthlyDays->setMaximumHeight(100);
+   m_shwHide = new QHotkey(QKeySequence("ctrl+alt+Q"), true);
+   connect(m_shwHide, SIGNAL(activated()), this, SLOT(m_showHide()));
 }
 //Destructor
 Reporter::~Reporter(){
    delete ui;
+   delete m_shwHide;
+}
+void Reporter::m_showHide(){
+   if(isVisible()){
+      hide();
+   }else{
+      show();
+   }
 }
 //Function to connect to DB triggered by click connect button
 void Reporter::on_dbConnect_clicked(){
