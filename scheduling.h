@@ -22,6 +22,7 @@ class Scheduling{
       void deserializeGlobal(const QStringList & global);
 
    private:
+      QString m_Name;
       ShiftSchedule m_Shift;
       DailySchedule m_Daily;
       WeeklySchedule m_Weekly;
