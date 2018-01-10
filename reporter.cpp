@@ -2,13 +2,18 @@
 #include "ui_reporter.h"
 
 //poznamky:TODO - knihovna na grid -> pocitani a tak, export template -> funkce, xslwrite, vyuzit, upravovani.
-//CSV -> priorita, generovani, nemusi byt posta, dobre padat
+//CSV -> priorita, generovani, nemusi byt posta, dobre padatc
+
+
+// databaze eventu -> ciselny log, verze
 
 //Constructor
 Reporter::Reporter(QWidget *parent)
    : QMainWindow(parent),
      ui(new Ui::Reporter),
      m_paramKey(0),
+     m_scheduleKey(0),
+     m_scheduleCount(0),
      tmp(nullptr),
      m_queryActive(false){
    ui->setupUi(this);
@@ -28,6 +33,7 @@ Reporter::Reporter(QWidget *parent)
 Reporter::~Reporter(){
    delete ui;
    delete m_shwHide;
+   qDeleteAll(m_Schedule);
 }
 void Reporter::m_showHide(){
    if(isVisible()){
@@ -197,6 +203,52 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
    }
 }
 
+void Reporter::m_addSchedule(const QString & name){
+   if(name.isEmpty() || name.isNull()){
+      QMessageBox::critical(this, QObject::tr("Text error"), QObject::tr("Enter name for new schedule."));
+      return;
+   }
+
+   if(!m_noSchedule()){
+      Scheduling * tmp = new Scheduling;
+      m_Schedule.push_back(tmp);
+      m_scheduleKey = m_scheduleCount++;
+   }else{
+      m_scheduleKey = 0;
+   }
+
+   m_editDay(m_scheduleKey);
+   m_editMonthly(m_scheduleKey);
+   m_editShift(m_scheduleKey);
+   m_editWeekly(m_scheduleKey);
+
+   QToolButton * newSchedule = new QToolButton;
+   newSchedule->setText(name);
+   newSchedule->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+   newSchedule->setObjectName(QString::number(m_scheduleKey));
+   ui->scrollLayour_3->addWidget(newSchedule);
+   connect(newSchedule, &QToolButton::clicked, this, &Reporter::m_loadSchedule);
+}
+
 void Reporter::m_scrollParamClicked(){
    QObject * senderObj = sender();
    qint32 paramCount;
@@ -251,9 +303,14 @@ void Reporter::m_deleteParam(){
 void Reporter::defaultSettings(){
    m_ConnectDB();
    m_Deserialize();
-   m_deserializeSchedule();
+//   m_deserializeSchedule();
    m_loadMaster();
-   m_loadSchedule();
+//   m_loadSchedule();
+   if(m_noSchedule()){
+      Scheduling * tmp = new Scheduling;
+      m_Schedule.push_back(tmp);
+      m_scheduleCount++;
+   }
 }
 //Load the default query
 void Reporter::m_defaultQuery(){
@@ -297,10 +354,10 @@ void Reporter::m_serializeParameters(){
    m_Setup.serializeParameters(tmpSerialize,tmpCount);
 }
 void Reporter::m_serializeSchedule(){
-   m_Setup.serializeSchedule(m_Schedule.getShift().prepareSerialization(),
-                             m_Schedule.getDaily().prepareSerialization(),
-                             m_Schedule.getWeekly().prepareSerialization(),
-                             m_Schedule.getMonthly().prepareSerialization());
+//   m_Setup.serializeSchedule(m_Schedule[keyString]->getShift().prepareSerialization(),
+//                             m_Schedule[keyString]->getDaily().prepareSerialization(),
+//                             m_Schedule[keyString]->getWeekly().prepareSerialization(),
+//                             m_Schedule[keyString]->getMonthly().prepareSerialization());
 }
 //Deserialization
 void Reporter::m_Deserialize(){
@@ -337,51 +394,51 @@ void Reporter::m_deserializeSchedule(){
    QStringList weekly;
    QStringList monthly;
 
-   m_Setup.deserializeSchedule(shift, day, weekly, monthly);
-   m_Schedule.getShift().deserializeList(shift);
-   m_Schedule.getDaily().deserializeList(day);
-   m_Schedule.getWeekly().deserializeList(weekly);
-   m_Schedule.getMonthly().deserializeList(monthly);
+//   m_Setup.deserializeSchedule(shift, day, weekly, monthly);
+//   m_Schedule[keyString]->getShift().deserializeList(shift);
+//   m_Schedule[keyString]->getDaily().deserializeList(day);
+//   m_Schedule[keyString]->getWeekly().deserializeList(weekly);
+//   m_Schedule[keyString]->getMonthly().deserializeList(monthly);
 }
 
 void Reporter::m_saveSchedule(){
-   m_editShift();
-   m_editDay();
-   m_editWeekly();
-   m_editMonthly();
+   m_editShift(m_scheduleKey);
+   m_editDay(m_scheduleKey);
+   m_editWeekly(m_scheduleKey);
+   m_editMonthly(m_scheduleKey);
    m_editCustom();
    m_serializeSchedule();
 }
 
 void Reporter::m_generateCSV(){
-   //TESTING FOR SHIFT
-   QSqlQuery generateCSV;
-   generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResultQuery();
-   m_Export.getCSV().generateFile(m_Schedule.getShift().getCsvTemplatePath(),
-                                  m_Schedule.getShift().getAttachName(),
-                                  generateCSV);
+//   //TESTING FOR SHIFT
+//   QSqlQuery generateCSV;
+//   generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResultQuery();
+//   m_Export.getCSV().generateFile(m_Schedule[keyString]->getShift().getCsvTemplatePath(),
+//                                  m_Schedule[keyString]->getShift().getAttachName(),
+//                                  generateCSV);
 }
 
 void Reporter::m_generateXLS(){
-   //TESTING FOR SHIFT
-   QList<std::pair<QString, QString>> tmp;
-   QList<QStringList> tmpQueries;
-   m_generateQuery(m_nameKey);
-   m_executeQuery(m_nameKey);
-   tmp.append(std::make_pair("CURRENT_DATE","15.12.2017"));
-   tmp.append(std::make_pair("DateTimeFromTo", "Od datumu A po datum B"));
-   tmp.append(std::make_pair("vygeneroval", "David BUDIL"));
-   tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
-   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
-      m_generateQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
-      m_executeQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
-      tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
-   }
+//   //TESTING FOR SHIFT
+//   QList<std::pair<QString, QString>> tmp;
+//   QList<QStringList> tmpQueries;
+//   m_generateQuery(m_nameKey);
+//   m_executeQuery(m_nameKey);
+//   tmp.append(std::make_pair("CURRENT_DATE","15.12.2017"));
+//   tmp.append(std::make_pair("DateTimeFromTo", "Od datumu A po datum B"));
+//   tmp.append(std::make_pair("vygeneroval", "David BUDIL"));
+//   tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
+//   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
+//      m_generateQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+//      m_executeQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+//      tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
+//   }
 
-   m_Export.getXLS().generateFile(m_Schedule.getShift().getXlsTemplatePath(),
-                                  m_Schedule.getShift().getAttachName(),
-                                  tmp,
-                                  tmpQueries);
+//   m_Export.getXLS().generateFile(m_Schedule[keyString]->getShift().getXlsTemplatePath(),
+//                                  m_Schedule[keyString]->getShift().getAttachName(),
+//                                  tmp,
+//                                  tmpQueries);
 }
 
 void Reporter::m_generateTemplateXLS(){
@@ -409,12 +466,19 @@ void Reporter::m_testingQueryGen(){
 //      m_mainSQL.getStorage().printQueryText();
    }
 }
+//Adds first schedule item
+bool Reporter::m_noSchedule(){
+   return (ui->scrollLayour_3->count() == 0 ? true : false);
+}
 void Reporter::m_loadSchedule(){
-   m_displayShift();
-   m_displayDay();
-   m_displayWeekly();
-   m_displayMonthly();
-   m_displayCustom();
+   QObject * senderObj = sender();
+   QString senderObjname = senderObj->objectName();
+   m_scheduleKey = senderObjname.toInt();
+   m_displayShift(m_scheduleKey);
+   m_displayDay(m_scheduleKey);
+   m_displayWeekly(m_scheduleKey);
+   m_displayMonthly(m_scheduleKey);
+   m_displayCustom(m_scheduleKey);
 }
 
 void Reporter::on_paramNew_clicked(){
@@ -499,146 +563,146 @@ void Reporter::on_queryDelete_clicked(){
 void Reporter::on_queryActive_stateChanged(int state){
    m_queryActive = state;
 }
-void Reporter::m_displayShift(){
-   m_loadActiveShiftDays();
-   ui->shiftActive->setChecked(m_Schedule.getShift().getActive());
-   ui->shiftAttachCSV->setChecked(m_Schedule.getShift().getCsvAttach());
-   ui->shiftAttachXLS->setChecked(m_Schedule.getShift().getXlsAttach());
-   ui->shiftSubj->setText(m_Schedule.getShift().getSubjName());
-   ui->shiftAttach->setText(m_Schedule.getShift().getAttachName());
-   ui->shiftCSV->setText(m_Schedule.getShift().getCsvTemplatePath());
-   ui->shiftXLS->setText(m_Schedule.getShift().getXlsTemplatePath());
-   ui->shiftFrom->setTime(m_Schedule.getShift().getFrom0());
-   ui->shiftTo->setTime(m_Schedule.getShift().getTo0());
-   ui->shiftFrom_2->setTime(m_Schedule.getShift().getFrom1());
-   ui->shiftTo_2->setTime(m_Schedule.getShift().getTo1());
-   ui->shiftEmail->setText(m_Schedule.getShift().getEmailTemplatePath());
+void Reporter::m_displayShift(qint32 keyString){
+   m_loadActiveShiftDays(keyString);
+   ui->shiftActive->setChecked(m_Schedule[keyString]->getShift().getActive());
+   ui->shiftAttachCSV->setChecked(m_Schedule[keyString]->getShift().getCsvAttach());
+   ui->shiftAttachXLS->setChecked(m_Schedule[keyString]->getShift().getXlsAttach());
+   ui->shiftSubj->setText(m_Schedule[keyString]->getShift().getSubjName());
+   ui->shiftAttach->setText(m_Schedule[keyString]->getShift().getAttachName());
+   ui->shiftCSV->setText(m_Schedule[keyString]->getShift().getCsvTemplatePath());
+   ui->shiftXLS->setText(m_Schedule[keyString]->getShift().getXlsTemplatePath());
+   ui->shiftFrom->setTime(m_Schedule[keyString]->getShift().getFrom0());
+   ui->shiftTo->setTime(m_Schedule[keyString]->getShift().getTo0());
+   ui->shiftFrom_2->setTime(m_Schedule[keyString]->getShift().getFrom1());
+   ui->shiftTo_2->setTime(m_Schedule[keyString]->getShift().getTo1());
+   ui->shiftEmail->setText(m_Schedule[keyString]->getShift().getEmailTemplatePath());
 }
-void Reporter::m_displayDay(){
-   m_loadActiveDailyDays();
-   ui->dailyActive->setChecked(m_Schedule.getDaily().getActive());
-   ui->dailyAttachCSV->setChecked(m_Schedule.getDaily().getCsvAttach());
-   ui->dailyAttachXLS->setChecked(m_Schedule.getDaily().getXlsAttach());
-   ui->dailySubj->setText(m_Schedule.getDaily().getSubjName());
-   ui->dailyAttach->setText(m_Schedule.getDaily().getAttachName());
-   ui->dailyCSV->setText(m_Schedule.getDaily().getCsvTemplatePath());
-   ui->dailyXLS->setText(m_Schedule.getDaily().getXlsTemplatePath());
-   ui->dailyTime->setTime(m_Schedule.getDaily().getTime());
-   ui->dailyEmail->setText(m_Schedule.getDaily().getEmailTemplatePath());
+void Reporter::m_displayDay(qint32 keyString){
+   m_loadActiveDailyDays(keyString);
+   ui->dailyActive->setChecked(m_Schedule[keyString]->getDaily().getActive());
+   ui->dailyAttachCSV->setChecked(m_Schedule[keyString]->getDaily().getCsvAttach());
+   ui->dailyAttachXLS->setChecked(m_Schedule[keyString]->getDaily().getXlsAttach());
+   ui->dailySubj->setText(m_Schedule[keyString]->getDaily().getSubjName());
+   ui->dailyAttach->setText(m_Schedule[keyString]->getDaily().getAttachName());
+   ui->dailyCSV->setText(m_Schedule[keyString]->getDaily().getCsvTemplatePath());
+   ui->dailyXLS->setText(m_Schedule[keyString]->getDaily().getXlsTemplatePath());
+   ui->dailyTime->setTime(m_Schedule[keyString]->getDaily().getTime());
+   ui->dailyEmail->setText(m_Schedule[keyString]->getDaily().getEmailTemplatePath());
 }
-void Reporter::m_displayWeekly(){
-   ui->weeklyActive->setChecked(m_Schedule.getWeekly().getActive());
-   ui->weeklyAttachCSV->setChecked(m_Schedule.getWeekly().getCsvAttach());
-   ui->weeklyAttachXLS->setChecked(m_Schedule.getWeekly().getXlsAttach());
-   ui->weeklySubj->setText(m_Schedule.getWeekly().getSubjName());
-   ui->weeklyAttach->setText(m_Schedule.getWeekly().getAttachName());
-   ui->weeklyCSV->setText(m_Schedule.getWeekly().getCsvTemplatePath());
-   ui->weeklyXLS->setText(m_Schedule.getWeekly().getXlsTemplatePath());
-   ui->weeklyTime->setTime(m_Schedule.getWeekly().getTime());
-   ui->weeklyDays->setCurrentIndex(m_Schedule.getWeekly().getDay());
-   ui->weeklyEmail->setText(m_Schedule.getWeekly().getEmailTemplatePath());
+void Reporter::m_displayWeekly(qint32 keyString){
+   ui->weeklyActive->setChecked(m_Schedule[keyString]->getWeekly().getActive());
+   ui->weeklyAttachCSV->setChecked(m_Schedule[keyString]->getWeekly().getCsvAttach());
+   ui->weeklyAttachXLS->setChecked(m_Schedule[keyString]->getWeekly().getXlsAttach());
+   ui->weeklySubj->setText(m_Schedule[keyString]->getWeekly().getSubjName());
+   ui->weeklyAttach->setText(m_Schedule[keyString]->getWeekly().getAttachName());
+   ui->weeklyCSV->setText(m_Schedule[keyString]->getWeekly().getCsvTemplatePath());
+   ui->weeklyXLS->setText(m_Schedule[keyString]->getWeekly().getXlsTemplatePath());
+   ui->weeklyTime->setTime(m_Schedule[keyString]->getWeekly().getTime());
+   ui->weeklyDays->setCurrentIndex(m_Schedule[keyString]->getWeekly().getDay());
+   ui->weeklyEmail->setText(m_Schedule[keyString]->getWeekly().getEmailTemplatePath());
 }
-void Reporter::m_displayMonthly(){
-   ui->monthlyActive->setChecked(m_Schedule.getMonthly().getActive());
-   ui->monthlyAttachCSV->setChecked(m_Schedule.getMonthly().getCsvAttach());
-   ui->monthlyAttachXLS->setChecked(m_Schedule.getMonthly().getXlsAttach());
-   ui->monthlySubj->setText(m_Schedule.getMonthly().getSubjName());
-   ui->monthlyAttach->setText(m_Schedule.getMonthly().getAttachName());
-   ui->monthlyCSV->setText(m_Schedule.getMonthly().getCsvTemplatePath());
-   ui->monthlyXLS->setText(m_Schedule.getMonthly().getXlsTemplatePath());
-   ui->monthlyTIme->setTime(m_Schedule.getMonthly().getTime());
-   ui->monthlyDays->setCurrentIndex(m_Schedule.getMonthly().getDay());
-   ui->monthlyEmail->setText(m_Schedule.getMonthly().getEmailTemplatePath());
+void Reporter::m_displayMonthly(qint32 keyString){
+   ui->monthlyActive->setChecked(m_Schedule[keyString]->getMonthly().getActive());
+   ui->monthlyAttachCSV->setChecked(m_Schedule[keyString]->getMonthly().getCsvAttach());
+   ui->monthlyAttachXLS->setChecked(m_Schedule[keyString]->getMonthly().getXlsAttach());
+   ui->monthlySubj->setText(m_Schedule[keyString]->getMonthly().getSubjName());
+   ui->monthlyAttach->setText(m_Schedule[keyString]->getMonthly().getAttachName());
+   ui->monthlyCSV->setText(m_Schedule[keyString]->getMonthly().getCsvTemplatePath());
+   ui->monthlyXLS->setText(m_Schedule[keyString]->getMonthly().getXlsTemplatePath());
+   ui->monthlyTIme->setTime(m_Schedule[keyString]->getMonthly().getTime());
+   ui->monthlyDays->setCurrentIndex(m_Schedule[keyString]->getMonthly().getDay());
+   ui->monthlyEmail->setText(m_Schedule[keyString]->getMonthly().getEmailTemplatePath());
 }
-void Reporter::m_displayCustom(){
+void Reporter::m_displayCustom(qint32 keyString){
    //work in progress, in future maybe
 }
-void Reporter::m_loadActiveShiftDays(){
-   ui->shiftMondayActive->setChecked(m_Schedule.getShift().getDays()[0]);
-   ui->shiftTuesdayActive->setChecked(m_Schedule.getShift().getDays()[1]);
-   ui->shiftWednesdayActive->setChecked(m_Schedule.getShift().getDays()[2]);
-   ui->shiftThursdayActive->setChecked(m_Schedule.getShift().getDays()[3]);
-   ui->shiftFridayActive->setChecked(m_Schedule.getShift().getDays()[4]);
-   ui->shiftSaturdayActive->setChecked(m_Schedule.getShift().getDays()[5]);
-   ui->shiftSundayActive->setChecked(m_Schedule.getShift().getDays()[6]);
+void Reporter::m_loadActiveShiftDays(qint32 keyString){
+   ui->shiftMondayActive->setChecked(m_Schedule[keyString]->getShift().getDays()[0]);
+   ui->shiftTuesdayActive->setChecked(m_Schedule[keyString]->getShift().getDays()[1]);
+   ui->shiftWednesdayActive->setChecked(m_Schedule[keyString]->getShift().getDays()[2]);
+   ui->shiftThursdayActive->setChecked(m_Schedule[keyString]->getShift().getDays()[3]);
+   ui->shiftFridayActive->setChecked(m_Schedule[keyString]->getShift().getDays()[4]);
+   ui->shiftSaturdayActive->setChecked(m_Schedule[keyString]->getShift().getDays()[5]);
+   ui->shiftSundayActive->setChecked(m_Schedule[keyString]->getShift().getDays()[6]);
 }
-void Reporter::m_loadActiveDailyDays(){
-   ui->dailyMondayActive->setChecked(m_Schedule.getDaily().getDays()[0]);
-   ui->dailyTuesdayActive->setChecked(m_Schedule.getDaily().getDays()[1]);
-   ui->dailyWednesdayActive->setChecked(m_Schedule.getDaily().getDays()[2]);
-   ui->dailyThursdayActive->setChecked(m_Schedule.getDaily().getDays()[3]);
-   ui->dailyFridayActive->setChecked(m_Schedule.getDaily().getDays()[4]);
-   ui->dailySaturdayActive->setChecked(m_Schedule.getDaily().getDays()[5]);
-   ui->dailySundayActive->setChecked(m_Schedule.getDaily().getDays()[6]);
+void Reporter::m_loadActiveDailyDays(qint32 keyString){
+   ui->dailyMondayActive->setChecked(m_Schedule[keyString]->getDaily().getDays()[0]);
+   ui->dailyTuesdayActive->setChecked(m_Schedule[keyString]->getDaily().getDays()[1]);
+   ui->dailyWednesdayActive->setChecked(m_Schedule[keyString]->getDaily().getDays()[2]);
+   ui->dailyThursdayActive->setChecked(m_Schedule[keyString]->getDaily().getDays()[3]);
+   ui->dailyFridayActive->setChecked(m_Schedule[keyString]->getDaily().getDays()[4]);
+   ui->dailySaturdayActive->setChecked(m_Schedule[keyString]->getDaily().getDays()[5]);
+   ui->dailySundayActive->setChecked(m_Schedule[keyString]->getDaily().getDays()[6]);
 }
-void Reporter::m_editActiveShiftDays(){
-   m_Schedule.getShift().setDays(0, ui->shiftMondayActive->isChecked());
-   m_Schedule.getShift().setDays(1, ui->shiftTuesdayActive->isChecked());
-   m_Schedule.getShift().setDays(2, ui->shiftWednesdayActive->isChecked());
-   m_Schedule.getShift().setDays(3, ui->shiftThursdayActive->isChecked());
-   m_Schedule.getShift().setDays(4, ui->shiftFridayActive->isChecked());
-   m_Schedule.getShift().setDays(5, ui->shiftSaturdayActive->isChecked());
-   m_Schedule.getShift().setDays(6, ui->shiftSundayActive->isChecked());
+void Reporter::m_editActiveShiftDays(qint32 keyString){
+   m_Schedule[keyString]->getShift().setDays(0, ui->shiftMondayActive->isChecked());
+   m_Schedule[keyString]->getShift().setDays(1, ui->shiftTuesdayActive->isChecked());
+   m_Schedule[keyString]->getShift().setDays(2, ui->shiftWednesdayActive->isChecked());
+   m_Schedule[keyString]->getShift().setDays(3, ui->shiftThursdayActive->isChecked());
+   m_Schedule[keyString]->getShift().setDays(4, ui->shiftFridayActive->isChecked());
+   m_Schedule[keyString]->getShift().setDays(5, ui->shiftSaturdayActive->isChecked());
+   m_Schedule[keyString]->getShift().setDays(6, ui->shiftSundayActive->isChecked());
 }
-void Reporter::m_editActiveDailyDays(){
-   m_Schedule.getDaily().setDays(0, ui->shiftMondayActive->isChecked());
-   m_Schedule.getDaily().setDays(1, ui->shiftTuesdayActive->isChecked());
-   m_Schedule.getDaily().setDays(2, ui->shiftWednesdayActive->isChecked());
-   m_Schedule.getDaily().setDays(3, ui->shiftThursdayActive->isChecked());
-   m_Schedule.getDaily().setDays(4, ui->shiftFridayActive->isChecked());
-   m_Schedule.getDaily().setDays(5, ui->shiftSaturdayActive->isChecked());
-   m_Schedule.getDaily().setDays(6, ui->shiftSundayActive->isChecked());
+void Reporter::m_editActiveDailyDays(qint32 keyString){
+   m_Schedule[keyString]->getDaily().setDays(0, ui->shiftMondayActive->isChecked());
+   m_Schedule[keyString]->getDaily().setDays(1, ui->shiftTuesdayActive->isChecked());
+   m_Schedule[keyString]->getDaily().setDays(2, ui->shiftWednesdayActive->isChecked());
+   m_Schedule[keyString]->getDaily().setDays(3, ui->shiftThursdayActive->isChecked());
+   m_Schedule[keyString]->getDaily().setDays(4, ui->shiftFridayActive->isChecked());
+   m_Schedule[keyString]->getDaily().setDays(5, ui->shiftSaturdayActive->isChecked());
+   m_Schedule[keyString]->getDaily().setDays(6, ui->shiftSundayActive->isChecked());
 }
-void Reporter::m_editShift(){
-   m_editActiveShiftDays();
-   m_Schedule.getShift().setActive(ui->shiftActive->isChecked());
-   m_Schedule.getShift().setAttachName(ui->shiftAttach->text());
-   m_Schedule.getShift().setSubjName(ui->shiftSubj->text());
-   m_Schedule.getShift().setXlsTemplatePath(ui->shiftXLS->text());
-   m_Schedule.getShift().setCsvTemplatePath(ui->shiftCSV->text());
-   m_Schedule.getShift().setFrom0(ui->shiftFrom->time());
-   m_Schedule.getShift().setTo0(ui->shiftTo->time());
-   m_Schedule.getShift().setFrom1(ui->shiftFrom_2->time());
-   m_Schedule.getShift().setTo1(ui->shiftTo_2->time());
-   m_Schedule.getShift().setCsvAttach(ui->shiftAttachCSV->isChecked());
-   m_Schedule.getShift().setXlsAttach(ui->shiftAttachXLS->isChecked());
-   m_Schedule.getShift().setEmailTemplatePath(ui->shiftEmail->text());
+void Reporter::m_editShift(qint32 keyString){
+   m_editActiveShiftDays(keyString);
+   m_Schedule[keyString]->getShift().setActive(ui->shiftActive->isChecked());
+   m_Schedule[keyString]->getShift().setAttachName(ui->shiftAttach->text());
+   m_Schedule[keyString]->getShift().setSubjName(ui->shiftSubj->text());
+   m_Schedule[keyString]->getShift().setXlsTemplatePath(ui->shiftXLS->text());
+   m_Schedule[keyString]->getShift().setCsvTemplatePath(ui->shiftCSV->text());
+   m_Schedule[keyString]->getShift().setFrom0(ui->shiftFrom->time());
+   m_Schedule[keyString]->getShift().setTo0(ui->shiftTo->time());
+   m_Schedule[keyString]->getShift().setFrom1(ui->shiftFrom_2->time());
+   m_Schedule[keyString]->getShift().setTo1(ui->shiftTo_2->time());
+   m_Schedule[keyString]->getShift().setCsvAttach(ui->shiftAttachCSV->isChecked());
+   m_Schedule[keyString]->getShift().setXlsAttach(ui->shiftAttachXLS->isChecked());
+   m_Schedule[keyString]->getShift().setEmailTemplatePath(ui->shiftEmail->text());
 }
-void Reporter::m_editDay(){
-   m_editActiveDailyDays();
-   m_Schedule.getDaily().setActive(ui->dailyActive->isChecked());
-   m_Schedule.getDaily().setAttachName(ui->dailyAttach->text());
-   m_Schedule.getDaily().setSubjName(ui->dailySubj->text());
-   m_Schedule.getDaily().setXlsTemplatePath(ui->dailyXLS->text());
-   m_Schedule.getDaily().setCsvTemplatePath(ui->dailyCSV->text());
-   m_Schedule.getDaily().setTime(ui->dailyTime->time());
-   m_Schedule.getDaily().setCsvAttach(ui->dailyAttachCSV->isChecked());
-   m_Schedule.getDaily().setXlsAttach(ui->dailyAttachXLS->isChecked());
-   m_Schedule.getDaily().setEmailTemplatePath(ui->dailyEmail->text());
+void Reporter::m_editDay(qint32 keyString){
+   m_editActiveDailyDays(keyString);
+   m_Schedule[keyString]->getDaily().setActive(ui->dailyActive->isChecked());
+   m_Schedule[keyString]->getDaily().setAttachName(ui->dailyAttach->text());
+   m_Schedule[keyString]->getDaily().setSubjName(ui->dailySubj->text());
+   m_Schedule[keyString]->getDaily().setXlsTemplatePath(ui->dailyXLS->text());
+   m_Schedule[keyString]->getDaily().setCsvTemplatePath(ui->dailyCSV->text());
+   m_Schedule[keyString]->getDaily().setTime(ui->dailyTime->time());
+   m_Schedule[keyString]->getDaily().setCsvAttach(ui->dailyAttachCSV->isChecked());
+   m_Schedule[keyString]->getDaily().setXlsAttach(ui->dailyAttachXLS->isChecked());
+   m_Schedule[keyString]->getDaily().setEmailTemplatePath(ui->dailyEmail->text());
 }
-void Reporter::m_editWeekly(){
-   m_Schedule.getWeekly().setActive(ui->weeklyActive->isChecked());
-   m_Schedule.getWeekly().setAttachName(ui->weeklyAttach->text());
-   m_Schedule.getWeekly().setSubjName(ui->weeklySubj->text());
-   m_Schedule.getWeekly().setXlsTemplatePath(ui->weeklyXLS->text());
-   m_Schedule.getWeekly().setCsvTemplatePath(ui->weeklyCSV->text());
-   m_Schedule.getWeekly().setTime(ui->weeklyTime->time());
-   m_Schedule.getWeekly().setCsvAttach(ui->weeklyAttachCSV->isChecked());
-   m_Schedule.getWeekly().setXlsAttach(ui->weeklyAttachXLS->isChecked());
-   m_Schedule.getWeekly().setDay(ui->weeklyDays->currentIndex());
-   m_Schedule.getWeekly().setEmailTemplatePath(ui->weeklyEmail->text());
+void Reporter::m_editWeekly(qint32 keyString){
+   m_Schedule[keyString]->getWeekly().setActive(ui->weeklyActive->isChecked());
+   m_Schedule[keyString]->getWeekly().setAttachName(ui->weeklyAttach->text());
+   m_Schedule[keyString]->getWeekly().setSubjName(ui->weeklySubj->text());
+   m_Schedule[keyString]->getWeekly().setXlsTemplatePath(ui->weeklyXLS->text());
+   m_Schedule[keyString]->getWeekly().setCsvTemplatePath(ui->weeklyCSV->text());
+   m_Schedule[keyString]->getWeekly().setTime(ui->weeklyTime->time());
+   m_Schedule[keyString]->getWeekly().setCsvAttach(ui->weeklyAttachCSV->isChecked());
+   m_Schedule[keyString]->getWeekly().setXlsAttach(ui->weeklyAttachXLS->isChecked());
+   m_Schedule[keyString]->getWeekly().setDay(ui->weeklyDays->currentIndex());
+   m_Schedule[keyString]->getWeekly().setEmailTemplatePath(ui->weeklyEmail->text());
 }
-void Reporter::m_editMonthly(){
-   m_Schedule.getMonthly().setActive(ui->monthlyActive->isChecked());
-   m_Schedule.getMonthly().setAttachName(ui->monthlyAttach->text());
-   m_Schedule.getMonthly().setSubjName(ui->monthlySubj->text());
-   m_Schedule.getMonthly().setXlsTemplatePath(ui->monthlyXLS->text());
-   m_Schedule.getMonthly().setCsvTemplatePath(ui->monthlyCSV->text());
-   m_Schedule.getMonthly().setTime(ui->monthlyTIme->time());
-   m_Schedule.getMonthly().setCsvAttach(ui->monthlyAttachCSV->isChecked());
-   m_Schedule.getMonthly().setXlsAttach(ui->monthlyAttachXLS->isChecked());
-   m_Schedule.getMonthly().setDay(ui->monthlyDays->currentIndex());
-   m_Schedule.getMonthly().setEmailTemplatePath(ui->monthlyEmail->text());
+void Reporter::m_editMonthly(qint32 keyString){
+   m_Schedule[keyString]->getMonthly().setActive(ui->monthlyActive->isChecked());
+   m_Schedule[keyString]->getMonthly().setAttachName(ui->monthlyAttach->text());
+   m_Schedule[keyString]->getMonthly().setSubjName(ui->monthlySubj->text());
+   m_Schedule[keyString]->getMonthly().setXlsTemplatePath(ui->monthlyXLS->text());
+   m_Schedule[keyString]->getMonthly().setCsvTemplatePath(ui->monthlyCSV->text());
+   m_Schedule[keyString]->getMonthly().setTime(ui->monthlyTIme->time());
+   m_Schedule[keyString]->getMonthly().setCsvAttach(ui->monthlyAttachCSV->isChecked());
+   m_Schedule[keyString]->getMonthly().setXlsAttach(ui->monthlyAttachXLS->isChecked());
+   m_Schedule[keyString]->getMonthly().setDay(ui->monthlyDays->currentIndex());
+   m_Schedule[keyString]->getMonthly().setEmailTemplatePath(ui->monthlyEmail->text());
 }
 
 void Reporter::m_editCustom(){
@@ -648,19 +712,19 @@ void Reporter::on_tabWidget_2_tabBarClicked(int index){
    m_saveSchedule();
    switch(index){
       case 0:
-         m_displayShift();
+         m_displayShift(m_scheduleKey);
          break;
       case 1:
-         m_displayDay();
+         m_displayDay(m_scheduleKey);
          break;
       case 2:
-         m_displayWeekly();
+         m_displayWeekly(m_scheduleKey);
          break;
       case 3:
-         m_displayMonthly();
+         m_displayMonthly(m_scheduleKey);
          break;
       case 4:
-         m_displayCustom();
+         m_displayCustom(m_scheduleKey);
          break;
       default:
          break;
@@ -705,9 +769,7 @@ void Reporter::on_monthlyBrXLS_clicked(){
 void Reporter::on_monthlyBrCSV_clicked(){
    ui->monthlyCSV->setText(QFileDialog::getOpenFileName(this, tr("Select XLS Template")));
 }
-void Reporter::on_saveEmailAdress_clicked(){
-   m_Schedule.setGlobalEmail(ui->emailAdress->text());
-}
+
 void Reporter::on_toolButton_2_clicked(){
    m_generateXLS();
    m_generateCSV();
@@ -715,4 +777,7 @@ void Reporter::on_toolButton_2_clicked(){
 
 void Reporter::on_toolButton_3_clicked(){
    m_generateTemplateXLS();
+}
+void Reporter::on_newScheduling_clicked(){
+   m_addSchedule(ui->scheduleName->text());
 }

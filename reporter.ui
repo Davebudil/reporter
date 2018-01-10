@@ -54,14 +54,14 @@ QDialog, QListView {
 }
 
 QListView::item:hover {
-  color: #F5F5F5;
-  background: #F5F5F5;
+  color: #DADFE1;
+  background: #DADFE1;
 }
 
 
 QListView::item:selected {
-  color: #F5F5F5;
-  background: #F5F5F5;
+  color: #DADFE1;
+  background: #DADFE1;
 }
 
 /* === QTabBar === */
@@ -69,23 +69,23 @@ QTabBar {
   background: white;
 }
 QPlainTextEdit{
-  background: #F5F5F5;
-  border: 1px solid #F5F5F5;
+  background: #DADFE1;
+  border: 1px solid #DADFE1;
   color: black;
 }
 QTableView{
-  background: #F5F5F5;
-  border: 1px solid #F5F5F5;
+  background: #DADFE1;
+  border: 1px solid #DADFE1;
   color: black;
 }
 QScrollArea{
-  background: #F5F5F5;
-  border: 1px solid #F5F5F5;
+  background: #DADFE1;
+  border: 1px solid #DADFE1;
   color: black;
 }
 QScrollArea{
-  background: #F5F5F5;
-  border: 1px solid #F5F5F5;
+  background: #DADFE1;
+  border: 1px solid #DADFE1;
   color: black;
 }
 
@@ -106,17 +106,17 @@ QTabBar::tab {
 }
 
 QTabBar::tab:hover {
-  background-color: #F5F5F5;
-  border: 0px solid #F5F5F5;
-  border-bottom: 2px solid #F5F5F5;
+  background-color: #DADFE1;
+  border: 0px solid #DADFE1;
+  border-bottom: 2px solid #DADFE1;
   color: black;
 }
 
 QTabBar::tab:selected {
-  background-color: #F5F5F5;
-  border: 0px solid #F5F5F5;
+  background-color: #DADFE1;
+  border: 0px solid #DADFE1;
   border-top: none;
-  border-bottom: 2px solid #F5F5F5;
+  border-bottom: 2px solid #DADFE1;
   color: black;
 }
 
@@ -143,13 +143,13 @@ QGroupBox::title {
 QComboBox {
   color: black;
   background-color: white;
-  selection-background-color: #F5F5F5;
+  selection-background-color: #DADFE1;
   outline: 0;
 }
 
 QComboBox QAbstractItemView
 {    
-    selection-background-color: #F5F5F5;
+    selection-background-color: #DADFE1;
   outline: 0;
 }
 
@@ -159,13 +159,13 @@ QCheckBox, QRadioButton {
 }
 
 QCheckBox::indicator::unchecked  {
-  background-color: #F5F5F5;
-  border: 1px solid #F5F5F5;
+  background-color: #DADFE1;
+  border: 1px solid #DADFE1;
 }
 
 QRadioButton::indicator::unchecked {
-  background-color: #F5F5F5;
-  border: 1px solid #F5F5F5;
+  background-color: #DADFE1;
+  border: 1px solid #DADFE1;
   border-radius: 4px;
 }
 
@@ -201,7 +201,7 @@ QTreeView::item:hover {
 }
 
 QTreeView::item:selected {
-  background-color: #F5F5F5;
+  background-color: #DADFE1;
   color: black;
 }
 
@@ -213,8 +213,8 @@ QTreeView QHeaderView:section {
 
 QTreeView::indicator:checked {
   background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 white);
-  border: 1px solid #F5F5F5 ;
-  selection-background-color: #F5F5F5 ;
+  border: 1px solid #DADFE1 ;
+  selection-background-color: #DADFE1 ;
 }
 
 QTreeView::indicator:unchecked {      /* This and the one above style the checkbox in the Options -&gt; Keyboard */
@@ -303,7 +303,7 @@ QPushButton {
 }
 
 QPushButton:hover {
-  color: #F5F5F5;
+  color: #DADFE1;
 }
 
 QPushButton:pressed {
@@ -311,14 +311,14 @@ QPushButton:pressed {
 }
 
 QLineEdit {
-  background: #F5F5F5;
-  border: 1px solid #F5F5F5;
+  background: #DADFE1;
+  border: 1px solid #DADFE1;
   color: black;
 }
 
 QSpinBox {
-  background: #F5F5F5;
-  border: 1px solid #F5F5F5;
+  background: #DADFE1;
+  border: 1px solid #DADFE1;
   color: black;
 }
 
@@ -335,7 +335,7 @@ QMenu {
 }
 
 QMenu::item:selected {
-  color: #F5F5F5;
+  color: #DADFE1;
 }
 
 QMenu::item:pressed {
@@ -366,7 +366,7 @@ QMenuBar::item:disabled {
 }
 
 QMenuBar::item:selected {
-  color: #F5F5F5;
+  color: #DADFE1;
 }
 
 QMenuBar::item:pressed {
@@ -390,7 +390,7 @@ QToolBar::separator {
 
 /* === QToolButton === */
 QToolButton:hover, QToolButton:pressed {
-  background-color: #F5F5F5;
+  background-color: #DADFE1;
 }
 
 QToolButton::menu-button {
@@ -416,7 +416,7 @@ QToolButton {
 }
 
 QToolButton:hover, QToolButton:pressed, QToolButton:checked {
-  background-color: #F5F5F5;
+  background-color: #DADFE1;
 }
 
 QToolButton:hover {
@@ -435,8 +435,8 @@ QToolButton {
 }
 
 QToolButton:hover {
-  background-color: #F5F5F5;
-  border: 1px solid #F5F5F5;
+  background-color: #DADFE1;
+  border: 1px solid #DADFE1;
 }
 
 QToolButton[popupMode=&quot;1&quot;] {
@@ -475,7 +475,7 @@ QDialogButtonBox {
 
 QTabWidget::tab-bar {
   left: 0px; /* Test this out on OS X, it will affect the tabs in the Options Dialog, on OS X they are centered */
-}</string>
+}tak</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
@@ -494,7 +494,7 @@ QTabWidget::tab-bar {
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="basic">
      <attribute name="title">
@@ -605,13 +605,13 @@ QTabWidget::tab-bar {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>191</width>
-          <height>191</height>
+          <width>189</width>
+          <height>189</height>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">	background:#F5F5F5;
-	border: 1px solid #F5F5F5;
+         <string notr="true">	background: #DADFE1;
+	border: 1px solid #DADFE1;
 	color: black;</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -638,10 +638,10 @@ QTabWidget::tab-bar {
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>210</x>
+        <y>60</y>
         <width>461</width>
-        <height>311</height>
+        <height>301</height>
        </rect>
       </property>
       <property name="currentIndex">
@@ -2230,7 +2230,7 @@ QTabWidget::tab-bar {
       <property name="geometry">
        <rect>
         <x>710</x>
-        <y>9</y>
+        <y>450</y>
         <width>61</width>
         <height>22</height>
        </rect>
@@ -2242,9 +2242,9 @@ QTabWidget::tab-bar {
      <widget class="QToolButton" name="saveScheduling">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>320</y>
-        <width>141</width>
+        <x>150</x>
+        <y>10</y>
+        <width>131</width>
         <height>41</height>
        </rect>
       </property>
@@ -2256,7 +2256,7 @@ QTabWidget::tab-bar {
       <property name="geometry">
        <rect>
         <x>580</x>
-        <y>10</y>
+        <y>450</y>
         <width>121</width>
         <height>20</height>
        </rect>
@@ -2269,9 +2269,81 @@ QTabWidget::tab-bar {
       <property name="geometry">
        <rect>
         <x>580</x>
-        <y>40</y>
+        <y>480</y>
         <width>231</width>
         <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scrollSchedule">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>191</width>
+        <height>261</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollScheduleWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>189</width>
+         <height>259</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">	background: #DADFE1;
+	border: 1px solid #DADFE1;
+	color: black;</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <layout class="QVBoxLayout" name="scrollLayour_3"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QToolButton" name="deleteScheduling">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Delete Schedule</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="newScheduling">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>10</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>New Schedule</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="scheduleName">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>191</width>
+        <height>31</height>
        </rect>
       </property>
      </widget>
@@ -2416,13 +2488,13 @@ QTabWidget::tab-bar {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>181</width>
-         <height>171</height>
+         <width>179</width>
+         <height>169</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">	background:#F5F5F5;
-	border: 1px solid #F5F5F5;
+        <string notr="true">	background: #DADFE1;
+	border: 1px solid #DADFE1;
 	color: black;</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">

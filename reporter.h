@@ -93,11 +93,11 @@ class Reporter : public QMainWindow{
 
       void on_monthlyBrCSV_clicked();
 
-      void on_saveEmailAdress_clicked();
-
       void on_toolButton_2_clicked();
 
       void on_toolButton_3_clicked();
+
+      void on_newScheduling_clicked();
 
    private:
       Ui::Reporter *ui;
@@ -105,10 +105,12 @@ class Reporter : public QMainWindow{
       Setup m_Setup;
       Log m_Log;
       Export m_Export;
-      Scheduling m_Schedule;
+      QVector<Scheduling*> m_Schedule;
       QString m_nameKey;
       qint32 m_selectedParam;
       qint32 m_paramKey;
+      qint32 m_scheduleKey;
+      qint32 m_scheduleCount;
       QToolButton * tmp;
       QHotkey * m_shwHide;
       qint32 m_daysWeeklyIndex;
@@ -150,30 +152,31 @@ class Reporter : public QMainWindow{
       void m_clearParam();
       void m_clearQuery();
       void m_loadSchedule();
-      void m_displayShift();
-      void m_displayDay();
-      void m_displayWeekly();
-      void m_displayMonthly();
-      void m_displayCustom();
-      void m_editShift();
-      void m_editDay();
-      void m_editWeekly();
-      void m_editMonthly();
+      void m_displayShift(qint32 keyString);
+      void m_displayDay(qint32 keyString);
+      void m_displayWeekly(qint32 keyString);
+      void m_displayMonthly(qint32 keyString);
+      void m_displayCustom(qint32 keyString);
+      void m_editShift(qint32 keyString);
+      void m_editDay(qint32 keyString);
+      void m_editWeekly(qint32 keyString);
+      void m_editMonthly(qint32 keyString);
       void m_editCustom();
-      void m_loadActiveShiftDays();
-      void m_loadActiveDailyDays();
-      void m_loadWeeklyDays();
-      void m_editWeeklyDays();
-      void m_editActiveShiftDays();
-      void m_editActiveDailyDays();
+      void m_loadActiveShiftDays(qint32 keyString);
+      void m_loadActiveDailyDays(qint32 keyString);
+      void m_editActiveShiftDays(qint32 keyString);
+      void m_editActiveDailyDays(qint32 keyString);
       void m_serializeSchedule();
       void m_deserializeSchedule();
       void m_serializeGlobal();
       void m_saveSchedule();
+      void m_addSchedule(const QString & name);
+      void m_deleteSchedule();
       void m_generateCSV();
       void m_generateXLS();
       void m_generateTemplateXLS();
       void m_testingQueryGen();
+      bool m_noSchedule();
 };
 
 #endif // REPORTER_H
