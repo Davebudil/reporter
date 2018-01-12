@@ -27,3 +27,13 @@ QString Scheduling::getGlobalEmail() const{
 void Scheduling::setGlobalEmail(const QString & GlobalEmail){
    m_GlobalEmail = GlobalEmail;
 }
+
+QString Scheduling::getName() const
+{
+    return m_Name;
+}
+
+void Scheduling::setName(const QString & Name)
+{
+    m_Name = Name;
+}

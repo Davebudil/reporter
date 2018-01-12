@@ -2,6 +2,7 @@
 #define DAILYSCHEDULE_H
 #include <QObject>
 #include <QTime>
+#include <QMap>
 
 class DailySchedule{
    public:
@@ -13,6 +14,7 @@ class DailySchedule{
       QString getEmailTemplatePath() const;
       QString getSubjName() const;
       QString getAttachName() const;
+      QMap<QString, QString> & getEmailAdresses();
       QTime getTime() const;
       bool getActive() const;
       bool * getDays() const;
@@ -43,6 +45,7 @@ class DailySchedule{
       QString m_xlsTemplatePath;
       QString m_csvTemplatePath;
       QString m_emailTemplatePath;
+      QMap<QString, QString> m_emailAdresses;
 };
 
 #endif // DAILYSCHEDULE_H

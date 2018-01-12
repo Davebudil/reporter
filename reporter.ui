@@ -640,7 +640,7 @@ QTabWidget::tab-bar {
        <rect>
         <x>210</x>
         <y>60</y>
-        <width>461</width>
+        <width>641</width>
         <height>301</height>
        </rect>
       </property>
@@ -667,7 +667,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftMondayActive">
         <property name="geometry">
          <rect>
-          <x>100</x>
+          <x>10</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -680,7 +680,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftTuesdayActive">
         <property name="geometry">
          <rect>
-          <x>155</x>
+          <x>65</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -693,7 +693,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftThursdayActive">
         <property name="geometry">
          <rect>
-          <x>260</x>
+          <x>170</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -706,7 +706,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftWednesdayActive">
         <property name="geometry">
          <rect>
-          <x>205</x>
+          <x>115</x>
           <y>70</y>
           <width>55</width>
           <height>24</height>
@@ -719,7 +719,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftFridayActive">
         <property name="geometry">
          <rect>
-          <x>310</x>
+          <x>220</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -732,7 +732,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftSaturdayActive">
         <property name="geometry">
          <rect>
-          <x>360</x>
+          <x>270</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -745,7 +745,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftSundayActive">
         <property name="geometry">
          <rect>
-          <x>410</x>
+          <x>320</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -806,7 +806,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>100</y>
-          <width>281</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -816,7 +816,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>130</y>
-          <width>281</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -826,7 +826,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>160</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -836,7 +836,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>190</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -846,7 +846,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>220</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -919,7 +919,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftAttachXLS">
         <property name="geometry">
          <rect>
-          <x>170</x>
+          <x>130</x>
           <y>250</y>
           <width>121</width>
           <height>24</height>
@@ -932,7 +932,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftAttachCSV">
         <property name="geometry">
          <rect>
-          <x>290</x>
+          <x>250</x>
           <y>250</y>
           <width>121</width>
           <height>24</height>
@@ -945,7 +945,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="shiftBrXLS">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>190</y>
           <width>31</width>
           <height>21</height>
@@ -958,7 +958,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="shiftBrEMAIL">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>160</y>
           <width>31</width>
           <height>21</height>
@@ -971,7 +971,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="shiftBrCSV">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>220</y>
           <width>31</width>
           <height>21</height>
@@ -1001,6 +1001,104 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
+       <widget class="QScrollArea" name="shiftEmailScrollArea">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>70</y>
+          <width>251</width>
+          <height>201</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="shiftEmailWidget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>249</width>
+           <height>199</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">	background: #DADFE1;
+	border: 1px solid #DADFE1;
+	color: black;</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <layout class="QVBoxLayout" name="shiftEmailLayout"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QLabel" name="label_5">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>10</y>
+          <width>141</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Email Adress</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="shiftemailAdress">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>40</y>
+          <width>211</width>
+          <height>20</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="shiftsaveEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>10</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="shiftnewEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>40</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>New</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="shiftdeleteEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>10</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="Daily">
        <attribute name="title">
@@ -1024,7 +1122,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>160</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -1034,7 +1132,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>190</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -1057,7 +1155,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>100</y>
-          <width>281</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -1065,7 +1163,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="dailyAttachCSV">
         <property name="geometry">
          <rect>
-          <x>290</x>
+          <x>250</x>
           <y>250</y>
           <width>121</width>
           <height>24</height>
@@ -1119,7 +1217,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>220</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -1129,7 +1227,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>130</y>
-          <width>281</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -1137,7 +1235,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="dailyAttachXLS">
         <property name="geometry">
          <rect>
-          <x>170</x>
+          <x>130</x>
           <y>250</y>
           <width>121</width>
           <height>24</height>
@@ -1163,7 +1261,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="dailySaturdayActive">
         <property name="geometry">
          <rect>
-          <x>360</x>
+          <x>270</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -1176,7 +1274,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="dailyTuesdayActive">
         <property name="geometry">
          <rect>
-          <x>155</x>
+          <x>65</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -1189,7 +1287,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="dailyWednesdayActive">
         <property name="geometry">
          <rect>
-          <x>205</x>
+          <x>115</x>
           <y>70</y>
           <width>55</width>
           <height>24</height>
@@ -1202,7 +1300,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="dailySundayActive">
         <property name="geometry">
          <rect>
-          <x>410</x>
+          <x>320</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -1215,7 +1313,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="dailyMondayActive">
         <property name="geometry">
          <rect>
-          <x>100</x>
+          <x>10</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -1228,7 +1326,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="dailyFridayActive">
         <property name="geometry">
          <rect>
-          <x>310</x>
+          <x>220</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -1241,7 +1339,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="dailyThursdayActive">
         <property name="geometry">
          <rect>
-          <x>260</x>
+          <x>170</x>
           <y>70</y>
           <width>51</width>
           <height>24</height>
@@ -1277,7 +1375,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="dailyBrXLS">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>190</y>
           <width>31</width>
           <height>21</height>
@@ -1290,7 +1388,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="dailyBrCSV">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>220</y>
           <width>31</width>
           <height>21</height>
@@ -1303,7 +1401,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="dailyBrEMAIL">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>160</y>
           <width>31</width>
           <height>21</height>
@@ -1311,6 +1409,104 @@ QTabWidget::tab-bar {
         </property>
         <property name="text">
          <string>Br</string>
+        </property>
+       </widget>
+       <widget class="QScrollArea" name="dailyEmailScrollArea">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>70</y>
+          <width>251</width>
+          <height>201</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="dailyEmailWidget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>249</width>
+           <height>199</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">	background: #DADFE1;
+	border: 1px solid #DADFE1;
+	color: black;</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <layout class="QVBoxLayout" name="dailyEmailLayout"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QLineEdit" name="dailyEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>40</y>
+          <width>211</width>
+          <height>20</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="dailynewEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>40</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>New</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="dailysaveEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>10</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="dailydeleteEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>10</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_23">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>10</y>
+          <width>141</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Email Adress</string>
         </property>
        </widget>
       </widget>
@@ -1336,7 +1532,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>190</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -1346,7 +1542,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>100</y>
-          <width>281</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -1382,7 +1578,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>220</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -1392,7 +1588,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>160</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -1415,7 +1611,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>130</y>
-          <width>281</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -1436,7 +1632,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="weeklyAttachXLS">
         <property name="geometry">
          <rect>
-          <x>170</x>
+          <x>130</x>
           <y>250</y>
           <width>121</width>
           <height>24</height>
@@ -1462,7 +1658,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="weeklyAttachCSV">
         <property name="geometry">
          <rect>
-          <x>290</x>
+          <x>250</x>
           <y>250</y>
           <width>121</width>
           <height>24</height>
@@ -1511,7 +1707,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="weeklyBrXLS">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>190</y>
           <width>31</width>
           <height>21</height>
@@ -1524,7 +1720,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="weeklyBrCSV">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>220</y>
           <width>31</width>
           <height>21</height>
@@ -1537,7 +1733,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="weeklyBrEMAIL">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>160</y>
           <width>31</width>
           <height>21</height>
@@ -1598,6 +1794,104 @@ QTabWidget::tab-bar {
          </property>
         </item>
        </widget>
+       <widget class="QScrollArea" name="weeklyEmailScrollArea">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>70</y>
+          <width>251</width>
+          <height>201</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="weeklyEmailWidget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>249</width>
+           <height>199</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">	background: #DADFE1;
+	border: 1px solid #DADFE1;
+	color: black;</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <layout class="QVBoxLayout" name="weeklyEmailLayout"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QLineEdit" name="emailAdress_3">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>40</y>
+          <width>211</width>
+          <height>20</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="saveEmailAdress_7">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>40</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>New</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="saveEmailAdress_8">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>10</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="saveEmailAdress_9">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>10</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_26">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>10</y>
+          <width>141</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Email Adress</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="Monthly">
        <attribute name="title">
@@ -1621,7 +1915,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>190</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -1631,7 +1925,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>100</y>
-          <width>281</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -1667,7 +1961,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>220</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -1677,7 +1971,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>160</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -1700,7 +1994,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>130</y>
-          <width>281</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -1721,7 +2015,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="monthlyAttachXLS">
         <property name="geometry">
          <rect>
-          <x>170</x>
+          <x>130</x>
           <y>250</y>
           <width>121</width>
           <height>24</height>
@@ -1747,7 +2041,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="monthlyAttachCSV">
         <property name="geometry">
          <rect>
-          <x>290</x>
+          <x>250</x>
           <y>250</y>
           <width>121</width>
           <height>24</height>
@@ -1796,7 +2090,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="monthlyBrXLS">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>190</y>
           <width>31</width>
           <height>21</height>
@@ -1809,7 +2103,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="monthlyBrCSV">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>220</y>
           <width>31</width>
           <height>21</height>
@@ -1822,7 +2116,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="monthlyBrEMAIL">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>160</y>
           <width>31</width>
           <height>21</height>
@@ -2000,6 +2294,104 @@ QTabWidget::tab-bar {
          </property>
         </item>
        </widget>
+       <widget class="QScrollArea" name="monthlyEmailScrollArea">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>70</y>
+          <width>251</width>
+          <height>201</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="monthlyEmailWidget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>249</width>
+           <height>199</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">	background: #DADFE1;
+	border: 1px solid #DADFE1;
+	color: black;</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <layout class="QVBoxLayout" name="monthlyEmailLayout"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QLineEdit" name="monthlyEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>40</y>
+          <width>211</width>
+          <height>20</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="monthlynewEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>40</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>New</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="monthlysaveEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>10</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="monthlydeleteEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>10</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_30">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>10</y>
+          <width>141</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Email Adress</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="Custom">
        <attribute name="title">
@@ -2023,7 +2415,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>190</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -2046,7 +2438,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>100</y>
-          <width>281</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -2082,7 +2474,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>220</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -2092,7 +2484,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>160</y>
-          <width>241</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -2115,7 +2507,7 @@ QTabWidget::tab-bar {
          <rect>
           <x>170</x>
           <y>130</y>
-          <width>281</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -2149,7 +2541,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftAttachXLS_5">
         <property name="geometry">
          <rect>
-          <x>170</x>
+          <x>130</x>
           <y>250</y>
           <width>121</width>
           <height>24</height>
@@ -2175,7 +2567,7 @@ QTabWidget::tab-bar {
        <widget class="QCheckBox" name="shiftAttachCSV_5">
         <property name="geometry">
          <rect>
-          <x>290</x>
+          <x>250</x>
           <y>250</y>
           <width>121</width>
           <height>24</height>
@@ -2188,7 +2580,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="customBrEMAIL">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>160</y>
           <width>31</width>
           <height>21</height>
@@ -2201,7 +2593,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="customBrXLS">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>190</y>
           <width>31</width>
           <height>21</height>
@@ -2214,7 +2606,7 @@ QTabWidget::tab-bar {
        <widget class="QToolButton" name="customBrCSV">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>340</x>
           <y>220</y>
           <width>31</width>
           <height>21</height>
@@ -2224,20 +2616,105 @@ QTabWidget::tab-bar {
          <string>Br</string>
         </property>
        </widget>
+       <widget class="QScrollArea" name="customEmailScrollArea">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>70</y>
+          <width>251</width>
+          <height>201</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="customEmailWidget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>249</width>
+           <height>199</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">	background: #DADFE1;
+	border: 1px solid #DADFE1;
+	color: black;</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <layout class="QVBoxLayout" name="customEmailLayout"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QLineEdit" name="customEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>40</y>
+          <width>211</width>
+          <height>20</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="saveEmailAdress_13">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>40</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>New</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="customsaveEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>10</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="customdeleteEmailAdress">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>10</y>
+          <width>61</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_39">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>10</y>
+          <width>141</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Email Adress</string>
+        </property>
+       </widget>
       </widget>
-     </widget>
-     <widget class="QToolButton" name="saveEmailAdress">
-      <property name="geometry">
-       <rect>
-        <x>710</x>
-        <y>450</y>
-        <width>61</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Save</string>
-      </property>
      </widget>
      <widget class="QToolButton" name="saveScheduling">
       <property name="geometry">
@@ -2250,29 +2727,6 @@ QTabWidget::tab-bar {
       </property>
       <property name="text">
        <string> Save Schedule</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_5">
-      <property name="geometry">
-       <rect>
-        <x>580</x>
-        <y>450</y>
-        <width>121</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Email Adress</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="emailAdress">
-      <property name="geometry">
-       <rect>
-        <x>580</x>
-        <y>480</y>
-        <width>231</width>
-        <height>20</height>
-       </rect>
       </property>
      </widget>
      <widget class="QScrollArea" name="scrollSchedule">

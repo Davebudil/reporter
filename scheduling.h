@@ -17,6 +17,8 @@ class Scheduling{
       MonthlySchedule & getMonthly();
       CustomSchedule & getCustom();
       QString getGlobalEmail() const;
+      QString getName() const;
+      void setName(const QString & Name);
       void setGlobalEmail(const QString & GlobalEmail);
       void serializeGlobal(const QStringList & global);
       void deserializeGlobal(const QStringList & global);
