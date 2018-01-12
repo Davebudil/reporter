@@ -25,7 +25,10 @@ QString DailySchedule::getSubjName() const{
     return m_SubjName;
 }
 QString DailySchedule::getAttachName() const{
-    return m_AttachName;
+   return m_AttachName;
+}
+QMap<QString, QString> & DailySchedule::getEmailAdresses(){
+   return m_emailAdresses;
 }
 QTime DailySchedule::getTime() const{
     return m_Time;

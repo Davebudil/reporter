@@ -81,14 +81,6 @@ void Reporter::on_newQuery_clicked(){
 void Reporter::on_saveQuery_clicked(){
    m_saveQuery();
 }
-void Reporter::m_deleteQuery(){
-   m_mainSQL.getStorage().getQueries().remove(m_nameKey);
-   tmp = ui->scrollAreaWidgetContents->findChild<QToolButton *>(m_nameKey);
-   delete tmp;
-   m_clearQuery();
-   m_serializeQueries();
-   m_nameKey = "";
-}
 //Function to save query
 void Reporter::m_saveQuery(){
    QString queryText;
@@ -211,10 +203,12 @@ void Reporter::m_addSchedule(const QString & name){
 
    if(!m_noSchedule()){
       Scheduling * tmp = new Scheduling;
-      m_Schedule.push_back(tmp);
+      tmp->setName(ui->scheduleName->text());
+      m_Schedule.insert(m_scheduleCount, tmp);
       m_scheduleKey = m_scheduleCount++;
    }else{
       m_scheduleKey = 0;
+      m_Schedule[m_scheduleKey]->setName(ui->scheduleName->text());
    }
 
    m_editDay(m_scheduleKey);
@@ -290,6 +284,30 @@ void Reporter::m_saveParameter(){
    }
 }
 
+void Reporter::m_deleteQuery(){
+   m_mainSQL.getStorage().getQueries().remove(m_nameKey);
+   tmp = ui->scrollAreaWidgetContents->findChild<QToolButton *>(m_nameKey);
+   delete tmp;
+   m_clearQuery();
+   m_serializeQueries();
+   m_nameKey = "";
+}
+
+void Reporter::m_deleteSchedule(){
+   m_Schedule.remove(m_scheduleKey);
+   tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
+   delete tmp;
+   m_scheduleCount--;
+   //serialize
+   m_clearSchedule();
+   if(m_noSchedule()){
+      Scheduling * tmp = new Scheduling;
+      m_scheduleKey = 0;
+      m_Schedule[0] = tmp;
+      m_scheduleCount++;
+   }
+}
+
 void Reporter::m_deleteParam(){
    m_mainSQL.getStorage().getParameters().remove(m_selectedParam);
    tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString::number(m_selectedParam));
@@ -308,7 +326,7 @@ void Reporter::defaultSettings(){
 //   m_loadSchedule();
    if(m_noSchedule()){
       Scheduling * tmp = new Scheduling;
-      m_Schedule.push_back(tmp);
+      m_Schedule[m_scheduleKey] = tmp;
       m_scheduleCount++;
    }
 }
@@ -479,6 +497,7 @@ void Reporter::m_loadSchedule(){
    m_displayWeekly(m_scheduleKey);
    m_displayMonthly(m_scheduleKey);
    m_displayCustom(m_scheduleKey);
+   ui->scheduleName->setText(m_Schedule[m_scheduleKey]->getName());
 }
 
 void Reporter::on_paramNew_clicked(){
@@ -550,6 +569,81 @@ void Reporter::m_clearQuery(){
    ui->queryNameEdit->clear();
    ui->queryParamEdit->clear();
    ui->queryActive->setChecked(false);
+}
+
+void Reporter::m_clearSchedule(){
+   m_clearShift();
+   m_clearDaily();
+   m_clearWeekly();
+   m_clearMonthly();
+   ui->scheduleName->clear();
+}
+
+void Reporter::m_clearShift(){
+   ui->shiftActive->setChecked(false);
+   ui->shiftAttachCSV->setChecked(false);
+   ui->shiftAttachXLS->setChecked(false);
+   ui->shiftSubj->clear();
+   ui->shiftAttach->clear();
+   ui->shiftCSV->clear();
+   ui->shiftXLS->clear();
+   ui->shiftFrom->clear();
+   ui->shiftTo->clear();
+   ui->shiftFrom_2->clear();
+   ui->shiftTo_2->clear();
+   ui->shiftEmail->clear();
+   ui->shiftMondayActive->setChecked(false);
+   ui->shiftTuesdayActive->setChecked(false);
+   ui->shiftWednesdayActive->setChecked(false);
+   ui->shiftThursdayActive->setChecked(false);
+   ui->shiftFridayActive->setChecked(false);
+   ui->shiftSaturdayActive->setChecked(false);
+   ui->shiftSundayActive->setChecked(false);
+}
+
+void Reporter::m_clearDaily(){
+   ui->dailyActive->setChecked(false);
+   ui->dailyAttachCSV->setChecked(false);
+   ui->dailyAttachXLS->setChecked(false);
+   ui->dailySubj->clear();
+   ui->dailyAttach->clear();
+   ui->dailyCSV->clear();
+   ui->dailyXLS->clear();
+   ui->dailyTime->clear();
+   ui->dailyEmail->clear();
+   ui->dailyMondayActive->setChecked(false);
+   ui->dailyTuesdayActive->setChecked(false);
+   ui->dailyWednesdayActive->setChecked(false);
+   ui->dailyThursdayActive->setChecked(false);
+   ui->dailyFridayActive->setChecked(false);
+   ui->dailySaturdayActive->setChecked(false);
+   ui->dailySundayActive->setChecked(false);
+}
+
+void Reporter::m_clearWeekly(){
+   ui->weeklyActive->setChecked(false);
+   ui->weeklyAttachCSV->setChecked(false);
+   ui->weeklyAttachXLS->setChecked(false);
+   ui->weeklySubj->clear();
+   ui->weeklyAttach->clear();
+   ui->weeklyCSV->clear();
+   ui->weeklyXLS->clear();
+   ui->weeklyTime->clear();
+   ui->weeklyDays->setCurrentIndex(0);
+   ui->weeklyEmail->clear();
+}
+
+void Reporter::m_clearMonthly(){
+   ui->monthlyActive->setChecked(false);
+   ui->monthlyAttachCSV->setChecked(false);
+   ui->monthlyAttachXLS->setChecked(false);
+   ui->monthlySubj->clear();
+   ui->monthlyAttach->clear();
+   ui->monthlyCSV->clear();
+   ui->monthlyXLS->clear();
+   ui->monthlyTIme->clear();
+   ui->monthlyDays->setCurrentIndex(0);
+   ui->monthlyEmail->clear();
 }
 
 void Reporter::on_paramDelete_clicked(){
@@ -780,4 +874,7 @@ void Reporter::on_toolButton_3_clicked(){
 }
 void Reporter::on_newScheduling_clicked(){
    m_addSchedule(ui->scheduleName->text());
+}
+void Reporter::on_deleteScheduling_clicked(){
+   m_deleteSchedule();
 }

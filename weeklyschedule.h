@@ -2,6 +2,7 @@
 #define WEEKLYSCHEDULE_H
 #include <QObject>
 #include <QDateTime>
+#include <QMap>
 
 class WeeklySchedule
 {
@@ -14,6 +15,7 @@ class WeeklySchedule
       QString getXlsTemplatePath() const;
       QString getCsvTemplatePath() const;
       QString getEmailTemplatePath() const;
+      QMap<QString, QString> & getEmailAdresses();
       QTime getTime() const;
       qint32 getDay() const;
       bool getActive() const;
@@ -44,6 +46,7 @@ class WeeklySchedule
       QString m_xlsTemplatePath;
       QString m_csvTemplatePath;
       QString m_emailTemplatePath;
+      QMap<QString, QString> m_emailAdresses;
 };
 
 #endif // WEEKLYSCHEDULE_H

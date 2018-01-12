@@ -1,5 +1,6 @@
 #ifndef SHIFTSCHEDULE_H
 #define SHIFTSCHEDULE_H
+#include <QMap>
 #include <QObject>
 #include <QTime>
 
@@ -12,6 +13,7 @@ class ShiftSchedule{
       QString getXlsTemplatePath() const;
       QString getSubjName() const;
       QString getEmailTemplatePath() const;
+      QMap<QString, QString> & getEmailAdresses();
       QTime getFrom0() const;
       QTime getTo0() const;
       QTime getFrom1() const;
@@ -51,6 +53,7 @@ class ShiftSchedule{
       QString m_emailTemplatePath;
       QString m_xlsTemplatePath;
       QString m_csvTemplatePath;
+      QMap<QString, QString> m_emailAdresses;
 };
 
 #endif // SHIFTSCHEDULE_H

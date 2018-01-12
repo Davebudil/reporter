@@ -99,13 +99,15 @@ class Reporter : public QMainWindow{
 
       void on_newScheduling_clicked();
 
+      void on_deleteScheduling_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
       Setup m_Setup;
       Log m_Log;
       Export m_Export;
-      QVector<Scheduling*> m_Schedule;
+      QMap<qint32, Scheduling*> m_Schedule;
       QString m_nameKey;
       qint32 m_selectedParam;
       qint32 m_paramKey;
@@ -134,6 +136,7 @@ class Reporter : public QMainWindow{
       //functions to delete selected data
       void m_deleteParam();
       void m_deleteQuery();
+      void m_deleteSchedule();
       //Serialization
       void m_serializeQueries();
       void m_serializeParameters();
@@ -151,6 +154,11 @@ class Reporter : public QMainWindow{
       void m_loadMaster();
       void m_clearParam();
       void m_clearQuery();
+      void m_clearSchedule();
+      void m_clearShift();
+      void m_clearDaily();
+      void m_clearWeekly();
+      void m_clearMonthly();
       void m_loadSchedule();
       void m_displayShift(qint32 keyString);
       void m_displayDay(qint32 keyString);
@@ -171,7 +179,6 @@ class Reporter : public QMainWindow{
       void m_serializeGlobal();
       void m_saveSchedule();
       void m_addSchedule(const QString & name);
-      void m_deleteSchedule();
       void m_generateCSV();
       void m_generateXLS();
       void m_generateTemplateXLS();

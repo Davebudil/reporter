@@ -98,6 +98,9 @@ void MonthlySchedule::setCsvAttach(bool csvAttach){
 QString MonthlySchedule::getEmailTemplatePath() const{
    return m_emailTemplatePath;
 }
+QMap<QString, QString> & MonthlySchedule::getEmailAdresses(){
+   return m_emailAdresses;
+}
 void MonthlySchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }

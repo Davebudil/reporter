@@ -2,6 +2,7 @@
 #define MONTHLYSCHEDULE_H
 #include <QObject>
 #include <QDateEdit>
+#include <QMap>
 
 class MonthlySchedule
 {
@@ -12,6 +13,7 @@ class MonthlySchedule
       QString getCsvTemplatePath() const;
       QString getXlsTemplatePath() const;
       QString getEmailTemplatePath() const;
+      QMap<QString, QString> & getEmailAdresses();
       QString getSubjName() const;
       QString getAttachName() const;
       QTime getTime() const;
@@ -44,6 +46,7 @@ class MonthlySchedule
       QString m_xlsTemplatePath;
       QString m_csvTemplatePath;
       QString m_emailTemplatePath;
+      QMap<QString, QString> m_emailAdresses;
 };
 
 #endif // MONTHLYSCHEDULE_H

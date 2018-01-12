@@ -130,3 +130,7 @@ QString ShiftSchedule::getEmailTemplatePath() const{
 void ShiftSchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }
+
+QMap<QString, QString> & ShiftSchedule::getEmailAdresses(){
+    return m_emailAdresses;
+}
