@@ -21,19 +21,9 @@ MonthlySchedule & Scheduling::getMonthly(){
 CustomSchedule & Scheduling::getCustom(){
    return m_Custom;
 }
-QString Scheduling::getGlobalEmail() const{
-   return m_GlobalEmail;
-}
-void Scheduling::setGlobalEmail(const QString & GlobalEmail){
-   m_GlobalEmail = GlobalEmail;
-}
-
-QString Scheduling::getName() const
-{
+QString Scheduling::getName() const{
     return m_Name;
 }
-
-void Scheduling::setName(const QString & Name)
-{
+void Scheduling::setName(const QString & Name){
     m_Name = Name;
 }

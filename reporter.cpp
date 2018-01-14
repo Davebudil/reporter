@@ -460,6 +460,10 @@ void Reporter::m_deleteSchedule(){
       m_Schedule[0] = tmp;
       m_scheduleCount++;
    }
+   m_Schedule[m_scheduleKey]->getShift().getEmailAdresses().clear();
+   m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses().clear();
+   m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses().clear();
+   m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses().clear();
 }
 
 void Reporter::m_deleteEmails(){
@@ -504,7 +508,6 @@ void Reporter::defaultSettings(){
    m_Deserialize();
 //   m_deserializeSchedule();
    m_loadMaster();
-//   m_loadSchedule();
    if(m_noSchedule()){
       Scheduling * tmp = new Scheduling;
       m_Schedule[m_scheduleKey] = tmp;
@@ -553,10 +556,14 @@ void Reporter::m_serializeParameters(){
    m_Setup.serializeParameters(tmpSerialize,tmpCount);
 }
 void Reporter::m_serializeSchedule(){
-//   m_Setup.serializeSchedule(m_Schedule[keyString]->getShift().prepareSerialization(),
-//                             m_Schedule[keyString]->getDaily().prepareSerialization(),
-//                             m_Schedule[keyString]->getWeekly().prepareSerialization(),
-//                             m_Schedule[keyString]->getMonthly().prepareSerialization());
+   QList<QStringList> scheduleSerialization;
+   for(auto & it : m_Schedule){
+      scheduleSerialization.append(it->getShift().prepareSerialization());
+      scheduleSerialization.append(it->getDaily().prepareSerialization());
+      scheduleSerialization.append(it->getWeekly().prepareSerialization());
+      scheduleSerialization.append(it->getMonthly().prepareSerialization());
+   }
+   m_Setup.serializeSchedule(scheduleSerialization);
 }
 //Deserialization
 void Reporter::m_Deserialize(){
@@ -1206,9 +1213,11 @@ void Reporter::on_toolButton_3_clicked(){
 void Reporter::on_newScheduling_clicked(){
    m_deleteEmails();
    m_addSchedule(ui->scheduleName->text());
+   m_serializeSchedule();
 }
 void Reporter::on_deleteScheduling_clicked(){
    m_deleteSchedule();
+   m_serializeSchedule();
 }
 void Reporter::on_shiftnewEmailAdress_clicked(){
    m_addShiftScheduleEmail(ui->shiftemailAdress->text());

@@ -22,32 +22,30 @@ bool Setup::deserializeQueries(QStringList &queries){
 bool Setup::serializeParameters(const QStringList &parameters, const QVector<qint32> & count){
    return m_serializeParameters(parameters, count);
 }
-
-bool Setup::serializeSchedule(const QStringList & shift,
-                              const QStringList & day,
-                              const QStringList & weekly,
-                              const QStringList & monthly){
+bool Setup::serializeSchedule(const QList<QStringList> & serializeData){
    QString tmp;
    QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterSchedule.dat");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
-      for(auto & it : shift){
-         tmp = it;
-         out << tmp;
+      for(qint32 i = 0; i + 3 < serializeData.size(); i+=4){
+         for(auto & it : serializeData[i]){
+            tmp = it;
+            out << tmp;
+         }
+         for(auto & it : serializeData[i+1]){
+            tmp = it;
+            out << tmp;
+         }
+         for(auto & it : serializeData[i+2]){
+            tmp = it;
+            out << tmp;
+         }
+         for(auto & it : serializeData[i+3]){
+            tmp = it;
+            out << tmp;
+         }
+         return true;
       }
-      for(auto & it : day){
-         tmp = it;
-         out << tmp;
-      }
-      for(auto & it : weekly){
-         tmp = it;
-         out << tmp;
-      }
-      for(auto & it : monthly){
-         tmp = it;
-         out << tmp;
-      }
-      return true;
    }
    return false;
 }
@@ -126,7 +124,7 @@ bool Setup::deserializeParameters(QStringList & parameters, QVector<qint32> & co
    }
    return false;
 }
-
+//DODELAT TODO
 bool Setup::deserializeSchedule(QStringList & shift,
                                 QStringList & day,
                                 QStringList & weekly,

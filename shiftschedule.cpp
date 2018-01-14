@@ -66,6 +66,9 @@ QStringList ShiftSchedule::prepareSerialization(){
    for(qint32 i = 0; i < 7; ++i){
       valueList.append(QString::number(m_Days[i]));
    }
+   for(auto & it : m_emailAdresses){
+      valueList.append(it);
+   }
    return valueList;
 }
 void ShiftSchedule::deserializeList(const QStringList & list){
@@ -82,7 +85,11 @@ void ShiftSchedule::deserializeList(const QStringList & list){
    m_From1 = QTime::fromString(list.at(10));
    m_To1 = QTime::fromString(list.at(11));
    for(qint32 i = 0; i < 7; ++i){
-      m_Days[i] = (list.at(11+i) == "0" ? false : true);
+      m_Days[i] = (list.at(12+i) == "0" ? false : true);
+   }
+   QStringList::const_iterator constIterator;
+   for(constIterator = list.constBegin() + 19; constIterator != list.constEnd(); ++constIterator){
+      m_emailAdresses.insert(*constIterator, *constIterator);
    }
 }
 void ShiftSchedule::setXlsAttach(bool xlsAttach){

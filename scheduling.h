@@ -16,10 +16,8 @@ class Scheduling{
       WeeklySchedule & getWeekly();
       MonthlySchedule & getMonthly();
       CustomSchedule & getCustom();
-      QString getGlobalEmail() const;
       QString getName() const;
       void setName(const QString & Name);
-      void setGlobalEmail(const QString & GlobalEmail);
       void serializeGlobal(const QStringList & global);
       void deserializeGlobal(const QStringList & global);
 
@@ -30,7 +28,6 @@ class Scheduling{
       WeeklySchedule m_Weekly;
       MonthlySchedule m_Monthly;
       CustomSchedule m_Custom;
-      QString m_GlobalEmail;
 };
 
 #endif // SCHEDULING_H
