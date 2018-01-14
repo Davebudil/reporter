@@ -195,6 +195,7 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
    }
 }
 
+
 void Reporter::m_addSchedule(const QString & name){
    if(name.isEmpty() || name.isNull()){
       QMessageBox::critical(this, QObject::tr("Text error"), QObject::tr("Enter name for new schedule."));
@@ -241,6 +242,158 @@ void Reporter::m_addSchedule(const QString & name){
    newSchedule->setObjectName(QString::number(m_scheduleKey));
    ui->scrollLayour_3->addWidget(newSchedule);
    connect(newSchedule, &QToolButton::clicked, this, &Reporter::m_loadSchedule);
+}
+void Reporter::m_addShiftScheduleEmail(const QString & email){
+   if(email.isEmpty() || email.isNull() || !m_validateEmail(email)){
+      QMessageBox::critical(this, QObject::tr("Email error"), QObject::tr("Enter valid email adress."));
+      return;
+   }
+
+   if(m_Schedule[m_scheduleKey]->getShift().getEmailAdresses().contains(email)){
+      QMessageBox::critical(this, QObject::tr("Email error"), QObject::tr("Email adress already exists."));
+      return;
+   }
+
+   QToolButton * newEmail = new QToolButton;
+   newEmail->setText(email);
+   newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+   newEmail->setObjectName(email);
+   ui->shiftEmailLayout->addWidget(newEmail);
+   connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadShiftEmail);
+   m_Schedule[m_scheduleKey]->getShift().getEmailAdresses().insert(email, email);
+}
+void Reporter::m_addDailyScheduleEmail(const QString & email){
+   if(email.isEmpty() || email.isNull() || !m_validateEmail(email)){
+      QMessageBox::critical(this, QObject::tr("Email error"), QObject::tr("Enter valid email adress."));
+      return;
+   }
+
+   if(m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses().contains(email)){
+      QMessageBox::critical(this, QObject::tr("Email error"), QObject::tr("Email adress already exists."));
+      return;
+   }
+
+   QToolButton * newEmail = new QToolButton;
+   newEmail->setText(email);
+   newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+   newEmail->setObjectName(email);
+   ui->dailyEmailLayout->addWidget(newEmail);
+   connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadDailyEmail);
+   m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses().insert(email, email);
+}
+void Reporter::m_addWeeklyScheduleEmail(const QString & email){
+   if(email.isEmpty() || email.isNull() || !m_validateEmail(email)){
+      QMessageBox::critical(this, QObject::tr("Email error"), QObject::tr("Enter valid email adress."));
+      return;
+   }
+
+   if(m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses().contains(email)){
+      QMessageBox::critical(this, QObject::tr("Email error"), QObject::tr("Email adress already exists."));
+      return;
+   }
+
+   QToolButton * newEmail = new QToolButton;
+   newEmail->setText(email);
+   newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+   newEmail->setObjectName(email);
+   ui->weeklyEmailLayout->addWidget(newEmail);
+   connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadWeeklyEmail);
+   m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses().insert(email, email);
+}
+void Reporter::m_addMonthlyScheduleEmail(const QString & email){
+   if(email.isEmpty() || email.isNull() || !m_validateEmail(email)){
+      QMessageBox::critical(this, QObject::tr("Email error"), QObject::tr("Enter valid email adress."));
+      return;
+   }
+
+   if(m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses().contains(email)){
+      QMessageBox::critical(this, QObject::tr("Email error"), QObject::tr("Email adress already exists."));
+      return;
+   }
+
+   QToolButton * newEmail = new QToolButton;
+   newEmail->setText(email);
+   newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+   newEmail->setObjectName(email);
+   ui->monthlyEmailLayout->addWidget(newEmail);
+   connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadMonthlyEmail);
+   m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses().insert(email, email);
 }
 
 void Reporter::m_scrollParamClicked(){
@@ -294,6 +447,7 @@ void Reporter::m_deleteQuery(){
 }
 
 void Reporter::m_deleteSchedule(){
+   m_deleteEmails();
    m_Schedule.remove(m_scheduleKey);
    tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
    delete tmp;
@@ -305,6 +459,33 @@ void Reporter::m_deleteSchedule(){
       m_scheduleKey = 0;
       m_Schedule[0] = tmp;
       m_scheduleCount++;
+   }
+}
+
+void Reporter::m_deleteEmails(){
+   for(auto & it : m_Schedule[m_scheduleKey]->getShift().getEmailAdresses()){
+      tmp = ui->shiftEmailWidget->findChild<QToolButton *>(QString(it));
+      delete tmp;
+      m_emailKey = "";
+      ui->shiftemailAdress->clear();
+   }
+   for(auto & it : m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses()){
+      tmp = ui->dailyEmailWidget->findChild<QToolButton *>(QString(it));
+      delete tmp;
+      m_emailKey = "";
+      ui->dailyEmailAdress->clear();
+   }
+   for(auto & it : m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses()){
+      tmp = ui->weeklyEmailWidget->findChild<QToolButton *>(QString(it));
+      delete tmp;
+      m_emailKey = "";
+      ui->weeklyemailAdress->clear();
+   }
+   for(auto & it : m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses()){
+      tmp = ui->monthlyEmailWidget->findChild<QToolButton *>(QString(it));
+      delete tmp;
+      m_emailKey = "";
+      ui->monthlyEmailAdress->clear();
    }
 }
 
@@ -488,7 +669,13 @@ void Reporter::m_testingQueryGen(){
 bool Reporter::m_noSchedule(){
    return (ui->scrollLayour_3->count() == 0 ? true : false);
 }
+
+bool Reporter::m_validateEmail(const QString & email){
+   QRegularExpression regex("^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$");
+   return regex.match(email).hasMatch();
+}
 void Reporter::m_loadSchedule(){
+   m_deleteEmails();
    QObject * senderObj = sender();
    QString senderObjname = senderObj->objectName();
    m_scheduleKey = senderObjname.toInt();
@@ -498,6 +685,31 @@ void Reporter::m_loadSchedule(){
    m_displayMonthly(m_scheduleKey);
    m_displayCustom(m_scheduleKey);
    ui->scheduleName->setText(m_Schedule[m_scheduleKey]->getName());
+   m_loadEmails();
+}
+
+void Reporter::m_loadShiftEmail(){
+   QObject * senderObj = sender();
+   m_emailKey = senderObj->objectName();
+   ui->shiftemailAdress->setText(m_Schedule[m_scheduleKey]->getShift().getEmailAdresses()[m_emailKey]);
+}
+
+void Reporter::m_loadDailyEmail(){
+   QObject * senderObj = sender();
+   m_emailKey = senderObj->objectName();
+   ui->shiftemailAdress->setText(m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses()[m_emailKey]);
+}
+
+void Reporter::m_loadWeeklyEmail(){
+   QObject * senderObj = sender();
+   m_emailKey = senderObj->objectName();
+   ui->shiftemailAdress->setText(m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses()[m_emailKey]);
+}
+
+void Reporter::m_loadMonthlyEmail(){
+   QObject * senderObj = sender();
+   m_emailKey = senderObj->objectName();
+   ui->shiftemailAdress->setText(m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses()[m_emailKey]);
 }
 
 void Reporter::on_paramNew_clicked(){
@@ -521,6 +733,121 @@ void Reporter::m_loadMaster(){
       if(!it->getIsMaster()){
          m_mainSQL.getStorage().masterQuery(it->getName(),it->getParam());
       }
+   }
+}
+
+void Reporter::m_loadEmails(){
+   for(auto & it : m_Schedule[m_scheduleKey]->getShift().getEmailAdresses()){
+      QString email = it;
+      QToolButton * newEmail = new QToolButton;
+      newEmail->setText(email);
+      newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                                 "background-color: #f44336; } QToolButton::menu-button "
+                                 "{ background: url('./images/downarrowgray.png') "
+                                 "center center no-repeat; background-color: #f44336; "
+                                 "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                                 "{ background-color: #f44336; } QStatusBar { background-color: "
+                                 "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                                 "{ color: white; background-color: #f44336; "
+                                 "} QToolButton:hover, QToolButton:pressed, "
+                                 "QToolButton:checked { background-color: "
+                                 "#607D8B; } QToolButton:hover { color: black; } "
+                                 "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                                 "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                                 "QToolButton:hover { background-color: white; color: black; border: 1px "
+                                 "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                                 "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                                 "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                                 "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                                 "QStatusBar::item { color: black; background-color: #f44336; } "
+                                 "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+      newEmail->setObjectName(email);
+      ui->shiftEmailLayout->addWidget(newEmail);
+      connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadShiftEmail);
+   }
+   for(auto & it : m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses()){
+      QString email = it;
+      QToolButton * newEmail = new QToolButton;
+      newEmail->setText(email);
+      newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                                 "background-color: #f44336; } QToolButton::menu-button "
+                                 "{ background: url('./images/downarrowgray.png') "
+                                 "center center no-repeat; background-color: #f44336; "
+                                 "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                                 "{ background-color: #f44336; } QStatusBar { background-color: "
+                                 "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                                 "{ color: white; background-color: #f44336; "
+                                 "} QToolButton:hover, QToolButton:pressed, "
+                                 "QToolButton:checked { background-color: "
+                                 "#607D8B; } QToolButton:hover { color: black; } "
+                                 "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                                 "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                                 "QToolButton:hover { background-color: white; color: black; border: 1px "
+                                 "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                                 "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                                 "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                                 "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                                 "QStatusBar::item { color: black; background-color: #f44336; } "
+                                 "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+      newEmail->setObjectName(email);
+      ui->dailyEmailLayout->addWidget(newEmail);
+      connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadDailyEmail);
+   }
+   for(auto & it : m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses()){
+      QString email = it;
+      QToolButton * newEmail = new QToolButton;
+      newEmail->setText(email);
+      newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                                 "background-color: #f44336; } QToolButton::menu-button "
+                                 "{ background: url('./images/downarrowgray.png') "
+                                 "center center no-repeat; background-color: #f44336; "
+                                 "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                                 "{ background-color: #f44336; } QStatusBar { background-color: "
+                                 "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                                 "{ color: white; background-color: #f44336; "
+                                 "} QToolButton:hover, QToolButton:pressed, "
+                                 "QToolButton:checked { background-color: "
+                                 "#607D8B; } QToolButton:hover { color: black; } "
+                                 "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                                 "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                                 "QToolButton:hover { background-color: white; color: black; border: 1px "
+                                 "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                                 "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                                 "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                                 "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                                 "QStatusBar::item { color: black; background-color: #f44336; } "
+                                 "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+      newEmail->setObjectName(email);
+      ui->weeklyEmailLayout->addWidget(newEmail);
+      connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadWeeklyEmail);
+   }
+   for(auto & it : m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses()){
+      QString email = it;
+      QToolButton * newEmail = new QToolButton;
+      newEmail->setText(email);
+      newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                                 "background-color: #f44336; } QToolButton::menu-button "
+                                 "{ background: url('./images/downarrowgray.png') "
+                                 "center center no-repeat; background-color: #f44336; "
+                                 "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                                 "{ background-color: #f44336; } QStatusBar { background-color: "
+                                 "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                                 "{ color: white; background-color: #f44336; "
+                                 "} QToolButton:hover, QToolButton:pressed, "
+                                 "QToolButton:checked { background-color: "
+                                 "#607D8B; } QToolButton:hover { color: black; } "
+                                 "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                                 "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                                 "QToolButton:hover { background-color: white; color: black; border: 1px "
+                                 "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                                 "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                                 "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                                 "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                                 "QStatusBar::item { color: black; background-color: #f44336; } "
+                                 "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+      newEmail->setObjectName(email);
+      ui->monthlyEmailLayout->addWidget(newEmail);
+      connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadMonthlyEmail);
    }
 }
 
@@ -807,15 +1134,19 @@ void Reporter::on_tabWidget_2_tabBarClicked(int index){
    switch(index){
       case 0:
          m_displayShift(m_scheduleKey);
+         ui->shiftemailAdress->clear();
          break;
       case 1:
          m_displayDay(m_scheduleKey);
+         ui->dailyEmailAdress->clear();
          break;
       case 2:
          m_displayWeekly(m_scheduleKey);
+         ui->weeklyemailAdress->clear();
          break;
       case 3:
          m_displayMonthly(m_scheduleKey);
+         ui->monthlyEmailAdress->clear();
          break;
       case 4:
          m_displayCustom(m_scheduleKey);
@@ -873,8 +1204,50 @@ void Reporter::on_toolButton_3_clicked(){
    m_generateTemplateXLS();
 }
 void Reporter::on_newScheduling_clicked(){
+   m_deleteEmails();
    m_addSchedule(ui->scheduleName->text());
 }
 void Reporter::on_deleteScheduling_clicked(){
    m_deleteSchedule();
+}
+void Reporter::on_shiftnewEmailAdress_clicked(){
+   m_addShiftScheduleEmail(ui->shiftemailAdress->text());
+}
+void Reporter::on_dailynewEmailAdress_clicked(){
+   m_addDailyScheduleEmail(ui->dailyEmailAdress->text());
+}
+void Reporter::on_saveEmailAdress_7_clicked(){
+   m_addWeeklyScheduleEmail(ui->weeklyemailAdress->text());
+}
+void Reporter::on_monthlynewEmailAdress_clicked(){
+   m_addMonthlyScheduleEmail(ui->monthlyEmailAdress->text());
+}
+
+void Reporter::on_shiftdeleteEmailAdress_clicked(){
+   m_Schedule[m_scheduleKey]->getShift().getEmailAdresses().remove(m_emailKey);
+   tmp = ui->shiftEmailWidget->findChild<QToolButton *>(QString(m_emailKey));
+   delete tmp;
+   m_emailKey = "";
+   ui->shiftemailAdress->clear();
+}
+void Reporter::on_dailydeleteEmailAdress_clicked(){
+   m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses().remove(m_emailKey);
+   tmp = ui->dailyEmailWidget->findChild<QToolButton *>(QString(m_emailKey));
+   delete tmp;
+   m_emailKey = "";
+   ui->dailyEmailAdress->clear();
+}
+void Reporter::on_weeklydeleteEmailAdress_clicked(){
+   m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses().remove(m_emailKey);
+   tmp = ui->weeklyEmailWidget->findChild<QToolButton *>(QString(m_emailKey));
+   delete tmp;
+   m_emailKey = "";
+   ui->weeklyemailAdress->clear();
+}
+void Reporter::on_monthlydeleteEmailAdress_clicked(){
+   m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses().remove(m_emailKey);
+   tmp = ui->monthlyEmailWidget->findChild<QToolButton *>(QString(m_emailKey));
+   delete tmp;
+   m_emailKey = "";
+   ui->monthlyEmailAdress->clear();
 }

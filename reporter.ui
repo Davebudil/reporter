@@ -645,7 +645,7 @@ QTabWidget::tab-bar {
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="Shift">
        <attribute name="title">
@@ -1060,19 +1060,6 @@ QTabWidget::tab-bar {
          </rect>
         </property>
        </widget>
-       <widget class="QToolButton" name="shiftsaveEmailAdress">
-        <property name="geometry">
-         <rect>
-          <x>500</x>
-          <y>10</y>
-          <width>61</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Save</string>
-        </property>
-       </widget>
        <widget class="QToolButton" name="shiftnewEmailAdress">
         <property name="geometry">
          <rect>
@@ -1470,19 +1457,6 @@ QTabWidget::tab-bar {
          <string>New</string>
         </property>
        </widget>
-       <widget class="QToolButton" name="dailysaveEmailAdress">
-        <property name="geometry">
-         <rect>
-          <x>500</x>
-          <y>10</y>
-          <width>61</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Save</string>
-        </property>
-       </widget>
        <widget class="QToolButton" name="dailydeleteEmailAdress">
         <property name="geometry">
          <rect>
@@ -1830,7 +1804,7 @@ QTabWidget::tab-bar {
          </layout>
         </widget>
        </widget>
-       <widget class="QLineEdit" name="emailAdress_3">
+       <widget class="QLineEdit" name="weeklyemailAdress">
         <property name="geometry">
          <rect>
           <x>350</x>
@@ -1853,20 +1827,7 @@ QTabWidget::tab-bar {
          <string>New</string>
         </property>
        </widget>
-       <widget class="QToolButton" name="saveEmailAdress_8">
-        <property name="geometry">
-         <rect>
-          <x>500</x>
-          <y>10</y>
-          <width>61</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Save</string>
-        </property>
-       </widget>
-       <widget class="QToolButton" name="saveEmailAdress_9">
+       <widget class="QToolButton" name="weeklydeleteEmailAdress">
         <property name="geometry">
          <rect>
           <x>570</x>
@@ -2353,19 +2314,6 @@ QTabWidget::tab-bar {
          <string>New</string>
         </property>
        </widget>
-       <widget class="QToolButton" name="monthlysaveEmailAdress">
-        <property name="geometry">
-         <rect>
-          <x>500</x>
-          <y>10</y>
-          <width>61</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Save</string>
-        </property>
-       </widget>
        <widget class="QToolButton" name="monthlydeleteEmailAdress">
         <property name="geometry">
          <rect>
@@ -2673,19 +2621,6 @@ QTabWidget::tab-bar {
         </property>
         <property name="text">
          <string>New</string>
-        </property>
-       </widget>
-       <widget class="QToolButton" name="customsaveEmailAdress">
-        <property name="geometry">
-         <rect>
-          <x>500</x>
-          <y>10</y>
-          <width>61</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Save</string>
         </property>
        </widget>
        <widget class="QToolButton" name="customdeleteEmailAdress">
