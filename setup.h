@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QStringList>
 #include <QDebug>
+#include <QDir>
 /*Class used to load and edit ini file
  * and to serialize and deserialize queries data
  * */
@@ -23,10 +24,7 @@ class Setup : public QObject{
       //serializes
       bool serializeQueries(const QStringList & queries);
       bool serializeParameters(const QStringList & parameters, const QVector<qint32> & count);
-      bool serializeSchedule(const QStringList & shift,
-                             const QStringList & day,
-                             const QStringList & weekly,
-                             const QStringList & monthly);
+      bool serializeSchedule(const QList<QStringList> & serializeData);
       bool serializeGlobal(const QStringList & global);
       //deserializes
       bool deserializeQueries(QStringList & queries);

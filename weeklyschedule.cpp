@@ -71,6 +71,9 @@ QStringList WeeklySchedule::prepareSerialization(){
    valueList.append(m_emailTemplatePath);
    valueList.append(QString(m_Time.toString()));
    valueList.append(QString::number(m_Day));
+   for(auto & it : m_emailAdresses){
+      valueList.append(it);
+   }
    return valueList;
 }
 
@@ -85,6 +88,10 @@ void WeeklySchedule::deserializeList(const QStringList & list){
    m_emailTemplatePath = list.at(7);
    m_Time = QTime::fromString(list.at(8));
    m_Day = QString(list.at(9)).toInt();
+   QStringList::const_iterator constIterator;
+   for(constIterator = list.constBegin() + 10; constIterator != list.constEnd(); ++constIterator){
+      m_emailAdresses.insert(*constIterator, *constIterator);
+   }
 }
 void WeeklySchedule::setXlsAttach(bool xlsAttach){
     m_xlsAttach = xlsAttach;
