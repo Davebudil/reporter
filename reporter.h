@@ -101,6 +101,22 @@ class Reporter : public QMainWindow{
 
       void on_deleteScheduling_clicked();
 
+      void on_shiftnewEmailAdress_clicked();
+
+      void on_dailynewEmailAdress_clicked();
+
+      void on_saveEmailAdress_7_clicked();
+
+      void on_monthlynewEmailAdress_clicked();
+
+      void on_shiftdeleteEmailAdress_clicked();
+
+      void on_dailydeleteEmailAdress_clicked();
+
+      void on_weeklydeleteEmailAdress_clicked();
+
+      void on_monthlydeleteEmailAdress_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -109,6 +125,7 @@ class Reporter : public QMainWindow{
       Export m_Export;
       QMap<qint32, Scheduling*> m_Schedule;
       QString m_nameKey;
+      QString m_emailKey;
       qint32 m_selectedParam;
       qint32 m_paramKey;
       qint32 m_scheduleKey;
@@ -123,8 +140,14 @@ class Reporter : public QMainWindow{
       void m_generateQuery(const QString & name);
       //function to execute query
       void m_executeQuery(const QString & name);
-      //function to add query
+      //functions to add
       void m_addQuery(const QString & queryText, const QString & queryName, const QString & paramName, bool mode, bool active);
+      void m_addSchedule(const QString & name);
+      void m_addParameters(const QStringList & params, const qint32 & count);
+      void m_addShiftScheduleEmail(const QString & email);
+      void m_addDailyScheduleEmail(const QString & email);
+      void m_addWeeklyScheduleEmail(const QString & email);
+      void m_addMonthlyScheduleEmail(const QString & email);
       //functions to determine which button was clicked and select the stored data based on it
       void m_scrollQueryClicked();
       void m_scrollParamClicked();
@@ -137,6 +160,7 @@ class Reporter : public QMainWindow{
       void m_deleteParam();
       void m_deleteQuery();
       void m_deleteSchedule();
+      void m_deleteEmails();
       //Serialization
       void m_serializeQueries();
       void m_serializeParameters();
@@ -146,12 +170,11 @@ class Reporter : public QMainWindow{
       void m_Settings();
       //connects to db
       void m_ConnectDB();
-      //add Parameters
-      void m_addParameters(const QStringList & params, const qint32 & count);
       //utility function to get text from parameters input boxes
       void m_createParamList(QStringList & tmp, qint32 & tmpCount);
       QStringList m_loadParameters(QVector<qint32> & count);
       void m_loadMaster();
+      void m_loadEmails();
       void m_clearParam();
       void m_clearQuery();
       void m_clearSchedule();
@@ -160,6 +183,10 @@ class Reporter : public QMainWindow{
       void m_clearWeekly();
       void m_clearMonthly();
       void m_loadSchedule();
+      void m_loadShiftEmail();
+      void m_loadDailyEmail();
+      void m_loadWeeklyEmail();
+      void m_loadMonthlyEmail();
       void m_displayShift(qint32 keyString);
       void m_displayDay(qint32 keyString);
       void m_displayWeekly(qint32 keyString);
@@ -178,12 +205,12 @@ class Reporter : public QMainWindow{
       void m_deserializeSchedule();
       void m_serializeGlobal();
       void m_saveSchedule();
-      void m_addSchedule(const QString & name);
       void m_generateCSV();
       void m_generateXLS();
       void m_generateTemplateXLS();
       void m_testingQueryGen();
       bool m_noSchedule();
+      bool m_validateEmail(const QString & email);
 };
 
 #endif // REPORTER_H
