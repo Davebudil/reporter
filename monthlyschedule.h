@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QDateEdit>
 #include <QMap>
+#include <QDebug>
 
 class MonthlySchedule
 {

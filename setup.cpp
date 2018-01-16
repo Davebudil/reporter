@@ -22,12 +22,16 @@ bool Setup::deserializeQueries(QStringList &queries){
 bool Setup::serializeParameters(const QStringList &parameters, const QVector<qint32> & count){
    return m_serializeParameters(parameters, count);
 }
-bool Setup::serializeSchedule(const QList<QStringList> & serializeData){
+bool Setup::serializeSchedule(const QList<QStringList> & serializeData, const QStringList & scheduleName){
    QString tmp;
    QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterSchedule.dat");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
-      for(qint32 i = 0; i + 3 < serializeData.size(); i+=4){
+      qint32 scheduleIterator = 0;
+      qDebug() << serializeData.count();
+      for(qint32 i = 0; i + 3 < serializeData.count(); i+=4){
+         qDebug() << scheduleName[scheduleIterator];
+         out << scheduleName[scheduleIterator++];
          for(auto & it : serializeData[i]){
             tmp = it;
             out << tmp;
@@ -44,8 +48,8 @@ bool Setup::serializeSchedule(const QList<QStringList> & serializeData){
             tmp = it;
             out << tmp;
          }
-         return true;
       }
+      return true;
    }
    return false;
 }
@@ -125,16 +129,24 @@ bool Setup::deserializeParameters(QStringList & parameters, QVector<qint32> & co
    return false;
 }
 //DODELAT TODO
-bool Setup::deserializeSchedule(QStringList & shift,
-                                QStringList & day,
-                                QStringList & weekly,
-                                QStringList & monthly){
+bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringList & scheduleName){
    QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ReporterSchedule.dat");
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
       while(!in.atEnd()){
          QString tmp;
+         QStringList shift, day, weekly, monthly;
+         qint32 emailCount;
+         in >> tmp;
+         scheduleName.push_back(tmp);
          for(qint32 i = 0; i < 19; ++i){
+            in >> tmp;
+            shift << tmp;
+         }
+         in >> tmp;
+         emailCount = tmp.toInt();
+         qDebug() << emailCount;
+         for(qint32 i = 0; i < emailCount; ++i){
             in >> tmp;
             shift << tmp;
          }
@@ -142,13 +154,50 @@ bool Setup::deserializeSchedule(QStringList & shift,
             in >> tmp;
             day << tmp;
          }
+         in >> tmp;
+         emailCount = tmp.toInt();
+         qDebug() << emailCount;
+         for(qint32 i = 0; i < emailCount; ++i){
+            in >> tmp;
+            day << tmp;
+         }
          for(qint32 i = 0; i < 10; ++i){
+            in >> tmp;
+            weekly << tmp;
+         }
+         in >> tmp;
+         emailCount = tmp.toInt();
+         qDebug() << emailCount;
+         for(qint32 i = 0; i < emailCount; ++i){
             in >> tmp;
             weekly << tmp;
          }
          for(qint32 i = 0; i < 10; ++i){
             in >> tmp;
             monthly << tmp;
+         }
+         in >> tmp;
+         emailCount = tmp.toInt();
+         qDebug() << emailCount;
+         for(qint32 i = 0; i < emailCount; ++i){
+            in >> tmp;
+            monthly << tmp;
+         }
+         deserializeData.push_back(shift);
+         deserializeData.push_back(day);
+         deserializeData.push_back(weekly);
+         deserializeData.push_back(monthly);
+         for(auto & it : shift){
+            qDebug() << "Shift: " << it;
+         }
+         for(auto & it : day){
+            qDebug() << "daily: " << it;
+         }
+         for(auto & it : weekly){
+            qDebug() << "weekly: " << it;
+         }
+         for(auto & it : monthly){
+            qDebug() << "monthly: " << it;
          }
       }
       return true;

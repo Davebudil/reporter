@@ -3,6 +3,7 @@
 #include <QMap>
 #include <QObject>
 #include <QTime>
+#include <QDebug>
 
 class ShiftSchedule{
    public:

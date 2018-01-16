@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QTime>
 #include <QMap>
+#include <QDebug>
 
 class DailySchedule{
    public:

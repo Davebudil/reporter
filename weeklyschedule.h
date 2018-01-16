@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QMap>
+#include <QDebug>
 
 class WeeklySchedule
 {
