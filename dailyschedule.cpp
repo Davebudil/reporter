@@ -3,12 +3,7 @@
 DailySchedule::DailySchedule()
               :m_Active(false),
                m_csvAttach(false),
-               m_xlsAttach(false),
-               m_AttachName("default"),
-               m_SubjName("default"),
-               m_xlsTemplatePath("default"),
-               m_csvTemplatePath("default"),
-               m_emailTemplatePath("default"){
+               m_xlsAttach(false){
    m_Days = new bool[7];
    std::fill_n(m_Days, 7, false);
 }

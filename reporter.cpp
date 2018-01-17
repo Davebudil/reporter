@@ -202,20 +202,15 @@ void Reporter::m_addSchedule(const QString & name){
       return;
    }
 
-   if(!m_noSchedule()){
-      Scheduling * tmp = new Scheduling;
-      tmp->setName(ui->scheduleName->text());
-      m_Schedule.insert(m_scheduleCount, tmp);
-      m_scheduleKey = m_scheduleCount++;
-   }else{
-      m_scheduleKey = 0;
-      m_Schedule[m_scheduleKey]->setName(ui->scheduleName->text());
-   }
+   Scheduling * tmp = new Scheduling;
+   tmp->setName(name);
+   m_Schedule.insert(m_scheduleCount, tmp);
+   m_scheduleKey = m_scheduleCount++;
 
-   m_editDay(m_scheduleKey);
-   m_editMonthly(m_scheduleKey);
-   m_editShift(m_scheduleKey);
-   m_editWeekly(m_scheduleKey);
+//   m_editDay(m_scheduleKey);
+//   m_editMonthly(m_scheduleKey);
+//   m_editShift(m_scheduleKey);
+//   m_editWeekly(m_scheduleKey);
 
    QToolButton * newSchedule = new QToolButton;
    newSchedule->setText(name);
@@ -259,25 +254,25 @@ void Reporter::m_addShiftScheduleEmail(const QString & email){
    QToolButton * newEmail = new QToolButton;
    newEmail->setText(email);
    newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                              "background-color: #f44336; } QToolButton::menu-button "
-                              "{ background: url('./images/downarrowgray.png') "
-                              "center center no-repeat; background-color: #f44336; "
-                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                              "{ background-color: #f44336; } QStatusBar { background-color: "
-                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
-                              "{ color: white; background-color: #f44336; "
-                              "} QToolButton:hover, QToolButton:pressed, "
-                              "QToolButton:checked { background-color: "
-                              "#607D8B; } QToolButton:hover { color: black; } "
-                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
-                              "QToolButton:hover { background-color: white; color: black; border: 1px "
-                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
-                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
-                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                              "QStatusBar::item { color: black; background-color: #f44336; } "
-                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                           "background-color: #f44336; } QToolButton::menu-button "
+                           "{ background: url('./images/downarrowgray.png') "
+                           "center center no-repeat; background-color: #f44336; "
+                           "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                           "{ background-color: #f44336; } QStatusBar { background-color: "
+                           "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                           "{ color: white; background-color: #f44336; "
+                           "} QToolButton:hover, QToolButton:pressed, "
+                           "QToolButton:checked { background-color: "
+                           "#607D8B; } QToolButton:hover { color: black; } "
+                           "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                           "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                           "QToolButton:hover { background-color: white; color: black; border: 1px "
+                           "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                           "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                           "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                           "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                           "QStatusBar::item { color: black; background-color: #f44336; } "
+                           "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
    newEmail->setObjectName(email);
    ui->shiftEmailLayout->addWidget(newEmail);
    connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadShiftEmail);
@@ -299,25 +294,25 @@ void Reporter::m_addDailyScheduleEmail(const QString & email){
    QToolButton * newEmail = new QToolButton;
    newEmail->setText(email);
    newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                              "background-color: #f44336; } QToolButton::menu-button "
-                              "{ background: url('./images/downarrowgray.png') "
-                              "center center no-repeat; background-color: #f44336; "
-                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                              "{ background-color: #f44336; } QStatusBar { background-color: "
-                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
-                              "{ color: white; background-color: #f44336; "
-                              "} QToolButton:hover, QToolButton:pressed, "
-                              "QToolButton:checked { background-color: "
-                              "#607D8B; } QToolButton:hover { color: black; } "
-                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
-                              "QToolButton:hover { background-color: white; color: black; border: 1px "
-                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
-                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
-                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                              "QStatusBar::item { color: black; background-color: #f44336; } "
-                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                           "background-color: #f44336; } QToolButton::menu-button "
+                           "{ background: url('./images/downarrowgray.png') "
+                           "center center no-repeat; background-color: #f44336; "
+                           "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                           "{ background-color: #f44336; } QStatusBar { background-color: "
+                           "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                           "{ color: white; background-color: #f44336; "
+                           "} QToolButton:hover, QToolButton:pressed, "
+                           "QToolButton:checked { background-color: "
+                           "#607D8B; } QToolButton:hover { color: black; } "
+                           "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                           "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                           "QToolButton:hover { background-color: white; color: black; border: 1px "
+                           "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                           "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                           "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                           "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                           "QStatusBar::item { color: black; background-color: #f44336; } "
+                           "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
    newEmail->setObjectName(email);
    ui->dailyEmailLayout->addWidget(newEmail);
    connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadDailyEmail);
@@ -339,25 +334,25 @@ void Reporter::m_addWeeklyScheduleEmail(const QString & email){
    QToolButton * newEmail = new QToolButton;
    newEmail->setText(email);
    newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                              "background-color: #f44336; } QToolButton::menu-button "
-                              "{ background: url('./images/downarrowgray.png') "
-                              "center center no-repeat; background-color: #f44336; "
-                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                              "{ background-color: #f44336; } QStatusBar { background-color: "
-                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
-                              "{ color: white; background-color: #f44336; "
-                              "} QToolButton:hover, QToolButton:pressed, "
-                              "QToolButton:checked { background-color: "
-                              "#607D8B; } QToolButton:hover { color: black; } "
-                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
-                              "QToolButton:hover { background-color: white; color: black; border: 1px "
-                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
-                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
-                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                              "QStatusBar::item { color: black; background-color: #f44336; } "
-                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                           "background-color: #f44336; } QToolButton::menu-button "
+                           "{ background: url('./images/downarrowgray.png') "
+                           "center center no-repeat; background-color: #f44336; "
+                           "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                           "{ background-color: #f44336; } QStatusBar { background-color: "
+                           "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                           "{ color: white; background-color: #f44336; "
+                           "} QToolButton:hover, QToolButton:pressed, "
+                           "QToolButton:checked { background-color: "
+                           "#607D8B; } QToolButton:hover { color: black; } "
+                           "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                           "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                           "QToolButton:hover { background-color: white; color: black; border: 1px "
+                           "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                           "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                           "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                           "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                           "QStatusBar::item { color: black; background-color: #f44336; } "
+                           "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
    newEmail->setObjectName(email);
    ui->weeklyEmailLayout->addWidget(newEmail);
    connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadWeeklyEmail);
@@ -379,25 +374,25 @@ void Reporter::m_addMonthlyScheduleEmail(const QString & email){
    QToolButton * newEmail = new QToolButton;
    newEmail->setText(email);
    newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                              "background-color: #f44336; } QToolButton::menu-button "
-                              "{ background: url('./images/downarrowgray.png') "
-                              "center center no-repeat; background-color: #f44336; "
-                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                              "{ background-color: #f44336; } QStatusBar { background-color: "
-                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
-                              "{ color: white; background-color: #f44336; "
-                              "} QToolButton:hover, QToolButton:pressed, "
-                              "QToolButton:checked { background-color: "
-                              "#607D8B; } QToolButton:hover { color: black; } "
-                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
-                              "QToolButton:hover { background-color: white; color: black; border: 1px "
-                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
-                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
-                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                              "QStatusBar::item { color: black; background-color: #f44336; } "
-                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                           "background-color: #f44336; } QToolButton::menu-button "
+                           "{ background: url('./images/downarrowgray.png') "
+                           "center center no-repeat; background-color: #f44336; "
+                           "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                           "{ background-color: #f44336; } QStatusBar { background-color: "
+                           "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                           "{ color: white; background-color: #f44336; "
+                           "} QToolButton:hover, QToolButton:pressed, "
+                           "QToolButton:checked { background-color: "
+                           "#607D8B; } QToolButton:hover { color: black; } "
+                           "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                           "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                           "QToolButton:hover { background-color: white; color: black; border: 1px "
+                           "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                           "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                           "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                           "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                           "QStatusBar::item { color: black; background-color: #f44336; } "
+                           "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
    newEmail->setObjectName(email);
    ui->monthlyEmailLayout->addWidget(newEmail);
    connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadMonthlyEmail);
@@ -456,24 +451,26 @@ void Reporter::m_deleteQuery(){
 }
 //Function that deletes selected Schedule
 void Reporter::m_deleteSchedule(){
-   m_deleteEmails();
-   tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
-   if(tmp){
-      delete tmp;
-   }
-   m_clearSchedule();
-   if(m_noSchedule()){
-      Scheduling * tmp = new Scheduling;
-      m_scheduleKey = 0;
-      m_Schedule[0] = tmp;
-      m_scheduleCount++;
-   }
    m_Schedule[m_scheduleKey]->getShift().getEmailAdresses().clear();
    m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses().clear();
    m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses().clear();
    m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses().clear();
+      m_deleteEmails();
    m_Schedule.remove(m_scheduleKey);
-   m_scheduleCount--;
+   tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
+   delete tmp;
+      if(m_noSchedule()){
+         m_scheduleKey = 0;
+         m_addSchedule("Default");
+      }
+   m_clearSchedule();
+   if(!m_Schedule.isEmpty()){
+      m_scheduleKey = m_Schedule.firstKey();
+   }else{
+      m_scheduleCount = 0;
+      m_scheduleKey = 0;
+      m_addSchedule("Default");
+   }
 }
 //Function that deletes email buttons so new ones can be loaded
 void Reporter::m_deleteEmails(){
@@ -518,9 +515,8 @@ void Reporter::defaultSettings(){
    m_deserializeSchedule();
    m_loadMaster();
    if(m_noSchedule()){
-      Scheduling * tmp = new Scheduling;
-      m_Schedule[m_scheduleKey] = tmp;
-      m_scheduleCount++;
+      m_addSchedule("Default");
+      ui->scheduleName->setText(m_Schedule[0]->getName());
    }
 }
 //Load the default query
@@ -668,6 +664,34 @@ void Reporter::m_deserializeSchedule(){
 }
 //Saves selected schedule
 void Reporter::m_saveSchedule(){
+   tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
+   delete tmp;
+   QToolButton * newSchedule = new QToolButton;
+   newSchedule->setText(ui->scheduleName->text());
+   newSchedule->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+   newSchedule->setObjectName(QString::number(m_scheduleKey));
+   ui->scrollLayour_3->addWidget(newSchedule);
+   connect(newSchedule, &QToolButton::clicked, this, &Reporter::m_loadSchedule);
+   m_Schedule[m_scheduleKey]->setName(ui->scheduleName->text());
    m_editShift(m_scheduleKey);
    m_editDay(m_scheduleKey);
    m_editWeekly(m_scheduleKey);
@@ -677,34 +701,34 @@ void Reporter::m_saveSchedule(){
 }
 //Generates CSV, mostly for testing
 void Reporter::m_generateCSV(){
-//   //TESTING FOR SHIFT
-//   QSqlQuery generateCSV;
-//   generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResultQuery();
-//   m_Export.getCSV().generateFile(m_Schedule[keyString]->getShift().getCsvTemplatePath(),
-//                                  m_Schedule[keyString]->getShift().getAttachName(),
-//                                  generateCSV);
+   //   //TESTING FOR SHIFT
+   //   QSqlQuery generateCSV;
+   //   generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResultQuery();
+   //   m_Export.getCSV().generateFile(m_Schedule[keyString]->getShift().getCsvTemplatePath(),
+   //                                  m_Schedule[keyString]->getShift().getAttachName(),
+   //                                  generateCSV);
 }
 //Generates XLS, mostly for testing
 void Reporter::m_generateXLS(){
-//   //TESTING FOR SHIFT
-//   QList<std::pair<QString, QString>> tmp;
-//   QList<QStringList> tmpQueries;
-//   m_generateQuery(m_nameKey);
-//   m_executeQuery(m_nameKey);
-//   tmp.append(std::make_pair("CURRENT_DATE","15.12.2017"));
-//   tmp.append(std::make_pair("DateTimeFromTo", "Od datumu A po datum B"));
-//   tmp.append(std::make_pair("vygeneroval", "David BUDIL"));
-//   tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
-//   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
-//      m_generateQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
-//      m_executeQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
-//      tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
-//   }
+   //   //TESTING FOR SHIFT
+   //   QList<std::pair<QString, QString>> tmp;
+   //   QList<QStringList> tmpQueries;
+   //   m_generateQuery(m_nameKey);
+   //   m_executeQuery(m_nameKey);
+   //   tmp.append(std::make_pair("CURRENT_DATE","15.12.2017"));
+   //   tmp.append(std::make_pair("DateTimeFromTo", "Od datumu A po datum B"));
+   //   tmp.append(std::make_pair("vygeneroval", "David BUDIL"));
+   //   tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
+   //   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
+   //      m_generateQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+   //      m_executeQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+   //      tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
+   //   }
 
-//   m_Export.getXLS().generateFile(m_Schedule[keyString]->getShift().getXlsTemplatePath(),
-//                                  m_Schedule[keyString]->getShift().getAttachName(),
-//                                  tmp,
-//                                  tmpQueries);
+   //   m_Export.getXLS().generateFile(m_Schedule[keyString]->getShift().getXlsTemplatePath(),
+   //                                  m_Schedule[keyString]->getShift().getAttachName(),
+   //                                  tmp,
+   //                                  tmpQueries);
 }
 //Generates XLS template
 void Reporter::m_generateTemplateXLS(){
@@ -728,7 +752,7 @@ void Reporter::m_testingQueryGen(){
       m_generateQuery(m_nameKey);
       m_executeQuery(m_nameKey);
       m_displaySQLResult(m_nameKey);
-//      m_mainSQL.getStorage().printQueryText();
+      //      m_mainSQL.getStorage().printQueryText();
    }
 }
 //Adds first schedule item
@@ -809,25 +833,25 @@ void Reporter::m_loadEmails(){
       QToolButton * newEmail = new QToolButton;
       newEmail->setText(email);
       newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                                 "background-color: #f44336; } QToolButton::menu-button "
-                                 "{ background: url('./images/downarrowgray.png') "
-                                 "center center no-repeat; background-color: #f44336; "
-                                 "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                                 "{ background-color: #f44336; } QStatusBar { background-color: "
-                                 "#FDD835; } QLabel { color: #f44336; } QToolButton "
-                                 "{ color: white; background-color: #f44336; "
-                                 "} QToolButton:hover, QToolButton:pressed, "
-                                 "QToolButton:checked { background-color: "
-                                 "#607D8B; } QToolButton:hover { color: black; } "
-                                 "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                                 "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
-                                 "QToolButton:hover { background-color: white; color: black; border: 1px "
-                                 "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                                 "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
-                                 "transparent; width: 16px; } QToolButton::menu-button:hover { "
-                                 "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                                 "QStatusBar::item { color: black; background-color: #f44336; } "
-                                 "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
       newEmail->setObjectName(email);
       ui->shiftEmailLayout->addWidget(newEmail);
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadShiftEmail);
@@ -837,25 +861,25 @@ void Reporter::m_loadEmails(){
       QToolButton * newEmail = new QToolButton;
       newEmail->setText(email);
       newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                                 "background-color: #f44336; } QToolButton::menu-button "
-                                 "{ background: url('./images/downarrowgray.png') "
-                                 "center center no-repeat; background-color: #f44336; "
-                                 "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                                 "{ background-color: #f44336; } QStatusBar { background-color: "
-                                 "#FDD835; } QLabel { color: #f44336; } QToolButton "
-                                 "{ color: white; background-color: #f44336; "
-                                 "} QToolButton:hover, QToolButton:pressed, "
-                                 "QToolButton:checked { background-color: "
-                                 "#607D8B; } QToolButton:hover { color: black; } "
-                                 "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                                 "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
-                                 "QToolButton:hover { background-color: white; color: black; border: 1px "
-                                 "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                                 "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
-                                 "transparent; width: 16px; } QToolButton::menu-button:hover { "
-                                 "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                                 "QStatusBar::item { color: black; background-color: #f44336; } "
-                                 "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
       newEmail->setObjectName(email);
       ui->dailyEmailLayout->addWidget(newEmail);
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadDailyEmail);
@@ -865,25 +889,25 @@ void Reporter::m_loadEmails(){
       QToolButton * newEmail = new QToolButton;
       newEmail->setText(email);
       newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                                 "background-color: #f44336; } QToolButton::menu-button "
-                                 "{ background: url('./images/downarrowgray.png') "
-                                 "center center no-repeat; background-color: #f44336; "
-                                 "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                                 "{ background-color: #f44336; } QStatusBar { background-color: "
-                                 "#FDD835; } QLabel { color: #f44336; } QToolButton "
-                                 "{ color: white; background-color: #f44336; "
-                                 "} QToolButton:hover, QToolButton:pressed, "
-                                 "QToolButton:checked { background-color: "
-                                 "#607D8B; } QToolButton:hover { color: black; } "
-                                 "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                                 "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
-                                 "QToolButton:hover { background-color: white; color: black; border: 1px "
-                                 "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                                 "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
-                                 "transparent; width: 16px; } QToolButton::menu-button:hover { "
-                                 "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                                 "QStatusBar::item { color: black; background-color: #f44336; } "
-                                 "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
       newEmail->setObjectName(email);
       ui->weeklyEmailLayout->addWidget(newEmail);
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadWeeklyEmail);
@@ -893,25 +917,25 @@ void Reporter::m_loadEmails(){
       QToolButton * newEmail = new QToolButton;
       newEmail->setText(email);
       newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
-                                 "background-color: #f44336; } QToolButton::menu-button "
-                                 "{ background: url('./images/downarrowgray.png') "
-                                 "center center no-repeat; background-color: #f44336; "
-                                 "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
-                                 "{ background-color: #f44336; } QStatusBar { background-color: "
-                                 "#FDD835; } QLabel { color: #f44336; } QToolButton "
-                                 "{ color: white; background-color: #f44336; "
-                                 "} QToolButton:hover, QToolButton:pressed, "
-                                 "QToolButton:checked { background-color: "
-                                 "#607D8B; } QToolButton:hover { color: black; } "
-                                 "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
-                                 "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
-                                 "QToolButton:hover { background-color: white; color: black; border: 1px "
-                                 "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
-                                 "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
-                                 "transparent; width: 16px; } QToolButton::menu-button:hover { "
-                                 "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
-                                 "QStatusBar::item { color: black; background-color: #f44336; } "
-                                 "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
+                              "background-color: #f44336; } QToolButton::menu-button "
+                              "{ background: url('./images/downarrowgray.png') "
+                              "center center no-repeat; background-color: #f44336; "
+                              "} QToolButton::menu-button:hover, QToolButton::menu-button:pressed "
+                              "{ background-color: #f44336; } QStatusBar { background-color: "
+                              "#FDD835; } QLabel { color: #f44336; } QToolButton "
+                              "{ color: white; background-color: #f44336; "
+                              "} QToolButton:hover, QToolButton:pressed, "
+                              "QToolButton:checked { background-color: "
+                              "#607D8B; } QToolButton:hover { color: black; } "
+                              "QToolButton:checked, QToolButton:pressed { color: #FFFFFF; "
+                              "} QToolButton { border: 1px solid #f44336; margin: 1px; } "
+                              "QToolButton:hover { background-color: white; color: black; border: 1px "
+                              "solid #f44336; } QToolButton[popupMode=\"1\"] { padding-right: 20px; } "
+                              "QToolButton::menu-button { border-left: 1px solid #f44336; background: "
+                              "transparent; width: 16px; } QToolButton::menu-button:hover { "
+                              "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
+                              "QStatusBar::item { color: black; background-color: #f44336; } "
+                              "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
       newEmail->setObjectName(email);
       ui->monthlyEmailLayout->addWidget(newEmail);
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadMonthlyEmail);

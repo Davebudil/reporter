@@ -3,12 +3,7 @@
 ShiftSchedule::ShiftSchedule()
               :m_Active(false),
                m_csvAttach(false),
-               m_xlsAttach(false),
-               m_AttachName("default"),
-               m_SubjName("default"),
-               m_emailTemplatePath("default"),
-               m_xlsTemplatePath("default"),
-               m_csvTemplatePath("default"){
+               m_xlsAttach(false){
    m_Days = new bool[7];
    std::fill_n(m_Days, 7, false);
 }
@@ -91,7 +86,6 @@ void ShiftSchedule::deserializeList(const QStringList & list){
    QStringList::const_iterator constIterator;
    for(constIterator = list.constBegin() + 19; constIterator != list.constEnd(); ++constIterator){
       m_emailAdresses.insert(*constIterator, *constIterator);
-      qDebug() << QString(*constIterator);
    }
 }
 void ShiftSchedule::setXlsAttach(bool xlsAttach){

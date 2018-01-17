@@ -4,12 +4,7 @@ MonthlySchedule::MonthlySchedule()
                 :m_Active(false),
                  m_csvAttach(false),
                  m_xlsAttach(false),
-                 m_Day(0),
-                 m_AttachName("default"),
-                 m_SubjName("default"),
-                 m_xlsTemplatePath("default"),
-                 m_csvTemplatePath("default"),
-                 m_emailTemplatePath("default"){
+                 m_Day(0){
 }
 MonthlySchedule::~MonthlySchedule(){
 
