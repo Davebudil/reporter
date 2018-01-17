@@ -1,4 +1,5 @@
 #include "exportcsv.h"
+#include "log.h"
 
 ExportCSV::ExportCSV(){
 
@@ -23,10 +24,11 @@ bool ExportCSV::generateFile(const QString & templatePathCSV,
       }
 
       fileCSV.close();
-      qDebug() << filePath;
       QDesktopServices::openUrl(QUrl(filePath));
+      qInfo(logInfo()) << "Successfuly generated CSV file.";
       return true;
    }else{
+      qWarning(logWarning()) << "Failed to generate CSV file.";
       return false;
    }
 }

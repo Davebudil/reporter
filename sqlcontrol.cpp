@@ -7,7 +7,6 @@ SQLControl::SQLControl(QObject *parent)
 //Destructor
 SQLControl::~SQLControl(){
    delete m_queryModel;
-
 }
 
 //Setter

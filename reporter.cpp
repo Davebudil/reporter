@@ -1,5 +1,6 @@
 #include "reporter.h"
 #include "ui_reporter.h"
+#include "log.h"
 
 //poznamky:TODO - knihovna na grid -> pocitani a tak, export template -> funkce, xslwrite, vyuzit, upravovani.
 //CSV -> priorita, generovani, nemusi byt posta, dobre padatc
@@ -16,6 +17,7 @@ Reporter::Reporter(QWidget *parent)
      m_scheduleCount(0),
      tmp(nullptr),
      m_queryActive(false){
+   qInfo(logInfo()) << "Application started.";
    ui->setupUi(this);
    ui->queryNameEdit->setText("Query Name");
    ui->queryParamEdit->setText("Master name");
@@ -34,6 +36,7 @@ Reporter::~Reporter(){
    delete ui;
    delete m_shwHide;
    qDeleteAll(m_Schedule);
+   qInfo(logInfo()) << "Application shutdown.";
 }
 //Shows or hides application on key shortcut pressed
 void Reporter::m_showHide(){
@@ -46,6 +49,7 @@ void Reporter::m_showHide(){
 //Function to connect to DB triggered by click connect button
 void Reporter::on_dbConnect_clicked(){
    if(ui->dbPassword->text().isEmpty()){
+      qWarning(logWarning()) << "Incorrect database password entered.";
       QMessageBox::critical(this, "Password Error", "No password entered.");
    }else{
       m_ConnectDB();
@@ -518,6 +522,8 @@ void Reporter::defaultSettings(){
       m_addSchedule("Default");
       ui->scheduleName->setText(m_Schedule[0]->getName());
    }
+   qDebug(logDebug()) << "Settings successfuly loaded.";
+   qDebug(logDebug()) << "Data successfuly loaded.";
 }
 //Load the default query
 void Reporter::m_defaultQuery(){
@@ -544,9 +550,11 @@ void Reporter::m_scrollQueryClicked(){
 //Setup connection to DB
 void Reporter::m_ConnectDB(){
    if(!m_mainSQL.getDatabase().createConnection()){
+      qCritical(logCritical()) << "Database connection error: " + m_mainSQL.getDatabase().getDatabase().lastError().text();
       QMessageBox::warning(this, "Database connection error",
                            m_mainSQL.getDatabase().getDatabase().lastError().text());
    }else{
+      qInfo(logInfo()) << "Connection to database estabilished successfuly.";
       QMessageBox::information(this, "Database connection success", "Connecting to database successful.");
    }
 }
