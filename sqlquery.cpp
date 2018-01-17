@@ -1,4 +1,5 @@
 #include "sqlquery.h"
+#include "log.h"
 
 SQLquery::SQLquery(const QString & query,
                    const QString & name,

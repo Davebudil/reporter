@@ -14,12 +14,21 @@ TEMPLATE = app
 
 QTPLUGIN += QSQLMYSQL
 
+VERSION_MAJOR = 0
+VERSION_MINOR = 1
+VERSION_BUILD = 3
+
+
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += QT_DEPRECATED_WARNINGS\
+          "VERSION_MAJOR=$$VERSION_MAJOR"\
+          "VERSION_MINOR=$$VERSION_MINOR"\
+          "VERSION_BUILD=$$VERSION_BUILD"
 
+VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_BUILD}
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.

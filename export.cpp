@@ -1,4 +1,5 @@
 #include "export.h"
+#include "log.h"
 
 Export::Export(){
 

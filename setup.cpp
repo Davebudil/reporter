@@ -1,4 +1,5 @@
 #include "setup.h"
+#include "log.h"
 //constructor
 Setup::Setup(QObject *parent)
            : QObject(parent){

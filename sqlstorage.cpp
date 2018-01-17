@@ -1,4 +1,5 @@
 #include "sqlstorage.h"
+#include "log.h"
 //Constructor
 SQLStorage::SQLStorage(QObject *parent)
    : QObject(parent){

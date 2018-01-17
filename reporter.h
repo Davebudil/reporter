@@ -121,7 +121,6 @@ class Reporter : public QMainWindow{
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
       Setup m_Setup;
-      Log m_Log;
       Export m_Export;
       QMap<qint32, Scheduling*> m_Schedule;
       QString m_nameKey;

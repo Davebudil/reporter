@@ -1,4 +1,5 @@
 #include "database.h"
+#include "log.h"
 //Constructor
 Database::Database(QObject *parent)
    : QObject(parent){
