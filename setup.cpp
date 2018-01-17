@@ -28,9 +28,7 @@ bool Setup::serializeSchedule(const QList<QStringList> & serializeData, const QS
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
       qint32 scheduleIterator = 0;
-      qDebug() << serializeData.count();
       for(qint32 i = 0; i + 3 < serializeData.count(); i+=4){
-         qDebug() << scheduleName[scheduleIterator];
          out << scheduleName[scheduleIterator++];
          for(auto & it : serializeData[i]){
             tmp = it;
@@ -145,7 +143,6 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
          }
          in >> tmp;
          emailCount = tmp.toInt();
-         qDebug() << emailCount;
          for(qint32 i = 0; i < emailCount; ++i){
             in >> tmp;
             shift << tmp;
@@ -156,7 +153,6 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
          }
          in >> tmp;
          emailCount = tmp.toInt();
-         qDebug() << emailCount;
          for(qint32 i = 0; i < emailCount; ++i){
             in >> tmp;
             day << tmp;
@@ -167,7 +163,6 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
          }
          in >> tmp;
          emailCount = tmp.toInt();
-         qDebug() << emailCount;
          for(qint32 i = 0; i < emailCount; ++i){
             in >> tmp;
             weekly << tmp;
@@ -178,7 +173,6 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
          }
          in >> tmp;
          emailCount = tmp.toInt();
-         qDebug() << emailCount;
          for(qint32 i = 0; i < emailCount; ++i){
             in >> tmp;
             monthly << tmp;
@@ -187,18 +181,6 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
          deserializeData.push_back(day);
          deserializeData.push_back(weekly);
          deserializeData.push_back(monthly);
-         for(auto & it : shift){
-            qDebug() << "Shift: " << it;
-         }
-         for(auto & it : day){
-            qDebug() << "daily: " << it;
-         }
-         for(auto & it : weekly){
-            qDebug() << "weekly: " << it;
-         }
-         for(auto & it : monthly){
-            qDebug() << "monthly: " << it;
-         }
       }
       return true;
    }
