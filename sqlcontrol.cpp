@@ -12,13 +12,14 @@ SQLControl::~SQLControl(){
 //Setter
 void SQLControl::setQueryModel(const QString & name){
    m_queryModel = new QSqlQueryModel;
+//   m_queryModel->setQuery(m_Storage.getQueries()[name]->getFinal(), m_DB.getDatabase());
    m_queryModel->setQuery(m_Storage.getQueries()[name]->getResult());
 }
 //Getters
 QString SQLControl::getPassword(){
    return m_DB.getDatabaseConnector().getPassword();
 }
-QSqlQueryModel * SQLControl::getModel() const{
+QSqlQueryModel * SQLControl::getModel(){
    return m_queryModel;
 }
 

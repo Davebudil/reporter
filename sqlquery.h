@@ -20,19 +20,21 @@ class SQLquery{
       //Getter for query member
       QString getQuery();
       QSqlQuery getResult();
-      QSqlQuery getResultQuery();
-      QString getnResult();
+      QString getResultString();
       QString getName();
       QString getParam();
       QString getFinal();
+      QString getMasterFinal();
       qint32 getQueryResultRows();
+      QString getParamString() const;
       bool getIsMaster();
       bool getActive();
       //Setters for members
       void setQuery(const QString & query);
       void setName(const QString & name);
       void setParam(const QString & param);
-      void setFinal(const QString & finalString);
+      void setMasterFinal(const QString & finalString);
+      void setParamString(const QString & paramString);
       void setActive(bool active);
       //print for debugging
       void printValue();
@@ -45,15 +47,23 @@ class SQLquery{
       //
       QStringList queryList();
 
+
    private:
-      //query
+      //original text
       QString m_Query;
+      //names
       QString m_Name;
+      //master name
       QString m_mParameter;
+      //final edited query text with master
+      QString m_masterfinalString;
+      //final string with no master
       QString m_finalString;
+      //Final result
       QSqlQuery * m_Result;
-      QSqlQuery * m_nResult;
+      //master/detail
       bool m_Master;
+      //is Active
       bool m_isActive;
 };
 

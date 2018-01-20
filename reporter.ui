@@ -494,7 +494,7 @@ QTabWidget::tab-bar {
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="basic">
      <attribute name="title">
@@ -2952,6 +2952,48 @@ QTabWidget::tab-bar {
       </property>
       <property name="text">
        <string>Export Result</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="sqlDataCount">
+      <property name="geometry">
+       <rect>
+        <x>800</x>
+        <y>540</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="sqlDataCount_2">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>540</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Row Count</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="paramTest">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>310</y>
+        <width>61</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Param</string>
       </property>
      </widget>
     </widget>

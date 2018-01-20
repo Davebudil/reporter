@@ -24,8 +24,13 @@ QSqlQuery SQLStorage::getResultQuery(){
    return m_Query;
 }
 
-bool SQLStorage::addQuery(const QString & query, const QString & name, const QString & param, bool active, bool display, bool mode){
-   SQLquery * tmp = new SQLquery(query,name,param,(param.isEmpty()), active);
+bool SQLStorage::addQuery(const QString & query,
+                          const QString & name,
+                          const QString & param,
+                          bool active,
+                          bool display,
+                          bool mode){
+   SQLquery * tmp = new SQLquery(query, name, param, (param.isEmpty()), active);
    if(m_Queries.contains(name)){
       if(display){
          QMessageBox::warning(0,QObject::tr("New Query Error"), "Query with this name already exists.");
@@ -39,7 +44,7 @@ bool SQLStorage::addQuery(const QString & query, const QString & name, const QSt
    }
    m_Queries[name] = tmp;
    if(m_Queries[name]->getIsMaster() && mode){
-      masterQuery(name,tmp->getParam());
+      masterQuery(name, tmp->getParam());
    }
    return true;
 }
@@ -53,8 +58,8 @@ bool SQLStorage::masterQuery(const QString & detail, const QString & master){
       QString tmp;
       QString tempDetail;
       qint32 index;
-      detailQuery = m_Queries[detail]->getQuery();
-      masterQuery = m_Queries[master]->getQuery();
+      detailQuery = m_Queries[detail]->getFinal();
+      masterQuery = m_Queries[master]->getFinal();
       index = detailQuery.lastIndexOf("WHERE", -1, Qt::CaseInsensitive) -1;
       tempDetail = "JOIN\n";
       tempDetail += '(' + QString(masterQuery);
@@ -70,13 +75,11 @@ bool SQLStorage::masterQuery(const QString & detail, const QString & master){
          detailQuery += '\n';
          detailQuery.append(tmp);
       }
-      m_Queries[detail]->setFinal(detailQuery);
+      m_Queries[detail]->setMasterFinal(detailQuery);
       return true;
    }
 }
 void SQLStorage::setParameter(const QString & parameter, const QString & value, const QString & queryName){
-   qDebug() << parameter;
-   qDebug() << value;
    m_Queries[queryName]->bindParameter(parameter, value);
 }
 
@@ -88,7 +91,7 @@ void SQLStorage::printQueries(){
 
 void SQLStorage::printQueryText(){
    for(auto & it : m_Queries){
-      qDebug() << it->getnResult();
+      qDebug() << it->getFinal();
    }
 }
 
