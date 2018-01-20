@@ -117,6 +117,8 @@ class Reporter : public QMainWindow{
 
       void on_monthlydeleteEmailAdress_clicked();
 
+      void on_paramTest_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
