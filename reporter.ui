@@ -475,7 +475,7 @@ QDialogButtonBox {
 
 QTabWidget::tab-bar {
   left: 0px; /* Test this out on OS X, it will affect the tabs in the Options Dialog, on OS X they are centered */
-}tak</string>
+}</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
@@ -605,8 +605,8 @@ QTabWidget::tab-bar {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>189</width>
-          <height>189</height>
+          <width>191</width>
+          <height>191</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -1021,8 +1021,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -1418,8 +1418,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -1788,8 +1788,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -2275,8 +2275,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -2584,8 +2584,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -2684,8 +2684,8 @@ QTabWidget::tab-bar {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>189</width>
-         <height>259</height>
+         <width>191</width>
+         <height>261</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -2746,7 +2746,7 @@ QTabWidget::tab-bar {
        <rect>
         <x>10</x>
         <y>350</y>
-        <width>851</width>
+        <width>711</width>
         <height>221</height>
        </rect>
       </property>
@@ -2877,8 +2877,8 @@ QTabWidget::tab-bar {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>179</width>
-         <height>169</height>
+         <width>181</width>
+         <height>171</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -2957,8 +2957,8 @@ QTabWidget::tab-bar {
      <widget class="QLabel" name="sqlDataCount">
       <property name="geometry">
        <rect>
-        <x>800</x>
-        <y>540</y>
+        <x>810</x>
+        <y>550</y>
         <width>51</width>
         <height>20</height>
        </rect>
@@ -2970,8 +2970,8 @@ QTabWidget::tab-bar {
      <widget class="QLabel" name="sqlDataCount_2">
       <property name="geometry">
        <rect>
-        <x>710</x>
-        <y>540</y>
+        <x>730</x>
+        <y>550</y>
         <width>91</width>
         <height>20</height>
        </rect>
@@ -2994,6 +2994,22 @@ QTabWidget::tab-bar {
       </property>
       <property name="text">
        <string>Param</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="tableNames">
+      <property name="geometry">
+       <rect>
+        <x>730</x>
+        <y>350</y>
+        <width>131</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Table Names</string>
       </property>
      </widget>
     </widget>

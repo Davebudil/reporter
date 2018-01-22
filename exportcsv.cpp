@@ -8,9 +8,10 @@ ExportCSV::ExportCSV(){
 bool ExportCSV::generateFile(const QString & templatePathCSV,
                              const QString & attachNameCSV,
                              QSqlQuery & dataCSV){
-   //TMP TEST add Template
+   //TMP TEST add Template -> maybe use TEMPLATE CSV AS INI
    QString filePath = QDir::currentPath() + "/" + attachNameCSV + ".csv";
    QFile fileCSV(filePath);
+   loadCSVIni(templatePathCSV);
 
    if(fileCSV.open(QFile::WriteOnly|QFile::Truncate)){
       QTextStream stream(&fileCSV);
@@ -31,5 +32,9 @@ bool ExportCSV::generateFile(const QString & templatePathCSV,
       qWarning(logWarning()) << "Failed to generate CSV file.";
       return false;
    }
+}
+
+QStringList ExportCSV::loadCSVIni(const QString & iniPath){
+
 }
 
