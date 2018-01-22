@@ -709,6 +709,7 @@ void Reporter::m_saveSchedule(){
 //Generates CSV, mostly for testing
 void Reporter::m_generateCSV(){
    //TESTING FOR SHIFT
+   //TODO: CRASHING THE APPLICATION FOR SOME REASON
    QSqlQuery generateCSV;
    generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult();
    m_Export.getCSV().generateFile(m_Schedule[m_scheduleKey]->getShift().getCsvTemplatePath(),
@@ -759,6 +760,7 @@ void Reporter::m_testingQueryGen(){
       QMessageBox::critical(0, QObject::tr("Database error"),
                             "Not connected to database");
    }else{
+      m_loadMaster();
       m_generateQuery(m_nameKey);
       m_executeQuery(m_nameKey);
       m_displaySQLResult(m_nameKey);
@@ -772,6 +774,16 @@ bool Reporter::m_noSchedule(){
 bool Reporter::m_validateEmail(const QString & email){
    QRegularExpression regex("^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$");
    return regex.match(email).hasMatch();
+}
+
+QStringList Reporter::m_getColumnNames(const QString & tableName){
+   QSqlRecord dbRecord = m_mainSQL.getDatabase().getDatabase().driver()->record(tableName);
+   qint32 colCount = dbRecord.count();
+   QStringList result;
+   for(qint32 i = 0; i < colCount; ++i){
+      result.append(dbRecord.field(i).name());
+   }
+   return result;
 }
 //Loads schedule on mouse click
 void Reporter::m_loadSchedule(){
@@ -1309,8 +1321,17 @@ void Reporter::on_monthlyBrCSV_clicked(){
 }
 
 void Reporter::on_toolButton_2_clicked(){
-   m_generateXLS();
-   m_generateCSV();
+   if(m_nameKey.isEmpty() || m_nameKey.isNull()){
+      QMessageBox::warning(this, "Query error.", "No query selected.");
+   }else{
+      m_testingQueryGen();
+      if(m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult().isActive()){
+         m_generateXLS();
+         //CRASHING THE APPLICATION
+         m_generateCSV();
+//         qDebug() << "TEST";
+      }
+   }
 }
 void Reporter::on_toolButton_3_clicked(){
    m_generateTemplateXLS();
@@ -1366,13 +1387,24 @@ void Reporter::on_monthlydeleteEmailAdress_clicked(){
 }
 void Reporter::on_paramTest_clicked(){
    QString tmpParam = m_mainSQL.getStorage().getParameters()[0]->getParameters()[0];
-//   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
-//      m_mainSQL.getStorage().getQueries()[m_nameKey]->setParamString(m_mainSQL.getStorage().getQueries()[m_nameKey]->getFinal());
-//   }else{
-//      m_mainSQL.getStorage().getQueries()[m_nameKey]->setParamString(m_mainSQL.getStorage().getQueries()[m_nameKey]->getQuery());
-//   }
    m_mainSQL.getStorage().getQueries()[m_nameKey]->bindParameter(":test", tmpParam);
    m_mainSQL.getStorage().getQueries()[m_nameKey]->generateQuery(m_mainSQL.getDatabase().getDatabase());
    m_mainSQL.getStorage().getQueries()[m_nameKey]->executeQuery();
-   qDebug() << m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult().lastQuery();
+   m_displaySQLResult(m_nameKey);
 }
+
+void Reporter::on_tableNames_clicked(){
+   QStringList dbNames;
+   TableInfo * infoDisplay = new TableInfo(this);
+   QVector<QStringList> dbInfo;
+   dbNames = m_mainSQL.getDatabase().getDatabase().tables();
+   for(auto & it : dbNames){
+      QStringList tmp;
+      tmp.append(it);
+      tmp += m_getColumnNames(it);
+      dbInfo.push_back(tmp);
+   }
+   infoDisplay->getInfo(dbInfo);
+   infoDisplay->show();
+}
+

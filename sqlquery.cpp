@@ -25,11 +25,11 @@ QString SQLquery::getQuery(){
 QSqlQuery SQLquery::getResult(){
    return *m_Result;
 }
-//QString SQLquery::getResultString(){
-//   QString tmp = m_nResult->lastQuery();
-//   tmp.replace(QRegExp("[\\n\\t\\r]"), " ");
-//   return tmp;
-//}
+QString SQLquery::getResultString(){
+   QString tmp = m_finalString;
+   tmp.replace(QRegExp("[\\n\\t\\r]"), " ");
+   return tmp;
+}
 QString SQLquery::getName(){
    return m_Name;
 }
@@ -103,7 +103,7 @@ QStringList SQLquery::queryList(){
    QStringList queryData;
    queryData.append(m_Name);
    queryData.append(m_mParameter);
-   queryData.append(m_Query);
+   queryData.append(m_finalString);
    return queryData;
 }
 //Binds parameter to value

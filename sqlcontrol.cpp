@@ -8,12 +8,15 @@ SQLControl::SQLControl(QObject *parent)
 SQLControl::~SQLControl(){
    delete m_queryModel;
 }
-
 //Setter
 void SQLControl::setQueryModel(const QString & name){
    m_queryModel = new QSqlQueryModel;
-//   m_queryModel->setQuery(m_Storage.getQueries()[name]->getFinal(), m_DB.getDatabase());
-   m_queryModel->setQuery(m_Storage.getQueries()[name]->getResult());
+   //not sure why, but the display table seems to be bugged, this is workaround
+   if(m_Storage.getQueries()[name]->getIsMaster()){
+      m_queryModel->setQuery(m_Storage.getQueries()[name]->getFinal(), m_DB.getDatabase());
+   }else{
+      m_queryModel->setQuery(m_Storage.getQueries()[name]->getResult());
+   }
 }
 //Getters
 QString SQLControl::getPassword(){
@@ -41,6 +44,7 @@ QStringList SQLControl::loadList(){
    }
    return tmpQueries;
 }
+//adds time parameters to string
 void SQLControl::setTimeParameters(const QDate &from, const QDate &to, const QString &queryName){
    m_Storage.getQueries()[queryName]->bindParameter(":TIMEFROM",from.toString());
    m_Storage.getQueries()[queryName]->bindParameter(":TIMETO", to.toString());

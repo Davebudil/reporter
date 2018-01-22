@@ -16,7 +16,7 @@ QTPLUGIN += QSQLMYSQL
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 1
-VERSION_BUILD = 3
+VERSION_BUILD = 4
 
 
 # The following define makes your compiler emit warnings if you use
@@ -57,7 +57,8 @@ SOURCES += \
     export.cpp \
     exportxls.cpp \
     exportcsv.cpp \
-    exporthtml.cpp
+    exporthtml.cpp \
+    tableinfo.cpp
 
 HEADERS += \
         reporter.h \
@@ -78,7 +79,9 @@ HEADERS += \
     export.h \
     exportxls.h \
     exportcsv.h \
-    exporthtml.h
+    exporthtml.h \
+    tableinfo.h
 
 FORMS += \
-        reporter.ui
+        reporter.ui \
+    tableinfo.ui

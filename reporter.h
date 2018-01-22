@@ -23,6 +23,7 @@
 #include <xlsxdocument.h>
 #include <QDesktopServices>
 #include <QHotkey>
+#include "tableinfo.h"
 
 namespace Ui{
    class Reporter;
@@ -119,6 +120,8 @@ class Reporter : public QMainWindow{
 
       void on_paramTest_clicked();
 
+      void on_tableNames_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -212,6 +215,7 @@ class Reporter : public QMainWindow{
       void m_testingQueryGen();
       bool m_noSchedule();
       bool m_validateEmail(const QString & email);
+      QStringList m_getColumnNames(const QString & tableName);
 };
 
 #endif // REPORTER_H
