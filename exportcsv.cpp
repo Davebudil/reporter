@@ -13,21 +13,27 @@ bool ExportCSV::generateFile(const QString & templatePathCSV,
    QFile fileCSV(filePath);
    loadCSVIni(templatePathCSV);
 
-   if(fileCSV.open(QFile::WriteOnly|QFile::Truncate)){
-      QTextStream stream(&fileCSV);
 
-      while(dataCSV.next()){
-         qint32 x = 0;
-         for(qint32 i = 0; i < dataCSV.record().count(); ++i){
-            stream << dataCSV.value(x++).toString() << ";";
+   if(dataCSV.first()){
+      if(fileCSV.open(QFile::WriteOnly|QFile::Truncate)){
+         QTextStream stream(&fileCSV);
+
+         while(dataCSV.next()){
+            qint32 x = 0;
+            for(qint32 i = 0; i < dataCSV.record().count(); ++i){
+               stream << dataCSV.value(x++).toString() << ";";
+            }
+            stream << "\n";
          }
-         stream << "\n";
-      }
 
-      fileCSV.close();
-      QDesktopServices::openUrl(QUrl(filePath));
-      qInfo(logInfo()) << "Successfuly generated CSV file.";
-      return true;
+         fileCSV.close();
+         QDesktopServices::openUrl(QUrl(filePath));
+         qInfo(logInfo()) << "Successfuly generated CSV file.";
+         return true;
+      }else{
+         qWarning(logWarning()) << "Failed to generate CSV file.";
+         return false;
+      }
    }else{
       qWarning(logWarning()) << "Failed to generate CSV file.";
       return false;
