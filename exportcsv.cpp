@@ -11,12 +11,18 @@ bool ExportCSV::generateFile(const QString & templatePathCSV,
    //TMP TEST add Template -> maybe use TEMPLATE CSV AS INI
    QString filePath = QDir::currentPath() + "/" + attachNameCSV + ".csv";
    QFile fileCSV(filePath);
-   loadCSVIni(templatePathCSV);
-
+//   loadCSVIni(templatePathCSV);
 
    if(dataCSV.first()){
       if(fileCSV.open(QFile::WriteOnly|QFile::Truncate)){
          QTextStream stream(&fileCSV);
+         QSqlRecord columns = dataCSV.record();
+
+         for(quint32 i = 0; i < columns.count(); ++i){
+            QString tmp = columns.fieldName(i);
+            stream << tmp << ";";
+         }
+         stream << "\n";
 
          while(dataCSV.next()){
             qint32 x = 0;

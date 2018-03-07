@@ -710,12 +710,11 @@ void Reporter::m_saveSchedule(){
 //Generates CSV, mostly for testing
 void Reporter::m_generateCSV(){
    //TESTING FOR SHIFT
-   //TODO: CRASHING THE APPLICATION FOR SOME REASON
    QSqlQuery generateCSV;
    generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult();
-   m_Export.getCSV().generateFile(m_Schedule[m_scheduleKey]->getShift().getCsvTemplatePath(),
-                                  m_Schedule[m_scheduleKey]->getShift().getAttachName(),
-                                  generateCSV);
+      m_Export.getCSV().generateFile(m_Schedule[m_scheduleKey]->getShift().getCsvTemplatePath(),
+                                     m_Schedule[m_scheduleKey]->getShift().getAttachName(),
+                                     generateCSV);
 }
 //Generates XLS, mostly for testing
 void Reporter::m_generateXLS(){
@@ -1333,9 +1332,7 @@ void Reporter::on_toolButton_2_clicked(){
       m_testingQueryGen();
       if(m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult().isActive()){
          m_generateXLS();
-         //CRASHING THE APPLICATION
          m_generateCSV();
-         //         qDebug() << "TEST";
       }
    }
 }
