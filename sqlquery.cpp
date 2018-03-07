@@ -81,11 +81,9 @@ void SQLquery::generateQuery(const QSqlDatabase & db){
    m_Result = new QSqlQuery(db);
    if(m_Master){
       //      qDebug() << "Execute Classic"; //debug
-      m_Result->setForwardOnly(true);
       m_Result->prepare(m_finalString);
    }else{
       //      qDebug() << "Execute Final"; //debug
-      m_Result->setForwardOnly(true);
       m_Result->prepare(m_masterfinalString);
    }
 }

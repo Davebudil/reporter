@@ -74,6 +74,7 @@ void Reporter::m_executeQuery(const QString & name){
 //used to generate result from current selected query
 void Reporter::m_generateQuery(const QString & name){
    m_mainSQL.getStorage().generateQuery(name,m_mainSQL.getDatabase().getDatabase());
+   //look into this
 }
 //Function to add new query
 void Reporter::on_newQuery_clicked(){
@@ -709,12 +710,11 @@ void Reporter::m_saveSchedule(){
 //Generates CSV, mostly for testing
 void Reporter::m_generateCSV(){
    //TESTING FOR SHIFT
-   //TODO: CRASHING THE APPLICATION FOR SOME REASON
    QSqlQuery generateCSV;
    generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult();
-   m_Export.getCSV().generateFile(m_Schedule[m_scheduleKey]->getShift().getCsvTemplatePath(),
-                                  m_Schedule[m_scheduleKey]->getShift().getAttachName(),
-                                  generateCSV);
+      m_Export.getCSV().generateFile(m_Schedule[m_scheduleKey]->getShift().getCsvTemplatePath(),
+                                     m_Schedule[m_scheduleKey]->getShift().getAttachName(),
+                                     generateCSV);
 }
 //Generates XLS, mostly for testing
 void Reporter::m_generateXLS(){
@@ -725,18 +725,23 @@ void Reporter::m_generateXLS(){
    m_executeQuery(m_nameKey);
    tmp.append(std::make_pair("CURRENT_DATE","15.12.2017"));
    tmp.append(std::make_pair("DateTimeFromTo", "Od datumu A po datum B"));
-   tmp.append(std::make_pair("vygeneroval", "David BUDIL"));
-   tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
-   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
-      m_generateQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
-      m_executeQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
-      tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
-   }
+   tmp.append(std::make_pair("vygeneroval", "David Budil"));
+   //TOHLE ASI NIC NEDELA -> OTESTOVAT
+   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult().first()){
+      return;
+   }else{
+      tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
+      if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
+         m_generateQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+         m_executeQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+         tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
+      }
 
-   m_Export.getXLS().generateFile(m_Schedule[m_scheduleKey]->getShift().getXlsTemplatePath(),
-                                  m_Schedule[m_scheduleKey]->getShift().getAttachName(),
-                                  tmp,
-                                  tmpQueries);
+      m_Export.getXLS().generateFile(m_Schedule[m_scheduleKey]->getShift().getXlsTemplatePath(),
+                                     m_Schedule[m_scheduleKey]->getShift().getAttachName(),
+                                     tmp,
+                                     tmpQueries);
+   }
 }
 //Generates XLS template
 void Reporter::m_generateTemplateXLS(){
@@ -1327,9 +1332,7 @@ void Reporter::on_toolButton_2_clicked(){
       m_testingQueryGen();
       if(m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult().isActive()){
          m_generateXLS();
-         //CRASHING THE APPLICATION
          m_generateCSV();
-//         qDebug() << "TEST";
       }
    }
 }
@@ -1363,6 +1366,7 @@ void Reporter::on_shiftdeleteEmailAdress_clicked(){
    delete tmp;
    m_emailKey = "";
    ui->shiftemailAdress->clear();
+   qDebug() << "test";
 }
 void Reporter::on_dailydeleteEmailAdress_clicked(){
    m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses().remove(m_emailKey);
@@ -1395,7 +1399,8 @@ void Reporter::on_paramTest_clicked(){
 
 void Reporter::on_tableNames_clicked(){
    QStringList dbNames;
-   TableInfo * infoDisplay = new TableInfo(this);
+   TableInfo * infoDisplay;
+   infoDisplay = new TableInfo(this);
    QVector<QStringList> dbInfo;
    dbNames = m_mainSQL.getDatabase().getDatabase().tables();
    for(auto & it : dbNames){
