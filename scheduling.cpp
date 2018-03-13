@@ -25,5 +25,8 @@ QString Scheduling::getName() const{
     return m_Name;
 }
 void Scheduling::setName(const QString & Name){
-    m_Name = Name;
+   m_Name = Name;
+}
+void Scheduling::checkTimeInterval(QDateTime & currentDateTime){
+
 }

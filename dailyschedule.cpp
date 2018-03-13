@@ -1,4 +1,5 @@
 #include "dailyschedule.h"
+#include <log.h>
 
 DailySchedule::DailySchedule()
               :m_Active(false),
@@ -106,8 +107,31 @@ bool DailySchedule::getCsvAttach() const{
 void DailySchedule::setCsvAttach(bool csvAttach){
     m_csvAttach = csvAttach;
 }
+
+void DailySchedule::checkDoneInterval(QDateTime & currentDate){
+   if(m_Done){
+      if(m_lastDoneDay != currentDate.date().dayOfWeek()){
+         //time rolled over to another day
+         m_Done = false;
+      }
+   }
+   if(currentDate.time() > m_Time && !m_Done){
+      m_lastDoneDay = currentDate.date().dayOfWeek();
+      m_Done = true;
+   }
+}
+
+bool DailySchedule::getDone() const
+{
+    return m_Done;
+}
+
+void DailySchedule::setDone(bool Done)
+{
+    m_Done = Done;
+}
 QString DailySchedule::getEmailTemplatePath() const{
-   return m_emailTemplatePath;
+    return m_emailTemplatePath;
 }
 void DailySchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;

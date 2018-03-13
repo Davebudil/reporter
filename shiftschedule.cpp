@@ -1,9 +1,13 @@
 #include "shiftschedule.h"
+#include <log.h>
 
 ShiftSchedule::ShiftSchedule()
               :m_Active(false),
                m_csvAttach(false),
-               m_xlsAttach(false){
+               m_xlsAttach(false),
+               m_Done0(false),
+               m_Done1(false),
+               m_Done2(false){
    m_Days = new bool[7];
    std::fill_n(m_Days, 7, false);
 }
@@ -54,10 +58,10 @@ QStringList ShiftSchedule::prepareSerialization(){
    valueList.append(m_xlsTemplatePath);
    valueList.append(m_csvTemplatePath);
    valueList.append(m_emailTemplatePath);
-   valueList.append(QString(m_From0.toString()));
-   valueList.append(QString(m_To0.toString()));
-   valueList.append(QString(m_From1.toString()));
-   valueList.append(QString(m_To1.toString()));
+   valueList.append(QString(m_time0.toString()));
+   valueList.append(QString(m_time1.toString()));
+   valueList.append(QString(m_time2.toString()));
+   valueList.append(QString(m_time0.toString()));
    for(qint32 i = 0; i < 7; ++i){
       valueList.append(QString::number(m_Days[i]));
    }
@@ -76,10 +80,10 @@ void ShiftSchedule::deserializeList(const QStringList & list){
    m_xlsTemplatePath = list.at(5);
    m_csvTemplatePath = list.at(6);
    m_emailTemplatePath = list.at(7);
-   m_From0 = QTime::fromString(list.at(8));
-   m_To0 = QTime::fromString(list.at(9));
-   m_From1 = QTime::fromString(list.at(10));
-   m_To1 = QTime::fromString(list.at(11));
+   m_time0 = QTime::fromString(list.at(8));
+   m_time1 = QTime::fromString(list.at(9));
+   m_time2 = QTime::fromString(list.at(10));
+   m_timeTMP = QTime::fromString(list.at(11));
    for(qint32 i = 0; i < 7; ++i){
       m_Days[i] = (list.at(12+i) == "0" ? false : true);
    }
@@ -104,28 +108,22 @@ void ShiftSchedule::setSubjName(const QString & SubjName){
    m_SubjName = SubjName;
 }
 QTime ShiftSchedule::getFrom0() const{
-   return m_From0;
+   return m_time0;
 }
 void ShiftSchedule::setFrom0(const QTime & From0){
-   m_From0 = From0;
+   m_time0 = From0;
 }
 QTime ShiftSchedule::getTo0() const{
-   return m_To0;
+   return m_time1;
 }
 void ShiftSchedule::setTo0(const QTime & To0){
-   m_To0 = To0;
+   m_time1 = To0;
 }
 QTime ShiftSchedule::getFrom1() const{
-   return m_From1;
+   return m_time2;
 }
 void ShiftSchedule::setFrom1(const QTime & From1){
-   m_From1 = From1;
-}
-QTime ShiftSchedule::getTo1() const{
-   return m_To1;
-}
-void ShiftSchedule::setTo1(const QTime & To1){
-   m_To1 = To1;
+   m_time2 = From1;
 }
 QString ShiftSchedule::getEmailTemplatePath() const{
    return m_emailTemplatePath;
@@ -134,6 +132,58 @@ void ShiftSchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }
 
+void ShiftSchedule::checkDoneInterval(QTime & currentTime){
+   if((currentTime > m_time0) && (currentTime < m_time1) && !m_Done0){
+      m_Done2 = false;
+      //first interval
+   }else if((currentTime > m_time1) && (currentTime < m_time2) && m_Done1){
+      m_Done0 = false;
+      //second interval
+   }else if((currentTime > m_time2) && (currentTime < m_time0) && m_Done2){
+      m_Done1 = false;
+      //third interval
+   }else{
+      qWarning(logWarning()) << "Failed to reset shift intervals.";
+      //fail, error? should not be possible to get here
+   }
+}
+
+bool ShiftSchedule::getDone0() const{
+   return m_Done0;
+}
+
+void ShiftSchedule::setDone0(bool Done0){
+   m_Done0 = Done0;
+}
+
+bool ShiftSchedule::getDone1() const{
+   return m_Done1;
+}
+
+void ShiftSchedule::setDone1(bool Done1){
+   m_Done1 = Done1;
+}
+
+bool ShiftSchedule::getDone2() const
+{
+   return m_Done2;
+}
+
+void ShiftSchedule::setDone2(bool Done2)
+{
+   m_Done2 = Done2;
+}
+
+QTime ShiftSchedule::getTimeTMP() const
+{
+   return m_timeTMP;
+}
+
+void ShiftSchedule::setTimeTMP(const QTime & timeTMP)
+{
+   m_timeTMP = timeTMP;
+}
+
 QMap<QString, QString> & ShiftSchedule::getEmailAdresses(){
-    return m_emailAdresses;
+   return m_emailAdresses;
 }

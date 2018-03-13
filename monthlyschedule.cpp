@@ -107,3 +107,23 @@ QMap<QString, QString> & MonthlySchedule::getEmailAdresses(){
 void MonthlySchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }
+
+void MonthlySchedule::checkDoneInterval(QDateTime & currentDate){
+   if(currentDate.date().day() < m_Day + 1){
+      m_Done = false;
+      //reset interval
+   }
+   if((currentDate.time() > m_Time) && (currentDate.date().day() >= m_Day + 1) && !m_Done){
+      m_Done = true;
+      //right interval
+   }
+}
+bool MonthlySchedule::getDone() const
+{
+   return m_Done;
+}
+
+void MonthlySchedule::setDone(bool Done)
+{
+   m_Done = Done;
+}

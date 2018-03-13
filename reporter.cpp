@@ -36,6 +36,7 @@ Reporter::~Reporter(){
    delete ui;
    delete m_shwHide;
    qDeleteAll(m_Schedule);
+   delete m_Timer;
    qInfo(logInfo()) << "Application shutdown.";
 }
 //Shows or hides application on key shortcut pressed
@@ -522,6 +523,7 @@ void Reporter::defaultSettings(){
       m_addSchedule("Default");
       ui->scheduleName->setText(m_Schedule[0]->getName());
    }
+   m_SetTimer(60000);
    qInfo(logInfo()) << "Settings successfuly loaded.";
    qInfo(logInfo()) << "Data successfuly loaded.";
 }
@@ -712,9 +714,9 @@ void Reporter::m_generateCSV(){
    //TESTING FOR SHIFT
    QSqlQuery generateCSV;
    generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult();
-      m_Export.getCSV().generateFile(m_Schedule[m_scheduleKey]->getShift().getCsvTemplatePath(),
-                                     m_Schedule[m_scheduleKey]->getShift().getAttachName(),
-                                     generateCSV);
+   m_Export.getCSV().generateFile(m_Schedule[m_scheduleKey]->getShift().getCsvTemplatePath(),
+                                  m_Schedule[m_scheduleKey]->getShift().getAttachName(),
+                                  generateCSV);
 }
 //Generates XLS, mostly for testing
 void Reporter::m_generateXLS(){
@@ -789,6 +791,16 @@ QStringList Reporter::m_getColumnNames(const QString & tableName){
       result.append(dbRecord.field(i).name());
    }
    return result;
+}
+
+void Reporter::m_SetTimer(qint32 interval){
+   m_Timer = new QTimer();
+   connect(m_Timer, SIGNAL(timeout()), this, SLOT(timerInterval()));
+   m_Timer->start(interval);
+}
+
+void Reporter::m_debugNotification(const QString & toDisplay){
+   QMessageBox::information(this, "debug", toDisplay);
 }
 //Loads schedule on mouse click
 void Reporter::m_loadSchedule(){
@@ -1033,7 +1045,6 @@ void Reporter::m_clearShift(){
    ui->shiftFrom->clear();
    ui->shiftTo->clear();
    ui->shiftFrom_2->clear();
-   ui->shiftTo_2->clear();
    ui->shiftEmail->clear();
    ui->shiftMondayActive->setChecked(false);
    ui->shiftTuesdayActive->setChecked(false);
@@ -1113,7 +1124,6 @@ void Reporter::m_displayShift(qint32 keyString){
    ui->shiftFrom->setTime(m_Schedule[keyString]->getShift().getFrom0());
    ui->shiftTo->setTime(m_Schedule[keyString]->getShift().getTo0());
    ui->shiftFrom_2->setTime(m_Schedule[keyString]->getShift().getFrom1());
-   ui->shiftTo_2->setTime(m_Schedule[keyString]->getShift().getTo1());
    ui->shiftEmail->setText(m_Schedule[keyString]->getShift().getEmailTemplatePath());
 }
 //Function to display daily schedule values
@@ -1209,7 +1219,7 @@ void Reporter::m_editShift(qint32 keyString){
    m_Schedule[keyString]->getShift().setFrom0(ui->shiftFrom->time());
    m_Schedule[keyString]->getShift().setTo0(ui->shiftTo->time());
    m_Schedule[keyString]->getShift().setFrom1(ui->shiftFrom_2->time());
-   m_Schedule[keyString]->getShift().setTo1(ui->shiftTo_2->time());
+   m_Schedule[keyString]->getShift().setTimeTMP(ui->shiftFrom_2->time());
    m_Schedule[keyString]->getShift().setCsvAttach(ui->shiftAttachCSV->isChecked());
    m_Schedule[keyString]->getShift().setXlsAttach(ui->shiftAttachXLS->isChecked());
    m_Schedule[keyString]->getShift().setEmailTemplatePath(ui->shiftEmail->text());
@@ -1411,5 +1421,12 @@ void Reporter::on_tableNames_clicked(){
    }
    infoDisplay->getInfo(dbInfo);
    infoDisplay->show();
+}
+
+void Reporter::timerInterval(){
+   QDateTime tmp = QDateTime().currentDateTime();
+   for(auto & it : m_Schedule){
+      it->checkTimeInterval(tmp);
+   }
 }
 

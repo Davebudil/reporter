@@ -108,3 +108,24 @@ QMap<QString, QString> &WeeklySchedule::getEmailAdresses(){
 void WeeklySchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }
+
+void WeeklySchedule::checkDoneInterval(QDateTime & currentDate){
+   if(currentDate.date().dayOfWeek() < m_Day + 1){
+      m_Done = false;
+      //reset interval
+   }
+   if((currentDate.time() > m_Time && m_Done) && (currentDate.date().dayOfWeek() >= m_Day + 1) && !m_Done){
+      m_Done = true;
+      //right interval
+   }
+}
+
+bool WeeklySchedule::getDone() const
+{
+    return m_Done;
+}
+
+void WeeklySchedule::setDone(bool Done)
+{
+    m_Done = Done;
+}

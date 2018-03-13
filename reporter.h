@@ -23,6 +23,10 @@
 #include <xlsxdocument.h>
 #include <QDesktopServices>
 #include <QHotkey>
+#include <QTimer>
+#include <QTime>
+#include <QDate>
+#include <QDateTime>
 #include "tableinfo.h"
 
 namespace Ui{
@@ -122,6 +126,8 @@ class Reporter : public QMainWindow{
 
       void on_tableNames_clicked();
 
+      void timerInterval();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -137,6 +143,7 @@ class Reporter : public QMainWindow{
       QToolButton * tmp;
       QHotkey * m_shwHide;
       qint32 m_daysWeeklyIndex;
+      QTimer* m_Timer;
       bool m_queryActive;
       //Print query result to the table
       void m_displaySQLResult(const QString & name);
@@ -216,6 +223,9 @@ class Reporter : public QMainWindow{
       bool m_noSchedule();
       bool m_validateEmail(const QString & email);
       QStringList m_getColumnNames(const QString & tableName);
+      void m_SetTimer(qint32 interval);
+      //simple debug function used during development
+      void m_debugNotification(const QString & toDisplay);
 };
 
 #endif // REPORTER_H
