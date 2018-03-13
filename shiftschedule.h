@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTime>
 #include <QDebug>
+#include <QDateTime>
 
 class ShiftSchedule{
    public:
@@ -18,7 +19,6 @@ class ShiftSchedule{
       QTime getFrom0() const;
       QTime getTo0() const;
       QTime getFrom1() const;
-      QTime getTo1() const;
       bool getActive() const;
       bool * getDays() const;
       bool getCsvAttach() const;
@@ -37,18 +37,34 @@ class ShiftSchedule{
       void setFrom0(const QTime & From0);
       void setTo0(const QTime & To0);
       void setFrom1(const QTime & From1);
-      void setTo1(const QTime & To1);
       void setEmailTemplatePath(const QString & emailTemplatePath);
+      void checkDoneInterval(QTime & currentTime);
+
+      bool getDone0() const;
+      void setDone0(bool Done0);
+
+      bool getDone1() const;
+      void setDone1(bool Done1);
+
+      bool getDone2() const;
+      void setDone2(bool Done2);
+
+
+      QTime getTimeTMP() const;
+      void setTimeTMP(const QTime & timeTMP);
 
    private:
       bool m_Active;
       bool * m_Days;
       bool m_csvAttach;
       bool m_xlsAttach;
-      QTime m_From0;
-      QTime m_To0;
-      QTime m_From1;
-      QTime m_To1;
+      bool m_Done0;
+      bool m_Done1;
+      bool m_Done2;
+      QTime m_time0;
+      QTime m_time1;
+      QTime m_time2;
+      QTime m_timeTMP;
       QString m_AttachName;
       QString m_SubjName;
       QString m_emailTemplatePath;

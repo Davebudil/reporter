@@ -4,6 +4,7 @@
 #include <QDateTime>
 #include <QMap>
 #include <QDebug>
+#include <QDateTime>
 
 class WeeklySchedule
 {
@@ -35,11 +36,16 @@ class WeeklySchedule
       void setXlsAttach(bool xlsAttach);
       void setCsvAttach(bool csvAttach);
       void setEmailTemplatePath(const QString & emailTemplatePath);
+      void checkDoneInterval(QDateTime & currentDate);
+
+      bool getDone() const;
+      void setDone(bool Done);
 
    private:
       bool m_Active;
       bool m_csvAttach;
       bool m_xlsAttach;
+      bool m_Done;
       qint32 m_Day;
       QTime m_Time;
       QString m_AttachName;

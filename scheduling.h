@@ -1,6 +1,9 @@
 #ifndef SCHEDULING_H
 #define SCHEDULING_H
 #include <QObject>
+#include <QDate>
+#include <QTime>
+#include <QDateTime>
 #include <shiftschedule.h>
 #include <dailyschedule.h>
 #include <weeklyschedule.h>
@@ -20,6 +23,7 @@ class Scheduling{
       void setName(const QString & Name);
       void serializeGlobal(const QStringList & global);
       void deserializeGlobal(const QStringList & global);
+      void checkTimeInterval(QDateTime & currentDateTime);
 
    private:
       QString m_Name;
