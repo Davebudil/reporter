@@ -27,6 +27,10 @@ QString Scheduling::getName() const{
 void Scheduling::setName(const QString & Name){
    m_Name = Name;
 }
+//Checks if its time to generate data tables
 void Scheduling::checkTimeInterval(QDateTime & currentDateTime){
-
+   m_Shift.generateShiftData(currentDateTime);
+   m_Daily.generateDailyData(currentDateTime);
+   m_Weekly.generateWeeklyData(currentDateTime);
+   m_Monthly.generateMonthlyData(currentDateTime);
 }

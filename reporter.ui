@@ -636,6 +636,9 @@ QTabWidget::tab-bar {
       </widget>
      </widget>
      <widget class="QTabWidget" name="tabWidget_2">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -645,7 +648,7 @@ QTabWidget::tab-bar {
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="Shift">
        <attribute name="title">
@@ -2319,6 +2322,9 @@ QTabWidget::tab-bar {
        </widget>
       </widget>
       <widget class="QWidget" name="Custom">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <attribute name="title">
         <string>Custom</string>
        </attribute>

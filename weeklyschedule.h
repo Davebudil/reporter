@@ -36,12 +36,14 @@ class WeeklySchedule
       void setXlsAttach(bool xlsAttach);
       void setCsvAttach(bool csvAttach);
       void setEmailTemplatePath(const QString & emailTemplatePath);
-      void checkDoneInterval(QDateTime & currentDate);
+      void generateWeeklyData(const QDateTime & currenDate);
 
       bool getDone() const;
       void setDone(bool Done);
 
    private:
+      void m_checkDoneInterval(const QDateTime & currentDate);
+      void m_weeklyInterval();
       bool m_Active;
       bool m_csvAttach;
       bool m_xlsAttach;
