@@ -38,7 +38,7 @@ class ShiftSchedule{
       void setTo0(const QTime & To0);
       void setFrom1(const QTime & From1);
       void setEmailTemplatePath(const QString & emailTemplatePath);
-      void checkDoneInterval(QTime & currentTime);
+      void generateShiftData(const QDateTime & currentTime);
 
       bool getDone0() const;
       void setDone0(bool Done0);
@@ -54,6 +54,10 @@ class ShiftSchedule{
       void setTimeTMP(const QTime & timeTMP);
 
    private:
+      void m_checkDoneInterval(const QTime & currentTime);
+      void m_timeInterval0();
+      void m_timeInterval1();
+      void m_timeInterval2();
       bool m_Active;
       bool * m_Days;
       bool m_csvAttach;

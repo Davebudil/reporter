@@ -132,20 +132,45 @@ void ShiftSchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }
 
-void ShiftSchedule::checkDoneInterval(QTime & currentTime){
-   if((currentTime > m_time0) && (currentTime < m_time1) && !m_Done0){
-      m_Done2 = false;
-      //first interval
-   }else if((currentTime > m_time1) && (currentTime < m_time2) && m_Done1){
+void ShiftSchedule::generateShiftData(const QDateTime & currentTime){
+   if(m_Days[currentTime.date().dayOfWeek() - 1]){
+      m_checkDoneInterval(currentTime.time());
+   }
+}
+
+void ShiftSchedule::m_checkDoneInterval(const QTime & currentTime){
+   if((currentTime > m_time0) && (currentTime < m_time1) && !m_Done2){
+      m_Done2 = true;
       m_Done0 = false;
-      //second interval
-   }else if((currentTime > m_time2) && (currentTime < m_time0) && m_Done2){
       m_Done1 = false;
+      m_timeInterval0();
+      //first interval
+   }else if((currentTime > m_time1) && (currentTime < m_time2) && m_Done0){
+      m_Done0 = true;
+      m_Done1 = false;
+      m_Done2 = false;
+      m_timeInterval1();
+      //second interval
+   }else if((currentTime > m_time2) && (currentTime < m_time0) && m_Done1){
+      m_Done1 = true;
+      m_Done0 = false;
+      m_Done2 = false;
+      m_timeInterval2();
       //third interval
    }else{
       qWarning(logWarning()) << "Failed to reset shift intervals.";
       //fail, error? should not be possible to get here
    }
+}
+
+void ShiftSchedule::m_timeInterval0(){
+   // m_time2 -> m_time0 interval
+}
+void ShiftSchedule::m_timeInterval1(){
+   // m_time0 -> m_time1 interval
+}
+void ShiftSchedule::m_timeInterval2(){
+   // m_time1 -> m_time2 interval
 }
 
 bool ShiftSchedule::getDone0() const{

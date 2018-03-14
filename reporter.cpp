@@ -30,6 +30,7 @@ Reporter::Reporter(QWidget *parent)
    ui->monthlyDays->setMaximumHeight(100);
    m_shwHide = new QHotkey(QKeySequence("ctrl+alt+Q"), true);
    connect(m_shwHide, SIGNAL(activated()), this, SLOT(m_showHide()));
+   //custom is disabled, waiting for future implementation
 }
 //Destructor
 Reporter::~Reporter(){

@@ -105,10 +105,14 @@ bool DailySchedule::getCsvAttach() const{
     return m_csvAttach;
 }
 void DailySchedule::setCsvAttach(bool csvAttach){
-    m_csvAttach = csvAttach;
+   m_csvAttach = csvAttach;
 }
 
-void DailySchedule::checkDoneInterval(QDateTime & currentDate){
+void DailySchedule::generateDailyData(const QDateTime & currentData){
+   m_checkDoneInterval(currentData);
+}
+
+void DailySchedule::m_checkDoneInterval(const QDateTime & currentDate){
    if(m_Done){
       if(m_lastDoneDay != currentDate.date().dayOfWeek()){
          //time rolled over to another day
@@ -119,6 +123,10 @@ void DailySchedule::checkDoneInterval(QDateTime & currentDate){
       m_lastDoneDay = currentDate.date().dayOfWeek();
       m_Done = true;
    }
+}
+
+void DailySchedule::m_dailyInterval(){
+   //m_Time -> m_Time interval(last day)
 }
 
 bool DailySchedule::getDone() const
