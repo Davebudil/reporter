@@ -27,6 +27,7 @@
 #include <QTime>
 #include <QDate>
 #include <QDateTime>
+#include <QMultiMap>
 #include "tableinfo.h"
 
 namespace Ui{
@@ -144,6 +145,7 @@ class Reporter : public QMainWindow{
       QHotkey * m_shwHide;
       qint32 m_daysWeeklyIndex;
       QTimer* m_Timer;
+
       bool m_queryActive;
       //Print query result to the table
       void m_displaySQLResult(const QString & name);
