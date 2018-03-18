@@ -132,9 +132,9 @@ void ShiftSchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }
 
-void ShiftSchedule::generateShiftData(const QDateTime & currentTime){
+bool ShiftSchedule::generateShiftData(const QDateTime & currentTime){
    if(m_Days[currentTime.date().dayOfWeek() - 1]){
-      m_checkDoneInterval(currentTime.time());
+      return m_checkDoneInterval(currentTime.time());
    }
 }
 
@@ -143,44 +143,33 @@ void ShiftSchedule::m_checkDoneInterval(const QTime & currentTime){
       m_Done0 = false;
       m_Done1 = false;
       m_Done2 = true;
-      m_completed = false;
+      return true;
       //first interval
    }else if((currentTime > m_time1) && (currentTime < m_time2) && !m_Done0){
       m_Done0 = true;
       m_Done1 = false;
       m_Done2 = false;
-      m_completed = false;
+      return true;
       //second interval
    }else if((currentTime > m_time2) && (currentTime < m_time0) && !m_Done1){
       m_Done0 = false;
       m_Done1 = true;
       m_Done2 = false;
-      m_completed = false;
+      return true;
       //third interval
    }else{
-      m_completed = true;
+      return false;
    }
 }
 
 void ShiftSchedule::m_timeInterval0(){
    // m_time2 -> m_time0 interval
-   m_completed = true;
 }
 void ShiftSchedule::m_timeInterval1(){
    // m_time0 -> m_time1 interval
-   m_completed = true;
 }
 void ShiftSchedule::m_timeInterval2(){
    // m_time1 -> m_time2 interval
-   m_completed = true;
-}
-
-bool ShiftSchedule::getCompleted() const{
-   return m_completed;
-}
-
-void ShiftSchedule::setCompleted(bool completed){
-   m_completed = completed;
 }
 
 bool ShiftSchedule::getDone0() const{

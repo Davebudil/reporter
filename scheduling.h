@@ -23,12 +23,8 @@ class Scheduling{
       void setName(const QString & Name);
       void serializeGlobal(const QStringList & global);
       void deserializeGlobal(const QStringList & global);
-      void checkTimeInterval(QDateTime & currentDateTime);
-      bool getGenerateThis() const;
-      void setGenerateThis(bool value);
 
    private:
-      bool generateThis;
       QString m_Name;
       ShiftSchedule m_Shift;
       DailySchedule m_Daily;
