@@ -33,4 +33,16 @@ void Scheduling::checkTimeInterval(QDateTime & currentDateTime){
    m_Daily.generateDailyData(currentDateTime);
    m_Weekly.generateWeeklyData(currentDateTime);
    m_Monthly.generateMonthlyData(currentDateTime);
+   if(m_Shift.getCompleted()){
+      generateThis = true;
+   }//if else(m_Daily.getCompleted()){
+   //}
+}
+
+bool Scheduling::getGenerateThis() const{
+   return generateThis;
+}
+
+void Scheduling::setGenerateThis(bool value){
+   generateThis = value;
 }

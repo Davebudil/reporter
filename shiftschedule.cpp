@@ -140,37 +140,47 @@ void ShiftSchedule::generateShiftData(const QDateTime & currentTime){
 
 void ShiftSchedule::m_checkDoneInterval(const QTime & currentTime){
    if((currentTime > m_time0) && (currentTime < m_time1) && !m_Done2){
-      m_Done2 = true;
       m_Done0 = false;
       m_Done1 = false;
-      m_timeInterval0();
+      m_Done2 = true;
+      m_completed = false;
       //first interval
-   }else if((currentTime > m_time1) && (currentTime < m_time2) && m_Done0){
+   }else if((currentTime > m_time1) && (currentTime < m_time2) && !m_Done0){
       m_Done0 = true;
       m_Done1 = false;
       m_Done2 = false;
-      m_timeInterval1();
+      m_completed = false;
       //second interval
-   }else if((currentTime > m_time2) && (currentTime < m_time0) && m_Done1){
-      m_Done1 = true;
+   }else if((currentTime > m_time2) && (currentTime < m_time0) && !m_Done1){
       m_Done0 = false;
+      m_Done1 = true;
       m_Done2 = false;
-      m_timeInterval2();
+      m_completed = false;
       //third interval
    }else{
-      qWarning(logWarning()) << "Failed to reset shift intervals.";
-      //fail, error? should not be possible to get here
+      m_completed = true;
    }
 }
 
 void ShiftSchedule::m_timeInterval0(){
    // m_time2 -> m_time0 interval
+   m_completed = true;
 }
 void ShiftSchedule::m_timeInterval1(){
    // m_time0 -> m_time1 interval
+   m_completed = true;
 }
 void ShiftSchedule::m_timeInterval2(){
    // m_time1 -> m_time2 interval
+   m_completed = true;
+}
+
+bool ShiftSchedule::getCompleted() const{
+   return m_completed;
+}
+
+void ShiftSchedule::setCompleted(bool completed){
+   m_completed = completed;
 }
 
 bool ShiftSchedule::getDone0() const{
