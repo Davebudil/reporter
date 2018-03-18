@@ -17,6 +17,10 @@ class Export{
       void handleExport(const QQueue<Scheduling> & intervalsToHandle);
 
    private:
+      void m_generateShift(const ShiftSchedule & shift);
+      void m_generateDaily(const DailySchedule & daily);
+      void m_generateWeekly(const WeeklySchedule & weekly);
+      void m_generateMonthly(const MonthlySchedule & monthly);
       ExportXLS m_XLS;
       ExportCSV m_CSV;
       ExportHTML m_HTML;

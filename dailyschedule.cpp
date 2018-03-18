@@ -129,13 +129,11 @@ void DailySchedule::m_dailyInterval(){
    //m_Time -> m_Time interval(last day)
 }
 
-bool DailySchedule::getDone() const
-{
+bool DailySchedule::getDone() const{
     return m_Done;
 }
 
-void DailySchedule::setDone(bool Done)
-{
+void DailySchedule::setDone(bool Done){
     m_Done = Done;
 }
 QString DailySchedule::getEmailTemplatePath() const{

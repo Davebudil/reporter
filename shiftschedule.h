@@ -38,7 +38,7 @@ class ShiftSchedule{
       void setTo0(const QTime & To0);
       void setFrom1(const QTime & From1);
       void setEmailTemplatePath(const QString & emailTemplatePath);
-      void generateShiftData(const QDateTime & currentTime);
+      bool generateShiftData(const QDateTime & currentTime);
 
       bool getDone0() const;
       void setDone0(bool Done0);
@@ -53,9 +53,6 @@ class ShiftSchedule{
       QTime getTimeTMP() const;
       void setTimeTMP(const QTime & timeTMP);
 
-      bool getCompleted() const;
-      void setCompleted(bool completed);
-
    private:
       void m_checkDoneInterval(const QTime & currentTime);
       void m_timeInterval0();
@@ -68,7 +65,6 @@ class ShiftSchedule{
       bool m_Done0;
       bool m_Done1;
       bool m_Done2;
-      bool m_completed;
       QTime m_time0;
       QTime m_time1;
       QTime m_time2;

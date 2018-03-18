@@ -1425,13 +1425,10 @@ void Reporter::on_tableNames_clicked(){
 }
 
 void Reporter::timerInterval(){
-   QDateTime tmp = QDateTime().currentDateTime();
    QQueue<Scheduling> tmpQ;
    for(auto & it : m_Schedule){
-      it->checkTimeInterval(tmp);
-      if(it->getGenerateThis()){
-         tmpQ.append(*it);
-      }
+      tmpQ.append(*it);
    }
+   m_Export.handleExport(tmpQ);
 }
 
