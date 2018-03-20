@@ -1425,10 +1425,24 @@ void Reporter::on_tableNames_clicked(){
 }
 
 void Reporter::timerInterval(){
-   QQueue<Scheduling> tmpQ;
-   for(auto & it : m_Schedule){
-      tmpQ.append(*it);
+   QQueue<Scheduling> tmpSch;
+   QQueue<SQLquery> tmpQueries;
+   QQueue<SQLParameter> tmpParams;
+   //For some reason crashes APP
+   for(auto it : m_Schedule){
+      tmpSch.append(*it);
    }
-   m_Export.handleExport(tmpQ);
+   for(auto it : m_mainSQL.getStorage().getQueries()){
+      tmpQueries.append(*it);
+   }
+   for(auto it : m_mainSQL.getStorage().getParameters()){
+      tmpParams.append(*it);
+   }
+   m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase());
 }
 
+void Reporter::on_toolButton_4_clicked(){
+   CustomScheduling * instantSchedule;
+   instantSchedule = new CustomScheduling(this);
+   instantSchedule->show();
+}

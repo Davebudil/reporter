@@ -58,7 +58,8 @@ SOURCES += \
     exportxls.cpp \
     exportcsv.cpp \
     exporthtml.cpp \
-    tableinfo.cpp
+    tableinfo.cpp \
+    customscheduling.cpp
 
 HEADERS += \
         reporter.h \
@@ -80,8 +81,10 @@ HEADERS += \
     exportxls.h \
     exportcsv.h \
     exporthtml.h \
-    tableinfo.h
+    tableinfo.h \
+    customscheduling.h
 
 FORMS += \
         reporter.ui \
-    tableinfo.ui
+    tableinfo.ui \
+    customscheduling.ui

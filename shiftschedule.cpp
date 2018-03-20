@@ -138,7 +138,7 @@ bool ShiftSchedule::generateShiftData(const QDateTime & currentTime){
    }
 }
 
-void ShiftSchedule::m_checkDoneInterval(const QTime & currentTime){
+bool ShiftSchedule::m_checkDoneInterval(const QTime & currentTime){
    if((currentTime > m_time0) && (currentTime < m_time1) && !m_Done2){
       m_Done0 = false;
       m_Done1 = false;

@@ -54,7 +54,7 @@ class ShiftSchedule{
       void setTimeTMP(const QTime & timeTMP);
 
    private:
-      void m_checkDoneInterval(const QTime & currentTime);
+      bool m_checkDoneInterval(const QTime & currentTime);
       void m_timeInterval0();
       void m_timeInterval1();
       void m_timeInterval2();
