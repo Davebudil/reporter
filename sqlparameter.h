@@ -7,9 +7,11 @@
 class SQLParameter{
    public:
       //Constructor
-      explicit SQLParameter(const QStringList & parameters, const qint32 & count);
+      explicit SQLParameter(const QStringList & parameters,
+                            const qint32 & count);
       //Setter for paremeter member
-      void editInfo(const QStringList & param, const qint32 & count);
+      void editInfo(const QStringList & param,
+                    const qint32 & count);
       //Getters
       QStringList getParameters() const;
       QString getName() const;

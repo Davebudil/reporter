@@ -2,9 +2,12 @@
 #define EXPORT_H
 #include <QObject>
 #include <QQueue>
-#include <exportxls.h>
-#include <exportcsv.h>
-#include <exporthtml.h>
+#include <QDateTime>
+#include "exportxls.h"
+#include "exportcsv.h"
+#include "exporthtml.h"
+#include "sqlquery.h"
+#include "sqlparameter.h"
 #include "scheduling.h"
 
 class Export{
@@ -14,13 +17,32 @@ class Export{
       ExportXLS getXLS() const;
       ExportHTML getHTML() const;
       ExportCSV getCSV() const;
-      void handleExport(const QQueue<Scheduling> & intervalsToHandle);
+      void handleExport(QQueue<Scheduling> & intervalsToHandle,
+                        QQueue<SQLquery> & queries,
+                        QQueue<SQLParameter> & parameters,
+                        QSqlDatabase & db);
 
    private:
-      void m_generateShift(const ShiftSchedule & shift);
-      void m_generateDaily(const DailySchedule & daily);
-      void m_generateWeekly(const WeeklySchedule & weekly);
-      void m_generateMonthly(const MonthlySchedule & monthly);
+      void m_generateShift(const ShiftSchedule & shift,
+                           QQueue<SQLquery> & queries,
+                           SQLParameter & param,
+                           QSqlDatabase & db,
+                           QDateTime & currentTime);
+      void m_generateDaily(const DailySchedule & daily,
+                           QQueue<SQLquery> & queries,
+                           SQLParameter & param,
+                           QSqlDatabase & db,
+                           QDateTime & currentTime);
+      void m_generateWeekly(const WeeklySchedule & weekly,
+                            QQueue<SQLquery> & queries,
+                            SQLParameter & param,
+                            QSqlDatabase & db,
+                            QDateTime & currentTime);
+      void m_generateMonthly(const MonthlySchedule & monthly,
+                             QQueue<SQLquery> & queries,
+                             SQLParameter & param,
+                             QSqlDatabase & db,
+                             QDateTime & currentTime);
       ExportXLS m_XLS;
       ExportCSV m_CSV;
       ExportHTML m_HTML;

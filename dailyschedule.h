@@ -35,13 +35,13 @@ class DailySchedule{
       void setDays(const qint32 day, bool value);
       void setXlsAttach(bool xlsAttach);
       void setCsvAttach(bool csvAttach);
-      void generateDailyData(const QDateTime & currentData);
+      bool generateDailyData(const QDateTime & currentData);
 
       bool getDone() const;
       void setDone(bool Done);
 
    private:
-      void m_checkDoneInterval(const QDateTime & currentDate);
+      bool m_checkDoneInterval(const QDateTime & currentDate);
       void m_dailyInterval();
       bool m_Active;
       bool * m_Days;

@@ -29,6 +29,7 @@
 #include <QDateTime>
 #include <QMultiMap>
 #include "tableinfo.h"
+#include "customscheduling.h"
 
 namespace Ui{
    class Reporter;
@@ -128,6 +129,8 @@ class Reporter : public QMainWindow{
       void on_tableNames_clicked();
 
       void timerInterval();
+
+      void on_toolButton_4_clicked();
 
    private:
       Ui::Reporter *ui;
