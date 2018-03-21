@@ -141,6 +141,8 @@ void ShiftSchedule::setEmailTemplatePath(const QString & emailTemplatePath){
 bool ShiftSchedule::generateShiftData(const QDateTime & currentTime){
    if(m_Days[currentTime.date().dayOfWeek() - 1]){
       return m_checkDoneInterval(currentTime.time());
+   }else{
+      return false;
    }
 }
 

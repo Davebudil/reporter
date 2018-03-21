@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QDateTime>
 #include <QLoggingCategory>
+#include <QSettings>
 
 QScopedPointer<QFile> m_logFile;
 
@@ -14,7 +15,13 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
 
 qint32 main(qint32 argc, char *argv[]){
    QApplication reporterApp(argc, argv);
-   m_logFile.reset(new QFile("/home/dave/Documents/sielaff/project/reporter/reporter/logFile.txt"));
+   //Handles settings
+   reporterApp.setOrganizationName("Sielaff Bohemia");
+   reporterApp.setOrganizationDomain("sielaff.cz");
+   reporterApp.setApplicationName("Reporter");
+
+   //Functions that handle logging
+   m_logFile.reset(new QFile(QDir::currentPath() + "/logFile.txt"));
    m_logFile.data()->open(QFile::Append | QFile::Text);
    qInstallMessageHandler(messageHandler);
    Reporter App;

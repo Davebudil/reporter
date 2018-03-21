@@ -17,6 +17,7 @@ Reporter::Reporter(QWidget *parent)
      m_scheduleCount(0),
      tmp(nullptr),
      m_queryActive(false){
+   m_Setup.loadIni();
    qInfo(logInfo()) << "Application started.";
    ui->setupUi(this);
    ui->queryNameEdit->setText("Query Name");
@@ -34,6 +35,7 @@ Reporter::Reporter(QWidget *parent)
 }
 //Destructor
 Reporter::~Reporter(){
+   m_Setup.saveIni();
    delete ui;
    delete m_shwHide;
    qDeleteAll(m_Schedule);
@@ -528,6 +530,11 @@ void Reporter::defaultSettings(){
    qInfo(logInfo()) << "Settings successfuly loaded.";
    qInfo(logInfo()) << "Data successfuly loaded.";
 }
+
+void Reporter::closeEvent(QCloseEvent * event){
+   m_Setup.saveIni();
+   event->accept();
+}
 //Load the default query
 void Reporter::m_defaultQuery(){
 
@@ -552,13 +559,19 @@ void Reporter::m_scrollQueryClicked(){
 }
 //Setup connection to DB
 void Reporter::m_ConnectDB(){
+   m_mainSQL.getDatabase().getDatabaseConnector().setInfo(m_Setup.getSettings().databaseType,
+                                                          m_Setup.getSettings().host,
+                                                          m_Setup.getSettings().port,
+                                                          m_Setup.getSettings().databaseName,
+                                                          m_Setup.getSettings().userName,
+                                                          m_Setup.getSettings().userPassword);
    if(!m_mainSQL.getDatabase().createConnection()){
       qCritical(logCritical()) << "Database connection error: " + m_mainSQL.getDatabase().getDatabase().lastError().text();
 //      QMessageBox::warning(this, "Database connection error",
 //                           m_mainSQL.getDatabase().getDatabase().lastError().text());
    }else{
-//      qInfo(logInfo()) << "Connection to database estabilished successfuly.";
-      QMessageBox::information(this, "Database connection success", "Connecting to database successful.");
+      qInfo(logInfo()) << "Connection to database estabilished successfuly.";
+//      QMessageBox::information(this, "Database connection success", "Connecting to database successful.");
    }
 }
 //Serializes queries
@@ -710,6 +723,7 @@ void Reporter::m_saveSchedule(){
    m_editCustom();
    m_serializeSchedule();
 }
+//DEBUG
 //Generates CSV, mostly for testing
 void Reporter::m_generateCSV(){
    //TESTING FOR SHIFT
@@ -719,6 +733,8 @@ void Reporter::m_generateCSV(){
                                   m_Schedule[m_scheduleKey]->getShift().getAttachName(),
                                   generateCSV);
 }
+
+//DEBUG
 //Generates XLS, mostly for testing
 void Reporter::m_generateXLS(){
    //TESTING FOR SHIFT

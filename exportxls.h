@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDir>
 
 class ExportXLS{
    public:
