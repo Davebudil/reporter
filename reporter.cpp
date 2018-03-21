@@ -524,7 +524,7 @@ void Reporter::defaultSettings(){
       m_addSchedule("Default");
       ui->scheduleName->setText(m_Schedule[0]->getName());
    }
-   m_SetTimer(10);
+   m_SetTimer(5000);
    qInfo(logInfo()) << "Settings successfuly loaded.";
    qInfo(logInfo()) << "Data successfuly loaded.";
 }
@@ -554,10 +554,10 @@ void Reporter::m_scrollQueryClicked(){
 void Reporter::m_ConnectDB(){
    if(!m_mainSQL.getDatabase().createConnection()){
       qCritical(logCritical()) << "Database connection error: " + m_mainSQL.getDatabase().getDatabase().lastError().text();
-      QMessageBox::warning(this, "Database connection error",
-                           m_mainSQL.getDatabase().getDatabase().lastError().text());
+//      QMessageBox::warning(this, "Database connection error",
+//                           m_mainSQL.getDatabase().getDatabase().lastError().text());
    }else{
-      qInfo(logInfo()) << "Connection to database estabilished successfuly.";
+//      qInfo(logInfo()) << "Connection to database estabilished successfuly.";
       QMessageBox::information(this, "Database connection success", "Connecting to database successful.");
    }
 }
@@ -1434,12 +1434,9 @@ void Reporter::timerInterval(){
    for(auto it : m_Schedule){
       tmpSch.append(it);
    }
-   for(auto it : m_mainSQL.getStorage().getQueries()){
-      tmpQueries.append(*it);
-   }
-   for(auto it : m_mainSQL.getStorage().getParameters()){
-      tmpParams.append(*it);
-   }
+
+   tmpQueries = m_mainSQL.getStorage().getQueueQueries();
+   tmpParams = m_mainSQL.getStorage().getQueueParameters();
 
    //TODO SPLIT THIS WITH THE TESTING GENERATING ENVIRONMENT -> CRASHING
    m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase());

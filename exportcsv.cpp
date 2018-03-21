@@ -33,7 +33,7 @@ bool ExportCSV::generateFile(const QString & templatePathCSV,
          }
 
          fileCSV.close();
-         QDesktopServices::openUrl(QUrl(filePath));
+//         QDesktopServices::openUrl(QUrl(filePath));
          qInfo(logInfo()) << "Successfuly generated CSV file.";
          return true;
       }else{

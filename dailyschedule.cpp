@@ -46,6 +46,7 @@ QStringList DailySchedule::prepareSerialization(){
    valueList.append(m_csvTemplatePath);
    valueList.append(m_emailTemplatePath);
    valueList.append(QString(m_Time.toString()));
+   valueList.append(QString::number(m_Done));
    for(qint32 i = 0; i < 7; ++i){
       valueList.append(QString::number(m_Days[i]));
    }
@@ -66,11 +67,12 @@ void DailySchedule::deserializeList(const QStringList & list){
    m_csvTemplatePath = list.at(6);
    m_emailTemplatePath = list.at(7);
    m_Time = QTime::fromString(list.at(8));
+   m_Done = (list.at(9) == "0" ? false : true);
    for(qint32 i = 0; i < 7; ++i){
-      m_Days[i] = (list.at(9+i) == "0" ? false : true);
+      m_Days[i] = (list.at(10+i) == "0" ? false : true);
    }
    QStringList::const_iterator constIterator;
-   for(constIterator = list.constBegin() + 16; constIterator != list.constEnd(); ++constIterator){
+   for(constIterator = list.constBegin() + 17; constIterator != list.constEnd(); ++constIterator){
       m_emailAdresses.insert(*constIterator, *constIterator);
    }
 }

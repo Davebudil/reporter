@@ -24,6 +24,22 @@ QSqlQuery SQLStorage::getResultQuery(){
    return m_Query;
 }
 
+QQueue<SQLquery> SQLStorage::getQueueQueries(){
+   QQueue<SQLquery> tmp;
+   for(auto & it : m_Queries){
+      tmp.append(*it);
+   }
+   return tmp;
+}
+
+QQueue<SQLParameter> SQLStorage::getQueueParameters(){
+   QQueue<SQLParameter> tmp;
+   for(auto & it : m_Parameters){
+      tmp.append(*it);
+   }
+   return tmp;
+}
+
 bool SQLStorage::addQuery(const QString & query,
                           const QString & name,
                           const QString & param,

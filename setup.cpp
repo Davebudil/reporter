@@ -138,7 +138,7 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
          qint32 emailCount;
          in >> tmp;
          scheduleName.push_back(tmp);
-         for(qint32 i = 0; i < 19; ++i){
+         for(qint32 i = 0; i < 22; ++i){
             in >> tmp;
             shift << tmp;
          }
@@ -148,7 +148,7 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
             in >> tmp;
             shift << tmp;
          }
-         for(qint32 i = 0; i < 16; ++i){
+         for(qint32 i = 0; i < 17; ++i){
             in >> tmp;
             day << tmp;
          }
@@ -158,7 +158,7 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
             in >> tmp;
             day << tmp;
          }
-         for(qint32 i = 0; i < 10; ++i){
+         for(qint32 i = 0; i < 11; ++i){
             in >> tmp;
             weekly << tmp;
          }
@@ -168,7 +168,7 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
             in >> tmp;
             weekly << tmp;
          }
-         for(qint32 i = 0; i < 10; ++i){
+         for(qint32 i = 0; i < 11; ++i){
             in >> tmp;
             monthly << tmp;
          }

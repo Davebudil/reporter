@@ -62,6 +62,9 @@ QStringList ShiftSchedule::prepareSerialization(){
    valueList.append(QString(m_time1.toString()));
    valueList.append(QString(m_time2.toString()));
    valueList.append(QString(m_time0.toString()));
+   valueList.append(QString::number(m_Done0));
+   valueList.append(QString::number(m_Done1));
+   valueList.append(QString::number(m_Done2));
    for(qint32 i = 0; i < 7; ++i){
       valueList.append(QString::number(m_Days[i]));
    }
@@ -84,11 +87,14 @@ void ShiftSchedule::deserializeList(const QStringList & list){
    m_time1 = QTime::fromString(list.at(9));
    m_time2 = QTime::fromString(list.at(10));
    m_timeTMP = QTime::fromString(list.at(11));
+   m_Done0 = (list.at(12) == "0" ? false : true);
+   m_Done1 = (list.at(13) == "0" ? false : true);
+   m_Done2 = (list.at(14) == "0" ? false : true);
    for(qint32 i = 0; i < 7; ++i){
-      m_Days[i] = (list.at(12+i) == "0" ? false : true);
+      m_Days[i] = (list.at(15+i) == "0" ? false : true);
    }
    QStringList::const_iterator constIterator;
-   for(constIterator = list.constBegin() + 19; constIterator != list.constEnd(); ++constIterator){
+   for(constIterator = list.constBegin() + 22; constIterator != list.constEnd(); ++constIterator){
       m_emailAdresses.insert(*constIterator, *constIterator);
    }
 }
