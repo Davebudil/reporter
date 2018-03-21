@@ -25,7 +25,7 @@ bool ExportXLS::generateFile(const QString & templatePath,
          out << it.at(1) << "\n";
          out << it.at(2) << "\n";
       }
-      QDesktopServices::openUrl(QUrl("/home/dave/Documents/sielaff/project/reporter/reporter/ask_attachment_source.txt"));
+//      QDesktopServices::openUrl(QUrl("/home/dave/Documents/sielaff/project/reporter/reporter/ask_attachment_source.txt"));
       qInfo(logInfo()) << "Successfuly generated XLSX file.";
       return true;
    }

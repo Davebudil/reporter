@@ -44,6 +44,7 @@ QStringList MonthlySchedule::prepareSerialization(){
    valueList.append(QString(m_Time.toString()));
    valueList.append(QString::number(m_Day));
    valueList.append(QString::number((m_emailAdresses.count())));
+   valueList.append(QString::number(m_Done));
    for(auto & it : m_emailAdresses){
       valueList.append(it);
    }
@@ -60,8 +61,9 @@ void MonthlySchedule::deserializeList(const QStringList & list){
    m_emailTemplatePath = list.at(7);
    m_Time = QTime::fromString(list.at(8));
    m_Day = QString(list.at(9)).toInt();
+   m_Done = (list.at(10) == "0" ? false : true);
    QStringList::const_iterator constIterator;
-   for(constIterator = list.constBegin() + 10; constIterator != list.constEnd(); ++constIterator){
+   for(constIterator = list.constBegin() + 11; constIterator != list.constEnd(); ++constIterator){
       m_emailAdresses.insert(*constIterator, *constIterator);
    }
 }

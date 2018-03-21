@@ -59,7 +59,7 @@ void Export::m_generateShift(const ShiftSchedule & shift,
                              QSqlDatabase & db,
                              QDateTime & currentTime,
                              quint32 & count){
-   //need to define which way to format parameters -> using #parameter1 - 5 for now
+   //need to define which way to format parameters . using #parameter1 - 5 for now
    for(auto & it : queries){
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
