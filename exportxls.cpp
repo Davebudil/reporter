@@ -9,7 +9,7 @@ bool ExportXLS::generateFile(const QString & templatePath,
                              const QString & genPath,
                              const QList<std::pair<QString, QString>> constants,
                              const QList<QStringList> queries){
-   QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ask_attachment_source.txt");
+   QFile loadFile(QDir::currentPath() + "/ask_attachment_source.txt");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QTextStream out(&loadFile);
       out << templatePath << "\n";
@@ -25,7 +25,8 @@ bool ExportXLS::generateFile(const QString & templatePath,
          out << it.at(1) << "\n";
          out << it.at(2) << "\n";
       }
-//      QDesktopServices::openUrl(QUrl("/home/dave/Documents/sielaff/project/reporter/reporter/ask_attachment_source.txt"));
+//      debug function
+//      QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/ask_attachment_source.txt"));
       qInfo(logInfo()) << "Successfuly generated XLSX file.";
       return true;
    }
@@ -33,7 +34,7 @@ bool ExportXLS::generateFile(const QString & templatePath,
    return false;
 }
 bool ExportXLS::readResult(){
-   QFile loadFile("/home/dave/Documents/sielaff/project/reporter/reporter/ask_ attachment_final.txt");
+   QFile loadFile(QDir::currentPath() + "/ask_ attachment_final.txt");
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
       QStringList tmp;

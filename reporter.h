@@ -30,6 +30,7 @@
 #include <QMultiMap>
 #include "tableinfo.h"
 #include "customscheduling.h"
+#include <QCloseEvent>
 
 namespace Ui{
    class Reporter;
@@ -47,6 +48,7 @@ class Reporter : public QMainWindow{
       ~Reporter();
       //Sets up default settings of the app
       void defaultSettings();
+      void closeEvent(QCloseEvent * event);
 
    private slots:
       //Shows or hides application

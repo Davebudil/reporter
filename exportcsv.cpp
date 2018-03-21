@@ -18,7 +18,7 @@ bool ExportCSV::generateFile(const QString & templatePathCSV,
          QTextStream stream(&fileCSV);
          QSqlRecord columns = dataCSV.record();
 
-         for(quint32 i = 0; i < columns.count(); ++i){
+         for(quint32 i = 0; i < (quint32)columns.count(); ++i){
             QString tmp = columns.fieldName(i);
             stream << tmp << ";";
          }
@@ -33,6 +33,7 @@ bool ExportCSV::generateFile(const QString & templatePathCSV,
          }
 
          fileCSV.close();
+         //debug function
 //         QDesktopServices::openUrl(QUrl(filePath));
          qInfo(logInfo()) << "Successfuly generated CSV file.";
          return true;

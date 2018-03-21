@@ -9,9 +9,21 @@
 #include <QDebug>
 #include <QDir>
 #include <QList>
+#include <QSettings>
+#include <QApplication>
 /*Class used to load and edit ini file
  * and to serialize and deserialize queries data
  * */
+
+struct SPreferences{
+   QString databaseType;
+   QString host;
+   quint32 port;
+   QString databaseName;
+   QString userName;
+   QString userPassword;
+};
+
 class Setup : public QObject{
       Q_OBJECT
    public:
@@ -20,8 +32,8 @@ class Setup : public QObject{
       //Destructor
       ~Setup();
       //.ini file
-      bool loadIni();
-      bool saveIni();
+      void loadIni();
+      void saveIni();
       //serializes
       bool serializeQueries(const QStringList & queries);
       bool serializeParameters(const QStringList & parameters, const QVector<qint32> & count);
@@ -38,18 +50,21 @@ class Setup : public QObject{
       void setFilePath(const QString & path);
       //getter
       QString getFilePath() const;
+      SPreferences getSettings();
 
    signals:
 
    public slots:
 
    private:
+      void loadSettings();
+      void saveSettings();
       bool m_serializeQueries(const QStringList & queries);
       bool m_deserializeQueries(QStringList & queries);
       bool m_serializeParameters(const QStringList & parameters, const QVector<qint32> & count);
       bool m_deserializeParameters(QStringList & parameters, QVector<qint32> & count);
       QString m_filePath;
-
+      SPreferences m_Settings;
 };
 
 #endif // SETUP_H
