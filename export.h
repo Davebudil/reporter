@@ -17,7 +17,7 @@ class Export{
       ExportXLS getXLS() const;
       ExportHTML getHTML() const;
       ExportCSV getCSV() const;
-      void handleExport(QQueue<Scheduling> & intervalsToHandle,
+      void handleExport(QQueue<Scheduling*> & intervalsToHandle,
                         QQueue<SQLquery> & queries,
                         QQueue<SQLParameter> & parameters,
                         QSqlDatabase & db);
@@ -27,22 +27,26 @@ class Export{
                            QQueue<SQLquery> & queries,
                            SQLParameter & param,
                            QSqlDatabase & db,
-                           QDateTime & currentTime);
+                           QDateTime & currentTime,
+                           quint32 & count);
       void m_generateDaily(const DailySchedule & daily,
                            QQueue<SQLquery> & queries,
                            SQLParameter & param,
                            QSqlDatabase & db,
-                           QDateTime & currentTime);
+                           QDateTime & currentTime,
+                           quint32 & count);
       void m_generateWeekly(const WeeklySchedule & weekly,
                             QQueue<SQLquery> & queries,
                             SQLParameter & param,
                             QSqlDatabase & db,
-                            QDateTime & currentTime);
+                            QDateTime & currentTime,
+                            quint32 & count);
       void m_generateMonthly(const MonthlySchedule & monthly,
                              QQueue<SQLquery> & queries,
                              SQLParameter & param,
                              QSqlDatabase & db,
-                             QDateTime & currentTime);
+                             QDateTime & currentTime,
+                             quint32 & count);
       ExportXLS m_XLS;
       ExportCSV m_CSV;
       ExportHTML m_HTML;

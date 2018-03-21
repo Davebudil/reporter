@@ -524,7 +524,7 @@ void Reporter::defaultSettings(){
       m_addSchedule("Default");
       ui->scheduleName->setText(m_Schedule[0]->getName());
    }
-   m_SetTimer(60000);
+   m_SetTimer(10);
    qInfo(logInfo()) << "Settings successfuly loaded.";
    qInfo(logInfo()) << "Data successfuly loaded.";
 }
@@ -1414,23 +1414,25 @@ void Reporter::on_tableNames_clicked(){
    infoDisplay = new TableInfo(this);
    QVector<QStringList> dbInfo;
    dbNames = m_mainSQL.getDatabase().getDatabase().tables();
+
    for(auto & it : dbNames){
       QStringList tmp;
       tmp.append(it);
       tmp += m_getColumnNames(it);
       dbInfo.push_back(tmp);
    }
+
    infoDisplay->getInfo(dbInfo);
    infoDisplay->show();
 }
 
 void Reporter::timerInterval(){
-   QQueue<Scheduling> tmpSch;
+   QQueue<Scheduling*> tmpSch;
    QQueue<SQLquery> tmpQueries;
    QQueue<SQLParameter> tmpParams;
-   //For some reason crashes APP
+
    for(auto it : m_Schedule){
-      tmpSch.append(*it);
+      tmpSch.append(it);
    }
    for(auto it : m_mainSQL.getStorage().getQueries()){
       tmpQueries.append(*it);
@@ -1438,6 +1440,8 @@ void Reporter::timerInterval(){
    for(auto it : m_mainSQL.getStorage().getParameters()){
       tmpParams.append(*it);
    }
+
+   //TODO SPLIT THIS WITH THE TESTING GENERATING ENVIRONMENT -> CRASHING
    m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase());
 }
 
