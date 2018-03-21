@@ -108,20 +108,24 @@ void MonthlySchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }
 
-void MonthlySchedule::generateMonthlyData(const QDateTime & currentData){
-   m_checkDoneInterval(currentData);
+bool MonthlySchedule::generateMonthlyData(const QDateTime & currentData){
+   return m_checkDoneInterval(currentData);
 }
 
-void MonthlySchedule::m_checkDoneInterval(const QDateTime & currentDate){
-   if(currentDate.date().day() < m_Day + 1){
+bool MonthlySchedule::m_checkDoneInterval(const QDateTime & currentDate){
+   if(currentDate.date().day() < m_Day + 1 && m_Done){
       m_Done = false;
       //reset interval
+   }else if((currentDate.date().day() == currentDate.date().daysInMonth()) && m_Day == 0 && m_Done){
+      m_Done = false;
    }
    if((currentDate.time() > m_Time) && (currentDate.date().day() >= m_Day + 1) && !m_Done){
       m_Done = true;
       m_monthlyInterval();
       //right interval
+      return true;
    }
+   return false;
 }
 
 void MonthlySchedule::m_monthlyInterval(){

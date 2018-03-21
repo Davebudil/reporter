@@ -36,13 +36,13 @@ class MonthlySchedule
       void setXlsAttach(bool xlsAttach);
       void setCsvAttach(bool csvAttach);
       void setEmailTemplatePath(const QString & emailTemplatePath);
-      void generateMonthlyData(const QDateTime & currentData);
+      bool generateMonthlyData(const QDateTime & currentData);
 
       bool getDone() const;
       void setDone(bool Done);
 
    private:
-      void m_checkDoneInterval(const QDateTime & currentDate);
+      bool m_checkDoneInterval(const QDateTime & currentDate);
       void m_monthlyInterval();
       bool m_Active;
       bool m_csvAttach;

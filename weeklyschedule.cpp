@@ -109,33 +109,33 @@ void WeeklySchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }
 
-void WeeklySchedule::generateWeeklyData(const QDateTime & currenDate){
-   m_checkDoneInterval(currenDate);
+bool WeeklySchedule::generateWeeklyData(const QDateTime & currenDate){
+   return m_checkDoneInterval(currenDate);
 }
 
-void WeeklySchedule::m_checkDoneInterval(const QDateTime & currentDate){
-   if(currentDate.date().dayOfWeek() < m_Day + 1){
+bool WeeklySchedule::m_checkDoneInterval(const QDateTime & currentDate){
+   if((currentDate.date().dayOfWeek() < m_Day + 1) && m_Done){
       m_Done = false;
-      //reset interval
+   }else if((currentDate.date().dayOfWeek() == 7) && (m_Day == 0) && m_Done){
+      m_Done = false;
    }
    if(((currentDate.time() > m_Time) && (currentDate.date().dayOfWeek() >= m_Day + 1) && !m_Done)){
       m_Done = true;
       m_weeklyInterval();
       //right interval
+      return true;
    }
+   return false;
 }
 
 void WeeklySchedule::m_weeklyInterval(){
    //interval from m_Day and m_Time of last week -> m_Day m_Time of today.
 }
 
-
-bool WeeklySchedule::getDone() const
-{
+bool WeeklySchedule::getDone() const{
     return m_Done;
 }
 
-void WeeklySchedule::setDone(bool Done)
-{
+void WeeklySchedule::setDone(bool Done){
     m_Done = Done;
 }
