@@ -16,6 +16,7 @@ class MonthlySchedule
       QString getXlsTemplatePath() const;
       QString getEmailTemplatePath() const;
       QMap<QString, QString> & getEmailAdresses();
+      QStringList emailAdresses();
       QString getSubjName() const;
       QString getAttachName() const;
       QTime getTime() const;

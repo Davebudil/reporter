@@ -26,6 +26,15 @@ QString DailySchedule::getAttachName() const{
 QMap<QString, QString> & DailySchedule::getEmailAdresses(){
    return m_emailAdresses;
 }
+
+QStringList DailySchedule::emailAdresses(){
+   QStringList tmp;
+   for(auto & it : m_emailAdresses){
+      tmp.append(it);
+   }
+
+   return tmp;
+}
 QTime DailySchedule::getTime() const{
     return m_Time;
 }

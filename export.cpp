@@ -49,11 +49,18 @@ void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
       }
    }
    if(exportCount != 0){
-      qInfo(logInfo()) << "Succesfully generated " + QVariant(exportCount).toString() + " queries.";
+      qInfo(logInfo()) << "Succesfully generated " + QVariant(exportCount).toString() + " datasets.";
    }
 }
 
-void Export::m_generateShift(const ShiftSchedule & shift,
+void Export::runXLSGenerator(){
+   QProcess * xlsGenerator = new QProcess;
+   QString filePath;
+   filePath = QDir::currentPath() + "xlsxGenerator.exe";
+   xlsGenerator->start(filePath);
+}
+
+void Export::m_generateShift(ShiftSchedule & shift,
                              QQueue<SQLquery> & queries,
                              SQLParameter & param,
                              QSqlDatabase & db,
@@ -112,6 +119,8 @@ void Export::m_generateShift(const ShiftSchedule & shift,
                                shift.getAttachName(),
                                genInfo,
                                finalQueries);
+            //            runXLSGenerator();
+            m_XLS.readResult();
          }
          if(shift.getCsvAttach()){
             QSqlQuery resultCSV = it.getResult();
@@ -123,10 +132,13 @@ void Export::m_generateShift(const ShiftSchedule & shift,
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
       }
-      //SEND TO EMAIL/POSTMAN QUEUE
+      QStringList emailAdresses = shift.emailAdresses();
+      for(const auto & it : emailAdresses){
+         //SEND TO EMAIL/POSTMAN QUEUE
+      }
    }
 }
-void Export::m_generateDaily(const DailySchedule & daily,
+void Export::m_generateDaily(DailySchedule & daily,
                              QQueue<SQLquery> & queries,
                              SQLParameter & param,
                              QSqlDatabase & db,
@@ -166,6 +178,8 @@ void Export::m_generateDaily(const DailySchedule & daily,
                                daily.getAttachName(),
                                genInfo,
                                finalQueries);
+            //            runXLSGenerator();
+            m_XLS.readResult();
          }
          if(daily.getCsvAttach()){
             QSqlQuery resultCSV = it.getResult();
@@ -177,10 +191,13 @@ void Export::m_generateDaily(const DailySchedule & daily,
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
       }
-      //SEND TO EMAIL/POSTMAN QUEUE
+      QStringList emailAdresses = daily.emailAdresses();
+      for(auto & it : emailAdresses){
+         //SEND TO EMAIL/POSTMAN QUEUE
+      }
    }
 }
-void Export::m_generateWeekly(const WeeklySchedule & weekly,
+void Export::m_generateWeekly(WeeklySchedule & weekly,
                               QQueue<SQLquery> & queries,
                               SQLParameter & param,
                               QSqlDatabase & db,
@@ -220,6 +237,8 @@ void Export::m_generateWeekly(const WeeklySchedule & weekly,
                                weekly.getAttachName(),
                                genInfo,
                                finalQueries);
+            //            runXLSGenerator();
+            m_XLS.readResult();
          }
          if(weekly.getCsvAttach()){
             QSqlQuery resultCSV = it.getResult();
@@ -231,11 +250,14 @@ void Export::m_generateWeekly(const WeeklySchedule & weekly,
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
       }
-      //SEND TO EMAIL/POSTMAN QUEUE
+      QStringList emailAdresses = weekly.emailAdresses();
+      for(auto & it : emailAdresses){
+         //SEND TO EMAIL/POSTMAN QUEUE
+      }
    }
 
 }
-void Export::m_generateMonthly(const MonthlySchedule & monthly,
+void Export::m_generateMonthly(MonthlySchedule & monthly,
                                QQueue<SQLquery> & queries,
                                SQLParameter & param,
                                QSqlDatabase & db,
@@ -275,6 +297,8 @@ void Export::m_generateMonthly(const MonthlySchedule & monthly,
                                monthly.getAttachName(),
                                genInfo,
                                finalQueries);
+            //            runXLSGenerator();
+            m_XLS.readResult();
          }
          if(monthly.getCsvAttach()){
             QSqlQuery resultCSV = it.getResult();
@@ -286,6 +310,9 @@ void Export::m_generateMonthly(const MonthlySchedule & monthly,
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
       }
-      //SEND TO EMAIL/POSTMAN QUEUE
+      QStringList emailAdresses = monthly.emailAdresses();
+      for(auto & it : emailAdresses){
+         //SEND TO EMAIL/POSTMAN QUEUE
+      }
    }
 }

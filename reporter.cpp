@@ -29,9 +29,9 @@ Reporter::Reporter(QWidget *parent)
    setFont(newFont);
    ui->weeklyDays->setMaximumHeight(100);
    ui->monthlyDays->setMaximumHeight(100);
-   m_shwHide = new QHotkey(QKeySequence("ctrl+alt+Q"), true);
+   m_shwHide = new QHotkey(QKeySequence(m_Setup.getSettings().hotKey), true);
    connect(m_shwHide, SIGNAL(activated()), this, SLOT(m_showHide()));
-   //custom is disabled, waiting for future implementation
+   //custom is disabled, waiting for future implementation9
 }
 //Destructor
 Reporter::~Reporter(){
@@ -526,7 +526,7 @@ void Reporter::defaultSettings(){
       m_addSchedule("Default");
       ui->scheduleName->setText(m_Schedule[0]->getName());
    }
-   m_SetTimer(5000);
+   m_SetTimer(10000);
    qInfo(logInfo()) << "Settings successfuly loaded.";
    qInfo(logInfo()) << "Data successfuly loaded.";
 }
@@ -567,11 +567,11 @@ void Reporter::m_ConnectDB(){
                                                           m_Setup.getSettings().userPassword);
    if(!m_mainSQL.getDatabase().createConnection()){
       qCritical(logCritical()) << "Database connection error: " + m_mainSQL.getDatabase().getDatabase().lastError().text();
-//      QMessageBox::warning(this, "Database connection error",
-//                           m_mainSQL.getDatabase().getDatabase().lastError().text());
+      //      QMessageBox::warning(this, "Database connection error",
+      //                           m_mainSQL.getDatabase().getDatabase().lastError().text());
    }else{
       qInfo(logInfo()) << "Connection to database estabilished successfuly.";
-//      QMessageBox::information(this, "Database connection success", "Connecting to database successful.");
+      //      QMessageBox::information(this, "Database connection success", "Connecting to database successful.");
    }
 }
 //Serializes queries
@@ -779,6 +779,12 @@ void Reporter::m_generateTemplateXLS(){
 }
 //Generates query data model that is displayed in table in application
 void Reporter::m_testingQueryGen(){
+   //close all existing queries to save memory usage
+   for(auto & it : m_mainSQL.getStorage().getQueries()){
+      if(it->getResult().isActive()){
+         it->getResult().clear();
+      }
+   }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
       qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
       QMessageBox::critical(0, QObject::tr("Database error"),
@@ -1454,7 +1460,6 @@ void Reporter::timerInterval(){
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
    tmpParams = m_mainSQL.getStorage().getQueueParameters();
 
-   //TODO SPLIT THIS WITH THE TESTING GENERATING ENVIRONMENT -> CRASHING
    m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase());
 }
 
@@ -1462,4 +1467,17 @@ void Reporter::on_toolButton_4_clicked(){
    CustomScheduling * instantSchedule;
    instantSchedule = new CustomScheduling(this);
    instantSchedule->show();
+}
+
+void Reporter::on_checkBox_stateChanged(int arg1){
+   //pause scheduling timer TODO
+   if(!arg1){
+      if(m_Timer->isActive()){
+         m_Timer->stop();
+         ui->colorLabel->setStyleSheet("background-color: red;");
+      }
+   }else{
+      m_Timer->start();
+      ui->colorLabel->setStyleSheet("background-color: green");
+   }
 }

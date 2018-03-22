@@ -134,6 +134,8 @@ class Reporter : public QMainWindow{
 
       void on_toolButton_4_clicked();
 
+      void on_checkBox_stateChanged(int arg1);
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;

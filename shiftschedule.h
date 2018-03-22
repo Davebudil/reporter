@@ -16,6 +16,7 @@ class ShiftSchedule{
       QString getSubjName() const;
       QString getEmailTemplatePath() const;
       QMap<QString, QString> & getEmailAdresses();
+      QStringList emailAdresses();
       QTime getFrom0() const;
       QTime getTo0() const;
       QTime getFrom1() const;

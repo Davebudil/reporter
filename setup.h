@@ -22,6 +22,7 @@ struct SPreferences{
    QString databaseName;
    QString userName;
    QString userPassword;
+   QString hotKey;
 };
 
 class Setup : public QObject{
