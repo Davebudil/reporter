@@ -16,9 +16,11 @@ Reporter::Reporter(QWidget *parent)
      m_scheduleKey(0),
      m_scheduleCount(0),
      tmp(nullptr),
-     m_queryActive(false){
-   m_Setup.loadIni();
+     m_queryActive(false),
+     m_firstQuery(false){
    qInfo(logInfo()) << "Application started.";
+   m_Setup.loadIni();
+   m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
    ui->setupUi(this);
    ui->queryNameEdit->setText("Query Name");
    ui->queryParamEdit->setText("Master name");
@@ -63,8 +65,10 @@ void Reporter::on_dbConnect_clicked(){
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
    m_mainSQL.setQueryModel(name);
+   ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getModel());
    ui->sqlDataCount->setText(QString::number(m_mainSQL.getStorage().getQueries()[name]->getQueryResultRows()));
+
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
@@ -526,7 +530,9 @@ void Reporter::defaultSettings(){
       m_addSchedule("Default");
       ui->scheduleName->setText(m_Schedule[0]->getName());
    }
-   m_SetTimer(10000);
+   m_SetTimer(m_TIMERINTERVAL);
+   m_PauseTimer();
+   m_PauseTimer();
    qInfo(logInfo()) << "Settings successfuly loaded.";
    qInfo(logInfo()) << "Data successfuly loaded.";
 }
@@ -779,10 +785,12 @@ void Reporter::m_generateTemplateXLS(){
 }
 //Generates query data model that is displayed in table in application
 void Reporter::m_testingQueryGen(){
-   //close all existing queries to save memory usage
-   for(auto & it : m_mainSQL.getStorage().getQueries()){
-      if(it->getResult().isActive()){
-         it->getResult().clear();
+   m_Timer->stop();
+   if(m_firstQuery){
+      m_mainSQL.getModel()->clear();
+      m_mainSQL.getModel()->query().clear();
+      for(auto & it : m_mainSQL.getStorage().getQueries()){
+         it->clearQueries();
       }
    }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
@@ -794,7 +802,9 @@ void Reporter::m_testingQueryGen(){
       m_generateQuery(m_nameKey);
       m_executeQuery(m_nameKey);
       m_displaySQLResult(m_nameKey);
+      m_firstQuery = true;
    }
+   m_Timer->start(m_TIMERINTERVAL);
 }
 //Adds first schedule item
 bool Reporter::m_noSchedule(){
@@ -820,10 +830,23 @@ void Reporter::m_SetTimer(qint32 interval){
    m_Timer = new QTimer();
    connect(m_Timer, SIGNAL(timeout()), this, SLOT(timerInterval()));
    m_Timer->start(interval);
+   qInfo(logInfo()) << "Timer with interval: " + QVariant(interval).toString() + " ms successfully started.";
 }
 
 void Reporter::m_debugNotification(const QString & toDisplay){
    QMessageBox::information(this, "debug", toDisplay);
+}
+
+void Reporter::m_PauseTimer(){
+   if(m_Timer->isActive()){
+      ui->pauseResumeButton->setText("Resume");
+      ui->colorLabel->setStyleSheet("background-color: red");
+      m_Timer->stop();
+   }else{
+      ui->pauseResumeButton->setText("Pause");
+      ui->colorLabel->setStyleSheet("background-color: green");
+      m_Timer->start(m_TIMERINTERVAL);
+   }
 }
 //Loads schedule on mouse click
 void Reporter::m_loadSchedule(){
@@ -1469,15 +1492,6 @@ void Reporter::on_toolButton_4_clicked(){
    instantSchedule->show();
 }
 
-void Reporter::on_checkBox_stateChanged(int arg1){
-   //pause scheduling timer TODO
-   if(!arg1){
-      if(m_Timer->isActive()){
-         m_Timer->stop();
-         ui->colorLabel->setStyleSheet("background-color: red;");
-      }
-   }else{
-      m_Timer->start();
-      ui->colorLabel->setStyleSheet("background-color: green");
-   }
+void Reporter::on_pauseResumeButton_clicked(){
+   m_PauseTimer();
 }

@@ -44,9 +44,12 @@ class SQLquery{
       void bindParameter(const QString & parameter, const QString & value);
       //function that executes the query
       void executeQuery();
+      void clearQueries();
       //
       QStringList queryList();
 
+
+      void setQueryResultRows(const quint32 & QueryResultRows);
 
    private:
       //original text
@@ -65,6 +68,7 @@ class SQLquery{
       bool m_Master;
       //is Active
       bool m_isActive;
+      quint32 m_QueryResultRows;
 };
 
 #endif // SQLQUERY_H

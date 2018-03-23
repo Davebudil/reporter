@@ -494,7 +494,7 @@ QTabWidget::tab-bar {
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="basic">
      <attribute name="title">
@@ -3074,25 +3074,25 @@ QTabWidget::tab-bar {
        </property>
       </widget>
      </widget>
-     <widget class="QCheckBox" name="checkBox">
-      <property name="geometry">
-       <rect>
-        <x>150</x>
-        <y>40</y>
-        <width>141</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Pause export</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="colorLabel">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>45</y>
+        <x>390</x>
+        <y>20</y>
         <width>41</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="pauseResumeButton">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>20</y>
+        <width>101</width>
         <height>31</height>
        </rect>
       </property>

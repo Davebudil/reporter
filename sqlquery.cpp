@@ -50,7 +50,7 @@ bool SQLquery::getActive(){
 }
 //Gets the number of result rows
 qint32 SQLquery::getQueryResultRows(){
-   return m_Result->size();
+   return m_QueryResultRows;
 }
 //Setter for query member
 void SQLquery::setQuery(const QString & query){
@@ -95,6 +95,12 @@ void SQLquery::executeQuery(){
       QMessageBox::warning(0, QObject::tr("SQL error."), m_Result->lastError().text());
       m_Result->clear();
    }
+   m_QueryResultRows = m_Result->size();
+   m_Result->finish();
+}
+
+void SQLquery::clearQueries(){
+   m_Result->clear();
 }
 
 QStringList SQLquery::queryList(){
@@ -103,6 +109,11 @@ QStringList SQLquery::queryList(){
    queryData.append(m_mParameter);
    queryData.append(m_finalString);
    return queryData;
+}
+
+void SQLquery::setQueryResultRows(const quint32 & QueryResultRows)
+{
+   m_QueryResultRows = QueryResultRows;
 }
 //Binds parameter to value
 void SQLquery::bindParameter(const QString & parameter, const QString & value){
