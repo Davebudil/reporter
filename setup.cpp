@@ -97,6 +97,8 @@ void Setup::loadSettings(){
    m_Settings.databaseName = settings.value("DatabaseName", "budil").toString();
    m_Settings.userName = settings.value("Username", "root").toString();
    m_Settings.userPassword = settings.value("UserPassword", "Blizazrd5").toString();
+   m_Settings.hotKey = settings.value("Hotkey", "ctrl+alt+Q").toString();
+   m_Settings.timerInterval = settings.value("TimerInterval", 1800000).toInt();
 }
 
 void Setup::saveSettings(){
@@ -107,6 +109,8 @@ void Setup::saveSettings(){
    settings.setValue("DatabaseName", m_Settings.databaseName);
    settings.setValue("Username", m_Settings.userName);
    settings.setValue("UserPassword", m_Settings.userPassword);
+   settings.setValue("Hotkey", m_Settings.hotKey);
+   settings.setValue("TimerInterval", m_Settings.timerInterval);
 }
 
 bool Setup::m_serializeQueries(const QStringList & queries){

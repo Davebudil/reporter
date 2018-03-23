@@ -107,6 +107,15 @@ QString WeeklySchedule::getEmailTemplatePath() const{
 QMap<QString, QString> &WeeklySchedule::getEmailAdresses(){
    return m_emailAdresses;
 }
+
+QStringList WeeklySchedule::emailAdresses(){
+   QStringList tmp;
+   for(auto & it : m_emailAdresses){
+      tmp.append(it);
+   }
+
+   return tmp;
+}
 void WeeklySchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }

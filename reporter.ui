@@ -1001,8 +1001,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -1398,8 +1398,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -1768,8 +1768,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -2255,8 +2255,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -2947,7 +2947,7 @@ QTabWidget::tab-bar {
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>Export Result</string>
+       <string>Types of data</string>
       </property>
      </widget>
      <widget class="QLabel" name="sqlDataCount">
@@ -3073,6 +3073,32 @@ QTabWidget::tab-bar {
         <string/>
        </property>
       </widget>
+     </widget>
+     <widget class="QLabel" name="colorLabel">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>20</y>
+        <width>41</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="pauseResumeButton">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>20</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
      </widget>
     </widget>
    </widget>

@@ -9,6 +9,7 @@
 #include "sqlquery.h"
 #include "sqlparameter.h"
 #include "scheduling.h"
+#include <QProcess>
 
 class Export{
    public:
@@ -23,25 +24,26 @@ class Export{
                         QSqlDatabase & db);
 
    private:
-      void m_generateShift(const ShiftSchedule & shift,
+      void runXLSGenerator();
+      void m_generateShift(ShiftSchedule & shift,
                            QQueue<SQLquery> & queries,
                            SQLParameter & param,
                            QSqlDatabase & db,
                            QDateTime & currentTime,
                            quint32 & count);
-      void m_generateDaily(const DailySchedule & daily,
+      void m_generateDaily(DailySchedule & daily,
                            QQueue<SQLquery> & queries,
                            SQLParameter & param,
                            QSqlDatabase & db,
                            QDateTime & currentTime,
                            quint32 & count);
-      void m_generateWeekly(const WeeklySchedule & weekly,
+      void m_generateWeekly(WeeklySchedule & weekly,
                             QQueue<SQLquery> & queries,
                             SQLParameter & param,
                             QSqlDatabase & db,
                             QDateTime & currentTime,
                             quint32 & count);
-      void m_generateMonthly(const MonthlySchedule & monthly,
+      void m_generateMonthly(MonthlySchedule & monthly,
                              QQueue<SQLquery> & queries,
                              SQLParameter & param,
                              QSqlDatabase & db,
@@ -50,6 +52,7 @@ class Export{
       ExportXLS m_XLS;
       ExportCSV m_CSV;
       ExportHTML m_HTML;
+
 };
 
 #endif // EXPORT_H

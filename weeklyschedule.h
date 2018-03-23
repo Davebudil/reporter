@@ -18,6 +18,7 @@ class WeeklySchedule
       QString getCsvTemplatePath() const;
       QString getEmailTemplatePath() const;
       QMap<QString, QString> & getEmailAdresses();
+      QStringList emailAdresses();
       QTime getTime() const;
       qint32 getDay() const;
       bool getActive() const;

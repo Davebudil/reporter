@@ -106,6 +106,15 @@ QString MonthlySchedule::getEmailTemplatePath() const{
 QMap<QString, QString> & MonthlySchedule::getEmailAdresses(){
    return m_emailAdresses;
 }
+
+QStringList MonthlySchedule::emailAdresses(){
+   QStringList tmp;
+   for(auto & it : m_emailAdresses){
+      tmp.append(it);
+   }
+
+   return tmp;
+}
 void MonthlySchedule::setEmailTemplatePath(const QString & emailTemplatePath){
    m_emailTemplatePath = emailTemplatePath;
 }

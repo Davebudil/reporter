@@ -219,3 +219,11 @@ void ShiftSchedule::setTimeTMP(const QTime & timeTMP)
 QMap<QString, QString> & ShiftSchedule::getEmailAdresses(){
    return m_emailAdresses;
 }
+
+QStringList ShiftSchedule::emailAdresses(){
+   QStringList tmp;
+   for(auto & it : m_emailAdresses){
+      tmp.append(it);
+   }
+   return tmp;
+}

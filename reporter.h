@@ -134,6 +134,8 @@ class Reporter : public QMainWindow{
 
       void on_toolButton_4_clicked();
 
+      void on_pauseResumeButton_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -150,6 +152,7 @@ class Reporter : public QMainWindow{
       QHotkey * m_shwHide;
       qint32 m_daysWeeklyIndex;
       QTimer* m_Timer;
+      quint32 m_TIMERINTERVAL;
 
       bool m_queryActive;
       //Print query result to the table
@@ -233,6 +236,8 @@ class Reporter : public QMainWindow{
       void m_SetTimer(qint32 interval);
       //simple debug function used during development
       void m_debugNotification(const QString & toDisplay);
+      bool m_firstQuery;
+      void m_PauseTimer();
 };
 
 #endif // REPORTER_H

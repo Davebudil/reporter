@@ -16,9 +16,11 @@ Reporter::Reporter(QWidget *parent)
      m_scheduleKey(0),
      m_scheduleCount(0),
      tmp(nullptr),
-     m_queryActive(false){
-   m_Setup.loadIni();
+     m_queryActive(false),
+     m_firstQuery(false){
    qInfo(logInfo()) << "Application started.";
+   m_Setup.loadIni();
+   m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
    ui->setupUi(this);
    ui->queryNameEdit->setText("Query Name");
    ui->queryParamEdit->setText("Master name");
@@ -29,9 +31,9 @@ Reporter::Reporter(QWidget *parent)
    setFont(newFont);
    ui->weeklyDays->setMaximumHeight(100);
    ui->monthlyDays->setMaximumHeight(100);
-   m_shwHide = new QHotkey(QKeySequence("ctrl+alt+Q"), true);
+   m_shwHide = new QHotkey(QKeySequence(m_Setup.getSettings().hotKey), true);
    connect(m_shwHide, SIGNAL(activated()), this, SLOT(m_showHide()));
-   //custom is disabled, waiting for future implementation
+   //custom is disabled, waiting for future implementation9
 }
 //Destructor
 Reporter::~Reporter(){
@@ -63,8 +65,10 @@ void Reporter::on_dbConnect_clicked(){
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
    m_mainSQL.setQueryModel(name);
+   ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getModel());
    ui->sqlDataCount->setText(QString::number(m_mainSQL.getStorage().getQueries()[name]->getQueryResultRows()));
+
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
@@ -526,7 +530,9 @@ void Reporter::defaultSettings(){
       m_addSchedule("Default");
       ui->scheduleName->setText(m_Schedule[0]->getName());
    }
-   m_SetTimer(5000);
+   m_SetTimer(m_TIMERINTERVAL);
+   m_PauseTimer();
+   m_PauseTimer();
    qInfo(logInfo()) << "Settings successfuly loaded.";
    qInfo(logInfo()) << "Data successfuly loaded.";
 }
@@ -567,11 +573,11 @@ void Reporter::m_ConnectDB(){
                                                           m_Setup.getSettings().userPassword);
    if(!m_mainSQL.getDatabase().createConnection()){
       qCritical(logCritical()) << "Database connection error: " + m_mainSQL.getDatabase().getDatabase().lastError().text();
-//      QMessageBox::warning(this, "Database connection error",
-//                           m_mainSQL.getDatabase().getDatabase().lastError().text());
+      //      QMessageBox::warning(this, "Database connection error",
+      //                           m_mainSQL.getDatabase().getDatabase().lastError().text());
    }else{
       qInfo(logInfo()) << "Connection to database estabilished successfuly.";
-//      QMessageBox::information(this, "Database connection success", "Connecting to database successful.");
+      //      QMessageBox::information(this, "Database connection success", "Connecting to database successful.");
    }
 }
 //Serializes queries
@@ -779,6 +785,14 @@ void Reporter::m_generateTemplateXLS(){
 }
 //Generates query data model that is displayed in table in application
 void Reporter::m_testingQueryGen(){
+   m_Timer->stop();
+   if(m_firstQuery){
+      m_mainSQL.getModel()->clear();
+      m_mainSQL.getModel()->query().clear();
+      for(auto & it : m_mainSQL.getStorage().getQueries()){
+         it->clearQueries();
+      }
+   }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
       qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
       QMessageBox::critical(0, QObject::tr("Database error"),
@@ -788,7 +802,9 @@ void Reporter::m_testingQueryGen(){
       m_generateQuery(m_nameKey);
       m_executeQuery(m_nameKey);
       m_displaySQLResult(m_nameKey);
+      m_firstQuery = true;
    }
+   m_Timer->start(m_TIMERINTERVAL);
 }
 //Adds first schedule item
 bool Reporter::m_noSchedule(){
@@ -814,10 +830,23 @@ void Reporter::m_SetTimer(qint32 interval){
    m_Timer = new QTimer();
    connect(m_Timer, SIGNAL(timeout()), this, SLOT(timerInterval()));
    m_Timer->start(interval);
+   qInfo(logInfo()) << "Timer with interval: " + QVariant(interval).toString() + " ms successfully started.";
 }
 
 void Reporter::m_debugNotification(const QString & toDisplay){
    QMessageBox::information(this, "debug", toDisplay);
+}
+
+void Reporter::m_PauseTimer(){
+   if(m_Timer->isActive()){
+      ui->pauseResumeButton->setText("Resume");
+      ui->colorLabel->setStyleSheet("background-color: red");
+      m_Timer->stop();
+   }else{
+      ui->pauseResumeButton->setText("Pause");
+      ui->colorLabel->setStyleSheet("background-color: green");
+      m_Timer->start(m_TIMERINTERVAL);
+   }
 }
 //Loads schedule on mouse click
 void Reporter::m_loadSchedule(){
@@ -1454,7 +1483,6 @@ void Reporter::timerInterval(){
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
    tmpParams = m_mainSQL.getStorage().getQueueParameters();
 
-   //TODO SPLIT THIS WITH THE TESTING GENERATING ENVIRONMENT -> CRASHING
    m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase());
 }
 
@@ -1462,4 +1490,8 @@ void Reporter::on_toolButton_4_clicked(){
    CustomScheduling * instantSchedule;
    instantSchedule = new CustomScheduling(this);
    instantSchedule->show();
+}
+
+void Reporter::on_pauseResumeButton_clicked(){
+   m_PauseTimer();
 }

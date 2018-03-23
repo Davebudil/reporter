@@ -17,6 +17,7 @@ class DailySchedule{
       QString getSubjName() const;
       QString getAttachName() const;
       QMap<QString, QString> & getEmailAdresses();
+      QStringList emailAdresses();
       QTime getTime() const;
       bool getActive() const;
       bool * getDays() const;
