@@ -45,6 +45,7 @@ class SQLquery{
       //function that executes the query
       void executeQuery();
       void clearQueries();
+      void finishQuery();
       //
       QStringList queryList();
 

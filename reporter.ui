@@ -494,7 +494,7 @@ QTabWidget::tab-bar {
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="basic">
      <attribute name="title">
@@ -648,7 +648,7 @@ QTabWidget::tab-bar {
        </rect>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="Shift">
        <attribute name="title">
@@ -2919,6 +2919,9 @@ QTabWidget::tab-bar {
       </property>
      </widget>
      <widget class="QToolButton" name="toolButton_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -2977,6 +2980,9 @@ QTabWidget::tab-bar {
       </property>
      </widget>
      <widget class="QToolButton" name="paramTest">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>80</x>
@@ -3008,6 +3014,23 @@ QTabWidget::tab-bar {
        <string>Table Names</string>
       </property>
      </widget>
+     <zorder>paramTest</zorder>
+     <zorder>queryTable</zorder>
+     <zorder>toolButton</zorder>
+     <zorder>queryEdit</zorder>
+     <zorder>newQuery</zorder>
+     <zorder>saveQuery</zorder>
+     <zorder>queryNameEdit</zorder>
+     <zorder>queryParamEdit</zorder>
+     <zorder>clearQuery</zorder>
+     <zorder>scrollArea</zorder>
+     <zorder>queryDelete</zorder>
+     <zorder>queryActive</zorder>
+     <zorder>toolButton_2</zorder>
+     <zorder>toolButton_3</zorder>
+     <zorder>sqlDataCount</zorder>
+     <zorder>sqlDataCount_2</zorder>
+     <zorder>tableNames</zorder>
     </widget>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -3077,8 +3100,8 @@ QTabWidget::tab-bar {
      <widget class="QLabel" name="colorLabel">
       <property name="geometry">
        <rect>
-        <x>390</x>
-        <y>20</y>
+        <x>10</x>
+        <y>10</y>
         <width>41</width>
         <height>31</height>
        </rect>
@@ -3090,8 +3113,8 @@ QTabWidget::tab-bar {
      <widget class="QToolButton" name="pauseResumeButton">
       <property name="geometry">
        <rect>
-        <x>440</x>
-        <y>20</y>
+        <x>60</x>
+        <y>10</y>
         <width>101</width>
         <height>31</height>
        </rect>

@@ -33,6 +33,9 @@ Reporter::Reporter(QWidget *parent)
    ui->monthlyDays->setMaximumHeight(100);
    m_shwHide = new QHotkey(QKeySequence(m_Setup.getSettings().hotKey), true);
    connect(m_shwHide, SIGNAL(activated()), this, SLOT(m_showHide()));
+   ui->toolButton_2->setVisible(false);
+   ui->paramTest->setVisible(false);
+   ui->tabWidget_2->removeTab(4);
    //custom is disabled, waiting for future implementation9
 }
 //Destructor
@@ -42,6 +45,7 @@ Reporter::~Reporter(){
    delete m_shwHide;
    qDeleteAll(m_Schedule);
    delete m_Timer;
+   delete instantSchedule;
    qInfo(logInfo()) << "Application shutdown.";
 }
 //Shows or hides application on key shortcut pressed
@@ -72,7 +76,9 @@ void Reporter::m_displaySQLResult(const QString & name){
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
-   m_testingQueryGen();
+   if(m_validateQuerySelected()){
+      m_testingQueryGen();
+   }
 }
 
 void Reporter::m_executeQuery(const QString & name){
@@ -782,6 +788,7 @@ void Reporter::m_generateTemplateXLS(){
    }
    xlsx.saveAs("/home/dave/Documents/sielaff/project/reporter/reporter/templateFieldNamesXLSX.xlsx");
    QDesktopServices::openUrl(QUrl("/home/dave/Documents/sielaff/project/reporter/reporter/templateFieldNamesXLSX.xlsx"));
+   m_mainSQL.getStorage().getQueries()[m_nameKey]->finishQuery();
 }
 //Generates query data model that is displayed in table in application
 void Reporter::m_testingQueryGen(){
@@ -846,6 +853,15 @@ void Reporter::m_PauseTimer(){
       ui->pauseResumeButton->setText("Pause");
       ui->colorLabel->setStyleSheet("background-color: green");
       m_Timer->start(m_TIMERINTERVAL);
+   }
+}
+
+bool Reporter::m_validateQuerySelected(){
+   if(m_nameKey.isEmpty() || m_nameKey.isNull()){
+      QMessageBox::critical(this, QObject::tr("Query Error"), "No query selected.");
+      return false;
+   }else{
+      return true;
    }
 }
 //Loads schedule on mouse click
@@ -1151,7 +1167,9 @@ void Reporter::on_paramDelete_clicked(){
 }
 //Deletes selected query
 void Reporter::on_queryDelete_clicked(){
-   m_deleteQuery();
+   if(m_validateQuerySelected()){
+      m_deleteQuery();
+   }
 }
 //Changes query state to active or inactive
 void Reporter::on_queryActive_stateChanged(int state){
@@ -1393,7 +1411,9 @@ void Reporter::on_toolButton_2_clicked(){
    }
 }
 void Reporter::on_toolButton_3_clicked(){
-   m_generateTemplateXLS();
+   if(m_validateQuerySelected()){
+      m_generateTemplateXLS();
+   }
 }
 void Reporter::on_newScheduling_clicked(){
    m_deleteEmails();
@@ -1487,9 +1507,9 @@ void Reporter::timerInterval(){
 }
 
 void Reporter::on_toolButton_4_clicked(){
-   CustomScheduling * instantSchedule;
    instantSchedule = new CustomScheduling(this);
-   instantSchedule->show();
+   instantSchedule->setModal(true);
+   qInfo() << QVariant(instantSchedule->exec()).toString();
 }
 
 void Reporter::on_pauseResumeButton_clicked(){
