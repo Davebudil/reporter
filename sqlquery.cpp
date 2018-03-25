@@ -96,11 +96,14 @@ void SQLquery::executeQuery(){
       m_Result->clear();
    }
    m_QueryResultRows = m_Result->size();
-   m_Result->finish();
 }
 
 void SQLquery::clearQueries(){
    m_Result->clear();
+}
+
+void SQLquery::finishQuery(){
+   m_Result->finish();
 }
 
 QStringList SQLquery::queryList(){

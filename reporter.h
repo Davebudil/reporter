@@ -153,6 +153,7 @@ class Reporter : public QMainWindow{
       qint32 m_daysWeeklyIndex;
       QTimer* m_Timer;
       quint32 m_TIMERINTERVAL;
+      CustomScheduling * instantSchedule;
 
       bool m_queryActive;
       //Print query result to the table
@@ -238,6 +239,7 @@ class Reporter : public QMainWindow{
       void m_debugNotification(const QString & toDisplay);
       bool m_firstQuery;
       void m_PauseTimer();
+      bool m_validateQuerySelected();
 };
 
 #endif // REPORTER_H
