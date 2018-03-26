@@ -1509,7 +1509,9 @@ void Reporter::timerInterval(){
 void Reporter::on_toolButton_4_clicked(){
    instantSchedule = new CustomScheduling(this);
    instantSchedule->setModal(true);
-   qInfo() << QVariant(instantSchedule->exec()).toString();
+   if(instantSchedule->exec()){
+      m_Export.customExport(*instantSchedule, m_mainSQL.getDatabase().getDatabase());
+   }
 }
 
 void Reporter::on_pauseResumeButton_clicked(){

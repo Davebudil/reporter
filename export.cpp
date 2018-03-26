@@ -53,6 +53,24 @@ void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
    }
 }
 
+void Export::customExport(CustomScheduling & exportData, QSqlDatabase & db){
+   QDateTime from;
+   QDateTime to;
+   quint32 counter = 0;
+   QElapsedTimer stopWatch;
+   from = exportData.m_From;
+   to = exportData.m_To;
+
+   while(!(from >= to)){
+      counter++;
+
+      stopWatch.start();
+      from = from.addSecs(6000);
+   }
+   qInfo(logInfo()) << "Time to calculate: " + QVariant(stopWatch.elapsed()).toString();
+   qInfo(logInfo()) << QVariant(counter).toString();
+}
+
 void Export::runXLSGenerator(){
    QProcess * xlsGenerator = new QProcess;
    QString filePath;
