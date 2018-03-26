@@ -101,3 +101,18 @@ void CustomScheduling::m_loadMonthly(){
    m_Monthly1 = ui->monthlyTime1->time();
 }
 
+//validates the input email
+void CustomScheduling::on_email_textEdited(const QString &arg1){
+   if(!arg1.isNull() || arg1.isEmpty()){
+      if(m_validateEmail(arg1)){
+         ui->label_18->setStyleSheet("color: green");
+      }else{
+         ui->label_18->setStyleSheet("color: red");
+      }
+   }
+}
+
+bool CustomScheduling::m_validateEmail(const QString & email){
+   QRegularExpression regex("^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$");
+   return regex.match(email).hasMatch();
+}

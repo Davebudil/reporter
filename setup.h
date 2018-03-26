@@ -24,6 +24,7 @@ struct SPreferences{
    QString userPassword;
    QString hotKey;
    quint32 timerInterval;
+   quint32 customInterval;
 };
 
 class Setup : public QObject{

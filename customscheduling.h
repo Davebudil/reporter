@@ -68,7 +68,10 @@ class CustomScheduling : public QDialog
 
       void on_toolButton_5_clicked();
 
+      void on_email_textEdited(const QString &arg1);
+
    private:
+      bool m_validateEmail(const QString & email);
       Ui::CustomScheduling *ui;
       void m_loadShift();
       void m_loadDaily();

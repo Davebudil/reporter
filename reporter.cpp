@@ -21,6 +21,7 @@ Reporter::Reporter(QWidget *parent)
    qInfo(logInfo()) << "Application started.";
    m_Setup.loadIni();
    m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
+   m_CUSTOMINTERVAL = m_Setup.getSettings().customInterval;
    ui->setupUi(this);
    ui->queryNameEdit->setText("Query Name");
    ui->queryParamEdit->setText("Master name");
@@ -1507,9 +1508,21 @@ void Reporter::timerInterval(){
 }
 
 void Reporter::on_toolButton_4_clicked(){
+   QQueue<SQLquery> tmpQueries;
+   QQueue<SQLParameter> tmpParams;
    instantSchedule = new CustomScheduling(this);
    instantSchedule->setModal(true);
-   qInfo() << QVariant(instantSchedule->exec()).toString();
+
+   tmpQueries = m_mainSQL.getStorage().getQueueQueries();
+   tmpParams = m_mainSQL.getStorage().getQueueParameters();
+
+   if(instantSchedule->exec()){
+      m_Export.customExport(*instantSchedule,
+                            tmpQueries,
+                            tmpParams,
+                            m_mainSQL.getDatabase().getDatabase(),
+                            m_CUSTOMINTERVAL);
+   }
 }
 
 void Reporter::on_pauseResumeButton_clicked(){

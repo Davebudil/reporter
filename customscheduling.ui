@@ -595,7 +595,7 @@ QTabWidget::tab-bar {
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -1539,7 +1539,7 @@ QTabWidget::tab-bar {
     <rect>
      <x>230</x>
      <y>290</y>
-     <width>151</width>
+     <width>211</width>
      <height>20</height>
     </rect>
    </property>

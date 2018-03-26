@@ -10,6 +10,7 @@
 #include "sqlparameter.h"
 #include "scheduling.h"
 #include <QProcess>
+#include <customscheduling.h>
 
 class Export{
    public:
@@ -22,9 +23,19 @@ class Export{
                         QQueue<SQLquery> & queries,
                         QQueue<SQLParameter> & parameters,
                         QSqlDatabase & db);
+      void customExport(CustomScheduling & exportData,
+                        QQueue<SQLquery> & queries,
+                        QQueue<SQLParameter> & parameters,
+                        QSqlDatabase & db,
+                        const quint32 & customInterval);
 
    private:
       void runXLSGenerator();
+      void m_createTempScheduling(CustomScheduling & exportData,
+                                  ShiftSchedule & shift,
+                                  DailySchedule & daily,
+                                  WeeklySchedule & weekly,
+                                  MonthlySchedule & monthly);
       void m_generateShift(ShiftSchedule & shift,
                            QQueue<SQLquery> & queries,
                            SQLParameter & param,
