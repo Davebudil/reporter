@@ -53,22 +53,64 @@ void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
    }
 }
 
-void Export::customExport(CustomScheduling & exportData, QSqlDatabase & db){
+void Export::customExport(CustomScheduling & exportData,
+                          QQueue<SQLquery> & queries,
+                          QQueue<SQLParameter> & parameters,
+                          QSqlDatabase & db,
+                          const quint32 & customInterval){
    QDateTime from;
    QDateTime to;
-   quint32 counter = 0;
-   QElapsedTimer stopWatch;
+   ShiftSchedule shift;
+   DailySchedule daily;
+   WeeklySchedule weekly;
+   MonthlySchedule monthly;
+   quint32 exportCount = 0;
+
    from = exportData.m_From;
    to = exportData.m_To;
+   m_createTempScheduling(exportData, shift, daily, weekly, monthly);
 
-   while(!(from >= to)){
-      counter++;
+   while(!(from > to)){
+      if(exportData.m_useParameters){
+         if(exportData.m_Shift){
+            for(auto & it : parameters){
+               m_generateShift(shift, queries, it, db, from, exportCount);
+            }
+         }
+         if(exportData.m_Daily){
+            for(auto & it : parameters){
+               m_generateDaily(daily, queries, it, db, from, exportCount);
+            }
+         }
+         if(exportData.m_Weekly){
+            for(auto & it : parameters){
+               m_generateWeekly(weekly, queries, it, db, from, exportCount);
+            }
+         }
+         if(exportData.m_Monthly){
+            for(auto & it : parameters){
+               m_generateMonthly(monthly, queries, it, db, from, exportCount);
+            }
+         }
+      }else{
+         //work around to not use any parameters -> use empy parameter as arguement
+         SQLParameter tmp(0);
 
-      stopWatch.start();
-      from = from.addSecs(6000);
+         if(exportData.m_Shift){
+            m_generateShift(shift, queries, tmp, db, from, exportCount);
+         }
+         if(exportData.m_Daily){
+            m_generateDaily(daily, queries, tmp, db, from, exportCount);
+         }
+         if(exportData.m_Weekly){
+            m_generateWeekly(weekly, queries, tmp, db, from, exportCount);
+         }
+         if(exportData.m_Monthly){
+            m_generateMonthly(monthly, queries, tmp, db, from, exportCount);
+         }
+      }
+      from = from.addMSecs(customInterval);
    }
-   qInfo(logInfo()) << "Time to calculate: " + QVariant(stopWatch.elapsed()).toString();
-   qInfo(logInfo()) << QVariant(counter).toString();
 }
 
 void Export::runXLSGenerator(){
@@ -76,6 +118,61 @@ void Export::runXLSGenerator(){
    QString filePath;
    filePath = QDir::currentPath() + "xlsxGenerator.exe";
    xlsGenerator->start(filePath);
+}
+
+void Export::m_createTempScheduling(CustomScheduling & exportData,
+                                    ShiftSchedule & shift,
+                                    DailySchedule & daily,
+                                    WeeklySchedule & weekly,
+                                    MonthlySchedule & monthly){
+   if(exportData.m_Shift){
+      for(quint32 i = 0; i < 7; i++){
+         shift.setDays(i, exportData.m_shiftDays[i]);
+      }
+      shift.setActive(true);
+      shift.setAttachName(exportData.m_ShiftAttachName);
+      shift.setCsvAttach(exportData.m_shiftCSV);
+      shift.setSubjName(exportData.m_ShiftSubjectName);
+      shift.setXlsAttach(exportData.m_shiftXLS);
+      shift.setXlsTemplatePath(exportData.m_ShiftxlsTemplatePath);
+      shift.setFrom0(exportData.m_Shift1);
+      shift.setFrom1(exportData.m_Shift2);
+      shift.setTo0(exportData.m_Shift3);
+   }
+   if(exportData.m_Daily){
+      for(quint32 i = 0; i < 7; i++){
+         daily.setDays(i, exportData.m_dailyDays[i]);
+      }
+      daily.setActive(true);
+      daily.setAttachName(exportData.m_DailyAttachName);
+      daily.setCsvAttach(exportData.m_dailyCSV);
+      daily.setXlsAttach(exportData.m_dailyXLS);
+      daily.setSubjName(exportData.m_DailySubjectName);
+      daily.setXlsTemplatePath(exportData.m_ShiftxlsTemplatePath);
+      daily.setTime(exportData.m_Daily1);
+   }
+
+   if(exportData.m_Weekly){
+      weekly.setDay(exportData.m_weeklyDay);
+      weekly.setActive(true);
+      weekly.setAttachName(exportData.m_WeeklyAttachName);
+      weekly.setCsvAttach(exportData.m_weeklyCSV);
+      weekly.setXlsAttach(exportData.m_weeklyXLS);
+      weekly.setXlsTemplatePath(exportData.m_WeeklyxlsTemplatePath);
+      weekly.setSubjName(exportData.m_WeeklySubjectName);
+      weekly.setTime(exportData.m_Weekly1);
+   }
+   if(exportData.m_Monthly){
+      monthly.setActive(true);
+      monthly.setDay(exportData.m_monthlyDay);
+      monthly.setCsvAttach(exportData.m_monthlyCSV);
+      monthly.setXlsAttach(exportData.m_monthlyXLS);
+      monthly.setAttachName(exportData.m_MonthlyAttachName);
+      monthly.setXlsTemplatePath(exportData.m_MonthlyxlsTemplatePath);
+      monthly.setSubjName(exportData.m_MonthlySubjectName);
+      monthly.setTime(exportData.m_Monthly1);
+   }
+
 }
 
 void Export::m_generateShift(ShiftSchedule & shift,

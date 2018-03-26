@@ -153,6 +153,7 @@ class Reporter : public QMainWindow{
       qint32 m_daysWeeklyIndex;
       QTimer* m_Timer;
       quint32 m_TIMERINTERVAL;
+      quint32 m_CUSTOMINTERVAL;
       CustomScheduling * instantSchedule;
 
       bool m_queryActive;

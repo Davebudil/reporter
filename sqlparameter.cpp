@@ -5,6 +5,10 @@ SQLParameter::SQLParameter(const QStringList & parameters, const qint32 & count)
      m_paramCount(count){
 }
 
+SQLParameter::SQLParameter(quint32 count) : m_paramCount(count){
+
+}
+
 void SQLParameter::editInfo(const QStringList & param, const qint32 & count){
    m_Parameters = param;
    m_paramCount = count;
@@ -21,6 +25,10 @@ QString SQLParameter::getName() const{
 
 qint32 SQLParameter::getCount() const{
    return m_paramCount;
+}
+
+void SQLParameter::setCount(quint32 count){
+   m_paramCount = count;
 }
 
 void SQLParameter::printParams() const{

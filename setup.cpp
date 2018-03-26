@@ -90,7 +90,7 @@ SPreferences Setup::getSettings(){
 }
 
 void Setup::loadSettings(){
-   QSettings settings(QDir::currentPath() +  "/reporterSettings.ini", QSettings::IniFormat);
+   QSettings settings(QDir::currentPath() +  "/ReporterSettings.ini", QSettings::IniFormat);
    m_Settings.databaseType = settings.value("DatabaseType", "QMYSQL").toString();
    m_Settings.host = settings.value("Host", "localhost").toString();
    m_Settings.port = settings.value("Port", 3306).toInt();
@@ -98,11 +98,12 @@ void Setup::loadSettings(){
    m_Settings.userName = settings.value("Username", "root").toString();
    m_Settings.userPassword = settings.value("UserPassword", "Blizazrd5").toString();
    m_Settings.hotKey = settings.value("Hotkey", "ctrl+alt+Q").toString();
-   m_Settings.timerInterval = settings.value("TimerInterval", 1800000).toInt();
+   m_Settings.timerInterval = settings.value("TimerIntervalMS", 1800000).toInt();
+   m_Settings.customInterval = settings.value("CustomIntervalMS", 1800000).toInt();
 }
 
 void Setup::saveSettings(){
-   QSettings settings(QDir::currentPath() +  "/reporterSettings.ini", QSettings::IniFormat);
+   QSettings settings(QDir::currentPath() +  "/ReporterSettings.ini", QSettings::IniFormat);
    settings.setValue("DatabaseType", m_Settings.databaseType);
    settings.setValue("Host", m_Settings.host);
    settings.setValue("Port", m_Settings.port);
@@ -110,7 +111,8 @@ void Setup::saveSettings(){
    settings.setValue("Username", m_Settings.userName);
    settings.setValue("UserPassword", m_Settings.userPassword);
    settings.setValue("Hotkey", m_Settings.hotKey);
-   settings.setValue("TimerInterval", m_Settings.timerInterval);
+   settings.setValue("TimerIntervalMS", m_Settings.timerInterval);
+   settings.setValue("CustomIntervalMS", m_Settings.customInterval);
 }
 
 bool Setup::m_serializeQueries(const QStringList & queries){
