@@ -1,5 +1,6 @@
 #include "customscheduling.h"
 #include "ui_customscheduling.h"
+#include "log.h"
 
 CustomScheduling::CustomScheduling(QWidget *parent) :
    QDialog(parent),
@@ -29,7 +30,7 @@ void CustomScheduling::on_buttonBox_accepted(){
    m_Weekly = ui->weeklyCheck->isChecked();
    m_Monthly = ui->monthlyCheck->isChecked();
    m_Email = ui->email->text();
-   m_useParameters = ui->weeklyCheck_2->isChecked();
+   m_useParameters = ui->parametersCheck->isChecked();
    m_From = ui->dateFrom->dateTime();
    m_To = ui->dateTo->dateTime();
 

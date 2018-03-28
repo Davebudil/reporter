@@ -507,7 +507,7 @@ QTabWidget::tab-bar {
     <string>Dialy</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="monthlyCheck">
+  <widget class="QCheckBox" name="weeklyCheck">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -520,7 +520,7 @@ QTabWidget::tab-bar {
     <string>Weekly</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="weeklyCheck">
+  <widget class="QCheckBox" name="monthlyCheck">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -1511,7 +1511,7 @@ QTabWidget::tab-bar {
     </widget>
    </widget>
   </widget>
-  <widget class="QCheckBox" name="weeklyCheck_2">
+  <widget class="QCheckBox" name="parametersCheck">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -1551,8 +1551,8 @@ QTabWidget::tab-bar {
  <tabstops>
   <tabstop>toolButton</tabstop>
   <tabstop>dailyCheck</tabstop>
-  <tabstop>monthlyCheck</tabstop>
   <tabstop>weeklyCheck</tabstop>
+  <tabstop>monthlyCheck</tabstop>
   <tabstop>dateFrom</tabstop>
   <tabstop>dateTo</tabstop>
   <tabstop>ShiftXLStemplate</tabstop>

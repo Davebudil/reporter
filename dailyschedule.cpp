@@ -120,7 +120,10 @@ void DailySchedule::setCsvAttach(bool csvAttach){
 }
 
 bool DailySchedule::generateDailyData(const QDateTime & currentData){
-   return m_checkDoneInterval(currentData);
+   if(m_Days[currentData.date().dayOfWeek() - 1]){
+      return m_checkDoneInterval(currentData);
+   }
+   return false;
 }
 
 bool DailySchedule::m_checkDoneInterval(const QDateTime & currentDate){
