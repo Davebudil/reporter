@@ -1,13 +1,9 @@
 #include "export.h"
 #include "log.h"
 
-Export::Export(){
+Export::Export() = default;
 
-}
-
-Export::~Export(){
-
-}
+Export::~Export() = default;
 
 ExportXLS Export::getXLS() const{
    return m_XLS;
@@ -57,7 +53,7 @@ void Export::customExport(CustomScheduling & exportData,
                           QQueue<SQLquery> & queries,
                           QQueue<SQLParameter> & parameters,
                           QSqlDatabase & db,
-                          const quint32 & customInterval){
+                          qint32 & customInterval){
    QDateTime from;
    QDateTime to;
    ShiftSchedule shift;
@@ -72,7 +68,7 @@ void Export::customExport(CustomScheduling & exportData,
 
    while(!(from > to)){
       if(exportData.m_useParameters){
-         //SHIFT NEFUNGUJE, GENERUJE JEN JEDNOU A NEZALEZI NA INTERVALU, PROBLEM S RESETEM NEJSPIS
+         //CHYBA JE VE 3. INTERVALU, PROBIHA JEN 8:00 -> 16:00 -> 24:00 a "24 -> 8:00" NEPROBEHNE
          if(exportData.m_Shift && shift.generateShiftData(from)){
             for(auto & it : parameters){
                m_generateShift(shift, queries, it, db, from, exportCount);
@@ -101,6 +97,7 @@ void Export::customExport(CustomScheduling & exportData,
          SQLParameter tmp(0);
 
          if(exportData.m_Shift && shift.generateShiftData(from)){
+//            qInfo(logInfo()) << "the time that passes shift interval: "+ from.toString();
             m_generateShift(shift, queries, tmp, db, from, exportCount);
          }
          if(exportData.m_Daily && daily.generateDailyData(from)){
@@ -121,7 +118,7 @@ void Export::customExport(CustomScheduling & exportData,
 }
 
 void Export::runXLSGenerator(){
-   QProcess * xlsGenerator = new QProcess;
+   auto xlsGenerator = new QProcess;
    QString filePath;
    filePath = QDir::currentPath() + "xlsxGenerator.exe";
    xlsGenerator->start(filePath);
@@ -133,7 +130,7 @@ void Export::m_createTempScheduling(CustomScheduling & exportData,
                                     WeeklySchedule & weekly,
                                     MonthlySchedule & monthly){
    if(exportData.m_Shift){
-      for(quint32 i = 0; i < 7; i++){
+      for(qint32 i = 0; i < 7; i++){
          shift.setDays(i, exportData.m_shiftDays[i]);
       }
       shift.setActive(true);
@@ -143,11 +140,11 @@ void Export::m_createTempScheduling(CustomScheduling & exportData,
       shift.setXlsAttach(exportData.m_shiftXLS);
       shift.setXlsTemplatePath(exportData.m_ShiftxlsTemplatePath);
       shift.setFrom0(exportData.m_Shift1);
-      shift.setFrom1(exportData.m_Shift2);
-      shift.setTo0(exportData.m_Shift3);
+      shift.setTo0(exportData.m_Shift2);
+      shift.setFrom1(exportData.m_Shift3);
    }
    if(exportData.m_Daily){
-      for(quint32 i = 0; i < 7; i++){
+      for(qint32 i = 0; i < 7; i++){
          daily.setDays(i, exportData.m_dailyDays[i]);
       }
       daily.setActive(true);
@@ -194,7 +191,7 @@ void Export::m_generateShift(ShiftSchedule & shift,
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
       genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
-      for(quint32 i = 0; i < quint32(param.getCount()); ++i){
+      for(qint32 i = 0; i < quint32(param.getCount()); ++i){
          QString tmpParam1;
          tmpParam1 = "#PARAMETER" + QString(i+1);
          it.bindParameter(tmpParam1, param.getParameters()[i]);
@@ -208,6 +205,7 @@ void Export::m_generateShift(ShiftSchedule & shift,
                                        " TO " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+         qInfo(logInfo()) << "generating from: " + tmp.toString() + " to " + tmp2.toString();
       }else if(shift.getDone1()){
          tmp.setTime(shift.getFrom0());
          tmp2.setTime(shift.getTo0());
@@ -217,6 +215,7 @@ void Export::m_generateShift(ShiftSchedule & shift,
                                        " TO " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+         qInfo(logInfo()) << "generating from: " + tmp.toString() + " to " + tmp2.toString();
       }else if(shift.getDone2()){
          tmp.setTime(shift.getTo0());
          tmp2.setTime(shift.getFrom1());
@@ -226,6 +225,7 @@ void Export::m_generateShift(ShiftSchedule & shift,
                                        " TO " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+         qInfo(logInfo()) << "generating from: " + tmp.toString() + " to " + tmp2.toString();
       }
       it.generateQuery(db);
       it.executeQuery();
@@ -271,7 +271,7 @@ void Export::m_generateDaily(DailySchedule & daily,
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
       genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
-      for(quint32 i = 0; i < quint32(param.getCount()); ++i){
+      for(qint32 i = 0; i < quint32(param.getCount()); ++i){
          QString tmpParam1;
          tmpParam1 = "#PARAMETER" + QString(i+1);
          it.bindParameter(tmpParam1, param.getParameters()[i]);
@@ -330,7 +330,7 @@ void Export::m_generateWeekly(WeeklySchedule & weekly,
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
       genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
-      for(quint32 i = 0; i < quint32(param.getCount()); ++i){
+      for(qint32 i = 0; i < quint32(param.getCount()); ++i){
          QString tmpParam1;
          tmpParam1 = "#PARAMETER" + QString(i+1);
          it.bindParameter(tmpParam1, param.getParameters()[i]);
@@ -390,7 +390,7 @@ void Export::m_generateMonthly(MonthlySchedule & monthly,
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
       genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
-      for(quint32 i = 0; i < quint32(param.getCount()); ++i){
+      for(qint32 i = 0; i < quint32(param.getCount()); ++i){
          QString tmpParam1;
          tmpParam1 = "#PARAMETER" + QString(i+1);
          it.bindParameter(tmpParam1, param.getParameters()[i]);

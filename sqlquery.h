@@ -12,8 +12,8 @@ class SQLquery{
    public:
       //constuctor
       explicit SQLquery(const QString & query,
-                        const QString & name,
-                        const QString & param,
+                        QString  name,
+                        QString  param,
                         bool master,
                         bool active);
       ~SQLquery();
@@ -35,6 +35,7 @@ class SQLquery{
       void setParam(const QString & param);
       void setMasterFinal(const QString & finalString);
       void setParamString(const QString & paramString);
+      void setQueryResultRows(const qint32 & QueryResultRows);
       void setActive(bool active);
       //print for debugging
       void printValue();
@@ -50,7 +51,6 @@ class SQLquery{
       QStringList queryList();
 
 
-      void setQueryResultRows(const quint32 & QueryResultRows);
 
    private:
       //original text
@@ -69,7 +69,7 @@ class SQLquery{
       bool m_Master;
       //is Active
       bool m_isActive;
-      quint32 m_QueryResultRows;
+      qint32 m_QueryResultRows;
 };
 
 #endif // SQLQUERY_H

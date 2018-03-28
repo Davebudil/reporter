@@ -2,12 +2,12 @@
 #include <log.h>
 
 ShiftSchedule::ShiftSchedule()
-              :m_Active(false),
-               m_csvAttach(false),
-               m_xlsAttach(false),
-               m_Done0(false),
-               m_Done1(false),
-               m_Done2(false){
+   :m_Active(false),
+     m_csvAttach(false),
+     m_xlsAttach(false),
+     m_Done0(false),
+     m_Done1(false),
+     m_Done2(false){
    m_Days = new bool[7];
    std::fill_n(m_Days, 7, false);
 }
@@ -99,13 +99,13 @@ void ShiftSchedule::deserializeList(const QStringList & list){
    }
 }
 void ShiftSchedule::setXlsAttach(bool xlsAttach){
-    m_xlsAttach = xlsAttach;
+   m_xlsAttach = xlsAttach;
 }
 bool ShiftSchedule::getCsvAttach() const{
-    return m_csvAttach;
+   return m_csvAttach;
 }
 void ShiftSchedule::setCsvAttach(bool csvAttach){
-    m_csvAttach = csvAttach;
+   m_csvAttach = csvAttach;
 }
 QString ShiftSchedule::getSubjName() const{
    return m_SubjName;
@@ -141,9 +141,8 @@ void ShiftSchedule::setEmailTemplatePath(const QString & emailTemplatePath){
 bool ShiftSchedule::generateShiftData(const QDateTime & currentTime){
    if(m_Days[currentTime.date().dayOfWeek() - 1]){
       return m_checkDoneInterval(currentTime.time());
-   }else{
-      return false;
    }
+   return false;
 }
 
 bool ShiftSchedule::m_checkDoneInterval(const QTime & currentTime){

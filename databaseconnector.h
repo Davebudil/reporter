@@ -1,10 +1,9 @@
 #ifndef DATABASECONNECTOR_H
 #define DATABASECONNECTOR_H
 
-#include <QObject>
 #include <QSqlDatabase>
+#include <QObject>
 #include <QSql>
-#include <QSqlError>
 #include <QMessageBox>
 
 class DatabaseConnector : public QObject{
@@ -28,9 +27,9 @@ class DatabaseConnector : public QObject{
    public slots:
 
    private:
+      qint32 m_port;
       QString m_dbType;
       QString m_hostName;
-      qint32 m_port;
       QString m_dbName;
       QString m_usrName;
       QString m_usrPasswrd;

@@ -1,6 +1,6 @@
+#include "log.h"
 #include "reporter.h"
 #include "ui_reporter.h"
-#include "log.h"
 
 //Constructor
 Reporter::Reporter(QWidget *parent)
@@ -142,7 +142,7 @@ void Reporter::m_addQuery(const QString & queryText,
    }
    if(!queryText.isEmpty() && !queryName.isEmpty()){
       if(m_mainSQL.getStorage().addQuery(queryText,queryName,param, active, true, mode)){
-         QToolButton * newQuery = new QToolButton;
+         auto newQuery = new QToolButton;
          newQuery->setText(queryName);
          //Ugly design settings ignore please
          newQuery->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
@@ -173,13 +173,13 @@ void Reporter::m_addQuery(const QString & queryText,
          m_serializeQueries();
       }
    }else{
-      QMessageBox::critical(0, QObject::tr("Text error"), "No text entered.");
+      QMessageBox::critical(nullptr, QObject::tr("Text error"), "No text entered.");
    }
 }
 //Function to add repeated parameters
 void Reporter::m_addParameters(const QStringList & params, const qint32 & count){
    if(m_mainSQL.getStorage().addParam(params,count,m_paramKey)){
-      QToolButton * newParameter = new QToolButton;
+      auto newParameter = new QToolButton;
       newParameter->setText(params.at(0));
       newParameter->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                                   "background-color: #f44336; } QToolButton::menu-button "
@@ -216,7 +216,7 @@ void Reporter::m_addSchedule(const QString & name){
       return;
    }
 
-   Scheduling * tmp = new Scheduling;
+   auto tmp = new Scheduling;
    tmp->setName(name);
    m_Schedule.insert(m_scheduleCount, tmp);
    m_scheduleKey = m_scheduleCount++;
@@ -226,7 +226,7 @@ void Reporter::m_addSchedule(const QString & name){
    //   m_editShift(m_scheduleKey);
    //   m_editWeekly(m_scheduleKey);
 
-   QToolButton * newSchedule = new QToolButton;
+   auto newSchedule = new QToolButton;
    newSchedule->setText(name);
    newSchedule->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                               "background-color: #f44336; } QToolButton::menu-button "
@@ -265,7 +265,7 @@ void Reporter::m_addShiftScheduleEmail(const QString & email){
       return;
    }
 
-   QToolButton * newEmail = new QToolButton;
+   auto newEmail = new QToolButton;
    newEmail->setText(email);
    newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                            "background-color: #f44336; } QToolButton::menu-button "
@@ -305,7 +305,7 @@ void Reporter::m_addDailyScheduleEmail(const QString & email){
       return;
    }
 
-   QToolButton * newEmail = new QToolButton;
+   auto newEmail = new QToolButton;
    newEmail->setText(email);
    newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                            "background-color: #f44336; } QToolButton::menu-button "
@@ -345,7 +345,7 @@ void Reporter::m_addWeeklyScheduleEmail(const QString & email){
       return;
    }
 
-   QToolButton * newEmail = new QToolButton;
+   auto newEmail = new QToolButton;
    newEmail->setText(email);
    newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                            "background-color: #f44336; } QToolButton::menu-button "
@@ -385,7 +385,7 @@ void Reporter::m_addMonthlyScheduleEmail(const QString & email){
       return;
    }
 
-   QToolButton * newEmail = new QToolButton;
+   auto newEmail = new QToolButton;
    newEmail->setText(email);
    newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                            "background-color: #f44336; } QToolButton::menu-button "
@@ -646,11 +646,11 @@ void Reporter::m_deserializeSchedule(){
    m_scheduleKey = 0;
    m_scheduleCount = 0;
    for(auto & it : scheduleNames){
-      Scheduling * tmp = new Scheduling;
+      auto tmp = new Scheduling;
       tmp->setName(it);
       m_Schedule.insert(m_scheduleCount, tmp);
       m_scheduleKey = m_scheduleCount++;
-      QToolButton * newSchedule = new QToolButton;
+      auto newSchedule = new QToolButton;
       newSchedule->setText(it);
       newSchedule->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                                  "background-color: #f44336; } QToolButton::menu-button "
@@ -697,7 +697,7 @@ void Reporter::m_deserializeSchedule(){
 void Reporter::m_saveSchedule(){
    tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
    delete tmp;
-   QToolButton * newSchedule = new QToolButton;
+   auto newSchedule = new QToolButton;
    newSchedule->setText(ui->scheduleName->text());
    newSchedule->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                               "background-color: #f44336; } QToolButton::menu-button "
@@ -797,7 +797,7 @@ void Reporter::m_testingQueryGen(){
    }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
       qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
-      QMessageBox::critical(0, QObject::tr("Database error"),
+      QMessageBox::critical(nullptr, QObject::tr("Database error"),
                             "Not connected to database");
    }else{
       m_loadMaster();
@@ -923,9 +923,8 @@ void Reporter::m_loadMaster(){
 //Loads emails to create mail buttons
 void Reporter::m_loadEmails(){
    for(auto & it : m_Schedule[m_scheduleKey]->getShift().getEmailAdresses()){
-      QString email = it;
-      QToolButton * newEmail = new QToolButton;
-      newEmail->setText(email);
+      auto newEmail = new QToolButton;
+      newEmail->setText(it);
       newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                               "background-color: #f44336; } QToolButton::menu-button "
                               "{ background: url('./images/downarrowgray.png') "
@@ -946,14 +945,13 @@ void Reporter::m_loadEmails(){
                               "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
                               "QStatusBar::item { color: black; background-color: #f44336; } "
                               "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
-      newEmail->setObjectName(email);
+      newEmail->setObjectName(it);
       ui->shiftEmailLayout->addWidget(newEmail);
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadShiftEmail);
    }
    for(auto & it : m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses()){
-      QString email = it;
-      QToolButton * newEmail = new QToolButton;
-      newEmail->setText(email);
+      auto newEmail = new QToolButton;
+      newEmail->setText(it);
       newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                               "background-color: #f44336; } QToolButton::menu-button "
                               "{ background: url('./images/downarrowgray.png') "
@@ -974,14 +972,13 @@ void Reporter::m_loadEmails(){
                               "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
                               "QStatusBar::item { color: black; background-color: #f44336; } "
                               "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
-      newEmail->setObjectName(email);
+      newEmail->setObjectName(it);
       ui->dailyEmailLayout->addWidget(newEmail);
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadDailyEmail);
    }
    for(auto & it : m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses()){
-      QString email = it;
-      QToolButton * newEmail = new QToolButton;
-      newEmail->setText(email);
+      auto newEmail = new QToolButton;
+      newEmail->setText(it);
       newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                               "background-color: #f44336; } QToolButton::menu-button "
                               "{ background: url('./images/downarrowgray.png') "
@@ -1002,14 +999,13 @@ void Reporter::m_loadEmails(){
                               "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
                               "QStatusBar::item { color: black; background-color: #f44336; } "
                               "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
-      newEmail->setObjectName(email);
+      newEmail->setObjectName(it);
       ui->weeklyEmailLayout->addWidget(newEmail);
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadWeeklyEmail);
    }
    for(auto & it : m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses()){
-      QString email = it;
-      QToolButton * newEmail = new QToolButton;
-      newEmail->setText(email);
+      auto newEmail = new QToolButton;
+      newEmail->setText(it);
       newEmail->setStyleSheet("QToolButton:hover, QToolButton:pressed { "
                               "background-color: #f44336; } QToolButton::menu-button "
                               "{ background: url('./images/downarrowgray.png') "
@@ -1030,7 +1026,7 @@ void Reporter::m_loadEmails(){
                               "border-left: 1px solid #FDD835; background: transparent; width: 16px; } "
                               "QStatusBar::item { color: black; background-color: #f44336; } "
                               "QAbstractScrollArea { /* Borders around the code editor and debug window */ border: 0; }");
-      newEmail->setObjectName(email);
+      newEmail->setObjectName(it);
       ui->monthlyEmailLayout->addWidget(newEmail);
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadMonthlyEmail);
    }

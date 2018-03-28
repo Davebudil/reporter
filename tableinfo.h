@@ -7,14 +7,14 @@
 
 namespace Ui {
    class TableInfo;
-}
+} // namespace Ui
 
 class TableInfo : public QDialog{
       Q_OBJECT
 
    public:
-      explicit TableInfo(QWidget *parent = 0);
-      ~TableInfo();
+      explicit TableInfo(QWidget *parent = nullptr);
+      ~TableInfo() override;
       void getInfo(const QVector<QStringList> & dbInfo);
 
    private:

@@ -1,14 +1,16 @@
+#include <utility>
+
 #include "sqlquery.h"
 #include "log.h"
 
 SQLquery::SQLquery(const QString & query,
-                   const QString & name,
-                   const QString & param,
+                   QString  name,
+                   QString  param,
                    bool master,
                    bool active)
    : m_Query(query),
-     m_Name(name),
-     m_mParameter(param),
+     m_Name(std::move(name)),
+     m_mParameter(std::move(param)),
      m_masterfinalString(query),
      m_finalString(query),
      m_Result(nullptr),
@@ -27,7 +29,7 @@ QSqlQuery SQLquery::getResult(){
 }
 QString SQLquery::getResultString(){
    QString tmp = m_finalString;
-   tmp.replace(QRegExp("[\\n\\t\\r]"), " ");
+   tmp.replace(QRegExp(R"([\n\t\r])"), " ");
    return tmp;
 }
 QString SQLquery::getName(){
@@ -92,7 +94,7 @@ void SQLquery::executeQuery(){
    m_Result->exec();
    if(!m_Result->isActive()){
       qWarning(logWarning()) << "SQL error" + m_Result->lastError().text();
-      QMessageBox::warning(0, QObject::tr("SQL error."), m_Result->lastError().text());
+      QMessageBox::warning(nullptr, QObject::tr("SQL error."), m_Result->lastError().text());
       m_Result->clear();
    }
    m_QueryResultRows = m_Result->size();
@@ -114,8 +116,7 @@ QStringList SQLquery::queryList(){
    return queryData;
 }
 
-void SQLquery::setQueryResultRows(const quint32 & QueryResultRows)
-{
+void SQLquery::setQueryResultRows(const qint32 & QueryResultRows){
    m_QueryResultRows = QueryResultRows;
 }
 //Binds parameter to value

@@ -2,8 +2,7 @@
 #define CUSTOMSCHEDULE_H
 
 
-class CustomSchedule
-{
+class CustomSchedule{
    public:
       CustomSchedule();
 };

@@ -7,9 +7,7 @@ WeeklySchedule::WeeklySchedule()
                 m_xlsAttach(false),
                 m_Day(0){
 }
-WeeklySchedule::~WeeklySchedule(){
-
-}
+WeeklySchedule::~WeeklySchedule() = default;
 QString WeeklySchedule::getAttachName() const{
    return m_AttachName;
 }

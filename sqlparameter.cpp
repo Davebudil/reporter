@@ -1,11 +1,12 @@
+#include <utility>
 #include "sqlparameter.h"
 
-SQLParameter::SQLParameter(const QStringList & parameters, const qint32 & count)
-   : m_Parameters(parameters),
+SQLParameter::SQLParameter(QStringList  parameters, const qint32 & count)
+   : m_Parameters(std::move(parameters)),
      m_paramCount(count){
 }
 
-SQLParameter::SQLParameter(quint32 count) : m_paramCount(count){
+SQLParameter::SQLParameter(qint32 count) : m_paramCount(count){
 
 }
 
@@ -27,13 +28,13 @@ qint32 SQLParameter::getCount() const{
    return m_paramCount;
 }
 
-void SQLParameter::setCount(quint32 count){
+void SQLParameter::setCount(qint32 count){
    m_paramCount = count;
 }
 
 void SQLParameter::printParams() const{
    for(auto & it : m_Parameters){
-      QString tmp = it;
+      const QString& tmp = it;
       qDebug() << tmp;
    }
 }

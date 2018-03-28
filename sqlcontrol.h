@@ -14,7 +14,7 @@ class SQLControl : public QObject
       //Constructor
       explicit SQLControl(QObject *parent = nullptr);
       //Destructor
-      ~SQLControl();
+      ~SQLControl() override;
       //Getters
       QString getPassword();
       QSqlQueryModel * getModel();

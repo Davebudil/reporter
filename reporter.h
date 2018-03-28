@@ -34,7 +34,7 @@
 
 namespace Ui{
    class Reporter;
-}
+} // namespace Ui
 /*Main class of the application
  *Contains all other classes
  * */
@@ -43,12 +43,12 @@ class Reporter : public QMainWindow{
 
    public:
       //Constructor
-      explicit Reporter(QWidget *parent = 0);
+      explicit Reporter(QWidget *parent = nullptr);
       //Destructor
-      ~Reporter();
+      ~Reporter() override;
+      void closeEvent(QCloseEvent * event) override;
       //Sets up default settings of the app
       void defaultSettings();
-      void closeEvent(QCloseEvent * event);
 
    private slots:
       //Shows or hides application
@@ -152,8 +152,8 @@ class Reporter : public QMainWindow{
       QHotkey * m_shwHide;
       qint32 m_daysWeeklyIndex;
       QTimer* m_Timer;
-      quint32 m_TIMERINTERVAL;
-      quint32 m_CUSTOMINTERVAL;
+      qint32 m_TIMERINTERVAL;
+      qint32 m_CUSTOMINTERVAL;
       CustomScheduling * instantSchedule;
 
       bool m_queryActive;

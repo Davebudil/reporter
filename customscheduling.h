@@ -15,8 +15,8 @@ class CustomScheduling : public QDialog
       Q_OBJECT
 
    public:
-      explicit CustomScheduling(QWidget *parent = 0);
-      ~CustomScheduling();
+      explicit CustomScheduling(QWidget *parent = nullptr);
+      ~CustomScheduling() override;
       QDateTime m_From;
       QDateTime m_To;
       QTime m_Shift1;
@@ -40,8 +40,8 @@ class CustomScheduling : public QDialog
       bool m_weeklyCSV;
       bool m_monthlyXLS;
       bool m_monthlyCSV;
-      quint32 m_weeklyDay;
-      quint32 m_monthlyDay;
+      qint32 m_weeklyDay;
+      qint32 m_monthlyDay;
       QString m_ShiftAttachName;
       QString m_DailyAttachName;
       QString m_WeeklyAttachName;

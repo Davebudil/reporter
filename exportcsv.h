@@ -6,8 +6,7 @@
 #include <QDesktopServices>
 #include <QFile>
 
-class ExportCSV
-{
+class ExportCSV{
    public:
       ExportCSV();
       bool generateFile(const QString & templatePathCSV,

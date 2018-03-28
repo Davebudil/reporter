@@ -18,13 +18,13 @@
 struct SPreferences{
    QString databaseType;
    QString host;
-   quint32 port;
+   qint32 port;
    QString databaseName;
    QString userName;
    QString userPassword;
    QString hotKey;
-   quint32 timerInterval;
-   quint32 customInterval;
+   qint32 timerInterval;
+   qint32 customInterval;
 };
 
 class Setup : public QObject{
@@ -33,7 +33,7 @@ class Setup : public QObject{
       //Constructor
       explicit Setup(QObject *parent = nullptr);
       //Destructor
-      ~Setup();
+      ~Setup() override;
       //.ini file
       void loadIni();
       void saveIni();
