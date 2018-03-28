@@ -31,6 +31,7 @@ class Export{
 
    private:
       void runXLSGenerator();
+      void m_shiftDayReset(ShiftSchedule & shift, const QDateTime & current);
       void m_createTempScheduling(CustomScheduling & exportData,
                                   ShiftSchedule & shift,
                                   DailySchedule & daily,

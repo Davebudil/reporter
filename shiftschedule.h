@@ -20,6 +20,9 @@ class ShiftSchedule{
       QTime getFrom0() const;
       QTime getTo0() const;
       QTime getFrom1() const;
+      QDateTime getDate0() const;
+      QDateTime getDate1() const;
+      QDateTime getDate2() const;
       bool getActive() const;
       bool * getDays() const;
       bool getCsvAttach() const;
@@ -38,6 +41,12 @@ class ShiftSchedule{
       void setFrom0(const QTime & From0);
       void setTo0(const QTime & To0);
       void setFrom1(const QTime & From1);
+      QTime getTimeTMP() const;
+      void setTimeTMP(const QTime & timeTMP);
+      void setDate2(const QDateTime & Date2);
+      void setDate1(const QDateTime & Date1);
+      void setDate0(const QDateTime & Date0);
+
       void setEmailTemplatePath(const QString & emailTemplatePath);
       bool generateShiftData(const QDateTime & currentTime);
 
@@ -51,11 +60,11 @@ class ShiftSchedule{
       void setDone2(bool Done2);
 
 
-      QTime getTimeTMP() const;
-      void setTimeTMP(const QTime & timeTMP);
+      QDateTime getDate3() const;
+      void setDate3(const QDateTime & Date3);
 
    private:
-      bool m_checkDoneInterval(const QTime & currentTime);
+      bool m_checkDoneInterval(const QDateTime & currentTime);
       void m_timeInterval0();
       void m_timeInterval1();
       void m_timeInterval2();
@@ -70,6 +79,10 @@ class ShiftSchedule{
       QTime m_time1;
       QTime m_time2;
       QTime m_timeTMP;
+      QDateTime m_Date0;
+      QDateTime m_Date1;
+      QDateTime m_Date2;
+      QDateTime m_Date3;
       QString m_AttachName;
       QString m_SubjName;
       QString m_emailTemplatePath;
