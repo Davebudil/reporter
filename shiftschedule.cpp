@@ -140,25 +140,30 @@ void ShiftSchedule::setEmailTemplatePath(const QString & emailTemplatePath){
 
 bool ShiftSchedule::generateShiftData(const QDateTime & currentTime){
    if(m_Days[currentTime.date().dayOfWeek() - 1]){
-      return m_checkDoneInterval(currentTime.time());
+      return m_checkDoneInterval(currentTime);
    }
    return false;
 }
 
-bool ShiftSchedule::m_checkDoneInterval(const QTime & currentTime){
-   if((currentTime > m_time0) && (currentTime < m_time1) && !m_Done2){
+bool ShiftSchedule::m_checkDoneInterval(const QDateTime & currentTime){
+   if((currentTime > m_Date0) && (currentTime < m_Date1) && !m_Done2){
+      qInfo(logInfo()) << "interval1: " + currentTime.toString();
       m_Done0 = false;
       m_Done1 = false;
       m_Done2 = true;
       return true;
       //first interval
-   }else if((currentTime > m_time1) && (currentTime < m_time2) && !m_Done0){
+   }
+   if((currentTime > m_Date1) && (currentTime < m_Date2) && !m_Done0){
+      qInfo(logInfo()) << "interval2: " + currentTime.toString();
       m_Done0 = true;
       m_Done1 = false;
       m_Done2 = false;
       return true;
       //second interval
-   }else if((currentTime > m_time2) && (currentTime < m_time0) && !m_Done1){
+   }
+   if((currentTime > m_Date2) && (currentTime < m_Date3) && !m_Done1){
+      qInfo(logInfo()) << "interval3: " + currentTime.toString();
       m_Done0 = false;
       m_Done1 = true;
       m_Done2 = false;
@@ -179,6 +184,40 @@ void ShiftSchedule::m_timeInterval2(){
    // m_time1 -> m_time2 interval
 }
 
+QDateTime ShiftSchedule::getDate3() const
+{
+   return m_Date3;
+}
+
+void ShiftSchedule::setDate3(const QDateTime & Date3)
+{
+   m_Date3 = Date3;
+}
+
+QDateTime ShiftSchedule::getDate0() const{
+   return m_Date0;
+}
+
+void ShiftSchedule::setDate0(const QDateTime & Date0){
+   m_Date0 = Date0;
+}
+
+QDateTime ShiftSchedule::getDate1() const{
+   return m_Date1;
+}
+
+void ShiftSchedule::setDate1(const QDateTime & Date1){
+   m_Date1 = Date1;
+}
+
+QDateTime ShiftSchedule::getDate2() const{
+   return m_Date2;
+}
+
+void ShiftSchedule::setDate2(const QDateTime & Date2){
+   m_Date2 = Date2;
+}
+
 bool ShiftSchedule::getDone0() const{
    return m_Done0;
 }
@@ -195,23 +234,19 @@ void ShiftSchedule::setDone1(bool Done1){
    m_Done1 = Done1;
 }
 
-bool ShiftSchedule::getDone2() const
-{
+bool ShiftSchedule::getDone2() const{
    return m_Done2;
 }
 
-void ShiftSchedule::setDone2(bool Done2)
-{
+void ShiftSchedule::setDone2(bool Done2){
    m_Done2 = Done2;
 }
 
-QTime ShiftSchedule::getTimeTMP() const
-{
+QTime ShiftSchedule::getTimeTMP() const{
    return m_timeTMP;
 }
 
-void ShiftSchedule::setTimeTMP(const QTime & timeTMP)
-{
+void ShiftSchedule::setTimeTMP(const QTime & timeTMP){
    m_timeTMP = timeTMP;
 }
 
