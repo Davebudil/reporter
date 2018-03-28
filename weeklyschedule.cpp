@@ -1,4 +1,5 @@
 #include "weeklyschedule.h"
+#include "log.h"
 
 WeeklySchedule::WeeklySchedule()
                :m_Active(false),
@@ -130,7 +131,8 @@ bool WeeklySchedule::m_checkDoneInterval(const QDateTime & currentDate){
    }else if((currentDate.date().dayOfWeek() == 7) && (m_Day == 0) && m_Done){
       m_Done = false;
    }
-   if(((currentDate.time() > m_Time) && (currentDate.date().dayOfWeek() >= m_Day + 1) && !m_Done)){
+   if(((currentDate.time() > m_Time) && (currentDate.date().dayOfWeek() >= m_Day + 1) && !m_Done)
+      && currentDate.date().dayOfWeek() != 7){
       m_Done = true;
       m_weeklyInterval();
       //right interval

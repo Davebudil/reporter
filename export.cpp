@@ -72,22 +72,26 @@ void Export::customExport(CustomScheduling & exportData,
 
    while(!(from > to)){
       if(exportData.m_useParameters){
-         if(exportData.m_Shift){
+         //SHIFT NEFUNGUJE, GENERUJE JEN JEDNOU A NEZALEZI NA INTERVALU, PROBLEM S RESETEM NEJSPIS
+         if(exportData.m_Shift && shift.generateShiftData(from)){
             for(auto & it : parameters){
                m_generateShift(shift, queries, it, db, from, exportCount);
             }
          }
-         if(exportData.m_Daily){
+         //IS WORKING
+         if(exportData.m_Daily && daily.generateDailyData(from)){
             for(auto & it : parameters){
                m_generateDaily(daily, queries, it, db, from, exportCount);
             }
          }
-         if(exportData.m_Weekly){
+         //IS WORKING
+         if(exportData.m_Weekly && weekly.generateWeeklyData(from)){
             for(auto & it : parameters){
                m_generateWeekly(weekly, queries, it, db, from, exportCount);
             }
          }
-         if(exportData.m_Monthly){
+         //IS WORKING
+         if(exportData.m_Monthly && monthly.generateMonthlyData(from)){
             for(auto & it : parameters){
                m_generateMonthly(monthly, queries, it, db, from, exportCount);
             }
@@ -96,20 +100,23 @@ void Export::customExport(CustomScheduling & exportData,
          //work around to not use any parameters -> use empy parameter as arguement
          SQLParameter tmp(0);
 
-         if(exportData.m_Shift){
+         if(exportData.m_Shift && shift.generateShiftData(from)){
             m_generateShift(shift, queries, tmp, db, from, exportCount);
          }
-         if(exportData.m_Daily){
+         if(exportData.m_Daily && daily.generateDailyData(from)){
             m_generateDaily(daily, queries, tmp, db, from, exportCount);
          }
-         if(exportData.m_Weekly){
+         if(exportData.m_Weekly && weekly.generateWeeklyData(from)){
             m_generateWeekly(weekly, queries, tmp, db, from, exportCount);
          }
-         if(exportData.m_Monthly){
+         if(exportData.m_Monthly && monthly.generateMonthlyData(from)){
             m_generateMonthly(monthly, queries, tmp, db, from, exportCount);
          }
       }
       from = from.addMSecs(customInterval);
+   }
+   if(exportCount != 0){
+      qInfo(logInfo()) << "Succesfully generated " + QVariant(exportCount).toString() + " datasets.";
    }
 }
 

@@ -91,15 +91,15 @@ SPreferences Setup::getSettings(){
 
 void Setup::loadSettings(){
    QSettings settings(QDir::currentPath() +  "/ReporterSettings.ini", QSettings::IniFormat);
-   m_Settings.databaseType = settings.value("DatabaseType", "QMYSQL").toString();
-   m_Settings.host = settings.value("Host", "localhost").toString();
-   m_Settings.port = settings.value("Port", 3306).toInt();
-   m_Settings.databaseName = settings.value("DatabaseName", "budil").toString();
-   m_Settings.userName = settings.value("Username", "root").toString();
-   m_Settings.userPassword = settings.value("UserPassword", "Blizazrd5").toString();
-   m_Settings.hotKey = settings.value("Hotkey", "ctrl+alt+Q").toString();
-   m_Settings.timerInterval = settings.value("TimerIntervalMS", 1800000).toInt();
-   m_Settings.customInterval = settings.value("CustomIntervalMS", 1800000).toInt();
+   m_Settings.databaseType = settings.value("DatabaseType").toString();
+   m_Settings.host = settings.value("Host").toString();
+   m_Settings.port = settings.value("Port").toInt();
+   m_Settings.databaseName = settings.value("DatabaseName").toString();
+   m_Settings.userName = settings.value("Username").toString();
+   m_Settings.userPassword = settings.value("UserPassword").toString();
+   m_Settings.hotKey = settings.value("Hotkey").toString();
+   m_Settings.timerInterval = settings.value("TimerIntervalMS").toInt();
+   m_Settings.customInterval = settings.value("CustomIntervalMS").toInt();
 }
 
 void Setup::saveSettings(){

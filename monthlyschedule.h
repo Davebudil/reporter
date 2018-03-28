@@ -49,6 +49,7 @@ class MonthlySchedule
       bool m_csvAttach;
       bool m_xlsAttach;
       bool m_Done;
+      QDateTime m_lastMonth;
       qint32 m_Day;
       QTime m_Time;
       QString m_AttachName;

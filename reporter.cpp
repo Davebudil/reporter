@@ -2,12 +2,6 @@
 #include "ui_reporter.h"
 #include "log.h"
 
-//poznamky:TODO - knihovna na grid -> pocitani a tak, export template -> funkce, xslwrite, vyuzit, upravovani.
-//CSV -> priorita, generovani, nemusi byt posta, dobre padatc
-
-
-// databaze eventu -> ciselny log, verze
-
 //Constructor
 Reporter::Reporter(QWidget *parent)
    : QMainWindow(parent),

@@ -34,7 +34,7 @@ bool ExportXLS::generateFile(const QString & templatePath,
    return false;
 }
 bool ExportXLS::readResult(){
-   QFile loadFile(QDir::currentPath() + "/ask_ attachment_final.txt");
+   QFile loadFile(QDir::currentPath() + "/ask_attachment_final.txt");
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
       QStringList tmp;
@@ -52,6 +52,5 @@ bool ExportXLS::readResult(){
       }
    }
    qWarning(logWarning()) << "Failed to read output file.";
-   QMessageBox::critical(0,QObject::tr("File Error"),QObject::tr("Failed to generate output file."));
    return false;
 }
