@@ -1,9 +1,7 @@
 #include "exportcsv.h"
 #include "log.h"
 
-ExportCSV::ExportCSV(){
-
-}
+ExportCSV::ExportCSV() = default;
 
 bool ExportCSV::generateFile(const QString & templatePathCSV,
                              const QString & attachNameCSV,
@@ -18,7 +16,7 @@ bool ExportCSV::generateFile(const QString & templatePathCSV,
          QTextStream stream(&fileCSV);
          QSqlRecord columns = dataCSV.record();
 
-         for(quint32 i = 0; i < (quint32)columns.count(); ++i){
+         for(qint32 i = 0; i < columns.count(); ++i){
             QString tmp = columns.fieldName(i);
             stream << tmp << ";";
          }

@@ -49,13 +49,13 @@ bool SQLStorage::addQuery(const QString & query,
    SQLquery * tmp = new SQLquery(query, name, param, (param.isEmpty()), active);
    if(m_Queries.contains(name)){
       if(display){
-         QMessageBox::warning(0,QObject::tr("New Query Error"), "Query with this name already exists.");
+         QMessageBox::warning(nullptr, QObject::tr("New Query Error"), "Query with this name already exists.");
          return false;
       }
       return false;
    }
    if(((!param.isEmpty()) && (!m_Queries.contains(param))) && mode){
-      QMessageBox::warning(0,QObject::tr("New Query Error"), "No query with specified master param name exists.");
+      QMessageBox::warning(nullptr, QObject::tr("New Query Error"), "No query with specified master param name exists.");
       return false;
    }
    m_Queries[name] = tmp;

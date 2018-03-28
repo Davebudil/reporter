@@ -5,7 +5,7 @@ Setup::Setup(QObject *parent)
            : QObject(parent){
 }
 //Destructor
-Setup::~Setup(){}
+Setup::~Setup() = default;
 //loads .ini settings file
 void Setup::loadIni(){
    loadSettings();
@@ -59,8 +59,7 @@ bool Setup::serializeGlobal(const QStringList & global){
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
       for(auto & it : global){
-         QString tmp = it;
-         out << tmp;
+         out << it;
       }
       return true;
    }
@@ -75,7 +74,7 @@ bool Setup::m_serializeParameters(const QStringList & param, const QVector<qint3
          qint32 tmpInt = it;
          out << tmpInt;
          for(qint32 i = it; i > 0; i--){
-            QString tmpString = param.at(drivingI);
+            const QString & tmpString = param.at(drivingI);
             out << tmpString;
             drivingI++;
          }
@@ -120,7 +119,7 @@ bool Setup::m_serializeQueries(const QStringList & queries){
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
       for(auto & it : queries){
-         QString tmp = it;
+         const QString & tmp = it;
          out << tmp;
       }
       return true;

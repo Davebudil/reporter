@@ -6,9 +6,7 @@ MonthlySchedule::MonthlySchedule()
                  m_xlsAttach(false),
                  m_Day(0){
 }
-MonthlySchedule::~MonthlySchedule(){
-
-}
+MonthlySchedule::~MonthlySchedule() = default;
 
 QString MonthlySchedule::getCsvTemplatePath() const{
     return m_csvTemplatePath;

@@ -1,11 +1,7 @@
 #include "scheduling.h"
 
-Scheduling::Scheduling(){
-
-}
-Scheduling::~Scheduling(){
-
-}
+Scheduling::Scheduling() = default;
+Scheduling::~Scheduling() = default;
 ShiftSchedule & Scheduling::getShift(){
    return m_Shift;
 }

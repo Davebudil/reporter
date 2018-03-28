@@ -2,8 +2,7 @@
 #define EXPORTHTML_H
 
 
-class ExportHTML
-{
+class ExportHTML{
    public:
       ExportHTML();
 };

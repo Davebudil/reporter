@@ -27,7 +27,7 @@ class Export{
                         QQueue<SQLquery> & queries,
                         QQueue<SQLParameter> & parameters,
                         QSqlDatabase & db,
-                        const quint32 & customInterval);
+                        qint32 & customInterval);
 
    private:
       void runXLSGenerator();

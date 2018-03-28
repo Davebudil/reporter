@@ -1,6 +1,4 @@
 #include "exporthtml.h"
 #include "log.h"
 
-ExportHTML::ExportHTML(){
-
-}
+ExportHTML::ExportHTML() = default;
