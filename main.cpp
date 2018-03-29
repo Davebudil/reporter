@@ -29,6 +29,7 @@ qint32 main(qint32 argc, char *argv[]){
    qInfo(logInfo()) << "Interface loaded successfuly.";
    App.defaultSettings();
 
+
    return reporterApp.exec();
 }
 

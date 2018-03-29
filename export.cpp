@@ -80,6 +80,10 @@ void Export::customExport(CustomScheduling & exportData,
    WeeklySchedule weekly;
    MonthlySchedule monthly;
    quint32 exportCount = 0;
+   quint32 shiftCount = 0;
+   quint32 dailyCount = 0;
+   quint32 weeklyCount = 0;
+   quint32 monthlyCount = 0;
 
    from = exportData.m_From;
    to = exportData.m_To;
@@ -91,25 +95,33 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Shift && shift.generateShiftData(from)){
             for(auto & it : parameters){
-               m_generateShift(shift, queries, it, db, from, exportCount);
+               if(m_generateShift(shift, queries, it, db, from, exportCount)){
+                  ++shiftCount;
+               }
             }
          }
          //IS WORKING
          if(exportData.m_Daily && daily.generateDailyData(from)){
             for(auto & it : parameters){
-               m_generateDaily(daily, queries, it, db, from, exportCount);
+               if(m_generateDaily(daily, queries, it, db, from, exportCount)){
+                  ++dailyCount;
+               }
             }
          }
          //IS WORKING
          if(exportData.m_Weekly && weekly.generateWeeklyData(from)){
             for(auto & it : parameters){
-               m_generateWeekly(weekly, queries, it, db, from, exportCount);
+               if(m_generateWeekly(weekly, queries, it, db, from, exportCount)){
+                  ++weeklyCount;
+               }
             }
          }
          //IS WORKING
          if(exportData.m_Monthly && monthly.generateMonthlyData(from)){
             for(auto & it : parameters){
-               m_generateMonthly(monthly, queries, it, db, from, exportCount);
+               if(m_generateMonthly(monthly, queries, it, db, from, exportCount)){
+                  ++monthlyCount;
+               }
             }
          }
       }else{
@@ -117,20 +129,40 @@ void Export::customExport(CustomScheduling & exportData,
          SQLParameter tmp(0);
 
          if(exportData.m_Shift && shift.generateShiftData(from)){
-            m_generateShift(shift, queries, tmp, db, from, exportCount);
+            if(m_generateShift(shift, queries, tmp, db, from, exportCount)){
+               ++shiftCount;
+            }
          }
          if(exportData.m_Daily && daily.generateDailyData(from)){
-            m_generateDaily(daily, queries, tmp, db, from, exportCount);
+            if(m_generateDaily(daily, queries, tmp, db, from, exportCount)){
+               ++dailyCount;
+            }
          }
          if(exportData.m_Weekly && weekly.generateWeeklyData(from)){
-            m_generateWeekly(weekly, queries, tmp, db, from, exportCount);
+            if(m_generateWeekly(weekly, queries, tmp, db, from, exportCount)){
+               ++weeklyCount;
+            }
          }
          if(exportData.m_Monthly && monthly.generateMonthlyData(from)){
-            m_generateMonthly(monthly, queries, tmp, db, from, exportCount);
+            if(m_generateMonthly(monthly, queries, tmp, db, from, exportCount)){
+               ++monthlyCount;
+            }
          }
       }
 
       from = from.addMSecs(customInterval);
+   }
+   if(shiftCount != 0){
+      qInfo(logInfo()) << "Succesfully generated " + QVariant(shiftCount).toString() + " shift datasets.";
+   }
+   if(dailyCount != 0){
+      qInfo(logInfo()) << "Succesfully generated " + QVariant(dailyCount).toString() + " daily datasets.";
+   }
+   if(weeklyCount != 0){
+      qInfo(logInfo()) << "Succesfully generated " + QVariant(weeklyCount).toString() + " weekly datasets.";
+   }
+   if(monthlyCount != 0){
+      qInfo(logInfo()) << "Succesfully generated " + QVariant(monthlyCount).toString() + " monthly datasets.";
    }
    if(exportCount != 0){
       qInfo(logInfo()) << "Succesfully generated " + QVariant(exportCount).toString() + " datasets.";
@@ -196,10 +228,9 @@ void Export::m_createTempScheduling(CustomScheduling & exportData,
       monthly.setSubjName(exportData.m_MonthlySubjectName);
       monthly.setTime(exportData.m_Monthly1);
    }
-
 }
 
-void Export::m_generateShift(ShiftSchedule & shift,
+bool Export::m_generateShift(ShiftSchedule & shift,
                              QQueue<SQLquery> & queries,
                              SQLParameter & param,
                              QSqlDatabase & db,
@@ -225,7 +256,6 @@ void Export::m_generateShift(ShiftSchedule & shift,
                                        " TO " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-         qInfo(logInfo()) << "1generating from: " + tmp.toString() + " to " + tmp2.toString();
       }else if(shift.getDone1()){
          tmp = shift.getDate2();
          tmp2 = shift.getDate3();
@@ -235,7 +265,6 @@ void Export::m_generateShift(ShiftSchedule & shift,
                                        " TO " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-         qInfo(logInfo()) << "2generating from: " + tmp.toString() + " to " + tmp2.toString();
       }else if(shift.getDone2()){
          tmp = shift.getDate0();
          tmp = tmp.addDays(-2);
@@ -247,7 +276,6 @@ void Export::m_generateShift(ShiftSchedule & shift,
                                        " TO " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-         qInfo(logInfo()) << "3generating from: " + tmp.toString() + " to " + tmp2.toString();
       }
       it.generateQuery(db);
       it.executeQuery();
@@ -272,17 +300,22 @@ void Export::m_generateShift(ShiftSchedule & shift,
                                shift.getAttachName(),
                                resultCSV);
          }
-         ++count;
+         if(shift.getXlsAttach() && shift.getCsvAttach()){
+            ++count;
+            return true; // TODO: TMP
+         }
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
+         return false;
       }
       QStringList emailAdresses = shift.emailAdresses();
       for(const auto & it : emailAdresses){
          //SEND TO EMAIL/POSTMAN QUEUE
       }
    }
+   return false;
 }
-void Export::m_generateDaily(DailySchedule & daily,
+bool Export::m_generateDaily(DailySchedule & daily,
                              QQueue<SQLquery> & queries,
                              SQLParameter & param,
                              QSqlDatabase & db,
@@ -331,17 +364,22 @@ void Export::m_generateDaily(DailySchedule & daily,
                                daily.getAttachName(),
                                resultCSV);
          }
-         ++count;
+         if(daily.getXlsAttach() && daily.getCsvAttach()){
+            ++count;
+            return true;// TODO: TMP
+         }
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
+         return false;
       }
       QStringList emailAdresses = daily.emailAdresses();
       for(auto & it : emailAdresses){
          //SEND TO EMAIL/POSTMAN QUEUE
       }
    }
+   return false;
 }
-void Export::m_generateWeekly(WeeklySchedule & weekly,
+bool Export::m_generateWeekly(WeeklySchedule & weekly,
                               QQueue<SQLquery> & queries,
                               SQLParameter & param,
                               QSqlDatabase & db,
@@ -390,18 +428,22 @@ void Export::m_generateWeekly(WeeklySchedule & weekly,
                                weekly.getAttachName(),
                                resultCSV);
          }
-         ++count;
+         if(weekly.getXlsAttach() && weekly.getCsvAttach()){
+            ++count;
+            return true; // TODO: TMP
+         }
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
+         return false;
       }
       QStringList emailAdresses = weekly.emailAdresses();
       for(auto & it : emailAdresses){
          //SEND TO EMAIL/POSTMAN QUEUE
       }
    }
-
+   return false;
 }
-void Export::m_generateMonthly(MonthlySchedule & monthly,
+bool Export::m_generateMonthly(MonthlySchedule & monthly,
                                QQueue<SQLquery> & queries,
                                SQLParameter & param,
                                QSqlDatabase & db,
@@ -450,13 +492,18 @@ void Export::m_generateMonthly(MonthlySchedule & monthly,
                                monthly.getAttachName(),
                                resultCSV);
          }
-         ++count;
+         if(monthly.getXlsAttach() && monthly.getCsvAttach()){
+            ++count;
+            return true; // TODO: TMP
+         }
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
+         return false;
       }
       QStringList emailAdresses = monthly.emailAdresses();
       for(auto & it : emailAdresses){
          //SEND TO EMAIL/POSTMAN QUEUE
       }
    }
+   return false;
 }
