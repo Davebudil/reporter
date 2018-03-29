@@ -51,14 +51,21 @@ void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
 }
 void Export::m_shiftDayReset(ShiftSchedule & shift, const QDateTime & current){
    QDateTime tmp = current;
-   tmp.setTime(shift.getFrom0());
-   shift.setDate0(tmp);
+
    tmp.setTime(shift.getTo0());
-   shift.setDate1(tmp);
-   tmp.setTime(shift.getFrom1());
-   shift.setDate2(tmp);
-   tmp = shift.getDate0();
    tmp = tmp.addDays(1);
+   shift.setDate0(tmp);
+
+   tmp = current;
+   tmp.setTime(shift.getFrom1());
+   shift.setDate1(tmp);
+
+   tmp = current;
+   tmp.setTime(shift.getFrom0());
+   shift.setDate2(tmp);
+
+   tmp = current;
+   tmp.setTime(shift.getTo0());
    shift.setDate3(tmp);
 }
 void Export::customExport(CustomScheduling & exportData,
@@ -81,8 +88,7 @@ void Export::customExport(CustomScheduling & exportData,
    while(!(from > to)){
       m_shiftDayReset(shift, from);
       if(exportData.m_useParameters){
-         //CHYBA JE VE 3. INTERVALU, PROBIHA JEN 8:00 -> 16:00 -> 24:00 a "24 -> 8:00" NEPROBEHNE
-         //NA SHIFT SE MI CELKOVE NECO NELIBI -> RADSI CELE PREPSAT
+         //IS WORKING
          if(exportData.m_Shift && shift.generateShiftData(from)){
             for(auto & it : parameters){
                m_generateShift(shift, queries, it, db, from, exportCount);
@@ -211,9 +217,7 @@ void Export::m_generateShift(ShiftSchedule & shift,
          it.bindParameter(tmpParam1, param.getParameters()[i]);
       }
       if(shift.getDone0()){
-//         tmp.setTime(shift.getTo0());
          tmp = shift.getDate1();
-//         tmp2.setTime(shift.getFrom1());
          tmp2 = shift.getDate2();
          tmp2 = tmp2.addSecs(-1);
          genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
@@ -221,11 +225,9 @@ void Export::m_generateShift(ShiftSchedule & shift,
                                        " TO " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-         qInfo(logInfo()) << "generating from: " + tmp.toString() + " to " + tmp2.toString();
+         qInfo(logInfo()) << "1generating from: " + tmp.toString() + " to " + tmp2.toString();
       }else if(shift.getDone1()){
-//         tmp.setTime(shift.getFrom0());
          tmp = shift.getDate2();
-//         tmp2.setTime(shift.getTo0());
          tmp2 = shift.getDate3();
          tmp2 = tmp2.addSecs(-1);
          genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
@@ -233,23 +235,19 @@ void Export::m_generateShift(ShiftSchedule & shift,
                                        " TO " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-         qInfo(logInfo()) << "generating from: " + tmp.toString() + " to " + tmp2.toString();
+         qInfo(logInfo()) << "2generating from: " + tmp.toString() + " to " + tmp2.toString();
       }else if(shift.getDone2()){
-//         tmp.setTime(shift.getFrom0());
          tmp = shift.getDate0();
-//         tmp2.setTime(shift.getTo0());
+         tmp = tmp.addDays(-2);
          tmp2 = shift.getDate1();
-         if(tmp2.time() == QTime().fromString("23:59")){
-            tmp2 = tmp2.addSecs(59);
-         }else{
-            tmp2 = tmp2.addSecs(-1);
-         }
+         tmp2 = tmp2.addSecs(-1);
+
          genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
                                        "FROM " + tmp.toString("dd.MM.yy hh:mm") +
                                        " TO " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-         qInfo(logInfo()) << "generating from: " + tmp.toString() + " to " + tmp2.toString();
+         qInfo(logInfo()) << "3generating from: " + tmp.toString() + " to " + tmp2.toString();
       }
       it.generateQuery(db);
       it.executeQuery();

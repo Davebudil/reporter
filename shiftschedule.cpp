@@ -146,32 +146,28 @@ bool ShiftSchedule::generateShiftData(const QDateTime & currentTime){
 }
 
 bool ShiftSchedule::m_checkDoneInterval(const QDateTime & currentTime){
-   if((currentTime > m_Date0) && (currentTime < m_Date1) && !m_Done2){
-      qInfo(logInfo()) << "interval1: " + currentTime.toString();
+   if((currentTime > m_Date1) && (currentTime < m_Date2) && !m_Done2){
       m_Done0 = false;
       m_Done1 = false;
       m_Done2 = true;
       return true;
       //first interval
    }
-   if((currentTime > m_Date1) && (currentTime < m_Date2) && !m_Done0){
-      qInfo(logInfo()) << "interval2: " + currentTime.toString();
+   if((currentTime > m_Date2) && (currentTime < m_Date3) && !m_Done0){
       m_Done0 = true;
       m_Done1 = false;
       m_Done2 = false;
       return true;
       //second interval
    }
-   if((currentTime > m_Date2) && (currentTime < m_Date3) && !m_Done1){
-      qInfo(logInfo()) << "interval3: " + currentTime.toString();
+   if((currentTime > m_Date3) && (currentTime <= m_Date0) && !m_Done1){
       m_Done0 = false;
       m_Done1 = true;
       m_Done2 = false;
       return true;
       //third interval
-   }else{
-      return false;
    }
+   return false;
 }
 
 void ShiftSchedule::m_timeInterval0(){
@@ -184,13 +180,21 @@ void ShiftSchedule::m_timeInterval2(){
    // m_time1 -> m_time2 interval
 }
 
-QDateTime ShiftSchedule::getDate3() const
+QDateTime ShiftSchedule::getDate4() const
 {
+   return m_Date4;
+}
+
+void ShiftSchedule::setDate4(const QDateTime & Date4)
+{
+   m_Date4 = Date4;
+}
+
+QDateTime ShiftSchedule::getDate3() const{
    return m_Date3;
 }
 
-void ShiftSchedule::setDate3(const QDateTime & Date3)
-{
+void ShiftSchedule::setDate3(const QDateTime & Date3){
    m_Date3 = Date3;
 }
 

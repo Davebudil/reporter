@@ -63,6 +63,9 @@ class ShiftSchedule{
       QDateTime getDate3() const;
       void setDate3(const QDateTime & Date3);
 
+      QDateTime getDate4() const;
+      void setDate4(const QDateTime & Date4);
+
    private:
       bool m_checkDoneInterval(const QDateTime & currentTime);
       void m_timeInterval0();
@@ -83,6 +86,7 @@ class ShiftSchedule{
       QDateTime m_Date1;
       QDateTime m_Date2;
       QDateTime m_Date3;
+      QDateTime m_Date4;
       QString m_AttachName;
       QString m_SubjName;
       QString m_emailTemplatePath;
