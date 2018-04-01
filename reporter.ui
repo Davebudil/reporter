@@ -494,7 +494,7 @@ QTabWidget::tab-bar {
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="basic">
      <attribute name="title">
@@ -3100,8 +3100,8 @@ QTabWidget::tab-bar {
      <widget class="QLabel" name="colorLabel">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>380</x>
+        <y>50</y>
         <width>41</width>
         <height>31</height>
        </rect>
@@ -3113,14 +3113,27 @@ QTabWidget::tab-bar {
      <widget class="QToolButton" name="pauseResumeButton">
       <property name="geometry">
        <rect>
-        <x>60</x>
-        <y>10</y>
+        <x>430</x>
+        <y>50</y>
         <width>101</width>
         <height>31</height>
        </rect>
       </property>
       <property name="text">
        <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>20</y>
+        <width>151</width>
+        <height>18</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Timer</string>
       </property>
      </widget>
     </widget>
