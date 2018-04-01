@@ -304,6 +304,7 @@ bool Export::m_generateShift(ShiftSchedule & shift,
             ++count;
             return true; // TODO: TMP
          }
+         m_HTML.generateFile(it.getResult(), shift.getAttachName());
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;
@@ -368,6 +369,7 @@ bool Export::m_generateDaily(DailySchedule & daily,
             ++count;
             return true;// TODO: TMP
          }
+         m_HTML.generateFile(it.getResult(), daily.getAttachName());
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;
@@ -432,6 +434,7 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
             ++count;
             return true; // TODO: TMP
          }
+         m_HTML.generateFile(it.getResult(), weekly.getAttachName());
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;
@@ -496,6 +499,7 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
             ++count;
             return true; // TODO: TMP
          }
+         m_HTML.generateFile(it.getResult(), monthly.getAttachName());
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;

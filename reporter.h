@@ -151,7 +151,7 @@ class Reporter : public QMainWindow{
       QToolButton * tmp;
       QHotkey * m_shwHide;
       qint32 m_daysWeeklyIndex;
-      QTimer* m_Timer;
+      QTimer * m_Timer;
       qint32 m_TIMERINTERVAL;
       qint32 m_CUSTOMINTERVAL;
       CustomScheduling * instantSchedule;
