@@ -242,6 +242,7 @@ bool Export::m_generateShift(ShiftSchedule & shift,
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
       genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+
       for(qint32 i = 0; i < param.getCount(); ++i){
          QString tmpParam1;
          tmpParam1 = "#PARAMETER" + QString(i+1);
@@ -294,8 +295,9 @@ bool Export::m_generateShift(ShiftSchedule & shift,
             //            runXLSGenerator();
             m_XLS.readResult();
          }
+         QSqlQuery resultCSV = it.getResult();
+
          if(shift.getCsvAttach()){
-            QSqlQuery resultCSV = it.getResult();
             m_CSV.generateFile(shift.getCsvTemplatePath(),
                                shift.getAttachName(),
                                resultCSV);
@@ -304,11 +306,13 @@ bool Export::m_generateShift(ShiftSchedule & shift,
             ++count;
             return true; // TODO: TMP
          }
-         m_HTML.generateFile(it.getResult(), shift.getAttachName());
+
+         m_HTML.generateFile(resultCSV, shift.getAttachName());
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;
       }
+
       QStringList emailAdresses = shift.emailAdresses();
       for(const auto & it : emailAdresses){
          //SEND TO EMAIL/POSTMAN QUEUE
@@ -327,6 +331,7 @@ bool Export::m_generateDaily(DailySchedule & daily,
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
       genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+
       for(qint32 i = 0; i < param.getCount(); ++i){
          QString tmpParam1;
          tmpParam1 = "#PARAMETER" + QString(i+1);
@@ -359,8 +364,9 @@ bool Export::m_generateDaily(DailySchedule & daily,
             //            runXLSGenerator();
             m_XLS.readResult();
          }
+         QSqlQuery resultCSV = it.getResult();
+
          if(daily.getCsvAttach()){
-            QSqlQuery resultCSV = it.getResult();
             m_CSV.generateFile(daily.getCsvTemplatePath(),
                                daily.getAttachName(),
                                resultCSV);
@@ -369,11 +375,13 @@ bool Export::m_generateDaily(DailySchedule & daily,
             ++count;
             return true;// TODO: TMP
          }
-         m_HTML.generateFile(it.getResult(), daily.getAttachName());
+
+         m_HTML.generateFile(resultCSV, daily.getAttachName());
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;
       }
+
       QStringList emailAdresses = daily.emailAdresses();
       for(auto & it : emailAdresses){
          //SEND TO EMAIL/POSTMAN QUEUE
@@ -392,11 +400,13 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
       genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+
       for(qint32 i = 0; i < param.getCount(); ++i){
          QString tmpParam1;
          tmpParam1 = "#PARAMETER" + QString(i+1);
          it.bindParameter(tmpParam1, param.getParameters()[i]);
       }
+
       tmp.setTime(weekly.getTime());
       tmp2.setTime(weekly.getTime());
       tmp = tmp.addDays(-7);
@@ -424,8 +434,9 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
             //            runXLSGenerator();
             m_XLS.readResult();
          }
+         QSqlQuery resultCSV = it.getResult();
+
          if(weekly.getCsvAttach()){
-            QSqlQuery resultCSV = it.getResult();
             m_CSV.generateFile(weekly.getCsvTemplatePath(),
                                weekly.getAttachName(),
                                resultCSV);
@@ -434,11 +445,13 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
             ++count;
             return true; // TODO: TMP
          }
-         m_HTML.generateFile(it.getResult(), weekly.getAttachName());
+
+         m_HTML.generateFile(resultCSV, weekly.getAttachName());
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;
       }
+
       QStringList emailAdresses = weekly.emailAdresses();
       for(auto & it : emailAdresses){
          //SEND TO EMAIL/POSTMAN QUEUE
@@ -457,11 +470,13 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
       genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+
       for(qint32 i = 0; i < param.getCount(); ++i){
          QString tmpParam1;
          tmpParam1 = "#PARAMETER" + QString(i+1);
          it.bindParameter(tmpParam1, param.getParameters()[i]);
       }
+
       tmp.setTime(monthly.getTime());
       tmp2.setTime(monthly.getTime());
       tmp = tmp.addMonths(-1);
@@ -489,8 +504,9 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
             //            runXLSGenerator();
             m_XLS.readResult();
          }
+         QSqlQuery resultCSV = it.getResult();
+
          if(monthly.getCsvAttach()){
-            QSqlQuery resultCSV = it.getResult();
             m_CSV.generateFile(monthly.getCsvTemplatePath(),
                                monthly.getAttachName(),
                                resultCSV);
@@ -499,11 +515,13 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
             ++count;
             return true; // TODO: TMP
          }
-         m_HTML.generateFile(it.getResult(), monthly.getAttachName());
+
+         m_HTML.generateFile(resultCSV, monthly.getAttachName());
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;
       }
+
       QStringList emailAdresses = monthly.emailAdresses();
       for(auto & it : emailAdresses){
          //SEND TO EMAIL/POSTMAN QUEUE
