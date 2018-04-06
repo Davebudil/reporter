@@ -4,7 +4,13 @@ MonthlySchedule::MonthlySchedule()
                 :m_Active(false),
                  m_csvAttach(false),
                  m_xlsAttach(false),
-                 m_Day(0){
+                 m_Done(false),
+                 m_Day(0),
+                 m_AttachName(" "),
+                 m_SubjName(" "),
+                 m_xlsTemplatePath(" "),
+                 m_csvTemplatePath(" "),
+                 m_emailTemplatePath(" "){
 }
 MonthlySchedule::~MonthlySchedule() = default;
 
@@ -43,6 +49,7 @@ QStringList MonthlySchedule::prepareSerialization(){
    valueList.append(QString::number(m_Day));
    valueList.append(QString::number((m_emailAdresses.count())));
    valueList.append(QString::number(m_Done));
+   valueList.append(m_lastMonth.toString());
    for(auto & it : m_emailAdresses){
       valueList.append(it);
    }
@@ -60,8 +67,9 @@ void MonthlySchedule::deserializeList(const QStringList & list){
    m_Time = QTime::fromString(list.at(8));
    m_Day = QString(list.at(9)).toInt();
    m_Done = (list.at(10) == "0" ? false : true);
+   m_lastMonth = QDateTime::fromString(list.at(11));
    QStringList::const_iterator constIterator;
-   for(constIterator = list.constBegin() + 11; constIterator != list.constEnd(); ++constIterator){
+   for(constIterator = list.constBegin() + 12; constIterator != list.constEnd(); ++constIterator){
       m_emailAdresses.insert(*constIterator, *constIterator);
    }
 }

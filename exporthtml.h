@@ -7,7 +7,7 @@
 class ExportHTML{
    public:
       ExportHTML();
-      bool generateFile(const QSqlQuery & dataHTML, const QString & htmlName);
+      bool generateFile(QSqlQuery & dataHTML, const QString & htmlName);
 };
 
 #endif // EXPORTHTML_H

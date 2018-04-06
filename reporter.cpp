@@ -539,8 +539,10 @@ void Reporter::defaultSettings(){
 }
 
 void Reporter::closeEvent(QCloseEvent * event){
-   m_Setup.saveIni();
-   event->accept();
+   if(event != nullptr){
+      m_Setup.saveIni();
+      event->accept();
+   }
 }
 //Load the default query
 void Reporter::m_defaultQuery(){
@@ -1465,21 +1467,25 @@ void Reporter::on_paramTest_clicked(){
 }
 
 void Reporter::on_tableNames_clicked(){
-   QStringList dbNames;
-   TableInfo * infoDisplay;
-   infoDisplay = new TableInfo(this);
-   QVector<QStringList> dbInfo;
-   dbNames = m_mainSQL.getDatabase().getDatabase().tables();
+   if(m_mainSQL.getDatabase().getDatabase().isOpen()){
+      QStringList dbNames;
+      TableInfo * infoDisplay;
+      infoDisplay = new TableInfo(this);
+      QVector<QStringList> dbInfo;
+      dbNames = m_mainSQL.getDatabase().getDatabase().tables();
 
-   for(auto & it : dbNames){
-      QStringList tmp;
-      tmp.append(it);
-      tmp += m_getColumnNames(it);
-      dbInfo.push_back(tmp);
+      for(auto & it : dbNames){
+         QStringList tmp;
+         tmp.append(it);
+         tmp += m_getColumnNames(it);
+         dbInfo.push_back(tmp);
+      }
+
+      infoDisplay->getInfo(dbInfo);
+      infoDisplay->show();
+   }else{
+      QMessageBox::warning(this, "Database error.", "No connection to database.");
    }
-
-   infoDisplay->getInfo(dbInfo);
-   infoDisplay->show();
 }
 
 void Reporter::timerInterval(){

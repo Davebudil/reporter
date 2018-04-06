@@ -179,7 +179,7 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
             in >> tmp;
             shift << tmp;
          }
-         for(qint32 i = 0; i < 17; ++i){
+         for(qint32 i = 0; i < 18; ++i){
             in >> tmp;
             day << tmp;
          }
@@ -199,7 +199,7 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
             in >> tmp;
             weekly << tmp;
          }
-         for(qint32 i = 0; i < 11; ++i){
+         for(qint32 i = 0; i < 12; ++i){
             in >> tmp;
             monthly << tmp;
          }

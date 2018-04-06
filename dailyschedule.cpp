@@ -4,7 +4,14 @@
 DailySchedule::DailySchedule()
               :m_Active(false),
                m_csvAttach(false),
-               m_xlsAttach(false){
+               m_xlsAttach(false),
+               m_Done(false),
+               m_lastDoneDay(0),
+               m_AttachName(" "),
+               m_SubjName(" "),
+               m_xlsTemplatePath(" "),
+               m_csvTemplatePath(" "),
+               m_emailTemplatePath(" "){
    m_Days = new bool[7];
    std::fill_n(m_Days, 7, false);
 }
@@ -56,6 +63,7 @@ QStringList DailySchedule::prepareSerialization(){
    valueList.append(m_emailTemplatePath);
    valueList.append(QString(m_Time.toString()));
    valueList.append(QString::number(m_Done));
+   valueList.append(QString::number(m_lastDoneDay));
    for(qint32 i = 0; i < 7; ++i){
       valueList.append(QString::number(m_Days[i]));
    }
@@ -77,11 +85,12 @@ void DailySchedule::deserializeList(const QStringList & list){
    m_emailTemplatePath = list.at(7);
    m_Time = QTime::fromString(list.at(8));
    m_Done = (list.at(9) == "0" ? false : true);
+   m_lastDoneDay = QVariant(list.at(10)).toInt();
    for(qint32 i = 0; i < 7; ++i){
-      m_Days[i] = (list.at(10+i) == "0" ? false : true);
+      m_Days[i] = (list.at(11+i) == "0" ? false : true);
    }
    QStringList::const_iterator constIterator;
-   for(constIterator = list.constBegin() + 17; constIterator != list.constEnd(); ++constIterator){
+   for(constIterator = list.constBegin() + 18; constIterator != list.constEnd(); ++constIterator){
       m_emailAdresses.insert(*constIterator, *constIterator);
    }
 }
