@@ -5,7 +5,13 @@ WeeklySchedule::WeeklySchedule()
                :m_Active(false),
                 m_csvAttach(false),
                 m_xlsAttach(false),
-                m_Day(0){
+                m_Done(false),
+                m_Day(0),
+                m_AttachName(" "),
+                m_SubjName(" "),
+                m_xlsTemplatePath(" "),
+                m_csvTemplatePath(" "),
+                m_emailTemplatePath(" "){
 }
 WeeklySchedule::~WeeklySchedule() = default;
 QString WeeklySchedule::getAttachName() const{

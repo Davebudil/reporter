@@ -7,7 +7,12 @@ ShiftSchedule::ShiftSchedule()
      m_xlsAttach(false),
      m_Done0(false),
      m_Done1(false),
-     m_Done2(false){
+     m_Done2(false),
+     m_AttachName(" "),
+     m_SubjName(" "),
+     m_emailTemplatePath(" "),
+     m_xlsTemplatePath(" "),
+     m_csvTemplatePath(" "){
    m_Days = new bool[7];
    std::fill_n(m_Days, 7, false);
 }

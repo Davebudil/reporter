@@ -18,9 +18,9 @@ UI_DIR = $$PWD
 
 QTPLUGIN += QSQLMYSQL
 
-VERSION_MAJOR = 0
-VERSION_MINOR = 1
-VERSION_BUILD = 9
+VERSION_MAJOR = 1
+VERSION_MINOR = 0
+VERSION_BUILD = 0
 
 
 # The following define makes your compiler emit warnings if you use
