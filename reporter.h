@@ -156,6 +156,8 @@ class Reporter : public QMainWindow{
       qint32 m_CUSTOMINTERVAL;
       QString m_generatedBy;
       CustomScheduling * instantSchedule;
+      quint32 m_daysSinceCleanUp;
+      QDate m_lastDay;
 
       bool m_queryActive;
       //Print query result to the table

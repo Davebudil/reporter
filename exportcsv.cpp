@@ -7,7 +7,7 @@ bool ExportCSV::generateFile(const QString & templatePathCSV,
                              const QString & attachNameCSV,
                              QSqlQuery & dataCSV){
    //TMP TEST add Template -> maybe use TEMPLATE CSV AS INI
-   QString filePath = QDir::currentPath() + "/" + attachNameCSV + ".csv";
+   QString filePath = QDir::currentPath() + "/export/csv/" + attachNameCSV + ".csv";
    QFile fileCSV(filePath);
 //   loadCSVIni(templatePathCSV);
 
@@ -33,14 +33,14 @@ bool ExportCSV::generateFile(const QString & templatePathCSV,
          fileCSV.close();
          //debug function
 //         QDesktopServices::openUrl(QUrl(filePath));
-         qInfo(logInfo()) << "Successfuly generated CSV file.";
+//         qInfo(logInfo()) << "Successfuly generated CSV file.";
          return true;
       }else{
-         qWarning(logWarning()) << "Failed to generate CSV file.";
+//         qWarning(logWarning()) << "Failed to generate CSV file.";
          return false;
       }
    }else{
-      qWarning(logWarning()) << "Failed to generate CSV file.";
+//      qWarning(logWarning()) << "Failed to generate CSV file.";
       return false;
    }
 }

@@ -29,22 +29,22 @@ void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
       if(it->getShift().generateShiftData(currentTime) && it->getShift().getActive()){
          for(auto & itPar : parameters){
             //generate all queries for this interval and for all parameters
-            m_generateShift(it->getShift(), queries, itPar, db, currentTime, exportCount, generatedBy);
+            m_generateShift(it->getShift(), queries, itPar, db, currentTime, exportCount, generatedBy, true);
          }
       }
       if(it->getDaily().generateDailyData(currentTime) && it->getDaily().getActive()){
          for(auto & itPar : parameters){
-            m_generateDaily(it->getDaily(), queries, itPar, db, currentTime, exportCount, generatedBy);
+            m_generateDaily(it->getDaily(), queries, itPar, db, currentTime, exportCount, generatedBy, true);
          }
       }
       if(it->getWeekly().generateWeeklyData(currentTime) && it->getWeekly().getActive()){
          for(auto & itPar : parameters){
-            m_generateWeekly(it->getWeekly(), queries, itPar, db, currentTime, exportCount, generatedBy);
+            m_generateWeekly(it->getWeekly(), queries, itPar, db, currentTime, exportCount, generatedBy, true);
          }
       }
       if(it->getMonthly().generateMonthlyData(currentTime) && it->getMonthly().getActive()){
          for(auto & itPar : parameters){
-            m_generateMonthly(it->getMonthly(), queries, itPar, db, currentTime, exportCount, generatedBy);
+            m_generateMonthly(it->getMonthly(), queries, itPar, db, currentTime, exportCount, generatedBy, true);
          }
       }
    }
@@ -101,7 +101,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Shift && shift.generateShiftData(from)){
             for(auto & it : parameters){
-               if(m_generateShift(shift, queries, it, db, from, exportCount, generatedBy)){
+               if(m_generateShift(shift, queries, it, db, from, exportCount, generatedBy, false)){
                   ++shiftCount;
                }
             }
@@ -109,7 +109,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Daily && daily.generateDailyData(from)){
             for(auto & it : parameters){
-               if(m_generateDaily(daily, queries, it, db, from, exportCount, generatedBy)){
+               if(m_generateDaily(daily, queries, it, db, from, exportCount, generatedBy, false)){
                   ++dailyCount;
                }
             }
@@ -117,7 +117,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Weekly && weekly.generateWeeklyData(from)){
             for(auto & it : parameters){
-               if(m_generateWeekly(weekly, queries, it, db, from, exportCount, generatedBy)){
+               if(m_generateWeekly(weekly, queries, it, db, from, exportCount, generatedBy, false)){
                   ++weeklyCount;
                }
             }
@@ -125,7 +125,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Monthly && monthly.generateMonthlyData(from)){
             for(auto & it : parameters){
-               if(m_generateMonthly(monthly, queries, it, db, from, exportCount, generatedBy)){
+               if(m_generateMonthly(monthly, queries, it, db, from, exportCount, generatedBy, false)){
                   ++monthlyCount;
                }
             }
@@ -135,22 +135,22 @@ void Export::customExport(CustomScheduling & exportData,
          SQLParameter tmp(0);
 
          if(exportData.m_Shift && shift.generateShiftData(from)){
-            if(m_generateShift(shift, queries, tmp, db, from, exportCount, generatedBy)){
+            if(m_generateShift(shift, queries, tmp, db, from, exportCount, generatedBy, false)){
                ++shiftCount;
             }
          }
          if(exportData.m_Daily && daily.generateDailyData(from)){
-            if(m_generateDaily(daily, queries, tmp, db, from, exportCount, generatedBy)){
+            if(m_generateDaily(daily, queries, tmp, db, from, exportCount, generatedBy, false)){
                ++dailyCount;
             }
          }
          if(exportData.m_Weekly && weekly.generateWeeklyData(from)){
-            if(m_generateWeekly(weekly, queries, tmp, db, from, exportCount, generatedBy)){
+            if(m_generateWeekly(weekly, queries, tmp, db, from, exportCount, generatedBy, false)){
                ++weeklyCount;
             }
          }
          if(exportData.m_Monthly && monthly.generateMonthlyData(from)){
-            if(m_generateMonthly(monthly, queries, tmp, db, from, exportCount, generatedBy)){
+            if(m_generateMonthly(monthly, queries, tmp, db, from, exportCount, generatedBy, false)){
                ++monthlyCount;
             }
          }
@@ -170,13 +170,6 @@ void Export::customExport(CustomScheduling & exportData,
    if(monthlyCount != 0){
       qInfo(logInfo()) << "Succesfully generated " + QVariant(monthlyCount).toString() + " monthly datasets.";
    }
-}
-
-void Export::runXLSGenerator(){
-   auto xlsGenerator = new QProcess;
-   QString filePath;
-   filePath = QDir::currentPath() + "xlsxGenerator.exe";
-   xlsGenerator->start(filePath);
 }
 
 void Export::m_createTempScheduling(CustomScheduling & exportData,
@@ -239,7 +232,8 @@ bool Export::m_generateShift(ShiftSchedule & shift,
                              QSqlDatabase & db,
                              QDateTime & currentTime,
                              quint32 & count,
-                             QString & generatedBy){
+                             QString & generatedBy,
+                             bool showInfo){
    //need to define which way to format parameters . using #parameter1 - 5 for now
    for(auto & it : queries){
       QList<std::pair<QString, QString>> genInfo;
@@ -293,12 +287,20 @@ bool Export::m_generateShift(ShiftSchedule & shift,
             //
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
-            m_XLS.generateFile(shift.getXlsTemplatePath(),
-                               tmpAttachName,
-                               genInfo,
-                               finalQueries);
-            //            runXLSGenerator();
-            m_XLS.readResult();
+            if(m_XLS.generateFile(shift.getXlsTemplatePath(),
+                                  tmpAttachName,
+                                  genInfo,
+                                  finalQueries) && showInfo){
+               qInfo(logInfo()) << "Successfuly generated XLSX file.";
+            }else if(showInfo){
+               qWarning(logWarning()) << "Failed to generate XLSX file.";
+            }
+
+            if(m_XLS.readResult() && showInfo){
+               qInfo(logInfo()) << "Export to xlsx file succesful.";
+            }else if(showInfo){
+               qWarning(logWarning()) << "Export to xlsx file failed.";
+            }
          }
          QSqlQuery resultCSV = it.getResult();
 
@@ -331,7 +333,8 @@ bool Export::m_generateDaily(DailySchedule & daily,
                              QSqlDatabase & db,
                              QDateTime & currentTime,
                              quint32 & count,
-                             QString & generatedBy){
+                             QString & generatedBy,
+                             bool showInfo){
    for(auto & it : queries){
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
@@ -364,13 +367,23 @@ bool Export::m_generateDaily(DailySchedule & daily,
             //
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
-            m_XLS.generateFile(daily.getXlsTemplatePath(),
-                               tmpAttachName,
-                               genInfo,
-                               finalQueries);
-            //            runXLSGenerator();
-            m_XLS.readResult();
+
+            if(m_XLS.generateFile(daily.getXlsTemplatePath(),
+                                  tmpAttachName,
+                                  genInfo,
+                                  finalQueries) && showInfo){
+               qInfo(logInfo()) << "Successfuly generated XLSX file.";
+            }else if(showInfo){
+               qWarning(logWarning()) << "Failed to generate XLSX file.";
+            }
+
+            if(m_XLS.readResult() && showInfo){
+               qInfo(logInfo()) << "Export to xlsx file succesful.";
+            }else if(showInfo){
+               qWarning(logWarning()) << "Export to xlsx file failed.";
+            }
          }
+
          QSqlQuery resultCSV = it.getResult();
 
          if(daily.getCsvAttach()){
@@ -402,7 +415,8 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
                               QSqlDatabase & db,
                               QDateTime & currentTime,
                               quint32 & count,
-                              QString & generatedBy){
+                              QString & generatedBy,
+                              bool showInfo){
    for(auto & it : queries){
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
@@ -436,12 +450,22 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
             //
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
-            m_XLS.generateFile(weekly.getXlsTemplatePath(),
-                               tmpAttachName,
-                               genInfo,
-                               finalQueries);
-            //            runXLSGenerator();
-            m_XLS.readResult();
+
+            if(m_XLS.generateFile(weekly.getXlsTemplatePath(),
+                                  tmpAttachName,
+                                  genInfo,
+                                  finalQueries) && showInfo){
+               qInfo(logInfo()) << "Successfuly generated XLSX file.";
+            }else if(showInfo){
+               qWarning(logWarning()) << "Failed to generate XLSX file.";
+            }
+
+            if(m_XLS.readResult() && showInfo){
+               qInfo(logInfo()) << "Export to xlsx file succesful.";
+            }else if(showInfo){
+               qWarning(logWarning()) << "Export to xlsx file failed.";
+            }
+
          }
          QSqlQuery resultCSV = it.getResult();
 
@@ -474,7 +498,8 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
                                QSqlDatabase & db,
                                QDateTime & currentTime,
                                quint32 & count,
-                               QString & generatedBy){
+                               QString & generatedBy,
+                               bool showInfo){
    for(auto & it : queries){
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
@@ -508,12 +533,22 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
             //
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
-            m_XLS.generateFile(monthly.getXlsTemplatePath(),
-                               tmpAttachName,
-                               genInfo,
-                               finalQueries);
-            //            runXLSGenerator();
-            m_XLS.readResult();
+
+            if(m_XLS.generateFile(monthly.getXlsTemplatePath(),
+                                  tmpAttachName,
+                                  genInfo,
+                                  finalQueries) && showInfo){
+               qInfo(logInfo()) << "Successfuly generated XLSX file.";
+            }else if(showInfo){
+               qWarning(logWarning()) << "Failed to generate XLSX file.";
+            }
+
+            if(m_XLS.readResult() && showInfo){
+               qInfo(logInfo()) << "Export to xlsx file succesful.";
+            }else if(showInfo){
+               qWarning(logWarning()) << "Export to xlsx file failed.";
+            }
+
          }
          QSqlQuery resultCSV = it.getResult();
 

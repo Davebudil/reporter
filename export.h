@@ -33,7 +33,6 @@ class Export{
                         QString & generatedBy);
 
    private:
-      void runXLSGenerator();
       void m_shiftDayReset(ShiftSchedule & shift, const QDateTime & current);
       void m_createTempScheduling(CustomScheduling & exportData,
                                   ShiftSchedule & shift,
@@ -46,28 +45,32 @@ class Export{
                            QSqlDatabase & db,
                            QDateTime & currentTime,
                            quint32 & count,
-                           QString & generatedBy);
+                           QString & generatedBy,
+                           bool showInfo);
       bool m_generateDaily(DailySchedule & daily,
                            QQueue<SQLquery> & queries,
                            SQLParameter & param,
                            QSqlDatabase & db,
                            QDateTime & currentTime,
                            quint32 & count,
-                           QString & generatedBy);
+                           QString & generatedBy,
+                           bool showInfo);
       bool m_generateWeekly(WeeklySchedule & weekly,
                             QQueue<SQLquery> & queries,
                             SQLParameter & param,
                             QSqlDatabase & db,
                             QDateTime & currentTime,
                             quint32 & count,
-                            QString & generatedBy);
+                            QString & generatedBy,
+                            bool showInfo);
       bool m_generateMonthly(MonthlySchedule & monthly,
                              QQueue<SQLquery> & queries,
                              SQLParameter & param,
                              QSqlDatabase & db,
                              QDateTime & currentTime,
                              quint32 & count,
-                             QString & generatedBy);
+                             QString & generatedBy,
+                             bool showInfo);
       ExportXLS m_XLS;
       ExportCSV m_CSV;
       ExportHTML m_HTML;
