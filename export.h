@@ -22,12 +22,14 @@ class Export{
       void handleExport(QQueue<Scheduling*> & intervalsToHandle,
                         QQueue<SQLquery> & queries,
                         QQueue<SQLParameter> & parameters,
-                        QSqlDatabase & db);
+                        QSqlDatabase & db,
+                        QString & generatedBy);
       void customExport(CustomScheduling & exportData,
                         QQueue<SQLquery> & queries,
                         QQueue<SQLParameter> & parameters,
                         QSqlDatabase & db,
-                        qint32 & customInterval);
+                        qint32 & customInterval,
+                        QString & generatedBy);
 
    private:
       void runXLSGenerator();
@@ -42,25 +44,29 @@ class Export{
                            SQLParameter & param,
                            QSqlDatabase & db,
                            QDateTime & currentTime,
-                           quint32 & count);
+                           quint32 & count,
+                           QString & generatedBy);
       bool m_generateDaily(DailySchedule & daily,
                            QQueue<SQLquery> & queries,
                            SQLParameter & param,
                            QSqlDatabase & db,
                            QDateTime & currentTime,
-                           quint32 & count);
+                           quint32 & count,
+                           QString & generatedBy);
       bool m_generateWeekly(WeeklySchedule & weekly,
                             QQueue<SQLquery> & queries,
                             SQLParameter & param,
                             QSqlDatabase & db,
                             QDateTime & currentTime,
-                            quint32 & count);
+                            quint32 & count,
+                            QString & generatedBy);
       bool m_generateMonthly(MonthlySchedule & monthly,
                              QQueue<SQLquery> & queries,
                              SQLParameter & param,
                              QSqlDatabase & db,
                              QDateTime & currentTime,
-                             quint32 & count);
+                             quint32 & count,
+                             QString & generatedBy);
       ExportXLS m_XLS;
       ExportCSV m_CSV;
       ExportHTML m_HTML;

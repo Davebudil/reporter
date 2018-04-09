@@ -16,6 +16,7 @@ Reporter::Reporter(QWidget *parent)
    m_Setup.loadIni();
    m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
    m_CUSTOMINTERVAL = m_Setup.getSettings().customInterval;
+   m_generatedBy = m_Setup.getSettings().generatedByUser;
    ui->setupUi(this);
    ui->queryNameEdit->setText("Query Name");
    ui->queryParamEdit->setText("Master name");
@@ -1500,7 +1501,7 @@ void Reporter::timerInterval(){
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
    tmpParams = m_mainSQL.getStorage().getQueueParameters();
 
-   m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase());
+   m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase(), m_generatedBy);
 }
 
 void Reporter::on_toolButton_4_clicked(){
@@ -1517,7 +1518,8 @@ void Reporter::on_toolButton_4_clicked(){
                             tmpQueries,
                             tmpParams,
                             m_mainSQL.getDatabase().getDatabase(),
-                            m_CUSTOMINTERVAL);
+                            m_CUSTOMINTERVAL,
+                            m_generatedBy);
    }
 }
 

@@ -17,7 +17,8 @@ ExportHTML Export::getHTML() const{
 void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
                           QQueue<SQLquery> & queries,
                           QQueue<SQLParameter> & parameters,
-                          QSqlDatabase & db){
+                          QSqlDatabase & db,
+                          QString & generatedBy){
    QDateTime currentTime = QDateTime().currentDateTime();
    quint32 exportCount = 0;
 
@@ -26,22 +27,22 @@ void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
       if(it->getShift().generateShiftData(currentTime) && it->getShift().getActive()){
          for(auto & itPar : parameters){
             //generate all queries for this interval and for all parameters
-            m_generateShift(it->getShift(), queries, itPar, db, currentTime, exportCount);
+            m_generateShift(it->getShift(), queries, itPar, db, currentTime, exportCount, generatedBy);
          }
       }
       if(it->getDaily().generateDailyData(currentTime) && it->getDaily().getActive()){
          for(auto & itPar : parameters){
-            m_generateDaily(it->getDaily(), queries, itPar, db, currentTime, exportCount);
+            m_generateDaily(it->getDaily(), queries, itPar, db, currentTime, exportCount, generatedBy);
          }
       }
       if(it->getWeekly().generateWeeklyData(currentTime) && it->getWeekly().getActive()){
          for(auto & itPar : parameters){
-            m_generateWeekly(it->getWeekly(), queries, itPar, db, currentTime, exportCount);
+            m_generateWeekly(it->getWeekly(), queries, itPar, db, currentTime, exportCount, generatedBy);
          }
       }
       if(it->getMonthly().generateMonthlyData(currentTime) && it->getMonthly().getActive()){
          for(auto & itPar : parameters){
-            m_generateMonthly(it->getMonthly(), queries, itPar, db, currentTime, exportCount);
+            m_generateMonthly(it->getMonthly(), queries, itPar, db, currentTime, exportCount, generatedBy);
          }
       }
    }
@@ -72,7 +73,8 @@ void Export::customExport(CustomScheduling & exportData,
                           QQueue<SQLquery> & queries,
                           QQueue<SQLParameter> & parameters,
                           QSqlDatabase & db,
-                          qint32 & customInterval){
+                          qint32 & customInterval,
+                          QString & generatedBy){
    QDateTime from;
    QDateTime to;
    ShiftSchedule shift;
@@ -95,7 +97,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Shift && shift.generateShiftData(from)){
             for(auto & it : parameters){
-               if(m_generateShift(shift, queries, it, db, from, exportCount)){
+               if(m_generateShift(shift, queries, it, db, from, exportCount, generatedBy)){
                   ++shiftCount;
                }
             }
@@ -103,7 +105,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Daily && daily.generateDailyData(from)){
             for(auto & it : parameters){
-               if(m_generateDaily(daily, queries, it, db, from, exportCount)){
+               if(m_generateDaily(daily, queries, it, db, from, exportCount, generatedBy)){
                   ++dailyCount;
                }
             }
@@ -111,7 +113,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Weekly && weekly.generateWeeklyData(from)){
             for(auto & it : parameters){
-               if(m_generateWeekly(weekly, queries, it, db, from, exportCount)){
+               if(m_generateWeekly(weekly, queries, it, db, from, exportCount, generatedBy)){
                   ++weeklyCount;
                }
             }
@@ -119,7 +121,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Monthly && monthly.generateMonthlyData(from)){
             for(auto & it : parameters){
-               if(m_generateMonthly(monthly, queries, it, db, from, exportCount)){
+               if(m_generateMonthly(monthly, queries, it, db, from, exportCount, generatedBy)){
                   ++monthlyCount;
                }
             }
@@ -129,22 +131,22 @@ void Export::customExport(CustomScheduling & exportData,
          SQLParameter tmp(0);
 
          if(exportData.m_Shift && shift.generateShiftData(from)){
-            if(m_generateShift(shift, queries, tmp, db, from, exportCount)){
+            if(m_generateShift(shift, queries, tmp, db, from, exportCount, generatedBy)){
                ++shiftCount;
             }
          }
          if(exportData.m_Daily && daily.generateDailyData(from)){
-            if(m_generateDaily(daily, queries, tmp, db, from, exportCount)){
+            if(m_generateDaily(daily, queries, tmp, db, from, exportCount, generatedBy)){
                ++dailyCount;
             }
          }
          if(exportData.m_Weekly && weekly.generateWeeklyData(from)){
-            if(m_generateWeekly(weekly, queries, tmp, db, from, exportCount)){
+            if(m_generateWeekly(weekly, queries, tmp, db, from, exportCount, generatedBy)){
                ++weeklyCount;
             }
          }
          if(exportData.m_Monthly && monthly.generateMonthlyData(from)){
-            if(m_generateMonthly(monthly, queries, tmp, db, from, exportCount)){
+            if(m_generateMonthly(monthly, queries, tmp, db, from, exportCount, generatedBy)){
                ++monthlyCount;
             }
          }
@@ -235,7 +237,8 @@ bool Export::m_generateShift(ShiftSchedule & shift,
                              SQLParameter & param,
                              QSqlDatabase & db,
                              QDateTime & currentTime,
-                             quint32 & count){
+                             quint32 & count,
+                             QString & generatedBy){
    //need to define which way to format parameters . using #parameter1 - 5 for now
    for(auto & it : queries){
       QList<std::pair<QString, QString>> genInfo;
@@ -284,7 +287,7 @@ bool Export::m_generateShift(ShiftSchedule & shift,
       if(it.getResult().isActive()){
          if(shift.getXlsAttach()){
             //NOT SURE ABOUT THIS LINE
-            genInfo.append(std::make_pair("GENERATED_BY", "David Budil"));
+            genInfo.append(std::make_pair("GENERATED_BY", generatedBy));
             //
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
@@ -325,7 +328,8 @@ bool Export::m_generateDaily(DailySchedule & daily,
                              SQLParameter & param,
                              QSqlDatabase & db,
                              QDateTime & currentTime,
-                             quint32 & count){
+                             quint32 & count,
+                             QString & generatedBy){
    for(auto & it : queries){
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
@@ -353,7 +357,7 @@ bool Export::m_generateDaily(DailySchedule & daily,
       if(it.getResult().isActive()){
          if(daily.getXlsAttach()){
             //NOT SURE ABOUT THIS LINE
-            genInfo.append(std::make_pair("GENERATED_BY", "David Budil"));
+            genInfo.append(std::make_pair("GENERATED_BY", generatedBy));
             //
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
@@ -394,7 +398,8 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
                               SQLParameter & param,
                               QSqlDatabase & db,
                               QDateTime & currentTime,
-                              quint32 & count){
+                              quint32 & count,
+                              QString & generatedBy){
    for(auto & it : queries){
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
@@ -423,7 +428,7 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
       if(it.getResult().isActive()){
          if(weekly.getXlsAttach()){
             //NOT SURE ABOUT THIS LINE
-            genInfo.append(std::make_pair("GENERATED_BY", "David Budil"));
+            genInfo.append(std::make_pair("GENERATED_BY", generatedBy));
             //
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
@@ -464,7 +469,8 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
                                SQLParameter & param,
                                QSqlDatabase & db,
                                QDateTime & currentTime,
-                               quint32 & count){
+                               quint32 & count,
+                               QString & generatedBy){
    for(auto & it : queries){
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
@@ -493,7 +499,7 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
       if(it.getResult().isActive()){
          if(monthly.getXlsAttach()){
             //NOT SURE ABOUT THIS LINE
-            genInfo.append(std::make_pair("GENERATED_BY", "David Budil"));
+            genInfo.append(std::make_pair("GENERATED_BY", generatedBy));
             //
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
