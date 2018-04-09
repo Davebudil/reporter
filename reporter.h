@@ -154,6 +154,7 @@ class Reporter : public QMainWindow{
       QTimer * m_Timer;
       qint32 m_TIMERINTERVAL;
       qint32 m_CUSTOMINTERVAL;
+      QString m_generatedBy;
       CustomScheduling * instantSchedule;
 
       bool m_queryActive;

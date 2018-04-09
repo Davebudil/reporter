@@ -99,6 +99,7 @@ void Setup::loadSettings(){
    m_Settings.databaseName = settings.value("DatabaseName", "budil").toString();
    m_Settings.userName = settings.value("Username", "root").toString();
    m_Settings.userPassword = settings.value("UserPassword", "Blizazrd5").toString();
+   m_Settings.generatedByUser = settings.value("GeneratedByUser", "David Budil").toString();
 }
 
 void Setup::saveSettings(){
@@ -112,6 +113,7 @@ void Setup::saveSettings(){
    settings.setValue("Hotkey", m_Settings.hotKey);
    settings.setValue("TimerIntervalMS", m_Settings.timerInterval);
    settings.setValue("CustomIntervalMS", m_Settings.customInterval);
+   settings.setValue("GeneratedByUser", m_Settings.generatedByUser);
 }
 
 bool Setup::m_serializeQueries(const QStringList & queries){
