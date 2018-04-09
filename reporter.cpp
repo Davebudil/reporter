@@ -10,6 +10,8 @@ Reporter::Reporter(QWidget *parent)
      m_scheduleKey(0),
      m_scheduleCount(0),
      tmp(nullptr),
+     m_daysSinceCleanUp(0),
+     m_lastDay(QDate::currentDate()),
      m_queryActive(false),
      m_firstQuery(false){
    qInfo(logInfo()) << "Application started.";
@@ -32,7 +34,9 @@ Reporter::Reporter(QWidget *parent)
    ui->toolButton_2->setVisible(false);
    ui->paramTest->setVisible(false);
    ui->tabWidget_2->removeTab(4);
-   //custom is disabled, waiting for future implementation9
+   m_lastDay = QDate::currentDate();
+   m_daysSinceCleanUp = 0;
+   //custom is disabled, waiting for future implementation
 }
 //Destructor
 Reporter::~Reporter(){
@@ -1495,6 +1499,21 @@ void Reporter::timerInterval(){
    QQueue<Scheduling*> tmpSch;
    QQueue<SQLquery> tmpQueries;
    QQueue<SQLParameter> tmpParams;
+
+   if(QDate::currentDate() != m_lastDay){
+      m_daysSinceCleanUp++;
+      m_lastDay = QDate::currentDate();
+   }
+
+   if(m_daysSinceCleanUp >= 30){
+      if(m_Setup.cleanUp()){
+         qInfo(logInfo()) << "Successfuly deleted old logs.";
+         m_daysSinceCleanUp = 0;
+      }else{
+         qWarning(logWarning()) << "Failed to delete old logs, trying again next day.";
+         m_daysSinceCleanUp = 29;
+      }
+   }
 
    for(auto it : m_Schedule){
       tmpSch.append(it);

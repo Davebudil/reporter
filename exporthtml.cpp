@@ -5,7 +5,7 @@ ExportHTML::ExportHTML() = default;
 
 bool ExportHTML::generateFile(QSqlQuery & dataHTML,
                               const QString & htmlName){
-   QString filePath = QDir::currentPath() + "/" + htmlName + ".html";
+   QString filePath = QDir::currentPath() + "/export/html/" + htmlName + ".html";
    QFile fileHtml(filePath);
 
    if(dataHTML.first()){

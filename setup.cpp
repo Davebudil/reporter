@@ -2,7 +2,7 @@
 #include "log.h"
 //constructor
 Setup::Setup(QObject *parent)
-           : QObject(parent){
+   : QObject(parent){
 }
 //Destructor
 Setup::~Setup() = default;
@@ -27,7 +27,7 @@ bool Setup::serializeParameters(const QStringList &parameters, const QVector<qin
 }
 bool Setup::serializeSchedule(const QList<QStringList> & serializeData, const QStringList & scheduleName){
    QString tmp;
-   QFile loadFile(QDir::currentPath() + "/ReporterSchedule.dat");
+   QFile loadFile(QDir::currentPath() + "/data/ReporterSchedule.dat");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
       qint32 scheduleIterator = 0;
@@ -55,7 +55,7 @@ bool Setup::serializeSchedule(const QList<QStringList> & serializeData, const QS
    return false;
 }
 bool Setup::serializeGlobal(const QStringList & global){
-   QFile loadFile(QDir::currentPath() + "/ReporterGlobal.dat");
+   QFile loadFile(QDir::currentPath() + "/data/ReporterGlobal.dat");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
       for(auto & it : global){
@@ -66,7 +66,7 @@ bool Setup::serializeGlobal(const QStringList & global){
    return false;
 }
 bool Setup::m_serializeParameters(const QStringList & param, const QVector<qint32> & count){
-   QFile loadFile(QDir::currentPath() + "/ReporterParameters.dat");
+   QFile loadFile(QDir::currentPath() + "/data/ReporterParameters.dat");
    if(loadFile.open(QIODevice::ReadWrite | QIODevice::Truncate)){
       QDataStream out(&loadFile);
       qint32 drivingI = 0;
@@ -89,7 +89,7 @@ SPreferences Setup::getSettings(){
 }
 
 void Setup::loadSettings(){
-   QSettings settings(QDir::currentPath() +  "/ReporterSettings.ini", QSettings::IniFormat);
+   QSettings settings(QDir::currentPath() +  "/settings/ReporterSettings.ini", QSettings::IniFormat);
    m_Settings.timerInterval = settings.value("TimerIntervalMS", 1800000).toInt();
    m_Settings.customInterval = settings.value("CustomIntervalMS", 1800000).toInt();
    m_Settings.databaseType = settings.value("DatabaseType", "QMYSQL").toString();
@@ -103,7 +103,7 @@ void Setup::loadSettings(){
 }
 
 void Setup::saveSettings(){
-   QSettings settings(QDir::currentPath() +  "/ReporterSettings.ini", QSettings::IniFormat);
+   QSettings settings(QDir::currentPath() +  "/settings/ReporterSettings.ini", QSettings::IniFormat);
    settings.setValue("DatabaseType", m_Settings.databaseType);
    settings.setValue("Host", m_Settings.host);
    settings.setValue("Port", m_Settings.port);
@@ -117,7 +117,7 @@ void Setup::saveSettings(){
 }
 
 bool Setup::m_serializeQueries(const QStringList & queries){
-   QFile loadFile(QDir::currentPath() + "/ReporterQueries.dat");
+   QFile loadFile(QDir::currentPath() + "/data/ReporterQueries.dat");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
       for(auto & it : queries){
@@ -130,7 +130,7 @@ bool Setup::m_serializeQueries(const QStringList & queries){
 }
 //deserializes
 bool Setup::m_deserializeQueries(QStringList & queries){
-   QFile loadFile(QDir::currentPath() + "/ReporterQueries.dat");
+   QFile loadFile(QDir::currentPath() + "/data/ReporterQueries.dat");
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
       while(!in.atEnd()){
@@ -143,7 +143,7 @@ bool Setup::m_deserializeQueries(QStringList & queries){
    return false;
 }
 bool Setup::deserializeParameters(QStringList & parameters, QVector<qint32> & count){
-   QFile loadFile(QDir::currentPath() + "/ReporterParameters.dat");
+   QFile loadFile(QDir::currentPath() + "/data/ReporterParameters.dat");
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
       qint32 tmpInt;
@@ -162,7 +162,7 @@ bool Setup::deserializeParameters(QStringList & parameters, QVector<qint32> & co
 }
 //DODELAT TODO
 bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringList & scheduleName){
-   QFile loadFile(QDir::currentPath() + "/ReporterSchedule.dat");
+   QFile loadFile(QDir::currentPath() + "/data/ReporterSchedule.dat");
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
       while(!in.atEnd()){
@@ -221,7 +221,7 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
    return false;
 }
 bool Setup::deserializeGlobal(QStringList & global){
-   QFile loadFile(QDir::currentPath() + "/ReporterGlobal.dat");
+   QFile loadFile(QDir::currentPath() + "/data/ReporterGlobal.dat");
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
       while(!in.atEnd()){
@@ -235,7 +235,36 @@ bool Setup::deserializeGlobal(QStringList & global){
 }
 //cleans up
 bool Setup::cleanUp(){
-   return true; //TMP
+   QFile loadFile(QDir::currentPath() + "/logs/logFile.txt");
+   QFile loadTMPFile(QDir::currentPath() + "/logs/tmp.txt");
+   QDate currentDate = QDate::currentDate();
+
+   if(loadFile.open(QIODevice::ReadOnly | QIODevice::Text)
+      && loadTMPFile.open(QIODevice::WriteOnly | QIODevice::Text)){
+      QTextStream in(&loadFile);
+      QTextStream out(&loadTMPFile);
+
+      while(!in.atEnd()){
+         QString tmpDate = "";
+         QString tmpLine = in.readLine();
+
+         for(qint32 i = 0; i < 10; ++i){
+            tmpDate += tmpLine[i];
+         }
+
+         QDate tmp = QDate().fromString(tmpDate);
+         tmp = tmp.addDays(14);
+
+         if(tmp < currentDate){
+            out << tmpLine << "\n";
+         }
+      }
+      loadFile.remove();
+      loadTMPFile.rename(loadFile.fileName());
+      return true;
+   }else{
+      return false;
+   }
 }
 //setter
 void Setup::setFilePath(const QString & path){

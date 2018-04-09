@@ -7,7 +7,7 @@ bool ExportXLS::generateFile(const QString & templatePath,
                              const QString & genPath,
                              const QList<std::pair<QString, QString>> constants,
                              const QList<QStringList> queries){
-   QFile loadFile(QDir::currentPath() + "/ask_attachment_source.txt");
+   QFile loadFile(QDir::currentPath() + "/export/tmp/ask_attachment_source.txt");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QTextStream out(&loadFile);
       out << templatePath << "\n";
@@ -23,19 +23,19 @@ bool ExportXLS::generateFile(const QString & templatePath,
          out << it.at(1) << "\n";
          out << it.at(2) << "\n";
       }
-      qInfo(logInfo()) << "Successfuly generated XLSX file.";
+//      qInfo(logInfo()) << "Successfuly generated XLSX file.";
       return true;
    }
-   qWarning(logWarning()) << "Failed to generate XLSX file.";
+//   qWarning(logWarning()) << "Failed to generate XLSX file.";
    return false;
 }
 bool ExportXLS::readResult(){
-   QFile loadFile(QDir::currentPath() + "/ask_attachment_final.txt");
-   QProcess generateXLS;
-
-   generateXLS.start(QDir::currentPath() + "/ask_attachment.exe");
-   generateXLS.waitForStarted();
-   generateXLS.waitForFinished();
+   QFile loadFile(QDir::currentPath() + "/export/tmp/ask_attachment_final.txt");
+//   QProcess generateXLS;
+//   TODO: uncomment this
+//   generateXLS.start(QDir::currentPath() + "/export/tmp/ask_attachment.exe");
+//   generateXLS.waitForStarted();
+//   generateXLS.waitForFinished();
 
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
@@ -44,15 +44,15 @@ bool ExportXLS::readResult(){
          in >> tmp;
       }
       if(tmp.at(0) == "0"){
-         qInfo(logInfo()) << "Export to xlsx file succesful.";
-         QMessageBox::information(nullptr, QObject::tr("Export Result"),QObject::tr("Export to xls file successful."));
+//         qInfo(logInfo()) << "Export to xlsx file succesful.";
+//         QMessageBox::information(nullptr, QObject::tr("Export Result"),QObject::tr("Export to xls file successful."));
          return true;
       }else{
-         qWarning(logWarning()) << "Export to xlsx file failed.";
-         QMessageBox::information(nullptr, QObject::tr("Export Error"),QObject::tr("Export to xls file failed."));
+//         qWarning(logWarning()) << "Export to xlsx file failed.";
+//         QMessageBox::information(nullptr, QObject::tr("Export Error"),QObject::tr("Export to xls file failed."));
          return false;
       }
    }
-   qWarning(logWarning()) << "Failed to open output file.";
+//   qWarning(logWarning()) << "Failed to open output file.";
    return false;
 }

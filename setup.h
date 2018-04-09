@@ -10,6 +10,7 @@
 #include <QDir>
 #include <QList>
 #include <QSettings>
+#include <QDate>
 #include <QApplication>
 /*Class used to load and edit ini file
  * and to serialize and deserialize queries data
