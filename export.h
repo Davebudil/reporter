@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QQueue>
 #include <QDateTime>
+#include <QFile>
 #include "exportxls.h"
 #include "exportcsv.h"
 #include "exporthtml.h"

@@ -23,8 +23,6 @@ bool ExportXLS::generateFile(const QString & templatePath,
          out << it.at(1) << "\n";
          out << it.at(2) << "\n";
       }
-//      debug function
-//      QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/ask_attachment_source.txt"));
       qInfo(logInfo()) << "Successfuly generated XLSX file.";
       return true;
    }
@@ -33,6 +31,12 @@ bool ExportXLS::generateFile(const QString & templatePath,
 }
 bool ExportXLS::readResult(){
    QFile loadFile(QDir::currentPath() + "/ask_attachment_final.txt");
+   QProcess generateXLS;
+
+   generateXLS.start(QDir::currentPath() + "/ask_attachment.exe");
+   generateXLS.waitForStarted();
+   generateXLS.waitForFinished();
+
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
       QStringList tmp;
@@ -49,6 +53,6 @@ bool ExportXLS::readResult(){
          return false;
       }
    }
-   qWarning(logWarning()) << "Failed to read output file.";
+   qWarning(logWarning()) << "Failed to open output file.";
    return false;
 }
