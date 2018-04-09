@@ -2,9 +2,10 @@
 #define EXPORTXLS_H
 #include <QObject>
 #include <QPair>
+#include <QTimer>
 #include <QDataStream>
 #include <QTextStream>
-#include <QFile>
+#include <QProcess>
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QUrl>

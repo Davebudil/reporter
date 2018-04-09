@@ -21,6 +21,8 @@ void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
                           QString & generatedBy){
    QDateTime currentTime = QDateTime().currentDateTime();
    quint32 exportCount = 0;
+   QFile resultFile(QDir::currentPath() + "/ask_attachment_final.txt");
+   resultFile.remove();
 
    for(auto & it : intervalsToHandle){
       m_shiftDayReset(it->getShift(), currentTime);
@@ -86,6 +88,8 @@ void Export::customExport(CustomScheduling & exportData,
    quint32 dailyCount = 0;
    quint32 weeklyCount = 0;
    quint32 monthlyCount = 0;
+   QFile resultFile(QDir::currentPath() + "/ask_attachment_final.txt");
+   resultFile.remove();
 
    from = exportData.m_From;
    to = exportData.m_To;
@@ -165,9 +169,6 @@ void Export::customExport(CustomScheduling & exportData,
    }
    if(monthlyCount != 0){
       qInfo(logInfo()) << "Succesfully generated " + QVariant(monthlyCount).toString() + " monthly datasets.";
-   }
-   if(exportCount != 0){
-      qInfo(logInfo()) << "Succesfully generated " + QVariant(exportCount).toString() + " datasets.";
    }
 }
 
@@ -283,6 +284,7 @@ bool Export::m_generateShift(ShiftSchedule & shift,
       }
       it.generateQuery(db);
       it.executeQuery();
+      QString tmpAttachName = shift.getAttachName() + "_" + tmp.toString("dd.MM.yy");
       //export as CSV or XLSX...
       if(it.getResult().isActive()){
          if(shift.getXlsAttach()){
@@ -292,7 +294,7 @@ bool Export::m_generateShift(ShiftSchedule & shift,
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
             m_XLS.generateFile(shift.getXlsTemplatePath(),
-                               shift.getAttachName(),
+                               tmpAttachName,
                                genInfo,
                                finalQueries);
             //            runXLSGenerator();
@@ -302,7 +304,7 @@ bool Export::m_generateShift(ShiftSchedule & shift,
 
          if(shift.getCsvAttach()){
             m_CSV.generateFile(shift.getCsvTemplatePath(),
-                               shift.getAttachName(),
+                               tmpAttachName,
                                resultCSV);
          }
          if(shift.getXlsAttach() && shift.getCsvAttach()){
@@ -310,7 +312,7 @@ bool Export::m_generateShift(ShiftSchedule & shift,
             return true; // TODO: TMP
          }
 
-         m_HTML.generateFile(resultCSV, shift.getAttachName());
+         m_HTML.generateFile(resultCSV, tmpAttachName);
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;
@@ -353,6 +355,7 @@ bool Export::m_generateDaily(DailySchedule & daily,
 
       it.generateQuery(db);
       it.executeQuery();
+      QString tmpAttachName = daily.getAttachName() + "_" + tmp.toString("dd.MM.yy");
       //export as CSV or XLSX...
       if(it.getResult().isActive()){
          if(daily.getXlsAttach()){
@@ -362,7 +365,7 @@ bool Export::m_generateDaily(DailySchedule & daily,
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
             m_XLS.generateFile(daily.getXlsTemplatePath(),
-                               daily.getAttachName(),
+                               tmpAttachName,
                                genInfo,
                                finalQueries);
             //            runXLSGenerator();
@@ -372,7 +375,7 @@ bool Export::m_generateDaily(DailySchedule & daily,
 
          if(daily.getCsvAttach()){
             m_CSV.generateFile(daily.getCsvTemplatePath(),
-                               daily.getAttachName(),
+                               tmpAttachName,
                                resultCSV);
          }
          if(daily.getXlsAttach() && daily.getCsvAttach()){
@@ -380,7 +383,7 @@ bool Export::m_generateDaily(DailySchedule & daily,
             return true;// TODO: TMP
          }
 
-         m_HTML.generateFile(resultCSV, daily.getAttachName());
+         m_HTML.generateFile(resultCSV, tmpAttachName);
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;
@@ -424,6 +427,7 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
 
       it.generateQuery(db);
       it.executeQuery();
+      QString tmpAttachName = weekly.getAttachName() + "_" + tmp.toString("dd.MM.yy");
       //export as CSV or XLSX...
       if(it.getResult().isActive()){
          if(weekly.getXlsAttach()){
@@ -433,7 +437,7 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
             m_XLS.generateFile(weekly.getXlsTemplatePath(),
-                               weekly.getAttachName(),
+                               tmpAttachName,
                                genInfo,
                                finalQueries);
             //            runXLSGenerator();
@@ -443,7 +447,7 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
 
          if(weekly.getCsvAttach()){
             m_CSV.generateFile(weekly.getCsvTemplatePath(),
-                               weekly.getAttachName(),
+                               tmpAttachName,
                                resultCSV);
          }
          if(weekly.getXlsAttach() && weekly.getCsvAttach()){
@@ -451,7 +455,7 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
             return true; // TODO: TMP
          }
 
-         m_HTML.generateFile(resultCSV, weekly.getAttachName());
+         m_HTML.generateFile(resultCSV, tmpAttachName);
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;
@@ -495,6 +499,7 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
 
       it.generateQuery(db);
       it.executeQuery();
+      QString tmpAttachName = monthly.getAttachName() + "_" + tmp.toString("dd.MM.yy");
       //export as CSV or XLSX...
       if(it.getResult().isActive()){
          if(monthly.getXlsAttach()){
@@ -504,7 +509,7 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
             QList<QStringList> finalQueries;
             finalQueries.append(it.queryList());
             m_XLS.generateFile(monthly.getXlsTemplatePath(),
-                               monthly.getAttachName(),
+                               tmpAttachName,
                                genInfo,
                                finalQueries);
             //            runXLSGenerator();
@@ -514,7 +519,7 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
 
          if(monthly.getCsvAttach()){
             m_CSV.generateFile(monthly.getCsvTemplatePath(),
-                               monthly.getAttachName(),
+                               tmpAttachName,
                                resultCSV);
          }
          if(monthly.getXlsAttach() && monthly.getCsvAttach()){
@@ -522,7 +527,7 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
             return true; // TODO: TMP
          }
 
-         m_HTML.generateFile(resultCSV, monthly.getAttachName());
+         m_HTML.generateFile(resultCSV, tmpAttachName);
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
          return false;

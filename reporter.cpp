@@ -221,7 +221,6 @@ void Reporter::m_addSchedule(const QString & name){
    tmp->setName(name);
    m_Schedule.insert(m_scheduleCount, tmp);
    m_scheduleKey = m_scheduleCount++;
-
    //   m_editDay(m_scheduleKey);
    //   m_editMonthly(m_scheduleKey);
    //   m_editShift(m_scheduleKey);
@@ -528,15 +527,16 @@ void Reporter::defaultSettings(){
    m_ConnectDB();
    m_Deserialize();
    m_deserializeSchedule();
+
    if(m_noSchedule()){
       m_addSchedule("Default");
       ui->scheduleName->setText(m_Schedule[0]->getName());
    }
+
    m_SetTimer(m_TIMERINTERVAL);
    m_PauseTimer();
    m_PauseTimer();
-   qInfo(logInfo()) << "Settings successfuly loaded.";
-   qInfo(logInfo()) << "Data successfuly loaded.";
+   qInfo(logInfo()) << "Settings and data successfuly loaded.";
 }
 
 void Reporter::closeEvent(QCloseEvent * event){
@@ -778,12 +778,14 @@ void Reporter::m_generateTemplateXLS(){
    QXlsx::Document xlsx;
    QSqlQuery tmpModel = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult();
    QSqlRecord rec = tmpModel.record();
+
    for(qint32 i = 0; i < rec.count(); ++i){
       QString tmp = rec.fieldName(i);
       xlsx.write(1, i + 1, tmp);
       tmpModel.next();
       xlsx.write(2, i + 1, tmpModel.value(i).toString());
    }
+
    xlsx.saveAs("/home/dave/Documents/sielaff/project/reporter/reporter/templateFieldNamesXLSX.xlsx");
    QDesktopServices::openUrl(QUrl("/home/dave/Documents/sielaff/project/reporter/reporter/templateFieldNamesXLSX.xlsx"));
    m_mainSQL.getStorage().getQueries()[m_nameKey]->finishQuery();
