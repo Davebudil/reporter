@@ -291,9 +291,9 @@ bool Export::m_generateShift(ShiftSchedule & shift,
                                   tmpAttachName,
                                   genInfo,
                                   finalQueries) && showInfo){
-               qInfo(logInfo()) << "Successfuly generated XLSX file.";
+               qInfo(logInfo()) << "Successfuly generated shift XLSX file.";
             }else if(showInfo){
-               qWarning(logWarning()) << "Failed to generate XLSX file.";
+               qWarning(logWarning()) << "Failed to generate shift XLSX file.";
             }
 
             if(m_XLS.readResult() && showInfo){
@@ -372,9 +372,9 @@ bool Export::m_generateDaily(DailySchedule & daily,
                                   tmpAttachName,
                                   genInfo,
                                   finalQueries) && showInfo){
-               qInfo(logInfo()) << "Successfuly generated XLSX file.";
+               qInfo(logInfo()) << "Successfuly generated daily XLSX file.";
             }else if(showInfo){
-               qWarning(logWarning()) << "Failed to generate XLSX file.";
+               qWarning(logWarning()) << "Failed to generate daily XLSX file.";
             }
 
             if(m_XLS.readResult() && showInfo){
@@ -455,9 +455,9 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
                                   tmpAttachName,
                                   genInfo,
                                   finalQueries) && showInfo){
-               qInfo(logInfo()) << "Successfuly generated XLSX file.";
+               qInfo(logInfo()) << "Successfuly generated weekly XLSX file.";
             }else if(showInfo){
-               qWarning(logWarning()) << "Failed to generate XLSX file.";
+               qWarning(logWarning()) << "Failed to generate weekly XLSX file.";
             }
 
             if(m_XLS.readResult() && showInfo){
@@ -538,9 +538,9 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
                                   tmpAttachName,
                                   genInfo,
                                   finalQueries) && showInfo){
-               qInfo(logInfo()) << "Successfuly generated XLSX file.";
+               qInfo(logInfo()) << "Successfuly generated monthly XLSX file.";
             }else if(showInfo){
-               qWarning(logWarning()) << "Failed to generate XLSX file.";
+               qWarning(logWarning()) << "Failed to generate monthly XLSX file.";
             }
 
             if(m_XLS.readResult() && showInfo){

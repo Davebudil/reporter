@@ -797,12 +797,16 @@ void Reporter::m_generateTemplateXLS(){
 //Generates query data model that is displayed in table in application
 void Reporter::m_testingQueryGen(){
    m_Timer->stop();
+   //TODO: FIX BUG, CRASHES WHEN GENERATING ANOTHER QUERY
    if(m_firstQuery){
       m_mainSQL.getModel()->clear();
       m_mainSQL.getModel()->query().clear();
-      for(auto & it : m_mainSQL.getStorage().getQueries()){
-         it->clearQueries();
-      }
+//      TMP
+//      for(auto & it : m_mainSQL.getStorage().getQueries()){
+//         if(it != m_mainSQL.getStorage().getQueries()[m_nameKey]){
+
+//         }
+//      }
    }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
       qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
@@ -813,6 +817,8 @@ void Reporter::m_testingQueryGen(){
       m_generateQuery(m_nameKey);
       m_executeQuery(m_nameKey);
       m_displaySQLResult(m_nameKey);
+      //TODO: tmp workaround, try to fix this in next version
+      m_mainSQL.getStorage().getQueries()[m_nameKey]->clearQueries();
       m_firstQuery = true;
    }
    m_Timer->start(m_TIMERINTERVAL);
