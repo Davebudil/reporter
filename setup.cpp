@@ -13,7 +13,6 @@ void Setup::loadIni(){
 }
 void Setup::saveIni(){
    saveSettings();
-   qInfo(logInfo()) << "Succesfully saved ini settings.";
 }
 
 bool Setup::serializeQueries(const QStringList &queries){
