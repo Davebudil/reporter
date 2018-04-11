@@ -50,7 +50,6 @@ bool ExportHTML::generateFile(QSqlQuery & dataHTML,
       }
       stream << "</body>\n";
       stream << "</html>\n";
-      qInfo(logInfo()) << "Succesfully generated html file.";
       return true;
       }
       qInfo(logInfo()) << "Failed to generate html file.";

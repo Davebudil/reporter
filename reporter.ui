@@ -494,7 +494,7 @@ QTabWidget::tab-bar {
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="basic">
      <attribute name="title">
@@ -1398,8 +1398,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -1768,8 +1768,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -2255,8 +2255,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -2567,8 +2567,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
-           <height>199</height>
+           <width>251</width>
+           <height>201</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -2731,6 +2731,27 @@ QTabWidget::tab-bar {
       <property name="text">
        <string>Custom Scheduling</string>
       </property>
+     </widget>
+     <widget class="QWidget" name="progressBar" native="true">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>430</y>
+        <width>181</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>181</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="progressLayout"/>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="SQL">
