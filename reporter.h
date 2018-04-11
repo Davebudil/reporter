@@ -158,6 +158,8 @@ class Reporter : public QMainWindow{
       CustomScheduling * instantSchedule;
       quint32 m_daysSinceCleanUp;
       QDate m_lastDay;
+      QDateTime m_progressFrom;
+      QDateTime m_progressTo;
 
       bool m_queryActive;
       //Print query result to the table
