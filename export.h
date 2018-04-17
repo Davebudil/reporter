@@ -31,9 +31,6 @@ class Export{
                         QSqlDatabase & db,
                         qint32 & customInterval,
                         QString & generatedBy);
-
-   private:
-      void m_shiftDayReset(ShiftSchedule & shift, const QDateTime & current);
       void m_createTempScheduling(CustomScheduling & exportData,
                                   ShiftSchedule & shift,
                                   DailySchedule & daily,
@@ -71,6 +68,8 @@ class Export{
                              quint32 & count,
                              QString & generatedBy,
                              bool showInfo);
+   private:
+      void m_shiftDayReset(ShiftSchedule & shift, const QDateTime & current);
       ExportXLS m_XLS;
       ExportCSV m_CSV;
       ExportHTML m_HTML;

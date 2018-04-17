@@ -7,475 +7,26 @@
     <x>0</x>
     <y>0</y>
     <width>866</width>
-    <height>602</height>
+    <height>626</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>866</width>
-    <height>602</height>
+    <height>626</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>866</width>
-    <height>602</height>
+    <height>626</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Reporter</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget:window {          /* Borders around the code editor and debug window */
-  border: 0px solid white;
-  background-color: white;
-}
-
-QToolTip {
-  background-color: white;
-  color: black;
-    padding: 5px;
-    border-radius: 0;
-    opacity: 200;
-}
-
-/* ==================== Dialog ==================== */
-QLabel {
-  background: white;
-  color: black; 
-  font: 75 11pt &quot;DejaVu Sans Mono&quot;;     /* Not sure about this one */
-}
-
-QDialog, QListView {
-  background-color: white;
-  color: black;
-  outline: 0;
-  border: 2px solid transparent;
-}
-
-QListView::item:hover {
-  color: #DADFE1;
-  background: #DADFE1;
-}
-
-
-QListView::item:selected {
-  color: #DADFE1;
-  background: #DADFE1;
-}
-
-/* === QTabBar === */
-QTabBar {
-  background: white;
-}
-QPlainTextEdit{
-  background: #DADFE1;
-  border: 1px solid #DADFE1;
-  color: black;
-}
-QTableView{
-  background: #DADFE1;
-  border: 1px solid #DADFE1;
-  color: black;
-}
-QScrollArea{
-  background: #DADFE1;
-  border: 1px solid #DADFE1;
-  color: black;
-}
-QScrollArea{
-  background: #DADFE1;
-  border: 1px solid #DADFE1;
-  color: black;
-}
-
-
-QTabWidget::pane {
-  background: transparent;  /* Only at the very bottom of the tabs */
-}
-
-QTabBar::tab {
-  background: white;
-  border: 0px solid white;
-  border-bottom: 2px solid white;
-  color: black;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-}
-
-QTabBar::tab:hover {
-  background-color: #DADFE1;
-  border: 0px solid #DADFE1;
-  border-bottom: 2px solid #DADFE1;
-  color: black;
-}
-
-QTabBar::tab:selected {
-  background-color: #DADFE1;
-  border: 0px solid #DADFE1;
-  border-top: none;
-  border-bottom: 2px solid #DADFE1;
-  color: black;
-}
-
-QStackedWidget {
-  background: white;  /* This covers a bunch of things, I was thinking about making it transparent, */
-              /* but I would have to find all the other elements... but QTabWidget::pane may be it */
-}
-
-
-/* === QGroupBox === */
-QGroupBox {
-    border: 1px solid white;
-    background-color: white;
-    margin-top: 1em;
-}
-
-QGroupBox::title {
-  color: black;
-    subcontrol-origin: margin;
-    left: 6px;
-    padding: 0 3px 0 3px;
-}
-
-QComboBox {
-  color: black;
-  background-color: white;
-  selection-background-color: #DADFE1;
-  outline: 0;
-}
-
-QComboBox QAbstractItemView
-{    
-    selection-background-color: #DADFE1;
-  outline: 0;
-}
-
-/* === QCheckBox === */
-QCheckBox, QRadioButton {
-  color: black;
-}
-
-QCheckBox::indicator::unchecked  {
-  background-color: #DADFE1;
-  border: 1px solid #DADFE1;
-}
-
-QRadioButton::indicator::unchecked {
-  background-color: #DADFE1;
-  border: 1px solid #DADFE1;
-  border-radius: 4px;
-}
-
-QCheckBox::indicator::checked, QTreeView::indicator::checked {
-  background-color: #f44336;
-  border: 1px solid #f44336;
-}
-
-QRadioButton::indicator::checked {
-  background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 white);
-  border: 1px solid white;
-  border-radius: 4px;
-}
-
-QCheckBox::indicator:disabled, QRadioButton::indicator:disabled, QTreeView::indicator:disabled {
-  background-color: white;      /* Not sure what this looks like */
-}
-
-QCheckBox::indicator::checked:disabled, QRadioButton::indicator::checked:disabled, QTreeView::indicator::checked:disabled {  
-  background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #BBBBBB, stop:1 white); /* Not sure what this looks like */
-}
-
-QTreeView {
-  background-color: white;
-  color: black;
-  outline: 0;
-  border: 0;
-}
-
-QTreeView::item:hover {
-  background-color: white;
-  color: black;
-}
-
-QTreeView::item:selected {
-  background-color: #DADFE1;
-  color: black;
-}
-
-QTreeView QHeaderView:section {
-  background-color: white;
-  color: black;
-  border: 0;
-}
-
-QTreeView::indicator:checked {
-  background-color: qradialgradient(cx:0.5, cy:0.5, fx:0.25, fy:0.15, radius:0.3, stop:0 #80CBC4, stop:1 white);
-  border: 1px solid #DADFE1 ;
-  selection-background-color: #DADFE1 ;
-}
-
-QTreeView::indicator:unchecked {      /* This and the one above style the checkbox in the Options -&gt; Keyboard */
-  background-color: white;        /* This is still a hover over in blue I can't get rid of */
-  border: 1px solid white;
-  selection-background-color: white;
-}
-/*
-QTreeView QScrollBar {
-  background-color: white;
-}
-*/
-QTreeView::branch {
-  /* Skip - applies to everything */
-}
-
-QTreeView::branch:has-siblings:adjoins-item {
-  /* Skip - files */
-}
-
-QTreeView::branch:has-siblings:!adjoins-item {
-  /* Skip - applies to almost all on the left side */
-}
-
-QTreeView::branch:closed:has-children:has-siblings {
-  background: url('./images/rightarrowgray.png') center center no-repeat;
-}
-
-QTreeView::branch:has-children:!has-siblings:closed {
-  background: url('./images/rightarrowgray.png') center center no-repeat;
-}
-
-QTreeView::branch:!has-children:!has-siblings:adjoins-item {
-  /* Skip - files */
-}
-
-QTreeView::branch:open:has-children:has-siblings {
-  background: url('./images/downarrowgray.png') center center no-repeat;
-}
-
-QTreeView::branch:open:has-children:!has-siblings {
-  background: url('./images/downarrowgray.png') center center no-repeat;
-}
-
-/* === QScrollBar:horizontal === */
-QScrollBar:horizontal {
-  background: #f44336;        /* Background where slider is not */
-  height: 10px;
-  margin: 0;
-}
-
-QScrollBar:vertical {
-  background: #f44336;        /* Background where slider is not */
-  width: 10px;
-  margin: 0;
-}
-
-QScrollBar::handle:horizontal {
-    background: white;          /* Slider color */
-    min-width: 16px;
-  border-radius: 5px;
-}
-
-QScrollBar::handle:vertical {
-    background: white;          /* Slider color */
-    min-height: 16px;
-  border-radius: 5px;
-}
-
-QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal,
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-  background: #f44336;                        /* Removes the dotted background */
-}
-
-QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,
-QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {  /* Hides the slider arrows */
-      border: #f44336;
-      background: #f44336;
-}
-
-QPushButton {
-  background-color: #f44336;
-  color: black;
-  border: 1px solid #f44336;
-  padding: 4px 22px;
-}
-
-QPushButton:hover {
-  color: #DADFE1;
-}
-
-QPushButton:pressed {
-  color: #FFFFFF;
-}
-
-QLineEdit {
-  background: #DADFE1;
-  border: 1px solid #DADFE1;
-  color: black;
-}
-
-QSpinBox {
-  background: #DADFE1;
-  border: 1px solid #DADFE1;
-  color: black;
-}
-
-/*****************************************************************************
-Main Screen
-*****************************************************************************/
-QTreeView {
-  background-color: white;
-}
-
-QMenu {
-  background-color: #f44336;    /* File Menu Background color */
-  color: black;
-}
-
-QMenu::item:selected {
-  color: #DADFE1;
-}
-
-QMenu::item:pressed {
-  color: #FFFFFF;
-}
-
-QMenu::separator {
-  height: 1px;
-  background: transparent;      /* Could change this to #546E7A and reduce the margin top and bottom to 1px */
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-/* === QMenuBar === */
-QMenuBar {
-  background-color: white;
-  color: black;
-}
-
-QMenuBar::item {
-  background: transparent;
-}
-
-QMenuBar::item:disabled {
-  color: gray;
-}
-
-QMenuBar::item:selected {
-  color: #DADFE1;
-}
-
-QMenuBar::item:pressed {
-  color: #FFFFFF;
-}
-
-QToolBar {
-  background: #f44336;
-  border: 1px solid transparent;
-}
-
-QToolBar:handle {
-  background: transparent;
-  border-left: 2px dotted #80CBC4;  /* Fix the 4 handle dots so it doesn't look crappy */
-  color: transparent;
-}
-
-QToolBar::separator {
-  border: 0;
-}
-
-/* === QToolButton === */
-QToolButton:hover, QToolButton:pressed {
-  background-color: #DADFE1;
-}
-
-QToolButton::menu-button {
-  background: url('./images/downarrowgray.png') center center no-repeat;
-  background-color: #f44336;                        
-}
-
-QToolButton::menu-button:hover, QToolButton::menu-button:pressed {
-  background-color: #f44336;
-}
-
-QStatusBar {
-  background-color: #f44336;
-}
-
-QLabel {
-  color: black;
-}
-
-QToolButton {
-  color: white;
-  background-color: #f44336;
-}
-
-QToolButton:hover, QToolButton:pressed, QToolButton:checked {
-  background-color: #DADFE1;
-}
-
-QToolButton:hover {
-  color: black;
-
-}
-
-QToolButton:checked, QToolButton:pressed {
-  color: #FFFFFF;
-}
-
-
-QToolButton {
-  border: 1px solid #f44336;
-  margin: 1px;
-}
-
-QToolButton:hover {
-  background-color: #DADFE1;
-  border: 1px solid #DADFE1;
-}
-
-QToolButton[popupMode=&quot;1&quot;] {
-  padding-right: 20px;
-}
-
-QToolButton::menu-button {
-  border-left: 1px solid #f44336;
-  background: transparent;
-    width: 16px;
-}
-
-QToolButton::menu-button:hover {
-  border-left: 1px solid #f44336;
-  background: transparent;
-    width: 16px;
-}
-
-QStatusBar::item {
-  color: white;
-  background-color: #f44336;
-}
-
-QAbstractScrollArea  {  /* Borders around the code editor and debug window */
-  border: 0;
-}
-
-/*****************************************************************************
-Play around with these settings
-*****************************************************************************/
-
-/* Force the dialog's buttons to follow the Windows guidelines. */
-QDialogButtonBox {
-    button-layout: 0;
-}
-
-QTabWidget::tab-bar {
-  left: 0px; /* Test this out on OS X, it will affect the tabs in the Options Dialog, on OS X they are centered */
-}</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
@@ -486,15 +37,15 @@ QTabWidget::tab-bar {
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1090</width>
-      <height>821</height>
+      <width>871</width>
+      <height>631</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="basic">
      <attribute name="title">
@@ -503,19 +54,19 @@ QTabWidget::tab-bar {
      <widget class="QWidget" name="paramWidget" native="true">
       <property name="geometry">
        <rect>
-        <x>-10</x>
-        <y>360</y>
+        <x>0</x>
+        <y>350</y>
         <width>461</width>
-        <height>221</height>
+        <height>231</height>
        </rect>
       </property>
       <widget class="QToolButton" name="paramNew">
        <property name="geometry">
         <rect>
-         <x>380</x>
-         <y>10</y>
-         <width>71</width>
-         <height>41</height>
+         <x>150</x>
+         <y>180</y>
+         <width>61</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="text">
@@ -525,21 +76,21 @@ QTabWidget::tab-bar {
       <widget class="QToolButton" name="paramEdit">
        <property name="geometry">
         <rect>
-         <x>220</x>
-         <y>10</y>
-         <width>71</width>
-         <height>41</height>
+         <x>90</x>
+         <y>180</y>
+         <width>51</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="text">
-        <string>Edit</string>
+        <string>Save</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="param1">
        <property name="geometry">
         <rect>
          <x>220</x>
-         <y>60</y>
+         <y>10</y>
          <width>231</width>
          <height>21</height>
         </rect>
@@ -549,7 +100,7 @@ QTabWidget::tab-bar {
        <property name="geometry">
         <rect>
          <x>220</x>
-         <y>90</y>
+         <y>40</y>
          <width>231</width>
          <height>21</height>
         </rect>
@@ -559,7 +110,7 @@ QTabWidget::tab-bar {
        <property name="geometry">
         <rect>
          <x>220</x>
-         <y>120</y>
+         <y>70</y>
          <width>231</width>
          <height>21</height>
         </rect>
@@ -569,7 +120,7 @@ QTabWidget::tab-bar {
        <property name="geometry">
         <rect>
          <x>220</x>
-         <y>150</y>
+         <y>100</y>
          <width>231</width>
          <height>21</height>
         </rect>
@@ -579,19 +130,32 @@ QTabWidget::tab-bar {
        <property name="geometry">
         <rect>
          <x>220</x>
-         <y>180</y>
+         <y>130</y>
          <width>231</width>
          <height>21</height>
         </rect>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="paramDelete">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>180</y>
+         <width>51</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Delete</string>
        </property>
       </widget>
       <widget class="QScrollArea" name="scrollArea_2">
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>10</y>
+         <y>0</y>
          <width>191</width>
-         <height>191</height>
+         <height>171</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -605,14 +169,12 @@ QTabWidget::tab-bar {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>191</width>
-          <height>191</height>
+          <width>189</width>
+          <height>169</height>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">	background: #DADFE1;
-	border: 1px solid #DADFE1;
-	color: black;</string>
+         <string notr="true"/>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
@@ -621,19 +183,6 @@ QTabWidget::tab-bar {
         </layout>
        </widget>
       </widget>
-      <widget class="QToolButton" name="paramDelete">
-       <property name="geometry">
-        <rect>
-         <x>300</x>
-         <y>10</y>
-         <width>71</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Delete</string>
-       </property>
-      </widget>
      </widget>
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="enabled">
@@ -641,14 +190,14 @@ QTabWidget::tab-bar {
       </property>
       <property name="geometry">
        <rect>
-        <x>210</x>
-        <y>60</y>
+        <x>220</x>
+        <y>10</y>
         <width>641</width>
-        <height>301</height>
+        <height>331</height>
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="Shift">
        <attribute name="title">
@@ -987,7 +536,7 @@ QTabWidget::tab-bar {
           <x>380</x>
           <y>70</y>
           <width>251</width>
-          <height>201</height>
+          <height>171</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -1001,14 +550,12 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>251</width>
-           <height>201</height>
+           <width>249</width>
+           <height>169</height>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">	background: #DADFE1;
-	border: 1px solid #DADFE1;
-	color: black;</string>
+          <string notr="true"/>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
@@ -1020,7 +567,7 @@ QTabWidget::tab-bar {
        <widget class="QLabel" name="label_5">
         <property name="geometry">
          <rect>
-          <x>350</x>
+          <x>380</x>
           <y>10</y>
           <width>141</width>
           <height>20</height>
@@ -1033,9 +580,9 @@ QTabWidget::tab-bar {
        <widget class="QLineEdit" name="shiftemailAdress">
         <property name="geometry">
          <rect>
-          <x>350</x>
+          <x>380</x>
           <y>40</y>
-          <width>211</width>
+          <width>181</width>
           <height>20</height>
          </rect>
         </property>
@@ -1066,6 +613,52 @@ QTabWidget::tab-bar {
          <string>Delete</string>
         </property>
        </widget>
+       <widget class="QToolButton" name="shiftGenerate">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>250</y>
+          <width>101</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Generate</string>
+        </property>
+       </widget>
+       <zorder>shiftEmail</zorder>
+       <zorder>shiftActive</zorder>
+       <zorder>shiftMondayActive</zorder>
+       <zorder>shiftTuesdayActive</zorder>
+       <zorder>shiftThursdayActive</zorder>
+       <zorder>shiftWednesdayActive</zorder>
+       <zorder>shiftFridayActive</zorder>
+       <zorder>shiftSaturdayActive</zorder>
+       <zorder>shiftSundayActive</zorder>
+       <zorder>shiftTo</zorder>
+       <zorder>shiftFrom</zorder>
+       <zorder>label_2</zorder>
+       <zorder>shiftAttach</zorder>
+       <zorder>shiftSubj</zorder>
+       <zorder>shiftXLS</zorder>
+       <zorder>shiftCSV</zorder>
+       <zorder>label_6</zorder>
+       <zorder>label_7</zorder>
+       <zorder>label_8</zorder>
+       <zorder>label_9</zorder>
+       <zorder>label_10</zorder>
+       <zorder>shiftAttachXLS</zorder>
+       <zorder>shiftAttachCSV</zorder>
+       <zorder>shiftBrXLS</zorder>
+       <zorder>shiftBrEMAIL</zorder>
+       <zorder>shiftBrCSV</zorder>
+       <zorder>shiftFrom_2</zorder>
+       <zorder>shiftEmailScrollArea</zorder>
+       <zorder>label_5</zorder>
+       <zorder>shiftemailAdress</zorder>
+       <zorder>shiftnewEmailAdress</zorder>
+       <zorder>shiftdeleteEmailAdress</zorder>
+       <zorder>shiftGenerate</zorder>
       </widget>
       <widget class="QWidget" name="Daily">
        <attribute name="title">
@@ -1384,7 +977,7 @@ QTabWidget::tab-bar {
           <x>380</x>
           <y>70</y>
           <width>251</width>
-          <height>201</height>
+          <height>171</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -1398,14 +991,12 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>251</width>
-           <height>201</height>
+           <width>249</width>
+           <height>169</height>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">	background: #DADFE1;
-	border: 1px solid #DADFE1;
-	color: black;</string>
+          <string notr="true"/>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
@@ -1417,9 +1008,9 @@ QTabWidget::tab-bar {
        <widget class="QLineEdit" name="dailyEmailAdress">
         <property name="geometry">
          <rect>
-          <x>350</x>
+          <x>380</x>
           <y>40</y>
-          <width>211</width>
+          <width>181</width>
           <height>20</height>
          </rect>
         </property>
@@ -1453,7 +1044,7 @@ QTabWidget::tab-bar {
        <widget class="QLabel" name="label_23">
         <property name="geometry">
          <rect>
-          <x>350</x>
+          <x>380</x>
           <y>10</y>
           <width>141</width>
           <height>20</height>
@@ -1461,6 +1052,19 @@ QTabWidget::tab-bar {
         </property>
         <property name="text">
          <string>Email Adress</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="dailyGenerate">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>250</y>
+          <width>101</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Generate</string>
         </property>
        </widget>
       </widget>
@@ -1754,7 +1358,7 @@ QTabWidget::tab-bar {
           <x>380</x>
           <y>70</y>
           <width>251</width>
-          <height>201</height>
+          <height>171</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -1768,14 +1372,12 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>251</width>
-           <height>201</height>
+           <width>249</width>
+           <height>169</height>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">	background: #DADFE1;
-	border: 1px solid #DADFE1;
-	color: black;</string>
+          <string notr="true"/>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
@@ -1787,9 +1389,9 @@ QTabWidget::tab-bar {
        <widget class="QLineEdit" name="weeklyemailAdress">
         <property name="geometry">
          <rect>
-          <x>350</x>
+          <x>380</x>
           <y>40</y>
-          <width>211</width>
+          <width>181</width>
           <height>20</height>
          </rect>
         </property>
@@ -1823,7 +1425,7 @@ QTabWidget::tab-bar {
        <widget class="QLabel" name="label_26">
         <property name="geometry">
          <rect>
-          <x>350</x>
+          <x>380</x>
           <y>10</y>
           <width>141</width>
           <height>20</height>
@@ -1831,6 +1433,19 @@ QTabWidget::tab-bar {
         </property>
         <property name="text">
          <string>Email Adress</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="weeklyGenerate">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>250</y>
+          <width>101</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Generate</string>
         </property>
        </widget>
       </widget>
@@ -2241,7 +1856,7 @@ QTabWidget::tab-bar {
           <x>380</x>
           <y>70</y>
           <width>251</width>
-          <height>201</height>
+          <height>171</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -2255,14 +1870,12 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>251</width>
-           <height>201</height>
+           <width>249</width>
+           <height>169</height>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">	background: #DADFE1;
-	border: 1px solid #DADFE1;
-	color: black;</string>
+          <string notr="true"/>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
@@ -2274,9 +1887,9 @@ QTabWidget::tab-bar {
        <widget class="QLineEdit" name="monthlyEmailAdress">
         <property name="geometry">
          <rect>
-          <x>350</x>
+          <x>380</x>
           <y>40</y>
-          <width>211</width>
+          <width>181</width>
           <height>20</height>
          </rect>
         </property>
@@ -2310,7 +1923,7 @@ QTabWidget::tab-bar {
        <widget class="QLabel" name="label_30">
         <property name="geometry">
          <rect>
-          <x>350</x>
+          <x>380</x>
           <y>10</y>
           <width>141</width>
           <height>20</height>
@@ -2318,6 +1931,19 @@ QTabWidget::tab-bar {
         </property>
         <property name="text">
          <string>Email Adress</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="monthlyGenerate">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>250</y>
+          <width>101</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Generate</string>
         </property>
        </widget>
       </widget>
@@ -2567,8 +2193,8 @@ QTabWidget::tab-bar {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>251</width>
-           <height>201</height>
+           <width>249</width>
+           <height>199</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -2637,23 +2263,23 @@ QTabWidget::tab-bar {
      <widget class="QToolButton" name="saveScheduling">
       <property name="geometry">
        <rect>
-        <x>150</x>
-        <y>10</y>
-        <width>131</width>
+        <x>620</x>
+        <y>350</y>
+        <width>91</width>
         <height>41</height>
        </rect>
       </property>
       <property name="text">
-       <string> Save Schedule</string>
+       <string>Save</string>
       </property>
      </widget>
      <widget class="QScrollArea" name="scrollSchedule">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>100</y>
+        <x>20</x>
+        <y>50</y>
         <width>191</width>
-        <height>261</height>
+        <height>291</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2667,14 +2293,12 @@ QTabWidget::tab-bar {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>191</width>
-         <height>261</height>
+         <width>189</width>
+         <height>289</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">	background: #DADFE1;
-	border: 1px solid #DADFE1;
-	color: black;</string>
+        <string notr="true"/>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
@@ -2686,21 +2310,21 @@ QTabWidget::tab-bar {
      <widget class="QToolButton" name="deleteScheduling">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>131</width>
+        <x>550</x>
+        <y>350</y>
+        <width>61</width>
         <height>41</height>
        </rect>
       </property>
       <property name="text">
-       <string>Delete Schedule</string>
+       <string>Delete </string>
       </property>
      </widget>
      <widget class="QToolButton" name="newScheduling">
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>10</y>
+        <x>720</x>
+        <y>350</y>
         <width>131</width>
         <height>41</height>
        </rect>
@@ -2712,8 +2336,8 @@ QTabWidget::tab-bar {
      <widget class="QLineEdit" name="scheduleName">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>60</y>
+        <x>20</x>
+        <y>10</y>
         <width>191</width>
         <height>31</height>
        </rect>
@@ -2722,14 +2346,14 @@ QTabWidget::tab-bar {
      <widget class="QToolButton" name="toolButton_4">
       <property name="geometry">
        <rect>
-        <x>660</x>
-        <y>370</y>
+        <x>670</x>
+        <y>400</y>
         <width>181</width>
         <height>51</height>
        </rect>
       </property>
       <property name="text">
-       <string>Custom Scheduling</string>
+       <string>Instant Scheduling</string>
       </property>
      </widget>
      <widget class="QWidget" name="progressBar" native="true">
@@ -2741,17 +2365,17 @@ QTabWidget::tab-bar {
         <height>31</height>
        </rect>
       </property>
-      <widget class="QWidget" name="verticalLayoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>181</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="progressLayout"/>
-      </widget>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>670</x>
+        <y>470</y>
+        <width>181</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="progressLayout"/>
      </widget>
     </widget>
     <widget class="QWidget" name="SQL">
@@ -2762,9 +2386,9 @@ QTabWidget::tab-bar {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>350</y>
-        <width>711</width>
-        <height>221</height>
+        <y>300</y>
+        <width>851</width>
+        <height>241</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2775,16 +2399,16 @@ QTabWidget::tab-bar {
       <property name="geometry">
        <rect>
         <x>680</x>
-        <y>310</y>
+        <y>250</y>
         <width>181</width>
-        <height>31</height>
+        <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>generate</string>
+       <string>Generate Query</string>
       </property>
      </widget>
      <widget class="QPlainTextEdit" name="queryEdit">
@@ -2792,8 +2416,8 @@ QTabWidget::tab-bar {
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>661</width>
-        <height>291</height>
+        <width>471</width>
+        <height>281</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2813,15 +2437,15 @@ QTabWidget::tab-bar {
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>new query</string>
+       <string>New Query</string>
       </property>
      </widget>
      <widget class="QToolButton" name="saveQuery">
       <property name="geometry">
        <rect>
-        <x>550</x>
-        <y>310</y>
-        <width>121</width>
+        <x>680</x>
+        <y>50</y>
+        <width>181</width>
         <height>31</height>
        </rect>
       </property>
@@ -2829,27 +2453,30 @@ QTabWidget::tab-bar {
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>edit selected</string>
+       <string>Save</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="queryNameEdit">
       <property name="geometry">
        <rect>
-        <x>680</x>
-        <y>50</y>
+        <x>490</x>
+        <y>10</y>
         <width>181</width>
         <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Query Name</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="queryParamEdit">
       <property name="geometry">
        <rect>
-        <x>680</x>
-        <y>80</y>
+        <x>490</x>
+        <y>40</y>
         <width>181</width>
         <height>21</height>
        </rect>
@@ -2857,13 +2484,16 @@ QTabWidget::tab-bar {
       <property name="styleSheet">
        <string notr="true"/>
       </property>
+      <property name="text">
+       <string>Master Name</string>
+      </property>
      </widget>
      <widget class="QToolButton" name="clearQuery">
       <property name="geometry">
        <rect>
-        <x>420</x>
-        <y>310</y>
-        <width>121</width>
+        <x>680</x>
+        <y>130</y>
+        <width>181</width>
         <height>31</height>
        </rect>
       </property>
@@ -2871,16 +2501,16 @@ QTabWidget::tab-bar {
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>clear</string>
+       <string>Clear text</string>
       </property>
      </widget>
      <widget class="QScrollArea" name="scrollArea">
       <property name="geometry">
        <rect>
-        <x>680</x>
-        <y>130</y>
+        <x>490</x>
+        <y>100</y>
         <width>181</width>
-        <height>171</height>
+        <height>191</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2894,14 +2524,12 @@ QTabWidget::tab-bar {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>181</width>
-         <height>171</height>
+         <width>179</width>
+         <height>189</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">	background: #DADFE1;
-	border: 1px solid #DADFE1;
-	color: black;</string>
+        <string notr="true"/>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
@@ -2913,9 +2541,9 @@ QTabWidget::tab-bar {
      <widget class="QToolButton" name="queryDelete">
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>310</y>
-        <width>121</width>
+        <x>680</x>
+        <y>90</y>
+        <width>181</width>
         <height>31</height>
        </rect>
       </property>
@@ -2929,8 +2557,8 @@ QTabWidget::tab-bar {
      <widget class="QCheckBox" name="queryActive">
       <property name="geometry">
        <rect>
-        <x>680</x>
-        <y>100</y>
+        <x>490</x>
+        <y>70</y>
         <width>111</width>
         <height>31</height>
        </rect>
@@ -2961,9 +2589,9 @@ QTabWidget::tab-bar {
      <widget class="QToolButton" name="toolButton_3">
       <property name="geometry">
        <rect>
-        <x>150</x>
-        <y>310</y>
-        <width>131</width>
+        <x>680</x>
+        <y>170</y>
+        <width>181</width>
         <height>31</height>
        </rect>
       </property>
@@ -3022,9 +2650,9 @@ QTabWidget::tab-bar {
      <widget class="QToolButton" name="tableNames">
       <property name="geometry">
        <rect>
-        <x>730</x>
-        <y>350</y>
-        <width>131</width>
+        <x>680</x>
+        <y>210</y>
+        <width>181</width>
         <height>31</height>
        </rect>
       </property>
@@ -3162,6 +2790,140 @@ QTabWidget::tab-bar {
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>scheduleName</tabstop>
+  <tabstop>scrollSchedule</tabstop>
+  <tabstop>tabWidget_2</tabstop>
+  <tabstop>shiftActive</tabstop>
+  <tabstop>shiftFrom</tabstop>
+  <tabstop>shiftTo</tabstop>
+  <tabstop>shiftFrom_2</tabstop>
+  <tabstop>shiftMondayActive</tabstop>
+  <tabstop>shiftTuesdayActive</tabstop>
+  <tabstop>shiftWednesdayActive</tabstop>
+  <tabstop>shiftThursdayActive</tabstop>
+  <tabstop>shiftFridayActive</tabstop>
+  <tabstop>shiftSaturdayActive</tabstop>
+  <tabstop>shiftSundayActive</tabstop>
+  <tabstop>shiftAttach</tabstop>
+  <tabstop>shiftSubj</tabstop>
+  <tabstop>shiftEmail</tabstop>
+  <tabstop>shiftBrEMAIL</tabstop>
+  <tabstop>shiftXLS</tabstop>
+  <tabstop>shiftBrXLS</tabstop>
+  <tabstop>shiftCSV</tabstop>
+  <tabstop>shiftBrCSV</tabstop>
+  <tabstop>shiftAttachXLS</tabstop>
+  <tabstop>shiftAttachCSV</tabstop>
+  <tabstop>shiftemailAdress</tabstop>
+  <tabstop>shiftdeleteEmailAdress</tabstop>
+  <tabstop>shiftnewEmailAdress</tabstop>
+  <tabstop>shiftEmailScrollArea</tabstop>
+  <tabstop>scrollArea_2</tabstop>
+  <tabstop>param1</tabstop>
+  <tabstop>param2</tabstop>
+  <tabstop>param3</tabstop>
+  <tabstop>param4</tabstop>
+  <tabstop>param5</tabstop>
+  <tabstop>paramDelete</tabstop>
+  <tabstop>paramEdit</tabstop>
+  <tabstop>paramNew</tabstop>
+  <tabstop>dailyActive</tabstop>
+  <tabstop>dailyTime</tabstop>
+  <tabstop>dailyMondayActive</tabstop>
+  <tabstop>dailyTuesdayActive</tabstop>
+  <tabstop>dailyWednesdayActive</tabstop>
+  <tabstop>dailyThursdayActive</tabstop>
+  <tabstop>dailyFridayActive</tabstop>
+  <tabstop>dailySaturdayActive</tabstop>
+  <tabstop>dailySundayActive</tabstop>
+  <tabstop>dailyAttach</tabstop>
+  <tabstop>dailySubj</tabstop>
+  <tabstop>dailyEmail</tabstop>
+  <tabstop>dailyBrEMAIL</tabstop>
+  <tabstop>dailyXLS</tabstop>
+  <tabstop>dailyBrXLS</tabstop>
+  <tabstop>dailyCSV</tabstop>
+  <tabstop>dailyBrCSV</tabstop>
+  <tabstop>dailyAttachXLS</tabstop>
+  <tabstop>dailyAttachCSV</tabstop>
+  <tabstop>dailyEmailAdress</tabstop>
+  <tabstop>dailydeleteEmailAdress</tabstop>
+  <tabstop>dailynewEmailAdress</tabstop>
+  <tabstop>dailyEmailScrollArea</tabstop>
+  <tabstop>weeklyActive</tabstop>
+  <tabstop>weeklyTime</tabstop>
+  <tabstop>weeklyDays</tabstop>
+  <tabstop>weeklyAttach</tabstop>
+  <tabstop>weeklySubj</tabstop>
+  <tabstop>weeklyEmail</tabstop>
+  <tabstop>weeklyBrEMAIL</tabstop>
+  <tabstop>weeklyXLS</tabstop>
+  <tabstop>weeklyBrXLS</tabstop>
+  <tabstop>weeklyCSV</tabstop>
+  <tabstop>weeklyBrCSV</tabstop>
+  <tabstop>weeklyAttachXLS</tabstop>
+  <tabstop>weeklyAttachCSV</tabstop>
+  <tabstop>weeklyemailAdress</tabstop>
+  <tabstop>weeklydeleteEmailAdress</tabstop>
+  <tabstop>saveEmailAdress_7</tabstop>
+  <tabstop>weeklyEmailScrollArea</tabstop>
+  <tabstop>monthlyActive</tabstop>
+  <tabstop>monthlyTIme</tabstop>
+  <tabstop>monthlyDays</tabstop>
+  <tabstop>monthlyAttach</tabstop>
+  <tabstop>monthlySubj</tabstop>
+  <tabstop>monthlyEmail</tabstop>
+  <tabstop>monthlyBrEMAIL</tabstop>
+  <tabstop>monthlyXLS</tabstop>
+  <tabstop>monthlyBrXLS</tabstop>
+  <tabstop>monthlyCSV</tabstop>
+  <tabstop>monthlyBrCSV</tabstop>
+  <tabstop>monthlyAttachXLS</tabstop>
+  <tabstop>monthlyAttachCSV</tabstop>
+  <tabstop>monthlyEmailAdress</tabstop>
+  <tabstop>monthlydeleteEmailAdress</tabstop>
+  <tabstop>monthlynewEmailAdress</tabstop>
+  <tabstop>monthlyEmailScrollArea</tabstop>
+  <tabstop>deleteScheduling</tabstop>
+  <tabstop>saveScheduling</tabstop>
+  <tabstop>newScheduling</tabstop>
+  <tabstop>toolButton_4</tabstop>
+  <tabstop>queryEdit</tabstop>
+  <tabstop>queryNameEdit</tabstop>
+  <tabstop>queryParamEdit</tabstop>
+  <tabstop>queryActive</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>newQuery</tabstop>
+  <tabstop>saveQuery</tabstop>
+  <tabstop>queryDelete</tabstop>
+  <tabstop>clearQuery</tabstop>
+  <tabstop>toolButton_3</tabstop>
+  <tabstop>tableNames</tabstop>
+  <tabstop>toolButton</tabstop>
+  <tabstop>pauseResumeButton</tabstop>
+  <tabstop>dbPassword</tabstop>
+  <tabstop>dbConnect</tabstop>
+  <tabstop>queryTable</tabstop>
+  <tabstop>shiftActive_6</tabstop>
+  <tabstop>shiftAttachXLS_5</tabstop>
+  <tabstop>saveEmailAdress_13</tabstop>
+  <tabstop>shiftEmail_5</tabstop>
+  <tabstop>shiftAttachCSV_5</tabstop>
+  <tabstop>customBrEMAIL</tabstop>
+  <tabstop>customBrCSV</tabstop>
+  <tabstop>customEmailAdress</tabstop>
+  <tabstop>customBrXLS</tabstop>
+  <tabstop>customEmailScrollArea</tabstop>
+  <tabstop>toolButton_2</tabstop>
+  <tabstop>shiftXLS_5</tabstop>
+  <tabstop>paramTest</tabstop>
+  <tabstop>shiftCSV_5</tabstop>
+  <tabstop>shiftAttach_5</tabstop>
+  <tabstop>customdeleteEmailAdress</tabstop>
+  <tabstop>shiftSubj_5</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

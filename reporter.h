@@ -136,6 +136,130 @@ class Reporter : public QMainWindow{
 
       void on_pauseResumeButton_clicked();
 
+      void on_param1_textEdited(const QString & arg1);
+
+      void on_param2_textEdited(const QString & arg1);
+
+      void on_param3_textEdited(const QString & arg1);
+
+      void on_param4_textEdited(const QString & arg1);
+
+      void on_param5_textEdited(const QString & arg1);
+
+      void on_shiftActive_clicked();
+
+      void on_shiftMondayActive_clicked();
+
+      void on_shiftTuesdayActive_clicked();
+
+      void on_shiftWednesdayActive_clicked();
+
+      void on_shiftThursdayActive_clicked();
+
+      void on_shiftFridayActive_clicked();
+
+      void on_shiftSaturdayActive_clicked();
+
+      void on_shiftSundayActive_clicked();
+
+      void on_shiftFrom_userTimeChanged(const QTime & time);
+
+      void on_shiftTo_userTimeChanged(const QTime & time);
+
+      void on_shiftFrom_2_userTimeChanged(const QTime & time);
+
+      void on_shiftAttach_textEdited(const QString & arg1);
+
+      void on_shiftSubj_textEdited(const QString & arg1);
+
+      void on_shiftEmail_textEdited(const QString & arg1);
+
+      void on_shiftXLS_textEdited(const QString & arg1);
+
+      void on_shiftCSV_textEdited(const QString & arg1);
+
+      void on_shiftAttachXLS_clicked();
+
+      void on_shiftAttachCSV_clicked();
+
+      void on_shiftemailAdress_textEdited(const QString & arg1);
+
+      void on_dailyActive_clicked();
+
+      void on_dailyTime_userTimeChanged(const QTime & time);
+
+      void on_dailyEmailAdress_textEdited(const QString & arg1);
+
+      void on_dailyMondayActive_clicked();
+
+      void on_dailyTuesdayActive_clicked();
+
+      void on_dailyWednesdayActive_clicked();
+
+      void on_dailyThursdayActive_clicked();
+
+      void on_dailyFridayActive_clicked();
+
+      void on_dailySaturdayActive_clicked();
+
+      void on_dailySundayActive_clicked();
+
+      void on_dailyAttach_textEdited(const QString & arg1);
+
+      void on_dailySubj_textEdited(const QString & arg1);
+
+      void on_dailyEmail_textEdited(const QString & arg1);
+
+      void on_dailyXLS_textEdited(const QString & arg1);
+
+      void on_dailyCSV_textEdited(const QString & arg1);
+
+      void on_dailyAttachXLS_clicked();
+
+      void on_dailyAttachCSV_clicked();
+
+      void on_weeklyActive_clicked();
+
+      void on_weeklyTime_userTimeChanged(const QTime & time);
+
+      void on_weeklyDays_currentIndexChanged(int index);
+
+      void on_weeklyAttach_textEdited(const QString & arg1);
+
+      void on_weeklySubj_textEdited(const QString & arg1);
+
+      void on_weeklyEmail_textEdited(const QString & arg1);
+
+      void on_weeklyXLS_textEdited(const QString & arg1);
+
+      void on_weeklyCSV_textEdited(const QString & arg1);
+
+      void on_weeklyemailAdress_textEdited(const QString & arg1);
+
+      void on_weeklyAttachXLS_clicked();
+
+      void on_weeklyAttachCSV_clicked();
+
+      void on_monthlyActive_clicked();
+
+      void on_monthlyTIme_userTimeChanged(const QTime & time);
+
+      void on_monthlyEmailAdress_textEdited(const QString & arg1);
+
+      void on_monthlyAttach_textEdited(const QString & arg1);
+
+      void on_monthlySubj_textEdited(const QString & arg1);
+
+      void on_monthlyEmail_textEdited(const QString & arg1);
+
+      void on_monthlyXLS_textEdited(const QString & arg1);
+
+      void on_monthlyCSV_textEdited(const QString & arg1);
+
+      void on_monthlyAttachXLS_clicked();
+
+      void onMonthlyattachcsvClicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -160,8 +284,8 @@ class Reporter : public QMainWindow{
       QDate m_lastDay;
       QDateTime m_progressFrom;
       QDateTime m_progressTo;
-
       bool m_queryActive;
+
       //Print query result to the table
       void m_displaySQLResult(const QString & name);
       //used to generate result from current selected query
