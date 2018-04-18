@@ -71,8 +71,8 @@ QStringList WeeklySchedule::prepareSerialization(){
    valueList.append(m_emailTemplatePath);
    valueList.append(QString(m_Time.toString()));
    valueList.append(QString::number(m_Day));
-   valueList.append(QString::number((m_emailAdresses.count())));
    valueList.append(QString::number(m_Done));
+   valueList.append(QString::number((m_emailAdresses.count())));
    for(auto & it : m_emailAdresses){
       valueList.append(it);
    }

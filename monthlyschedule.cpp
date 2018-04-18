@@ -5,6 +5,7 @@ MonthlySchedule::MonthlySchedule()
                  m_csvAttach(false),
                  m_xlsAttach(false),
                  m_Done(false),
+                 m_lastMonth(QDateTime::currentDateTime()),
                  m_Day(0),
                  m_AttachName(" "),
                  m_SubjName(" "),
@@ -47,9 +48,9 @@ QStringList MonthlySchedule::prepareSerialization(){
    valueList.append(m_emailTemplatePath);
    valueList.append(QString(m_Time.toString()));
    valueList.append(QString::number(m_Day));
-   valueList.append(QString::number((m_emailAdresses.count())));
    valueList.append(QString::number(m_Done));
    valueList.append(m_lastMonth.toString());
+   valueList.append(QString::number((m_emailAdresses.count())));
    for(auto & it : m_emailAdresses){
       valueList.append(it);
    }
