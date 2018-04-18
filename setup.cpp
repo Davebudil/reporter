@@ -35,18 +35,22 @@ bool Setup::serializeSchedule(const QList<QStringList> & serializeData, const QS
          for(auto & it : serializeData[i]){
             tmp = it;
             out << tmp;
+//            qInfo(logInfo()) << tmp + " SHIFT";
          }
          for(auto & it : serializeData[i+1]){
             tmp = it;
             out << tmp;
+//            qInfo(logInfo()) << tmp + " DAILY";
          }
          for(auto & it : serializeData[i+2]){
             tmp = it;
             out << tmp;
+//            qInfo(logInfo()) << tmp + " WEEKLY";
          }
          for(auto & it : serializeData[i+3]){
             tmp = it;
             out << tmp;
+//            qInfo(logInfo()) << tmp + " MONTHLY";
          }
       }
       return true;
@@ -239,7 +243,7 @@ bool Setup::cleanUp(){
    QDate currentDate = QDate::currentDate();
 
    if(loadFile.open(QIODevice::ReadOnly | QIODevice::Text)
-      && loadTMPFile.open(QIODevice::WriteOnly | QIODevice::Text)){
+         && loadTMPFile.open(QIODevice::WriteOnly | QIODevice::Text)){
       QTextStream in(&loadFile);
       QTextStream out(&loadTMPFile);
 

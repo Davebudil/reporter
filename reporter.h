@@ -313,6 +313,7 @@ class Reporter : public QMainWindow{
       void m_deleteQuery();
       void m_deleteSchedule();
       void m_deleteEmails();
+      void m_deleteParameters();
       //Serialization
       void m_serializeQueries();
       void m_serializeParameters();
@@ -339,6 +340,7 @@ class Reporter : public QMainWindow{
       void m_loadDailyEmail();
       void m_loadWeeklyEmail();
       void m_loadMonthlyEmail();
+      void m_loadScheduleParameters();
       void m_displayShift(qint32 keyString);
       void m_displayDay(qint32 keyString);
       void m_displayWeekly(qint32 keyString);
