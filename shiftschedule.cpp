@@ -77,9 +77,6 @@ QStringList ShiftSchedule::prepareSerialization(){
    for(auto & it : m_emailAdresses){
       valueList.append(it);
    }
-   for(const auto & it : valueList){
-      qInfo(logInfo()) << it;
-   }
    return valueList;
 }
 void ShiftSchedule::deserializeList(const QStringList & list){

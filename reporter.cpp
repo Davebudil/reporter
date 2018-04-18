@@ -20,8 +20,8 @@ Reporter::Reporter(QWidget *parent)
    m_CUSTOMINTERVAL = m_Setup.getSettings().customInterval;
    m_generatedBy = m_Setup.getSettings().generatedByUser;
    ui->setupUi(this);
-   ui->queryNameEdit->setText("Query Name");
-   ui->queryParamEdit->setText("Master name");
+//   ui->queryNameEdit->setText("Query Name");
+//   ui->queryParamEdit->setText("Master name");
    ui->queryTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
    ui->dbPassword->setEchoMode(QLineEdit::Password);
    ui->dbPassword->setText(m_mainSQL.getPassword());
@@ -168,6 +168,7 @@ void Reporter::m_addQuery(const QString & queryText,
 //Function to add repeated parameters
 void Reporter::m_addParameters(const QStringList & params, const qint32 & count){
    m_paramKey = m_Schedule[m_scheduleKey]->getParamCount();
+
    if(m_Schedule[m_scheduleKey]->addParam(params, count, m_paramKey)){
       auto newParameter = new QToolButton;
       newParameter->setText(params.at(0));
@@ -180,7 +181,7 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
       m_clearParam();
       m_selectedParam = -1;
       //TODO serialize parameters in schedule
-      m_serializeParameters();
+//      m_serializeParameters();
       m_serializeSchedule();
    }
 }
@@ -304,23 +305,23 @@ void Reporter::m_scrollParamClicked(){
    QString senderObjID = senderObj->objectName();
 
    m_selectedParam = senderObjID.toInt();
-   paramCount = m_mainSQL.getStorage().getParameters()[m_selectedParam]->getCount();
+   paramCount = m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getCount();
    m_clearParam();
 
    if(paramCount > 0){
-      ui->param1->setText(m_mainSQL.getStorage().getParameters()[m_selectedParam]->getParameters().at(0));
+      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(0));
    }
    if(paramCount > 1){
-      ui->param2->setText(m_mainSQL.getStorage().getParameters()[m_selectedParam]->getParameters().at(1));
+      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(1));
    }
    if(paramCount > 2){
-      ui->param3->setText(m_mainSQL.getStorage().getParameters()[m_selectedParam]->getParameters().at(2));
+      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(2));
    }
    if(paramCount > 3){
-      ui->param4->setText(m_mainSQL.getStorage().getParameters()[m_selectedParam]->getParameters().at(3));
+      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(3));
    }
    if(paramCount > 4){
-      ui->param5->setText(m_mainSQL.getStorage().getParameters()[m_selectedParam]->getParameters().at(4));
+      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(4));
    }
 }
 //Function that saves choosen paramaters
@@ -531,7 +532,7 @@ void Reporter::m_Deserialize(){
          tmpList << tmpDeserializeParameters.at(drivingI);
          drivingI++;
       }
-      m_addParameters(tmpList,tmpInt);
+      m_addParameters(tmpList, tmpInt);
    }
 }
 //Deserializes Schedule
@@ -558,7 +559,6 @@ void Reporter::m_deserializeSchedule(){
       m_scheduleKey = m_scheduleCount++;
       auto newSchedule = new QToolButton;
       newSchedule->setText(it);
-      qInfo(logInfo()) << newSchedule->text() + "TEXT NAME";
       newSchedule->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       newSchedule->setObjectName(QString::number(m_scheduleKey));
       ui->scrollLayour_3->addWidget(newSchedule);
@@ -600,7 +600,7 @@ void Reporter::m_saveSchedule(){
    m_editMonthly(m_scheduleKey);
    m_editCustom();
    //TODO: save parameters
-//   m_saveParameter();
+   //   m_saveParameter();
    m_serializeSchedule();
 }
 //DEBUG
@@ -753,6 +753,7 @@ void Reporter::m_loadSchedule(){
    m_displayCustom(m_scheduleKey);
    ui->scheduleName->setText(m_Schedule[m_scheduleKey]->getName());
    m_loadEmails();
+   m_loadScheduleParameters();
 }
 //Loads shift email on mouse click
 void Reporter::m_loadShiftEmail(){
@@ -780,8 +781,26 @@ void Reporter::m_loadMonthlyEmail(){
 }
 
 void Reporter::m_loadScheduleParameters(){
-   QObject * senderObj = sender();
+   //delete current toolbuttons to show the selected scheduling parameters
+   tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>();
+   while(tmp){
+      qInfo(logInfo()) << tmp->text();
+      delete tmp;
+      tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>();
+   }
+   m_clearParam();
 
+   for(const auto & it : m_Schedule[m_scheduleKey]->getParameters()){
+      auto newParameter = new QToolButton;
+      newParameter->setText(it->getParameters().at(0));
+      newParameter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
+      newParameter->setObjectName(QString::number(m_Schedule[m_scheduleKey]->getParameters().key(it)));
+      ui->scrollLayout_2->addWidget(newParameter);
+
+      connect(newParameter, &QToolButton::clicked, this, &Reporter::m_scrollParamClicked);
+      m_clearParam();
+      m_selectedParam = -1;
+   }
 }
 //Adds new parameter
 void Reporter::on_paramNew_clicked(){
@@ -1368,23 +1387,23 @@ void Reporter::on_pauseResumeButton_clicked(){
 }
 
 void Reporter::on_param1_textEdited(const QString &arg1){
-   m_saveParameter();
+//   m_saveParameter();
 }
 
 void Reporter::on_param2_textEdited(const QString &arg1){
-   m_saveParameter();
+//   m_saveParameter();
 }
 
 void Reporter::on_param3_textEdited(const QString &arg1){
-   m_saveParameter();
+//   m_saveParameter();
 }
 
 void Reporter::on_param4_textEdited(const QString &arg1){
-   m_saveParameter();
+//   m_saveParameter();
 }
 
 void Reporter::on_param5_textEdited(const QString &arg1){
-   m_saveParameter();
+//   m_saveParameter();
 }
 
 void Reporter::on_shiftActive_clicked(){
@@ -1419,13 +1438,16 @@ void Reporter::on_shiftSundayActive_clicked(){
 }
 
 void Reporter::on_shiftFrom_userTimeChanged(const QTime &time){
-//   m_saveSchedule();
+   // CAUSES BUGS
+   //   m_saveSchedule();
 }
 void Reporter::on_shiftTo_userTimeChanged(const QTime &time){
-//   m_saveSchedule();
+   // CAUSES BUGS
+   //   m_saveSchedule();
 }
 void Reporter::on_shiftFrom_2_userTimeChanged(const QTime &time){
-//   m_saveSchedule();
+   // CAUSES BUGS
+   //   m_saveSchedule();
 }
 
 void Reporter::on_shiftAttach_textEdited(const QString &arg1){
@@ -1437,7 +1459,8 @@ void Reporter::on_shiftSubj_textEdited(const QString &arg1){
 }
 
 void Reporter::on_shiftEmail_textEdited(const QString &arg1){
-//   m_saveSchedule();
+   // CAUSES BUGS
+   //   m_saveSchedule();
 }
 
 void Reporter::on_shiftXLS_textEdited(const QString &arg1){
@@ -1461,7 +1484,8 @@ void Reporter::on_dailyActive_clicked(){
    m_saveSchedule();
 }
 void Reporter::on_dailyTime_userTimeChanged(const QTime &time){
-//   m_saveSchedule();
+   // CAUSES BUGS
+   //   m_saveSchedule();
 }
 
 void Reporter::on_dailyEmailAdress_textEdited(const QString &arg1){
@@ -1525,9 +1549,10 @@ void Reporter::on_weeklyActive_clicked(){
 }
 
 void Reporter::on_weeklyTime_userTimeChanged(const QTime &time){
-//   m_saveSchedule();
+   //   m_saveSchedule();
 }
 void Reporter::on_weeklyDays_currentIndexChanged(int index){
+   // CAUSES BUGS
    //   TODO: TMP
 }
 void Reporter::on_weeklyAttach_textEdited(const QString &arg1){
@@ -1565,7 +1590,8 @@ void Reporter::on_monthlyActive_clicked(){
 }
 
 void Reporter::on_monthlyTIme_userTimeChanged(const QTime &time){
-//   m_saveSchedule();
+   // CAUSES BUGS
+   //   m_saveSchedule();
 }
 
 void Reporter::on_monthlyEmailAdress_textEdited(const QString &arg1){
