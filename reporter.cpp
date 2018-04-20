@@ -508,12 +508,6 @@ void Reporter::m_serializeQueries(){
    QStringList tmpSerialize = m_mainSQL.loadList();
    m_Setup.serializeQueries(tmpSerialize);
 }
-//Serializes parameters
-void Reporter::m_serializeParameters(){
-   QVector<qint32> tmpCount;
-   QStringList tmpSerialize = m_loadParameters(tmpCount);
-   m_Setup.serializeParameters(tmpSerialize,tmpCount);
-}
 //Serializes schedule
 void Reporter::m_serializeSchedule(){
    QList<QStringList> scheduleSerialization;
@@ -891,15 +885,7 @@ void Reporter::m_loadEmails(){
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadMonthlyEmail);
    }
 }
-//Loads parameters into list while storing the number of parameters into vector
-QStringList Reporter::m_loadParameters(QVector<qint32> & count){
-   QStringList tmp;
-   for(auto it : m_mainSQL.getStorage().getParameters()){
-      count.append(it->getCount());
-      tmp+=it->getParameters();
-   }
-   return tmp;
-}
+
 //Loads all parameters into String List
 void Reporter::m_createParamList(QStringList & tmp, qint32 & tmpCount){
    if(!(ui->param1->text().isEmpty())){
@@ -1328,13 +1314,6 @@ void Reporter::on_monthlydeleteEmailAdress_clicked(){
    m_emailKey = "";
    ui->monthlyEmailAdress->clear();
 }
-void Reporter::on_paramTest_clicked(){
-   QString tmpParam = m_mainSQL.getStorage().getParameters()[0]->getParameters()[0];
-   m_mainSQL.getStorage().getQueries()[m_nameKey]->bindParameter(":test", tmpParam);
-   m_mainSQL.getStorage().getQueries()[m_nameKey]->generateQuery(m_mainSQL.getDatabase().getDatabase());
-   m_mainSQL.getStorage().getQueries()[m_nameKey]->executeQuery();
-   m_displaySQLResult(m_nameKey);
-}
 
 void Reporter::on_tableNames_clicked(){
    if(m_mainSQL.getDatabase().getDatabase().isOpen()){
@@ -1384,7 +1363,7 @@ void Reporter::timerInterval(){
    }
 
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
-   tmpParams = m_mainSQL.getStorage().getQueueParameters();
+   tmpParams = m_Schedule[m_scheduleKey]->getQueueParameters();
 
    m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase(), m_generatedBy);
 }
@@ -1396,7 +1375,7 @@ void Reporter::on_toolButton_4_clicked(){
    instantSchedule->setModal(true);
 
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
-   tmpParams = m_mainSQL.getStorage().getQueueParameters();
+   tmpParams = m_Schedule[m_scheduleKey]->getQueueParameters();
 
    if(instantSchedule->exec()){
       m_Export.customExport(*instantSchedule,

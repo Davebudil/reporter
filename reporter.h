@@ -126,8 +126,6 @@ class Reporter : public QMainWindow{
 
       void on_monthlydeleteEmailAdress_clicked();
 
-      void on_paramTest_clicked();
-
       void on_tableNames_clicked();
 
       void timerInterval();
@@ -316,7 +314,6 @@ class Reporter : public QMainWindow{
       void m_deleteParameters();
       //Serialization
       void m_serializeQueries();
-      void m_serializeParameters();
       //Deserialization
       void m_Deserialize();
       //loads .ini settings
@@ -325,7 +322,6 @@ class Reporter : public QMainWindow{
       void m_ConnectDB();
       //utility function to get text from parameters input boxes
       void m_createParamList(QStringList & tmp, qint32 & tmpCount);
-      QStringList m_loadParameters(QVector<qint32> & count);
       void m_loadMaster();
       void m_loadEmails();
       void m_clearParam();
