@@ -10,6 +10,7 @@ Reporter::Reporter(QWidget *parent)
      m_scheduleKey(0),
      m_scheduleCount(0),
      tmp(nullptr),
+     m_Timer(nullptr),
      m_daysSinceCleanUp(0),
      m_lastDay(QDate::currentDate()),
      m_queryActive(false),
@@ -38,6 +39,7 @@ Reporter::Reporter(QWidget *parent)
    m_daysSinceCleanUp = 0;
    ui->tabWidget->setStyleSheet("QTabBar::tab { height: 50px; width: 150px; }");
    ui->tabWidget_2->setStyleSheet("QTabBar::tab { height: 30px; width: 120px; }");
+   m_Timer = new QTimer;
    //custom is disabled, waiting for future implementation
 }
 //Destructor
@@ -446,9 +448,9 @@ void Reporter::defaultSettings(){
       ui->scheduleName->setText(m_Schedule[0]->getName());
    }
 
-   m_SetTimer(m_TIMERINTERVAL);
-   m_PauseTimer();
-   m_PauseTimer();
+//   m_SetTimer(m_TIMERINTERVAL);
+//   m_PauseTimer();
+//   m_PauseTimer();
    qInfo(logInfo()) << "Settings and data successfuly loaded.";
 }
 
@@ -563,12 +565,6 @@ void Reporter::m_deserializeSchedule(){
    QMap<QString, QVector<QStringList>> parameters;
 
    m_Setup.deserializeSchedule(scheduleDeserialize, scheduleNames, parameters);
-
-   for(auto & it : parameters){
-      for(auto & par : it){
-         qInfo(logInfo()) << parameters.key(it) + " " + par.join(",") + " TESTING THIS";
-      }
-   }
 
    desCount = 0;
    m_scheduleKey = 0;
@@ -746,7 +742,6 @@ QStringList Reporter::m_getColumnNames(const QString & tableName){
 }
 
 void Reporter::m_SetTimer(qint32 interval){
-   m_Timer = new QTimer();
    connect(m_Timer, SIGNAL(timeout()), this, SLOT(timerInterval()));
    m_Timer->start(interval);
    qInfo(logInfo()) << "Timer with interval: " + QVariant(interval).toString() + " ms successfully started.";
@@ -758,12 +753,8 @@ void Reporter::m_debugNotification(const QString & toDisplay){
 
 void Reporter::m_PauseTimer(){
    if(m_Timer->isActive()){
-      ui->pauseResumeButton->setText("Resume");
-      ui->colorLabel->setStyleSheet("background-color: red");
       m_Timer->stop();
    }else{
-      ui->pauseResumeButton->setText("Pause");
-      ui->colorLabel->setStyleSheet("background-color: green");
       m_Timer->start(m_TIMERINTERVAL);
    }
 }
@@ -1417,10 +1408,6 @@ void Reporter::on_toolButton_4_clicked(){
    }
 }
 
-void Reporter::on_pauseResumeButton_clicked(){
-   m_PauseTimer();
-}
-
 void Reporter::on_param1_textEdited(const QString &arg1){
    //   m_saveSchedule();
 }
@@ -1657,4 +1644,14 @@ void Reporter::on_monthlyAttachXLS_clicked(){
 
 void Reporter::onMonthlyattachcsvClicked(){
    m_saveSchedule();
+}
+
+void Reporter::on_startTImer_clicked(){
+   if(m_Timer->isActive()){
+      m_PauseTimer();
+      ui->startTImer->setText("Start");
+   }else{
+      m_SetTimer(m_TIMERINTERVAL);
+      ui->startTImer->setText("Pause");
+   }
 }

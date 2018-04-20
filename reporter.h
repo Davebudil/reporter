@@ -134,8 +134,6 @@ class Reporter : public QMainWindow{
 
       void on_toolButton_4_clicked();
 
-      void on_pauseResumeButton_clicked();
-
       void on_param1_textEdited(const QString & arg1);
 
       void on_param2_textEdited(const QString & arg1);
@@ -259,6 +257,8 @@ class Reporter : public QMainWindow{
       void on_monthlyAttachXLS_clicked();
 
       void onMonthlyattachcsvClicked();
+
+      void on_startTImer_clicked();
 
    private:
       Ui::Reporter *ui;
