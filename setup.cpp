@@ -30,7 +30,7 @@ bool Setup::serializeSchedule(const QList<QStringList> & serializeData, const QS
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QDataStream out(&loadFile);
       qint32 scheduleIterator = 0;
-      for(qint32 i = 0; i + 3 < serializeData.count(); i+=4){
+      for(qint32 i = 0; i + 4 < serializeData.count(); i+=5){
          out << scheduleName[scheduleIterator++];
          for(auto & it : serializeData[i]){
             tmp = it;
@@ -51,6 +51,10 @@ bool Setup::serializeSchedule(const QList<QStringList> & serializeData, const QS
             tmp = it;
             out << tmp;
 //            qInfo(logInfo()) << tmp + " MONTHLY";
+         }
+         for(auto & it : serializeData[i+4]){
+            tmp = it;
+            out << tmp;
          }
       }
       return true;
@@ -164,7 +168,9 @@ bool Setup::deserializeParameters(QStringList & parameters, QVector<qint32> & co
    return false;
 }
 //DODELAT TODO
-bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringList & scheduleName){
+bool Setup::deserializeSchedule(QList<QStringList> & deserializeData,
+                                QStringList & scheduleName,
+                                QMap<QString, QStringList> & parameters){
    QFile loadFile(QDir::currentPath() + "/data/ReporterSchedule.dat");
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
@@ -172,6 +178,7 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
          QString tmp;
          QStringList shift, day, weekly, monthly;
          qint32 emailCount;
+         qint32 totalParamCount, paramCount;
          in >> tmp;
          scheduleName.push_back(tmp);
          for(qint32 i = 0; i < 22; ++i){
@@ -214,6 +221,8 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData, QStringLis
             in >> tmp;
             monthly << tmp;
          }
+
+
          deserializeData.push_back(shift);
          deserializeData.push_back(day);
          deserializeData.push_back(weekly);

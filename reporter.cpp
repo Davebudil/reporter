@@ -20,8 +20,8 @@ Reporter::Reporter(QWidget *parent)
    m_CUSTOMINTERVAL = m_Setup.getSettings().customInterval;
    m_generatedBy = m_Setup.getSettings().generatedByUser;
    ui->setupUi(this);
-//   ui->queryNameEdit->setText("Query Name");
-//   ui->queryParamEdit->setText("Master name");
+   //   ui->queryNameEdit->setText("Query Name");
+   //   ui->queryParamEdit->setText("Master name");
    ui->queryTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
    ui->dbPassword->setEchoMode(QLineEdit::Password);
    ui->dbPassword->setText(m_mainSQL.getPassword());
@@ -171,6 +171,7 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
 
    if(m_Schedule[m_scheduleKey]->addParam(params, count, m_paramKey)){
       auto newParameter = new QToolButton;
+      m_selectedParam = m_paramKey;
       newParameter->setText(params.at(0));
       newParameter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       newParameter->setObjectName(QString::number(m_paramKey++));
@@ -178,11 +179,26 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
 
       connect(newParameter, &QToolButton::clicked, this, &Reporter::m_scrollParamClicked);
       m_Schedule[m_scheduleKey]->setParamCount(m_paramKey);
-      m_clearParam();
-      m_selectedParam = -1;
       //TODO serialize parameters in schedule
-//      m_serializeParameters();
+      //      m_serializeParameters();
       m_serializeSchedule();
+      qint32 paramCount = m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getCount();
+      m_clearParam();
+      if(paramCount > 0){
+         ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(0));
+      }
+      if(paramCount > 1){
+         ui->param2->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(1));
+      }
+      if(paramCount > 2){
+         ui->param3->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(2));
+      }
+      if(paramCount > 3){
+         ui->param4->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(3));
+      }
+      if(paramCount > 4){
+         ui->param5->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(4));
+      }
    }
 }
 //Function to add schedule
@@ -312,16 +328,16 @@ void Reporter::m_scrollParamClicked(){
       ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(0));
    }
    if(paramCount > 1){
-      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(1));
+      ui->param2->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(1));
    }
    if(paramCount > 2){
-      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(2));
+      ui->param3->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(2));
    }
    if(paramCount > 3){
-      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(3));
+      ui->param4->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(3));
    }
    if(paramCount > 4){
-      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(4));
+      ui->param5->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(4));
    }
 }
 //Function that saves choosen paramaters
@@ -333,10 +349,10 @@ void Reporter::m_saveParameter(){
    if(tmpCount == 0 || m_selectedParam == -1){
       QMessageBox::critical(this,QObject::tr("Text error"), "No parameter selected.");
    }else{
-      m_mainSQL.getStorage().getParameters()[m_selectedParam]->editInfo(parameters, tmpCount);
+      m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->editInfo(parameters, tmpCount);
       tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString::number(m_selectedParam));
       tmp->setText(parameters.at(0));
-      m_serializeParameters();
+      m_serializeSchedule();
    }
 }
 //Function that deletes selected query
@@ -414,7 +430,8 @@ void Reporter::m_deleteParam(){
    delete tmp;
    m_selectedParam = -1;
    m_clearParam();
-   m_serializeParameters();
+   m_serializeSchedule();
+//   m_serializeParameters();
 }
 //Sets up default settings of the app
 void Reporter::defaultSettings(){
@@ -503,6 +520,7 @@ void Reporter::m_serializeSchedule(){
       scheduleSerialization.append(it->getDaily().prepareSerialization());
       scheduleSerialization.append(it->getWeekly().prepareSerialization());
       scheduleSerialization.append(it->getMonthly().prepareSerialization());
+      scheduleSerialization.append(it->serializeParameters());
    }
    m_Setup.serializeSchedule(scheduleSerialization, scheduleNames);
 }
@@ -540,14 +558,9 @@ void Reporter::m_deserializeSchedule(){
    QList<QStringList> scheduleDeserialize;
    QStringList scheduleNames;
    qint32 desCount;
+   QMap<QString, QStringList> parameters;
 
-   m_Setup.deserializeSchedule(scheduleDeserialize, scheduleNames);
-   for(const auto & it : scheduleNames){
-      qInfo(logInfo()) << it << "SCHEDULE_NAME";
-   }
-   for(const auto & it : scheduleDeserialize){
-      qInfo(logInfo()) << it << "SCHEDULE_DATA";
-   }
+   m_Setup.deserializeSchedule(scheduleDeserialize, scheduleNames, parameters);
 
    desCount = 0;
    m_scheduleKey = 0;
@@ -806,14 +819,14 @@ void Reporter::m_loadScheduleParameters(){
 void Reporter::on_paramNew_clicked(){
    QStringList tmp;
    qint32 tmpCount = 0;
-   auto tmpFindChild = ui->scrollAreaWidgetContents_2->children();
-
-   if(m_mainSQL.getStorage().getParameters().count() != 0){
-      m_clearParam();
+   if(m_Schedule[m_scheduleKey]->getParamCount() == 0){
+      m_createParamList(tmp, tmpCount);
+      m_addParameters(tmp, tmpCount);
+   }else{
+      tmp.append("Parameter1");
+      tmpCount = 1;
+      m_addParameters(tmp, tmpCount);
    }
-
-   m_createParamList(tmp, tmpCount);
-   m_addParameters(tmp, tmpCount);
 }
 //Edits selected parameter
 void Reporter::on_paramEdit_clicked(){
@@ -1387,23 +1400,23 @@ void Reporter::on_pauseResumeButton_clicked(){
 }
 
 void Reporter::on_param1_textEdited(const QString &arg1){
-//   m_saveParameter();
+   //   m_saveParameter();
 }
 
 void Reporter::on_param2_textEdited(const QString &arg1){
-//   m_saveParameter();
+   //   m_saveParameter();
 }
 
 void Reporter::on_param3_textEdited(const QString &arg1){
-//   m_saveParameter();
+   //   m_saveParameter();
 }
 
 void Reporter::on_param4_textEdited(const QString &arg1){
-//   m_saveParameter();
+   //   m_saveParameter();
 }
 
 void Reporter::on_param5_textEdited(const QString &arg1){
-//   m_saveParameter();
+   //   m_saveParameter();
 }
 
 void Reporter::on_shiftActive_clicked(){

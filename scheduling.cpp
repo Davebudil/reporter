@@ -1,4 +1,5 @@
 #include "scheduling.h"
+#include "log.h"
 
 Scheduling::Scheduling() : m_paramCount(0){
 
@@ -49,6 +50,22 @@ bool Scheduling::addParam(const QStringList & param, const qint32 & count, const
 
 void Scheduling::setParameters(const QMap<qint32, SQLParameter *> & Parameters){
    m_Parameters = Parameters;
+}
+
+QStringList Scheduling::serializeParameters(){
+   QStringList tmpParameters;
+   tmpParameters.append(QString::number(m_paramCount));
+   for(auto & it : m_Parameters){
+      tmpParameters.append(QString::number(it->getCount()));
+      for(auto & parIt : it->getParameters()){
+         tmpParameters.append(parIt);
+      }
+   }
+   return tmpParameters;
+}
+
+void Scheduling::deserializeParameters(QStringList & Parameters){
+
 }
 
 qint32 Scheduling::getParamCount() const
