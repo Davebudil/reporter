@@ -96,6 +96,20 @@ void SQLStorage::printQueryText(){
    }
 }
 
+void SQLStorage::fixMaster(){
+   for(auto & it : m_Queries){
+      for(auto & it2 : m_Queries){
+         if(it != it2){
+            if(!it->getParam().isEmpty()){
+               it->setMasterQueryString(m_Queries[it->getParam()]->getFinal());
+            }else{
+               it->setMasterQueryString("");
+            }
+         }
+      }
+   }
+}
+
 void SQLStorage::generateQuery(const QString & name, const QSqlDatabase & db){
    m_Queries[name]->generateQuery(db);
 }

@@ -27,6 +27,7 @@ class SQLStorage : public QObject{
       void generateQuery(const QString & name, const QSqlDatabase & db);
       void executeQuery(const QString & name);
       void printQueryText();
+      void fixMaster();
    signals:
 
    public slots:

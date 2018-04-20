@@ -22,11 +22,10 @@ class SQLquery{
       QSqlQuery getResult();
       QString getResultString();
       QString getName();
-      QString getParam();
+      QString & getParam();
       QString getFinal();
       QString getMasterFinal();
       qint32 getQueryResultRows();
-      QString getParamString() const;
       bool getIsMaster();
       bool getActive();
       //Setters for members
@@ -37,6 +36,7 @@ class SQLquery{
       void setParamString(const QString & paramString);
       void setQueryResultRows(const qint32 & QueryResultRows);
       void setActive(bool active);
+      void setIsMaster(bool master);
       //print for debugging
       void printValue();
       //Generate
@@ -45,12 +45,13 @@ class SQLquery{
       void bindParameter(const QString & parameter, const QString & value);
       //function that executes the query
       void executeQuery();
+      void forceExecuteQuery();
       void clearQueries();
       void finishQuery();
       //
       QStringList queryList();
-
-
+      QString getMasterQueryString() const;
+      void setMasterQueryString(const QString & masterQueryString);
 
    private:
       //original text
@@ -63,6 +64,7 @@ class SQLquery{
       QString m_masterfinalString;
       //final string with no master
       QString m_finalString;
+      QString m_masterQueryString;
       //Final result
       QSqlQuery * m_Result;
       //master/detail

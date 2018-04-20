@@ -35,7 +35,7 @@ QString SQLquery::getResultString(){
 QString SQLquery::getName(){
    return m_Name;
 }
-QString SQLquery::getParam(){
+QString & SQLquery::getParam(){
    return m_mParameter;
 }
 QString SQLquery::getFinal(){
@@ -71,12 +71,16 @@ void SQLquery::setMasterFinal(const QString & finalString){
 void SQLquery::setActive(bool active){
    m_isActive = active;
 }
+
+void SQLquery::setIsMaster(bool master){
+   m_Master = master;
+}
 //Debug function
 void SQLquery::printValue(){
-   qDebug() << "Name:" << m_Name;
-   qDebug() << "Query:" << m_Query;
-   qDebug() << "FinalQuery:" << m_finalString;
-   qDebug() << "MasterBool:" << m_Master;
+   qInfo(logInfo()) << "Name:" << m_Name;
+   qInfo(logInfo()) << "Query:" << m_Query;
+   qInfo(logInfo()) << "FinalQuery:" << m_finalString;
+   qInfo(logInfo()) << "Master Query:" << m_masterQueryString;
 }
 //generates query result
 void SQLquery::generateQuery(const QSqlDatabase & db){
@@ -100,6 +104,10 @@ void SQLquery::executeQuery(){
    m_QueryResultRows = m_Result->size();
 }
 
+void SQLquery::forceExecuteQuery(){
+   m_Result->exec();
+}
+
 void SQLquery::clearQueries(){
    m_Result->clear();
 }
@@ -116,10 +124,19 @@ QStringList SQLquery::queryList(){
    return queryData;
 }
 
+QString SQLquery::getMasterQueryString() const{
+   return m_masterQueryString;
+}
+
+void SQLquery::setMasterQueryString(const QString & masterQueryString){
+   m_masterQueryString = masterQueryString;
+}
+
 void SQLquery::setQueryResultRows(const qint32 & QueryResultRows){
    m_QueryResultRows = QueryResultRows;
 }
 //Binds parameter to value
 void SQLquery::bindParameter(const QString & parameter, const QString & value){
    m_finalString.replace(QString(parameter), QString(value));
+   m_masterfinalString.replace(QString(parameter), QString(value));
 }

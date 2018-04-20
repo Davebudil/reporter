@@ -70,6 +70,7 @@ class Export{
                              bool showInfo);
    private:
       void m_shiftDayReset(ShiftSchedule & shift, const QDateTime & current);
+      bool validateQuery(QQueue<SQLquery> & query, SQLquery & currentQuery);
       ExportXLS m_XLS;
       ExportCSV m_CSV;
       ExportHTML m_HTML;

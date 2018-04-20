@@ -1,5 +1,8 @@
 #include "exportxls.h"
 #include "log.h"
+//test
+#include <QRandomGenerator>
+
 
 ExportXLS::ExportXLS() = default;
 
@@ -7,7 +10,8 @@ bool ExportXLS::generateFile(const QString & templatePath,
                              const QString & genPath,
                              const QList<std::pair<QString, QString>> constants,
                              const QList<QStringList> queries){
-   QFile loadFile(QDir::currentPath() + "/export/tmp/ask_attachment_source.txt");
+   qint32 randomInt = QRandomGenerator::global()->generate();
+   QFile loadFile(QDir::currentPath() + "/export/tmp/ask_attachment_source" + QString::number(randomInt) + ".txt");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QTextStream out(&loadFile);
       out << templatePath << "\n";
