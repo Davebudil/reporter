@@ -337,6 +337,7 @@ class Reporter : public QMainWindow{
       void m_loadWeeklyEmail();
       void m_loadMonthlyEmail();
       void m_loadScheduleParameters();
+      void m_loadIndividualParameters(const qint32 & paramCount);
       void m_displayShift(qint32 keyString);
       void m_displayDay(qint32 keyString);
       void m_displayWeekly(qint32 keyString);
