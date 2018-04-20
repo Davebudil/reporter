@@ -28,7 +28,6 @@ void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
       m_shiftDayReset(it->getShift(), currentTime);
       if(it->getShift().generateShiftData(currentTime) && it->getShift().getActive()){
          for(auto & itPar : parameters){
-            //generate all queries for this interval and for all parameters
             m_generateShift(it->getShift(), queries, itPar, db, currentTime, exportCount, generatedBy, true);
          }
       }
@@ -384,15 +383,15 @@ bool Export::m_generateDaily(DailySchedule & daily,
 
          QSqlQuery resultCSV = it.getResult();
 
-         if(daily.getCsvAttach()){
-            m_CSV.generateFile(daily.getCsvTemplatePath(),
-                               tmpAttachName,
-                               resultCSV);
-         }
-         if(daily.getXlsAttach() && daily.getCsvAttach()){
-            ++count;
-         }
-         m_HTML.generateFile(resultCSV, tmpAttachName);
+//         if(daily.getCsvAttach()){
+//            m_CSV.generateFile(daily.getCsvTemplatePath(),
+//                               tmpAttachName,
+//                               resultCSV);
+//         }
+//         if(daily.getXlsAttach() && daily.getCsvAttach()){
+//            ++count;
+//         }
+//         m_HTML.generateFile(resultCSV, tmpAttachName);
 
       }else{
          qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();

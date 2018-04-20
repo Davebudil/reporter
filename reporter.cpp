@@ -136,6 +136,7 @@ void Reporter::m_saveQuery(){
          ui->queryParamEdit->setText(paramName);
       }
    }
+   m_mainSQL.getStorage().fixMaster();
    m_serializeQueries();
 }
 //function to add query
@@ -345,6 +346,7 @@ void Reporter::m_deleteSchedule(){
    m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses().clear();
    m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses().clear();
    m_deleteEmails();
+   m_deleteParameters();
    m_Schedule.remove(m_scheduleKey);
    tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
    delete tmp;
@@ -390,10 +392,10 @@ void Reporter::m_deleteEmails(){
 }
 
 void Reporter::m_deleteParameters(){
-   //debug, not used at the moment
-   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
-      tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString(m_Schedule[m_scheduleKey]->getParameters().key(it)));
-
+   tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>();
+   while(tmp){
+      delete tmp;
+      tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>();
    }
 }
 //Function that deletes parameters
@@ -420,6 +422,7 @@ void Reporter::defaultSettings(){
    //   m_SetTimer(m_TIMERINTERVAL);
    //   m_PauseTimer();
    //   m_PauseTimer();
+   m_mainSQL.getStorage().fixMaster();
    qInfo(logInfo()) << "Settings and data successfuly loaded.";
 }
 
