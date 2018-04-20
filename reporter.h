@@ -126,15 +126,11 @@ class Reporter : public QMainWindow{
 
       void on_monthlydeleteEmailAdress_clicked();
 
-      void on_paramTest_clicked();
-
       void on_tableNames_clicked();
 
       void timerInterval();
 
       void on_toolButton_4_clicked();
-
-      void on_pauseResumeButton_clicked();
 
       void on_param1_textEdited(const QString & arg1);
 
@@ -260,6 +256,8 @@ class Reporter : public QMainWindow{
 
       void onMonthlyattachcsvClicked();
 
+      void on_startTImer_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -316,7 +314,6 @@ class Reporter : public QMainWindow{
       void m_deleteParameters();
       //Serialization
       void m_serializeQueries();
-      void m_serializeParameters();
       //Deserialization
       void m_Deserialize();
       //loads .ini settings
@@ -325,7 +322,6 @@ class Reporter : public QMainWindow{
       void m_ConnectDB();
       //utility function to get text from parameters input boxes
       void m_createParamList(QStringList & tmp, qint32 & tmpCount);
-      QStringList m_loadParameters(QVector<qint32> & count);
       void m_loadMaster();
       void m_loadEmails();
       void m_clearParam();
@@ -365,6 +361,7 @@ class Reporter : public QMainWindow{
       void m_testingQueryGen();
       bool m_noSchedule();
       bool m_validateEmail(const QString & email);
+      bool m_validateScheduleName(const QString & name);
       QStringList m_getColumnNames(const QString & tableName);
       void m_SetTimer(qint32 interval);
       //simple debug function used during development

@@ -10,6 +10,7 @@ Reporter::Reporter(QWidget *parent)
      m_scheduleKey(0),
      m_scheduleCount(0),
      tmp(nullptr),
+     m_Timer(nullptr),
      m_daysSinceCleanUp(0),
      m_lastDay(QDate::currentDate()),
      m_queryActive(false),
@@ -20,8 +21,8 @@ Reporter::Reporter(QWidget *parent)
    m_CUSTOMINTERVAL = m_Setup.getSettings().customInterval;
    m_generatedBy = m_Setup.getSettings().generatedByUser;
    ui->setupUi(this);
-//   ui->queryNameEdit->setText("Query Name");
-//   ui->queryParamEdit->setText("Master name");
+   //   ui->queryNameEdit->setText("Query Name");
+   //   ui->queryParamEdit->setText("Master name");
    ui->queryTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
    ui->dbPassword->setEchoMode(QLineEdit::Password);
    ui->dbPassword->setText(m_mainSQL.getPassword());
@@ -38,6 +39,7 @@ Reporter::Reporter(QWidget *parent)
    m_daysSinceCleanUp = 0;
    ui->tabWidget->setStyleSheet("QTabBar::tab { height: 50px; width: 150px; }");
    ui->tabWidget_2->setStyleSheet("QTabBar::tab { height: 30px; width: 120px; }");
+   m_Timer = new QTimer;
    //custom is disabled, waiting for future implementation
 }
 //Destructor
@@ -171,6 +173,7 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
 
    if(m_Schedule[m_scheduleKey]->addParam(params, count, m_paramKey)){
       auto newParameter = new QToolButton;
+      m_selectedParam = m_paramKey;
       newParameter->setText(params.at(0));
       newParameter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       newParameter->setObjectName(QString::number(m_paramKey++));
@@ -178,17 +181,35 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
 
       connect(newParameter, &QToolButton::clicked, this, &Reporter::m_scrollParamClicked);
       m_Schedule[m_scheduleKey]->setParamCount(m_paramKey);
-      m_clearParam();
-      m_selectedParam = -1;
       //TODO serialize parameters in schedule
-//      m_serializeParameters();
+      //      m_serializeParameters();
       m_serializeSchedule();
+      qint32 paramCount = m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getCount();
+      m_clearParam();
+      if(paramCount > 0){
+         ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(0));
+      }
+      if(paramCount > 1){
+         ui->param2->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(1));
+      }
+      if(paramCount > 2){
+         ui->param3->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(2));
+      }
+      if(paramCount > 3){
+         ui->param4->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(3));
+      }
+      if(paramCount > 4){
+         ui->param5->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(4));
+      }
    }
 }
 //Function to add schedule
 void Reporter::m_addSchedule(const QString & name){
    if(name.isEmpty() || name.isNull()){
       QMessageBox::critical(this, QObject::tr("Text error"), QObject::tr("Enter name for new schedule."));
+      return;
+   }
+   if(!m_validateScheduleName(name)){
       return;
    }
 
@@ -312,16 +333,16 @@ void Reporter::m_scrollParamClicked(){
       ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(0));
    }
    if(paramCount > 1){
-      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(1));
+      ui->param2->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(1));
    }
    if(paramCount > 2){
-      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(2));
+      ui->param3->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(2));
    }
    if(paramCount > 3){
-      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(3));
+      ui->param4->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(3));
    }
    if(paramCount > 4){
-      ui->param1->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(4));
+      ui->param5->setText(m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getParameters().at(4));
    }
 }
 //Function that saves choosen paramaters
@@ -333,10 +354,10 @@ void Reporter::m_saveParameter(){
    if(tmpCount == 0 || m_selectedParam == -1){
       QMessageBox::critical(this,QObject::tr("Text error"), "No parameter selected.");
    }else{
-      m_mainSQL.getStorage().getParameters()[m_selectedParam]->editInfo(parameters, tmpCount);
+      m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->editInfo(parameters, tmpCount);
       tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString::number(m_selectedParam));
       tmp->setText(parameters.at(0));
-      m_serializeParameters();
+      m_serializeSchedule();
    }
 }
 //Function that deletes selected query
@@ -400,7 +421,7 @@ void Reporter::m_deleteEmails(){
 }
 
 void Reporter::m_deleteParameters(){
-   //TODO: delete parameters QToolButtons widgets
+   //debug, not used at the moment
    for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
       tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString(m_Schedule[m_scheduleKey]->getParameters().key(it)));
 
@@ -408,13 +429,13 @@ void Reporter::m_deleteParameters(){
 }
 //Function that deletes parameters
 void Reporter::m_deleteParam(){
-   //TODO: delete parameters
-   m_mainSQL.getStorage().getParameters().remove(m_selectedParam);
+   m_Schedule[m_selectedParam]->deleteParameter(m_selectedParam);
    tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString::number(m_selectedParam));
    delete tmp;
    m_selectedParam = -1;
    m_clearParam();
-   m_serializeParameters();
+   m_serializeSchedule();
+   //   m_serializeParameters();
 }
 //Sets up default settings of the app
 void Reporter::defaultSettings(){
@@ -427,9 +448,9 @@ void Reporter::defaultSettings(){
       ui->scheduleName->setText(m_Schedule[0]->getName());
    }
 
-   m_SetTimer(m_TIMERINTERVAL);
-   m_PauseTimer();
-   m_PauseTimer();
+//   m_SetTimer(m_TIMERINTERVAL);
+//   m_PauseTimer();
+//   m_PauseTimer();
    qInfo(logInfo()) << "Settings and data successfuly loaded.";
 }
 
@@ -487,12 +508,6 @@ void Reporter::m_serializeQueries(){
    QStringList tmpSerialize = m_mainSQL.loadList();
    m_Setup.serializeQueries(tmpSerialize);
 }
-//Serializes parameters
-void Reporter::m_serializeParameters(){
-   QVector<qint32> tmpCount;
-   QStringList tmpSerialize = m_loadParameters(tmpCount);
-   m_Setup.serializeParameters(tmpSerialize,tmpCount);
-}
 //Serializes schedule
 void Reporter::m_serializeSchedule(){
    QList<QStringList> scheduleSerialization;
@@ -503,6 +518,7 @@ void Reporter::m_serializeSchedule(){
       scheduleSerialization.append(it->getDaily().prepareSerialization());
       scheduleSerialization.append(it->getWeekly().prepareSerialization());
       scheduleSerialization.append(it->getMonthly().prepareSerialization());
+      scheduleSerialization.append(it->serializeParameters());
    }
    m_Setup.serializeSchedule(scheduleSerialization, scheduleNames);
 }
@@ -540,14 +556,9 @@ void Reporter::m_deserializeSchedule(){
    QList<QStringList> scheduleDeserialize;
    QStringList scheduleNames;
    qint32 desCount;
+   QMap<QString, QVector<QStringList>> parameters;
 
-   m_Setup.deserializeSchedule(scheduleDeserialize, scheduleNames);
-   for(const auto & it : scheduleNames){
-      qInfo(logInfo()) << it << "SCHEDULE_NAME";
-   }
-   for(const auto & it : scheduleDeserialize){
-      qInfo(logInfo()) << it << "SCHEDULE_DATA";
-   }
+   m_Setup.deserializeSchedule(scheduleDeserialize, scheduleNames, parameters);
 
    desCount = 0;
    m_scheduleKey = 0;
@@ -569,7 +580,7 @@ void Reporter::m_deserializeSchedule(){
       m_Schedule[m_scheduleKey]->getDaily().deserializeList(scheduleDeserialize[desCount++]);
       m_Schedule[m_scheduleKey]->getWeekly().deserializeList(scheduleDeserialize[desCount++]);
       m_Schedule[m_scheduleKey]->getMonthly().deserializeList(scheduleDeserialize[desCount++]);
-
+      m_Schedule[m_scheduleKey]->deserializeParameters(parameters[it]);
    }
    m_scheduleKey = 0;
    if(!m_noSchedule()){
@@ -580,10 +591,14 @@ void Reporter::m_deserializeSchedule(){
       m_displayMonthly(m_scheduleKey);
       m_displayCustom(m_scheduleKey);
       m_loadEmails();
+      m_loadScheduleParameters();
    }
 }
 //Saves selected schedule
 void Reporter::m_saveSchedule(){
+   if(!m_validateScheduleName(ui->scheduleName->text())){
+      return;
+   }
    tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
    delete tmp;
    auto newSchedule = new QToolButton;
@@ -599,7 +614,6 @@ void Reporter::m_saveSchedule(){
    m_editWeekly(m_scheduleKey);
    m_editMonthly(m_scheduleKey);
    m_editCustom();
-   //TODO: save parameters
    //   m_saveParameter();
    m_serializeSchedule();
 }
@@ -676,7 +690,7 @@ void Reporter::m_testingQueryGen(){
    }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
       qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
-      QMessageBox::critical(nullptr, QObject::tr("Database error"),
+      QMessageBox::critical(this, QObject::tr("Database error"),
                             "Not connected to database");
    }else{
       m_loadMaster();
@@ -699,6 +713,18 @@ bool Reporter::m_validateEmail(const QString & email){
    return regex.match(email).hasMatch();
 }
 
+bool Reporter::m_validateScheduleName(const QString & name){
+   for(const auto & it : m_Schedule){
+      //TODO: work on this in the future
+      if(name == it->getName() && it != m_Schedule[m_scheduleKey]){
+         QMessageBox::critical(this, QObject::tr("New schedule error"),
+                               "Schedule with this name already exists.");
+         return false;
+      }
+   }
+   return true;
+}
+
 QStringList Reporter::m_getColumnNames(const QString & tableName){
    QSqlRecord dbRecord = m_mainSQL.getDatabase().getDatabase().driver()->record(tableName);
    qint32 colCount = dbRecord.count();
@@ -710,7 +736,6 @@ QStringList Reporter::m_getColumnNames(const QString & tableName){
 }
 
 void Reporter::m_SetTimer(qint32 interval){
-   m_Timer = new QTimer();
    connect(m_Timer, SIGNAL(timeout()), this, SLOT(timerInterval()));
    m_Timer->start(interval);
    qInfo(logInfo()) << "Timer with interval: " + QVariant(interval).toString() + " ms successfully started.";
@@ -722,12 +747,8 @@ void Reporter::m_debugNotification(const QString & toDisplay){
 
 void Reporter::m_PauseTimer(){
    if(m_Timer->isActive()){
-      ui->pauseResumeButton->setText("Resume");
-      ui->colorLabel->setStyleSheet("background-color: red");
       m_Timer->stop();
    }else{
-      ui->pauseResumeButton->setText("Pause");
-      ui->colorLabel->setStyleSheet("background-color: green");
       m_Timer->start(m_TIMERINTERVAL);
    }
 }
@@ -784,7 +805,6 @@ void Reporter::m_loadScheduleParameters(){
    //delete current toolbuttons to show the selected scheduling parameters
    tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>();
    while(tmp){
-      qInfo(logInfo()) << tmp->text();
       delete tmp;
       tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>();
    }
@@ -806,14 +826,14 @@ void Reporter::m_loadScheduleParameters(){
 void Reporter::on_paramNew_clicked(){
    QStringList tmp;
    qint32 tmpCount = 0;
-   auto tmpFindChild = ui->scrollAreaWidgetContents_2->children();
-
-   if(m_mainSQL.getStorage().getParameters().count() != 0){
-      m_clearParam();
+   if(m_Schedule[m_scheduleKey]->getParamCount() == 0){
+      m_createParamList(tmp, tmpCount);
+      m_addParameters(tmp, tmpCount);
+   }else{
+      tmp.append("Parameter1");
+      tmpCount = 1;
+      m_addParameters(tmp, tmpCount);
    }
-
-   m_createParamList(tmp, tmpCount);
-   m_addParameters(tmp, tmpCount);
 }
 //Edits selected parameter
 void Reporter::on_paramEdit_clicked(){
@@ -865,15 +885,7 @@ void Reporter::m_loadEmails(){
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadMonthlyEmail);
    }
 }
-//Loads parameters into list while storing the number of parameters into vector
-QStringList Reporter::m_loadParameters(QVector<qint32> & count){
-   QStringList tmp;
-   for(auto it : m_mainSQL.getStorage().getParameters()){
-      count.append(it->getCount());
-      tmp+=it->getParameters();
-   }
-   return tmp;
-}
+
 //Loads all parameters into String List
 void Reporter::m_createParamList(QStringList & tmp, qint32 & tmpCount){
    if(!(ui->param1->text().isEmpty())){
@@ -1302,13 +1314,6 @@ void Reporter::on_monthlydeleteEmailAdress_clicked(){
    m_emailKey = "";
    ui->monthlyEmailAdress->clear();
 }
-void Reporter::on_paramTest_clicked(){
-   QString tmpParam = m_mainSQL.getStorage().getParameters()[0]->getParameters()[0];
-   m_mainSQL.getStorage().getQueries()[m_nameKey]->bindParameter(":test", tmpParam);
-   m_mainSQL.getStorage().getQueries()[m_nameKey]->generateQuery(m_mainSQL.getDatabase().getDatabase());
-   m_mainSQL.getStorage().getQueries()[m_nameKey]->executeQuery();
-   m_displaySQLResult(m_nameKey);
-}
 
 void Reporter::on_tableNames_clicked(){
    if(m_mainSQL.getDatabase().getDatabase().isOpen()){
@@ -1358,7 +1363,7 @@ void Reporter::timerInterval(){
    }
 
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
-   tmpParams = m_mainSQL.getStorage().getQueueParameters();
+   tmpParams = m_Schedule[m_scheduleKey]->getQueueParameters();
 
    m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase(), m_generatedBy);
 }
@@ -1370,7 +1375,7 @@ void Reporter::on_toolButton_4_clicked(){
    instantSchedule->setModal(true);
 
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
-   tmpParams = m_mainSQL.getStorage().getQueueParameters();
+   tmpParams = m_Schedule[m_scheduleKey]->getQueueParameters();
 
    if(instantSchedule->exec()){
       m_Export.customExport(*instantSchedule,
@@ -1382,28 +1387,24 @@ void Reporter::on_toolButton_4_clicked(){
    }
 }
 
-void Reporter::on_pauseResumeButton_clicked(){
-   m_PauseTimer();
-}
-
 void Reporter::on_param1_textEdited(const QString &arg1){
-//   m_saveParameter();
+   //   m_saveSchedule();
 }
 
 void Reporter::on_param2_textEdited(const QString &arg1){
-//   m_saveParameter();
+   //   m_saveSchedule();
 }
 
 void Reporter::on_param3_textEdited(const QString &arg1){
-//   m_saveParameter();
+   //   m_saveSchedule();
 }
 
 void Reporter::on_param4_textEdited(const QString &arg1){
-//   m_saveParameter();
+   //   m_saveSchedule();
 }
 
 void Reporter::on_param5_textEdited(const QString &arg1){
-//   m_saveParameter();
+   //   m_saveSchedule();
 }
 
 void Reporter::on_shiftActive_clicked(){
@@ -1622,4 +1623,14 @@ void Reporter::on_monthlyAttachXLS_clicked(){
 
 void Reporter::onMonthlyattachcsvClicked(){
    m_saveSchedule();
+}
+
+void Reporter::on_startTImer_clicked(){
+   if(m_Timer->isActive()){
+      m_PauseTimer();
+      ui->startTImer->setText("Start");
+   }else{
+      m_SetTimer(m_TIMERINTERVAL);
+      ui->startTImer->setText("Pause");
+   }
 }

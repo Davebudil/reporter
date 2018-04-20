@@ -47,7 +47,9 @@ class Setup : public QObject{
       //deserializes
       bool deserializeQueries(QStringList & queries);
       bool deserializeParameters(QStringList & parameters, QVector<qint32> & count);
-      bool deserializeSchedule(QList<QStringList> & deserializeData, QStringList & scheduleName);
+      bool deserializeSchedule(QList<QStringList> & deserializeData,
+                               QStringList & scheduleName,
+                               QMap<QString, QVector<QStringList>> & parameters);
       bool deserializeGlobal(QStringList & global);
       //cleans up after applicaton
       bool cleanUp();

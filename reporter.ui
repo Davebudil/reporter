@@ -2392,6 +2392,19 @@
       </property>
       <layout class="QVBoxLayout" name="progressLayout"/>
      </widget>
+     <widget class="QToolButton" name="startTImer">
+      <property name="geometry">
+       <rect>
+        <x>690</x>
+        <y>520</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Start</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="SQL">
      <attribute name="title">
@@ -2762,6 +2775,9 @@
       </widget>
      </widget>
      <widget class="QLabel" name="colorLabel">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>380</x>
@@ -2772,32 +2788,6 @@
       </property>
       <property name="text">
        <string/>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="pauseResumeButton">
-      <property name="geometry">
-       <rect>
-        <x>430</x>
-        <y>50</y>
-        <width>101</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>380</x>
-        <y>20</y>
-        <width>151</width>
-        <height>18</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Timer</string>
       </property>
      </widget>
     </widget>
@@ -2917,7 +2907,6 @@
   <tabstop>toolButton_3</tabstop>
   <tabstop>tableNames</tabstop>
   <tabstop>toolButton</tabstop>
-  <tabstop>pauseResumeButton</tabstop>
   <tabstop>dbPassword</tabstop>
   <tabstop>dbConnect</tabstop>
   <tabstop>queryTable</tabstop>
