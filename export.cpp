@@ -250,7 +250,7 @@ bool Export::m_generateShift(ShiftSchedule & shift,
          tmp2 = tmp2.addSecs(-1);
          genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
                                        "FROM " + tmp.toString("dd.MM.yy hh:mm") +
-                                       " TO " + tmp2.toString("dd.MM.yy hh:mm")));
+                                       " " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
       }else if(shift.getDone1()){
@@ -259,7 +259,7 @@ bool Export::m_generateShift(ShiftSchedule & shift,
          tmp2 = tmp2.addSecs(-1);
          genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
                                        "FROM " + tmp.toString("dd.MM.yy hh:mm") +
-                                       " TO " + tmp2.toString("dd.MM.yy hh:mm")));
+                                       " " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
       }else if(shift.getDone2()){
@@ -270,7 +270,7 @@ bool Export::m_generateShift(ShiftSchedule & shift,
 
          genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
                                        "FROM " + tmp.toString("dd.MM.yy hh:mm") +
-                                       " TO " + tmp2.toString("dd.MM.yy hh:mm")));
+                                       " " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
       }
@@ -349,7 +349,7 @@ bool Export::m_generateDaily(DailySchedule & daily,
       tmp2 = tmp2.addSecs(-1);
       genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
                                     "FROM " + tmp.toString("dd.MM.yy hh:mm") +
-                                    " TO " + tmp2.toString("dd.MM.yy hh:mm")));
+                                    " " + tmp2.toString("dd.MM.yy hh:mm")));
       it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
       it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
@@ -363,6 +363,13 @@ bool Export::m_generateDaily(DailySchedule & daily,
             genInfo.append(std::make_pair("GENERATED_BY", generatedBy));
             //
             QList<QStringList> finalQueries;
+            if(!it.getParam().isEmpty()){
+               QStringList tmpList;
+               tmpList.append(it.getParam());
+               tmpList.append("");
+               tmpList.append(it.getMasterQueryString());
+               finalQueries.append(tmpList);
+            }
             finalQueries.append(it.queryList());
 
             if(m_XLS.generateFile(daily.getXlsTemplatePath(),
@@ -431,7 +438,7 @@ bool Export::m_generateWeekly(WeeklySchedule & weekly,
       tmp2 = tmp2.addSecs(-1);
       genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
                                     "FROM " + tmp.toString("dd.MM.yy hh:mm") +
-                                    " TO " + tmp2.toString("dd.MM.yy hh:mm")));
+                                    " " + tmp2.toString("dd.MM.yy hh:mm")));
       it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
       it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
@@ -513,7 +520,7 @@ bool Export::m_generateMonthly(MonthlySchedule & monthly,
       tmp2 = tmp2.addSecs(-1);
       genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
                                     "FROM " + tmp.toString("dd.MM.yy hh:mm") +
-                                    " TO " + tmp2.toString("dd.MM.yy hh:mm")));
+                                    " " + tmp2.toString("dd.MM.yy hh:mm")));
       it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
       it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 

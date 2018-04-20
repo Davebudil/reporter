@@ -116,7 +116,6 @@ QStringList SQLquery::queryList(){
    QStringList queryData;
    queryData.append(m_Name);
    queryData.append(m_mParameter);
-   queryData.append(m_masterQueryString);
    queryData.append(m_finalString);
    return queryData;
 }
