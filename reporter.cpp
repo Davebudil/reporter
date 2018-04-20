@@ -37,6 +37,7 @@ Reporter::Reporter(QWidget *parent)
    ui->tabWidget_2->removeTab(4);
    m_lastDay = QDate::currentDate();
    m_daysSinceCleanUp = 0;
+   m_selectedParam = -1;
    ui->tabWidget->setStyleSheet("QTabBar::tab { height: 50px; width: 150px; }");
    ui->tabWidget_2->setStyleSheet("QTabBar::tab { height: 30px; width: 120px; }");
    m_Timer = new QTimer;
@@ -397,6 +398,7 @@ void Reporter::m_deleteParameters(){
       delete tmp;
       tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>();
    }
+   m_clearParam();
 }
 //Function that deletes parameters
 void Reporter::m_deleteParam(){

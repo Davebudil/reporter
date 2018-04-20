@@ -104,6 +104,10 @@ void SQLquery::executeQuery(){
    m_QueryResultRows = m_Result->size();
 }
 
+void SQLquery::forceExecuteQuery(){
+   m_Result->exec();
+}
+
 void SQLquery::clearQueries(){
    m_Result->clear();
 }
@@ -134,4 +138,5 @@ void SQLquery::setQueryResultRows(const qint32 & QueryResultRows){
 //Binds parameter to value
 void SQLquery::bindParameter(const QString & parameter, const QString & value){
    m_finalString.replace(QString(parameter), QString(value));
+   m_masterfinalString.replace(QString(parameter), QString(value));
 }

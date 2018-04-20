@@ -45,6 +45,7 @@ class SQLquery{
       void bindParameter(const QString & parameter, const QString & value);
       //function that executes the query
       void executeQuery();
+      void forceExecuteQuery();
       void clearQueries();
       void finishQuery();
       //
