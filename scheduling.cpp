@@ -54,9 +54,9 @@ void Scheduling::setParameters(const QMap<qint32, SQLParameter *> & Parameters){
 
 QStringList Scheduling::serializeParameters(){
    QStringList tmpParameters;
-   tmpParameters.append(QString::number(m_paramCount));
+   tmpParameters.append(QString::number(m_Parameters.count()));
    for(auto & it : m_Parameters){
-      tmpParameters.append(QString::number(it->getCount()));
+      tmpParameters.append(QString::number(it->getParameters().count()));
       for(auto & parIt : it->getParameters()){
          tmpParameters.append(parIt);
       }
@@ -64,8 +64,12 @@ QStringList Scheduling::serializeParameters(){
    return tmpParameters;
 }
 
-void Scheduling::deserializeParameters(QStringList & Parameters){
-
+void Scheduling::deserializeParameters(QVector<QStringList> & Parameters){
+   qint32 id = 0;
+   for(auto & it : Parameters){
+      qInfo(logInfo()) << it;
+      addParam(it, it.count(), id++);
+   }
 }
 
 qint32 Scheduling::getParamCount() const

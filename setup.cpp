@@ -170,13 +170,15 @@ bool Setup::deserializeParameters(QStringList & parameters, QVector<qint32> & co
 //DODELAT TODO
 bool Setup::deserializeSchedule(QList<QStringList> & deserializeData,
                                 QStringList & scheduleName,
-                                QMap<QString, QStringList> & parameters){
+                                QMap<QString, QVector<QStringList>> & parameters){
    QFile loadFile(QDir::currentPath() + "/data/ReporterSchedule.dat");
    if(loadFile.open(QIODevice::ReadOnly)){
       QDataStream in(&loadFile);
+      qint32 scheduleCount = 0;
       while(!in.atEnd()){
          QString tmp;
          QStringList shift, day, weekly, monthly;
+         QVector<QStringList> allParameters;
          qint32 emailCount;
          qint32 totalParamCount, paramCount;
          in >> tmp;
@@ -221,8 +223,20 @@ bool Setup::deserializeSchedule(QList<QStringList> & deserializeData,
             in >> tmp;
             monthly << tmp;
          }
+         in >> tmp;
+         totalParamCount = tmp.toInt();
+         for(qint32 i = 0; i < totalParamCount; ++i){
+            QStringList tmpList;
+            in >> tmp;
+            paramCount = tmp.toInt();
+            for(qint32 y = 0; y < paramCount; ++y){
+               in >> tmp;
+               tmpList << tmp;
+            }
+            allParameters.push_back(tmpList);
+         }
 
-
+         parameters[scheduleName[scheduleCount++]] = allParameters;
          deserializeData.push_back(shift);
          deserializeData.push_back(day);
          deserializeData.push_back(weekly);

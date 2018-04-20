@@ -365,6 +365,7 @@ class Reporter : public QMainWindow{
       void m_testingQueryGen();
       bool m_noSchedule();
       bool m_validateEmail(const QString & email);
+      bool m_validateScheduleName(const QString & name);
       QStringList m_getColumnNames(const QString & tableName);
       void m_SetTimer(qint32 interval);
       //simple debug function used during development

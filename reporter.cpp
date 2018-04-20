@@ -207,6 +207,9 @@ void Reporter::m_addSchedule(const QString & name){
       QMessageBox::critical(this, QObject::tr("Text error"), QObject::tr("Enter name for new schedule."));
       return;
    }
+   if(!m_validateScheduleName(name)){
+      return;
+   }
 
    auto tmp = new Scheduling;
    tmp->setName(name);
@@ -431,7 +434,7 @@ void Reporter::m_deleteParam(){
    m_selectedParam = -1;
    m_clearParam();
    m_serializeSchedule();
-//   m_serializeParameters();
+   //   m_serializeParameters();
 }
 //Sets up default settings of the app
 void Reporter::defaultSettings(){
@@ -558,9 +561,15 @@ void Reporter::m_deserializeSchedule(){
    QList<QStringList> scheduleDeserialize;
    QStringList scheduleNames;
    qint32 desCount;
-   QMap<QString, QStringList> parameters;
+   QMap<QString, QVector<QStringList>> parameters;
 
    m_Setup.deserializeSchedule(scheduleDeserialize, scheduleNames, parameters);
+
+   for(auto & it : parameters){
+      for(auto & par : it){
+         qInfo(logInfo()) << parameters.key(it) + " " + par.join(",") + " TESTING THIS";
+      }
+   }
 
    desCount = 0;
    m_scheduleKey = 0;
@@ -582,7 +591,7 @@ void Reporter::m_deserializeSchedule(){
       m_Schedule[m_scheduleKey]->getDaily().deserializeList(scheduleDeserialize[desCount++]);
       m_Schedule[m_scheduleKey]->getWeekly().deserializeList(scheduleDeserialize[desCount++]);
       m_Schedule[m_scheduleKey]->getMonthly().deserializeList(scheduleDeserialize[desCount++]);
-
+      m_Schedule[m_scheduleKey]->deserializeParameters(parameters[it]);
    }
    m_scheduleKey = 0;
    if(!m_noSchedule()){
@@ -593,10 +602,14 @@ void Reporter::m_deserializeSchedule(){
       m_displayMonthly(m_scheduleKey);
       m_displayCustom(m_scheduleKey);
       m_loadEmails();
+      m_loadScheduleParameters();
    }
 }
 //Saves selected schedule
 void Reporter::m_saveSchedule(){
+   if(!m_validateScheduleName(ui->scheduleName->text())){
+      return;
+   }
    tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
    delete tmp;
    auto newSchedule = new QToolButton;
@@ -612,7 +625,6 @@ void Reporter::m_saveSchedule(){
    m_editWeekly(m_scheduleKey);
    m_editMonthly(m_scheduleKey);
    m_editCustom();
-   //TODO: save parameters
    //   m_saveParameter();
    m_serializeSchedule();
 }
@@ -689,7 +701,7 @@ void Reporter::m_testingQueryGen(){
    }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
       qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
-      QMessageBox::critical(nullptr, QObject::tr("Database error"),
+      QMessageBox::critical(this, QObject::tr("Database error"),
                             "Not connected to database");
    }else{
       m_loadMaster();
@@ -710,6 +722,18 @@ bool Reporter::m_noSchedule(){
 bool Reporter::m_validateEmail(const QString & email){
    QRegularExpression regex("^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$");
    return regex.match(email).hasMatch();
+}
+
+bool Reporter::m_validateScheduleName(const QString & name){
+   for(const auto & it : m_Schedule){
+      //TODO: work on this in the future
+      if(name == it->getName() && it != m_Schedule[m_scheduleKey]){
+         QMessageBox::critical(this, QObject::tr("New schedule error"),
+                               "Schedule with this name already exists.");
+         return false;
+      }
+   }
+   return true;
 }
 
 QStringList Reporter::m_getColumnNames(const QString & tableName){
@@ -797,7 +821,6 @@ void Reporter::m_loadScheduleParameters(){
    //delete current toolbuttons to show the selected scheduling parameters
    tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>();
    while(tmp){
-      qInfo(logInfo()) << tmp->text();
       delete tmp;
       tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>();
    }
@@ -1400,23 +1423,23 @@ void Reporter::on_pauseResumeButton_clicked(){
 }
 
 void Reporter::on_param1_textEdited(const QString &arg1){
-   //   m_saveParameter();
+   //   m_saveSchedule();
 }
 
 void Reporter::on_param2_textEdited(const QString &arg1){
-   //   m_saveParameter();
+   //   m_saveSchedule();
 }
 
 void Reporter::on_param3_textEdited(const QString &arg1){
-   //   m_saveParameter();
+   //   m_saveSchedule();
 }
 
 void Reporter::on_param4_textEdited(const QString &arg1){
-   //   m_saveParameter();
+   //   m_saveSchedule();
 }
 
 void Reporter::on_param5_textEdited(const QString &arg1){
-   //   m_saveParameter();
+   //   m_saveSchedule();
 }
 
 void Reporter::on_shiftActive_clicked(){
