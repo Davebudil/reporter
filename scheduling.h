@@ -33,6 +33,7 @@ class Scheduling{
       void setParameters(const QMap<qint32, SQLParameter *> & Parameters);
       QStringList serializeParameters();
       void deserializeParameters(QVector<QStringList> & Parameters);
+      void deleteParameter(const qint32 & parameterKey);
 
    private:
       QString m_Name;

@@ -419,7 +419,7 @@ void Reporter::m_deleteEmails(){
 }
 
 void Reporter::m_deleteParameters(){
-   //TODO: delete parameters QToolButtons widgets
+   //debug, not used at the moment
    for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
       tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString(m_Schedule[m_scheduleKey]->getParameters().key(it)));
 
@@ -427,8 +427,7 @@ void Reporter::m_deleteParameters(){
 }
 //Function that deletes parameters
 void Reporter::m_deleteParam(){
-   //TODO: delete parameters
-   m_mainSQL.getStorage().getParameters().remove(m_selectedParam);
+   m_Schedule[m_selectedParam]->deleteParameter(m_selectedParam);
    tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString::number(m_selectedParam));
    delete tmp;
    m_selectedParam = -1;

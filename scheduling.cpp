@@ -72,6 +72,10 @@ void Scheduling::deserializeParameters(QVector<QStringList> & Parameters){
    }
 }
 
+void Scheduling::deleteParameter(const qint32 & parameterKey){
+   m_Parameters.remove(parameterKey);
+}
+
 qint32 Scheduling::getParamCount() const
 {
    return m_paramCount;
