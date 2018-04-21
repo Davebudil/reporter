@@ -5,6 +5,7 @@
 #include <QTime>
 #include <QDebug>
 #include <QDateTime>
+#include <sqlparameter.h>
 
 class ShiftSchedule{
    public:
@@ -46,6 +47,7 @@ class ShiftSchedule{
       void setDate2(const QDateTime & Date2);
       void setDate1(const QDateTime & Date1);
       void setDate0(const QDateTime & Date0);
+      void fixParameters(SQLParameter & param, QDateTime & currentTime);
 
       void setEmailTemplatePath(const QString & emailTemplatePath);
       bool generateShiftData(const QDateTime & currentTime);

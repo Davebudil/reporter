@@ -1369,9 +1369,8 @@ void Reporter::on_toolButton_4_clicked(){
    QQueue<SQLParameter> tmpParams;
    instantSchedule = new CustomScheduling(this);
    instantSchedule->setModal(true);
-
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
-   tmpParams = m_Schedule[m_scheduleKey]->getQueueParameters();
+   //fix this to use custom parameters
 
    if(instantSchedule->exec()){
       m_Export.customExport(*instantSchedule,

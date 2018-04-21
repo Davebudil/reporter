@@ -212,7 +212,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="Shift">
        <attribute name="title">
@@ -396,6 +396,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="shiftCSV">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -458,6 +461,9 @@
         </property>
        </widget>
        <widget class="QLabel" name="label_10">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -523,6 +529,9 @@
         </property>
        </widget>
        <widget class="QToolButton" name="shiftBrCSV">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>340</x>
@@ -788,6 +797,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="dailyCSV">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -821,6 +833,9 @@
         </property>
        </widget>
        <widget class="QLabel" name="label_17">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -961,6 +976,9 @@
         </property>
        </widget>
        <widget class="QToolButton" name="dailyBrCSV">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>340</x>
@@ -1088,6 +1106,9 @@
         <string>Weekly</string>
        </attribute>
        <widget class="QLabel" name="label_18">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1147,6 +1168,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="weeklyCSV">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1291,6 +1315,9 @@
         </property>
        </widget>
        <widget class="QToolButton" name="weeklyBrCSV">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>340</x>
@@ -1469,6 +1496,9 @@
         <string>Monthly</string>
        </attribute>
        <widget class="QLabel" name="label_25">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1528,6 +1558,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="monthlyCSV">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1672,6 +1705,9 @@
         </property>
        </widget>
        <widget class="QToolButton" name="monthlyBrCSV">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>340</x>

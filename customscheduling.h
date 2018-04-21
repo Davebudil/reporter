@@ -56,6 +56,11 @@ class CustomScheduling : public QDialog
       QString m_WeeklyxlsTemplatePath;
       QString m_MonthlyxlsTemplatePath;
       QString m_Email;
+      QString parameter0;
+      QString parameter1;
+      QString parameter2;
+      QString parameter3;
+      QString parameter4;
 
    private slots:
       void on_toolButton_clicked();
