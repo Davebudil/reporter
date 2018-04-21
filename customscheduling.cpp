@@ -46,6 +46,13 @@ void CustomScheduling::on_buttonBox_accepted(){
    if(m_Monthly){
       m_loadMonthly();
    }
+   if(m_useParameters){
+      parameter0 = ui->lineEdit->text();
+      parameter1 = ui->lineEdit_2->text();
+      parameter2 = ui->lineEdit_3->text();
+      parameter3 = ui->lineEdit_4->text();
+      parameter4 = ui->lineEdit_5->text();
+   }
 }
 
 void CustomScheduling::m_loadShift(){

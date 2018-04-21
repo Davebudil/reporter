@@ -24,34 +24,36 @@ void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
    QFile resultFile(QDir::currentPath() + "/ask_attachment_final.txt");
    resultFile.remove();
 
-   if(!parameters.isEmpty()){
-      for(auto & it : intervalsToHandle){
+   //TODO: test parameters specific for every scheduling
+
+   for(auto & it : intervalsToHandle){
+      if(it->getParameters().isEmpty()){
          m_shiftDayReset(it->getShift(), currentTime);
+
          if(it->getShift().generateShiftData(currentTime) && it->getShift().getActive()){
-            for(auto & itPar : parameters){
-               m_generateShift(it->getShift(), queries, itPar, db, currentTime, exportCount, generatedBy, true);
+            for(auto & itPar : it->getParameters()){
+               m_generateShift(it->getShift(), queries, *itPar, db, currentTime, exportCount, generatedBy, true);
             }
          }
          if(it->getDaily().generateDailyData(currentTime) && it->getDaily().getActive()){
-            for(auto & itPar : parameters){
-               m_generateDaily(it->getDaily(), queries, itPar, db, currentTime, exportCount, generatedBy, true);
+            for(auto & itPar : it->getParameters()){
+               m_generateDaily(it->getDaily(), queries, *itPar, db, currentTime, exportCount, generatedBy, true);
             }
          }
          if(it->getWeekly().generateWeeklyData(currentTime) && it->getWeekly().getActive()){
-            for(auto & itPar : parameters){
-               m_generateWeekly(it->getWeekly(), queries, itPar, db, currentTime, exportCount, generatedBy, true);
+            for(auto & itPar : it->getParameters()){
+               m_generateWeekly(it->getWeekly(), queries, *itPar, db, currentTime, exportCount, generatedBy, true);
             }
          }
          if(it->getMonthly().generateMonthlyData(currentTime) && it->getMonthly().getActive()){
-            for(auto & itPar : parameters){
-               m_generateMonthly(it->getMonthly(), queries, itPar, db, currentTime, exportCount, generatedBy, true);
+            for(auto & itPar : it->getParameters()){
+               m_generateMonthly(it->getMonthly(), queries, *itPar, db, currentTime, exportCount, generatedBy, true);
             }
          }
-      }
-   }else{
-      SQLParameter tmp(0);
-      for(auto & it : intervalsToHandle){
+      }else{
+         SQLParameter tmp(0);
          m_shiftDayReset(it->getShift(), currentTime);
+
          if(it->getShift().generateShiftData(currentTime) && it->getShift().getActive()){
             m_generateShift(it->getShift(), queries, tmp, db, currentTime, exportCount, generatedBy, true);
          }
@@ -116,11 +118,21 @@ void Export::customExport(CustomScheduling & exportData,
    quint32 weeklyCount = 0;
    quint32 monthlyCount = 0;
    QFile resultFile(QDir::currentPath() + "/ask_attachment_final.txt");
+   QStringList tmpList;
+   tmpList.append(exportData.parameter0);
+   tmpList.append(exportData.parameter1);
+   tmpList.append(exportData.parameter2);
+   tmpList.append(exportData.parameter3);
+   tmpList.append(exportData.parameter4);
+   SQLParameter tmpParameters(tmpList, tmpList.count());
+
+   parameters.append(tmpParameters);
    resultFile.remove();
 
    from = exportData.m_From;
    to = exportData.m_To;
    m_createTempScheduling(exportData, shift, daily, weekly, monthly);
+   //TODO: TEST CUSTOM PARAMETERS
 
    while(!(from > to)){
       m_shiftDayReset(shift, from);
@@ -277,6 +289,8 @@ bool Export::m_generateShift(ShiftSchedule & shift,
          tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
          it.bindParameter(tmpParam1, param.getParameters()[i]);
       }
+      shift.fixParameters(param);
+
       if(shift.getDone0()){
          tmp = shift.getDate1();
          tmp2 = shift.getDate2();

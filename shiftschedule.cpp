@@ -211,6 +211,17 @@ void ShiftSchedule::setDate0(const QDateTime & Date0){
    m_Date0 = Date0;
 }
 
+void ShiftSchedule::fixParameters(SQLParameter & param){
+   QStringList tmp = param.getParameters();
+   for(qint32 i = 0; i < tmp.count(); ++i){
+      m_AttachName.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);
+      m_SubjName.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);
+      m_emailTemplatePath.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);
+      m_xlsTemplatePath.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);
+   }
+   //fix dates
+}
+
 QDateTime ShiftSchedule::getDate1() const{
    return m_Date1;
 }
