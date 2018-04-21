@@ -135,6 +135,40 @@ bool DailySchedule::generateDailyData(const QDateTime & currentData){
    return false;
 }
 
+void DailySchedule::fixParameters(SQLParameter & param, QDateTime & currentTime){
+   QStringList tmp = param.getParameters();
+   for(qint32 i = 0; i < tmp.count(); ++i){
+      m_AttachName.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);
+      m_SubjName.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);
+      m_emailTemplatePath.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);
+      m_xlsTemplatePath.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);
+   }
+
+   if(m_AttachName.contains("#Date", Qt::CaseInsensitive)){
+      QString tmpDate;
+      QString resultDate;
+      qint32 first, last;
+      first = m_AttachName.indexOf("#Date(") + 6;
+      last = m_AttachName.lastIndexOf(")");
+      tmpDate = m_AttachName.mid(first, last - first);
+      resultDate = currentTime.toString(tmpDate);
+      tmpDate = "#Date(" + tmpDate + ")";
+      m_AttachName.replace(tmpDate, resultDate);
+   }
+
+   if(m_SubjName.contains("#Date", Qt::CaseInsensitive)){
+      QString tmpDate;
+      QString resultDate;
+      qint32 first, last;
+      first = m_SubjName.indexOf("#Date(") + 6;
+      last = m_SubjName.lastIndexOf(")");
+      tmpDate = m_SubjName.mid(first, last - first);
+      resultDate = currentTime.toString(tmpDate);
+      tmpDate = "#Date(" + tmpDate + ")";
+      m_SubjName.replace(tmpDate, resultDate);
+   }
+}
+
 bool DailySchedule::m_checkDoneInterval(const QDateTime & currentDate){
    if(m_Done){
       if(m_lastDoneDay != currentDate.date().dayOfWeek()){

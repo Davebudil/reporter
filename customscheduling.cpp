@@ -6,6 +6,8 @@ CustomScheduling::CustomScheduling(QWidget *parent) :
    QDialog(parent),
    ui(new Ui::CustomScheduling){
    ui->setupUi(this);
+   ui->dateFrom->setDateTime(QDateTime::currentDateTime());
+   ui->dateTo->setDateTime(QDateTime::currentDateTime());
 }
 
 CustomScheduling::~CustomScheduling(){

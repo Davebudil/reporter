@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QDebug>
 #include <QDateTime>
+#include "sqlparameter.h"
 
 class DailySchedule{
    public:
@@ -37,6 +38,7 @@ class DailySchedule{
       void setXlsAttach(bool xlsAttach);
       void setCsvAttach(bool csvAttach);
       bool generateDailyData(const QDateTime & currentData);
+      void fixParameters(SQLParameter & param, QDateTime & currentTime);
 
       bool getDone() const;
       void setDone(bool Done);
