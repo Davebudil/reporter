@@ -293,6 +293,8 @@ bool Export::m_generateShift(ShiftSchedule shift,
       }
       shift.fixParameters(param, currentTime);
 
+
+      //TODO: fix this, not working corrrectly at this moment
       if(shift.getDone0()){
          tmp = shift.getDate1();
          tmp2 = shift.getDate2();
