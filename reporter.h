@@ -318,6 +318,11 @@ class Reporter : public QMainWindow{
       void m_Deserialize();
       //loads .ini settings
       void m_Settings();
+      //displays selected button
+      void m_loadColorSchedule();
+      void m_loadColorScheduleEmail();
+      void m_loadColorScheduleParam();
+      void m_loadColorQueries();
       //connects to db
       void m_ConnectDB();
       //utility function to get text from parameters input boxes
@@ -363,6 +368,7 @@ class Reporter : public QMainWindow{
       bool m_noSchedule();
       bool m_validateEmail(const QString & email);
       bool m_validateScheduleName(const QString & name);
+      bool m_validateScheduleNameSaving(const QString & name);
       QStringList m_getColumnNames(const QString & tableName);
       void m_SetTimer(qint32 interval);
       //simple debug function used during development

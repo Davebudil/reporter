@@ -139,6 +139,7 @@ void Reporter::m_saveQuery(){
    }
    m_mainSQL.getStorage().fixMaster();
    m_serializeQueries();
+   m_loadColorQueries();
 }
 //function to add query
 void Reporter::m_addQuery(const QString & queryText,
@@ -164,6 +165,7 @@ void Reporter::m_addQuery(const QString & queryText,
          m_clearQuery();
          m_nameKey = "";
          m_serializeQueries();
+         m_loadColorQueries();
       }
    }else{
       QMessageBox::critical(nullptr, QObject::tr("Text error"), "No text entered.");
@@ -194,9 +196,6 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
 void Reporter::m_addSchedule(const QString & name){
    if(name.isEmpty() || name.isNull()){
       QMessageBox::critical(this, QObject::tr("Text error"), QObject::tr("Enter name for new schedule."));
-      return;
-   }
-   if(!m_validateScheduleName(name)){
       return;
    }
 
@@ -235,6 +234,7 @@ void Reporter::m_addShiftScheduleEmail(const QString & email){
    newEmail->setText(email);
    newEmail->setObjectName(email);
    ui->shiftEmailLayout->addWidget(newEmail);
+   m_emailKey = email;
 
    connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadShiftEmail);
    m_Schedule[m_scheduleKey]->getShift().getEmailAdresses().insert(email, email);
@@ -257,6 +257,7 @@ void Reporter::m_addDailyScheduleEmail(const QString & email){
    newEmail->setText(email);
    newEmail->setObjectName(email);
    ui->dailyEmailLayout->addWidget(newEmail);
+   m_emailKey = email;
 
    connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadDailyEmail);
    m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses().insert(email, email);
@@ -279,6 +280,7 @@ void Reporter::m_addWeeklyScheduleEmail(const QString & email){
    newEmail->setText(email);
    newEmail->setObjectName(email);
    ui->weeklyEmailLayout->addWidget(newEmail);
+   m_emailKey = email;
 
    connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadWeeklyEmail);
    m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses().insert(email, email);
@@ -301,6 +303,7 @@ void Reporter::m_addMonthlyScheduleEmail(const QString & email){
    newEmail->setText(email);
    newEmail->setObjectName(email);
    ui->monthlyEmailLayout->addWidget(newEmail);
+   m_emailKey = email;
 
    connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadMonthlyEmail);
    m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses().insert(email, email);
@@ -315,6 +318,7 @@ void Reporter::m_scrollParamClicked(){
    m_selectedParam = senderObjID.toInt();
    paramCount = m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getCount();
    m_loadIndividualParameters(paramCount);
+   m_loadColorScheduleParam();
 }
 //Function that saves choosen paramaters
 void Reporter::m_saveParameter(){
@@ -330,6 +334,7 @@ void Reporter::m_saveParameter(){
       tmp->setText(parameters.at(0));
       m_serializeSchedule();
    }
+   m_loadColorScheduleParam();
 }
 //Function that deletes selected query
 void Reporter::m_deleteQuery(){
@@ -425,6 +430,7 @@ void Reporter::defaultSettings(){
    //   m_PauseTimer();
    //   m_PauseTimer();
    m_mainSQL.getStorage().fixMaster();
+   m_loadColorSchedule();
    qInfo(logInfo()) << "Settings and data successfuly loaded.";
 }
 
@@ -459,6 +465,7 @@ void Reporter::m_scrollQueryClicked(){
    ui->queryNameEdit->setText(m_mainSQL.getStorage().getQueries()[senderObjname]->getName());
    ui->queryParamEdit->setText(m_mainSQL.getStorage().getQueries()[senderObjname]->getParam());
    ui->queryActive->setChecked(m_mainSQL.getStorage().getQueries()[senderObjname]->getActive());
+   m_loadColorQueries();
 }
 //Setup connection to DB
 void Reporter::m_ConnectDB(){
@@ -525,6 +532,82 @@ void Reporter::m_Deserialize(){
       m_addParameters(tmpList, tmpInt);
    }
 }
+
+void Reporter::m_loadColorSchedule(){
+   qint32 tmpKey;
+   for(auto & it : m_Schedule){
+      tmpKey = m_Schedule.key(it);
+      tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(tmpKey));
+      if(tmpKey == m_scheduleKey){
+         tmp->setStyleSheet("background-color: #90A4AE;");
+      }else{
+         tmp->setStyleSheet(" ");
+      }
+   }
+}
+
+void Reporter::m_loadColorScheduleEmail(){
+   for(auto & it : m_Schedule[m_scheduleKey]->getShift().getEmailAdresses()){
+      tmp = ui->shiftEmailScrollArea->findChild<QToolButton *>(it);
+      if(it == m_emailKey){
+         tmp->setStyleSheet("background-color: #90A4AE;");
+         qInfo(logInfo()) << "FOUND: " + it + " == " + m_emailKey;
+      }else{
+         qInfo(logInfo()) << "NOTFOUND: " + it + " != " + m_emailKey;
+         tmp->setStyleSheet(" ");
+      }
+   }
+   for(auto & it : m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses()){
+      tmp = ui->dailyEmailScrollArea->findChild<QToolButton *>(it);
+      if(it == m_emailKey){
+         tmp->setStyleSheet("background-color: #90A4AE;");
+      }else{
+         tmp->setStyleSheet(" ");
+      }
+   }
+   for(auto & it : m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses()){
+      tmp = ui->weeklyEmailScrollArea->findChild<QToolButton *>(it);
+      if(it == m_emailKey){
+         tmp->setStyleSheet("background-color: #90A4AE;");
+      }else{
+         tmp->setStyleSheet(" ");
+      }
+   }
+   for(auto & it : m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses()){
+      tmp = ui->monthlyEmailScrollArea->findChild<QToolButton *>(it);
+      if(it == m_emailKey){
+         tmp->setStyleSheet("background-color: #90A4AE;");
+      }else{
+         tmp->setStyleSheet(" ");
+      }
+   }
+}
+
+void Reporter::m_loadColorScheduleParam(){
+   qint32 tmpKey;
+   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
+      tmpKey = m_Schedule[m_scheduleKey]->getParameters().key(it);
+      tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString::number(tmpKey));
+      if(tmpKey == m_selectedParam){
+         tmp->setStyleSheet("background-color: #90A4AE;");
+      }else{
+         tmp->setStyleSheet(" ");
+      }
+   }
+}
+
+void Reporter::m_loadColorQueries(){
+   QString tmpKey;
+   for(auto & it : m_mainSQL.getStorage().getQueries()){
+      tmpKey = m_mainSQL.getStorage().getQueries().key(it);
+      tmp = ui->scrollAreaWidgetContents->findChild<QToolButton *>(QString(tmpKey));
+      if(tmpKey == m_nameKey){
+         tmp->setStyleSheet("background-color: #90A4AE;");
+      }else{
+         tmp->setStyleSheet(" ");
+      }
+   }
+}
 //Deserializes Schedule
 void Reporter::m_deserializeSchedule(){
    QList<QStringList> scheduleDeserialize;
@@ -570,7 +653,7 @@ void Reporter::m_deserializeSchedule(){
 }
 //Saves selected schedule
 void Reporter::m_saveSchedule(){
-   if(!m_validateScheduleName(ui->scheduleName->text())){
+   if(!m_validateScheduleNameSaving(ui->scheduleName->text())){
       return;
    }
    tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
@@ -590,6 +673,7 @@ void Reporter::m_saveSchedule(){
    m_editCustom();
    //   m_saveParameter();
    m_serializeSchedule();
+   m_loadColorSchedule();
 }
 //DEBUG
 //Generates CSV, mostly for testing
@@ -688,10 +772,22 @@ bool Reporter::m_validateEmail(const QString & email){
 
 bool Reporter::m_validateScheduleName(const QString & name){
    for(const auto & it : m_Schedule){
-      //TODO: work on this in the future
+      if(name == it->getName()){
+         QMessageBox::critical(this, QObject::tr("New schedule error"),
+                               "Schedule with this name already exists.");
+         return false;
+      }
+   }
+   return true;
+}
+
+bool Reporter::m_validateScheduleNameSaving(const QString & name){
+   for(const auto & it : m_Schedule){
       if(name == it->getName() && it != m_Schedule[m_scheduleKey]){
          QMessageBox::critical(this, QObject::tr("New schedule error"),
                                "Schedule with this name already exists.");
+
+         ui->scheduleName->setText(m_Schedule[m_scheduleKey]->getName());
          return false;
       }
    }
@@ -748,30 +844,35 @@ void Reporter::m_loadSchedule(){
    ui->scheduleName->setText(m_Schedule[m_scheduleKey]->getName());
    m_loadEmails();
    m_loadScheduleParameters();
+   m_loadColorSchedule();
 }
 //Loads shift email on mouse click
 void Reporter::m_loadShiftEmail(){
    QObject * senderObj = sender();
    m_emailKey = senderObj->objectName();
    ui->shiftemailAdress->setText(m_Schedule[m_scheduleKey]->getShift().getEmailAdresses()[m_emailKey]);
+   m_loadColorScheduleEmail();
 }
 //Loads daily email on mouse click
 void Reporter::m_loadDailyEmail(){
    QObject * senderObj = sender();
    m_emailKey = senderObj->objectName();
    ui->dailyEmailAdress->setText(m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses()[m_emailKey]);
+   m_loadColorScheduleEmail();
 }
 //Loads weekly email on mouse click
 void Reporter::m_loadWeeklyEmail(){
    QObject * senderObj = sender();
    m_emailKey = senderObj->objectName();
    ui->weeklyemailAdress->setText(m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses()[m_emailKey]);
+   m_loadColorScheduleEmail();
 }
 //Loads monthly email on mouse click
 void Reporter::m_loadMonthlyEmail(){
    QObject * senderObj = sender();
    m_emailKey = senderObj->objectName();
    ui->monthlyEmailAdress->setText(m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses()[m_emailKey]);
+   m_loadColorScheduleEmail();
 }
 
 void Reporter::m_loadScheduleParameters(){
@@ -794,6 +895,7 @@ void Reporter::m_loadScheduleParameters(){
       m_clearParam();
       m_selectedParam = -1;
    }
+   m_loadColorScheduleParam();
 }
 
 void Reporter::m_loadIndividualParameters(const qint32 & paramCount){
@@ -876,6 +978,7 @@ void Reporter::m_loadEmails(){
 
       connect(newEmail, &QToolButton::clicked, this, &Reporter::m_loadMonthlyEmail);
    }
+   m_loadColorScheduleEmail();
 }
 
 //Loads all parameters into String List
@@ -1254,9 +1357,11 @@ void Reporter::on_toolButton_3_clicked(){
    }
 }
 void Reporter::on_newScheduling_clicked(){
-   m_deleteEmails();
-   m_addSchedule(ui->scheduleName->text());
-   m_serializeSchedule();
+   if(m_validateScheduleName(ui->scheduleName->text())){
+      m_deleteEmails();
+      m_addSchedule(ui->scheduleName->text());
+      m_serializeSchedule();
+   }
 }
 void Reporter::on_deleteScheduling_clicked(){
    QMessageBox::StandardButton confirmSchedulingDelete;
@@ -1271,15 +1376,19 @@ void Reporter::on_deleteScheduling_clicked(){
 }
 void Reporter::on_shiftnewEmailAdress_clicked(){
    m_addShiftScheduleEmail(ui->shiftemailAdress->text());
+   m_loadColorScheduleEmail();
 }
 void Reporter::on_dailynewEmailAdress_clicked(){
    m_addDailyScheduleEmail(ui->dailyEmailAdress->text());
+   m_loadColorScheduleEmail();
 }
 void Reporter::on_saveEmailAdress_7_clicked(){
    m_addWeeklyScheduleEmail(ui->weeklyemailAdress->text());
+   m_loadColorScheduleEmail();
 }
 void Reporter::on_monthlynewEmailAdress_clicked(){
    m_addMonthlyScheduleEmail(ui->monthlyEmailAdress->text());
+   m_loadColorScheduleEmail();
 }
 void Reporter::on_shiftdeleteEmailAdress_clicked(){
    m_Schedule[m_scheduleKey]->getShift().getEmailAdresses().remove(m_emailKey);
