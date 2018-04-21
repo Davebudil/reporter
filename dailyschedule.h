@@ -21,7 +21,7 @@ class DailySchedule{
       QStringList emailAdresses();
       QTime getTime() const;
       bool getActive() const;
-      bool * getDays() const;
+      QVector<bool> getDays() const;
       bool getXlsAttach() const;
       bool getCsvAttach() const;
       QStringList prepareSerialization();
@@ -47,7 +47,7 @@ class DailySchedule{
       bool m_checkDoneInterval(const QDateTime & currentDate);
       void m_dailyInterval();
       bool m_Active;
-      bool * m_Days;
+      QVector<bool> m_Days;
       bool m_csvAttach;
       bool m_xlsAttach;
       bool m_Done;

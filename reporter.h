@@ -258,6 +258,14 @@ class Reporter : public QMainWindow{
 
       void on_startTImer_clicked();
 
+      void on_shiftGenerate_clicked();
+
+      void on_dailyGenerate_clicked();
+
+      void on_weeklyGenerate_clicked();
+
+      void on_monthlyGenerate_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;

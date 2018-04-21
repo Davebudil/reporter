@@ -142,7 +142,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Shift && shift.generateShiftData(from)){
             for(auto & it : parameters){
-               if(m_generateShift(shift, queries, it, db, from, exportCount, generatedBy, false)){
+               if(m_generateShift(shift, queries, it, db, from, exportCount, generatedBy, true)){
                   ++shiftCount;
                }
             }
@@ -150,7 +150,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Daily && daily.generateDailyData(from)){
             for(auto & it : parameters){
-               if(m_generateDaily(daily, queries, it, db, from, exportCount, generatedBy, false)){
+               if(m_generateDaily(daily, queries, it, db, from, exportCount, generatedBy, true)){
                   ++dailyCount;
                }
             }
@@ -158,7 +158,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Weekly && weekly.generateWeeklyData(from)){
             for(auto & it : parameters){
-               if(m_generateWeekly(weekly, queries, it, db, from, exportCount, generatedBy, false)){
+               if(m_generateWeekly(weekly, queries, it, db, from, exportCount, generatedBy, true)){
                   ++weeklyCount;
                }
             }
@@ -166,7 +166,7 @@ void Export::customExport(CustomScheduling & exportData,
          //IS WORKING
          if(exportData.m_Monthly && monthly.generateMonthlyData(from)){
             for(auto & it : parameters){
-               if(m_generateMonthly(monthly, queries, it, db, from, exportCount, generatedBy, false)){
+               if(m_generateMonthly(monthly, queries, it, db, from, exportCount, generatedBy, true)){
                   ++monthlyCount;
                }
             }
@@ -176,22 +176,22 @@ void Export::customExport(CustomScheduling & exportData,
          SQLParameter tmp(0);
 
          if(exportData.m_Shift && shift.generateShiftData(from)){
-            if(m_generateShift(shift, queries, tmp, db, from, exportCount, generatedBy, false)){
+            if(m_generateShift(shift, queries, tmp, db, from, exportCount, generatedBy, true)){
                ++shiftCount;
             }
          }
          if(exportData.m_Daily && daily.generateDailyData(from)){
-            if(m_generateDaily(daily, queries, tmp, db, from, exportCount, generatedBy, false)){
+            if(m_generateDaily(daily, queries, tmp, db, from, exportCount, generatedBy, true)){
                ++dailyCount;
             }
          }
          if(exportData.m_Weekly && weekly.generateWeeklyData(from)){
-            if(m_generateWeekly(weekly, queries, tmp, db, from, exportCount, generatedBy, false)){
+            if(m_generateWeekly(weekly, queries, tmp, db, from, exportCount, generatedBy, true)){
                ++weeklyCount;
             }
          }
          if(exportData.m_Monthly && monthly.generateMonthlyData(from)){
-            if(m_generateMonthly(monthly, queries, tmp, db, from, exportCount, generatedBy, false)){
+            if(m_generateMonthly(monthly, queries, tmp, db, from, exportCount, generatedBy, true)){
                ++monthlyCount;
             }
          }
@@ -275,7 +275,7 @@ bool Export::m_generateShift(ShiftSchedule shift,
                              QString & generatedBy,
                              bool showInfo){
    //need to define which way to format parameters . using #parameter1 - 5 for now
-   for(auto & it : queries){
+   for(auto it : queries){
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);

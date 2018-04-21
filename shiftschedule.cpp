@@ -13,11 +13,10 @@ ShiftSchedule::ShiftSchedule()
      m_emailTemplatePath(" "),
      m_xlsTemplatePath(" "),
      m_csvTemplatePath(" "){
-   m_Days = new bool[7];
-   std::fill_n(m_Days, 7, false);
+   QVector<bool> falseIni = {false,false,false,false,false,false,false};
+   m_Days = falseIni;
 }
 ShiftSchedule::~ShiftSchedule(){
-   delete[] m_Days;
 }
 QString ShiftSchedule::getAttachName() const{
    return m_AttachName;
@@ -31,7 +30,7 @@ QString ShiftSchedule::getCsvTemplatePath() const{
 bool ShiftSchedule::getActive() const{
    return m_Active;
 }
-bool * ShiftSchedule::getDays() const{
+QVector<bool> ShiftSchedule::getDays() const{
    return m_Days;
 }
 void ShiftSchedule::setAttachName(const QString & AttachName){

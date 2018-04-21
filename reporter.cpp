@@ -551,9 +551,7 @@ void Reporter::m_loadColorScheduleEmail(){
       tmp = ui->shiftEmailScrollArea->findChild<QToolButton *>(it);
       if(it == m_emailKey){
          tmp->setStyleSheet("background-color: #90A4AE;");
-         qInfo(logInfo()) << "FOUND: " + it + " == " + m_emailKey;
       }else{
-         qInfo(logInfo()) << "NOTFOUND: " + it + " != " + m_emailKey;
          tmp->setStyleSheet(" ");
       }
    }
@@ -1737,5 +1735,93 @@ void Reporter::on_startTImer_clicked(){
       timerInterval();
       m_SetTimer(m_TIMERINTERVAL);
       ui->startTImer->setText("Pause");
+   }
+}
+
+void Reporter::on_shiftGenerate_clicked(){
+   quint32 count = 0;
+   ShiftSchedule tmp;
+   tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
+   QDateTime currentTime = QDateTime::currentDateTime();
+
+   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
+      qInfo(logInfo()) << "generating shift instant";
+      tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
+      tmp.setDone0(false);
+      tmp.setDone1(false);
+      tmp.setDone2(false);
+      tmp.generateShiftData(currentTime);
+      m_Export.m_generateShift(tmp,
+                               m_mainSQL.getStorage().getQueueQueries(),
+                               *it,
+                               m_mainSQL.getDatabase().getDatabase(),
+                               currentTime,
+                               count,
+                               m_generatedBy,
+                               true);
+   }
+}
+
+void Reporter::on_dailyGenerate_clicked(){
+   quint32 count = 0;
+   DailySchedule tmp;
+   tmp = m_Schedule[m_scheduleKey]->getDailyCopy();
+   QDateTime currentTime = QDateTime::currentDateTime();
+
+   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
+      qInfo(logInfo()) << "generating daily instant";
+      tmp = m_Schedule[m_scheduleKey]->getDailyCopy();
+      tmp.setDone(false);
+      tmp.generateDailyData(currentTime);
+      m_Export.m_generateDaily(tmp,
+                               m_mainSQL.getStorage().getQueueQueries(),
+                               *it,
+                               m_mainSQL.getDatabase().getDatabase(),
+                               currentTime,
+                               count,
+                               m_generatedBy,
+                               true);
+   }
+}
+
+void Reporter::on_weeklyGenerate_clicked(){
+   quint32 count = 0;
+   WeeklySchedule tmp;
+   tmp = m_Schedule[m_scheduleKey]->getWeeklyCopy();
+   QDateTime currentTime = QDateTime::currentDateTime();
+
+   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
+      qInfo(logInfo()) << "generating weekly instant";
+      tmp.setDone(false);
+      tmp.generateWeeklyData(currentTime);
+      m_Export.m_generateWeekly(tmp,
+                               m_mainSQL.getStorage().getQueueQueries(),
+                               *it,
+                               m_mainSQL.getDatabase().getDatabase(),
+                               currentTime,
+                               count,
+                               m_generatedBy,
+                               true);
+   }
+}
+
+void Reporter::on_monthlyGenerate_clicked(){
+   quint32 count = 0;
+   MonthlySchedule tmp;
+   tmp = m_Schedule[m_scheduleKey]->getMonthlyCopy();
+   QDateTime currentTime = QDateTime::currentDateTime();
+
+   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
+      qInfo(logInfo()) << "generating monthly instant";
+      tmp.setDone(false);
+      tmp.generateMonthlyData(currentTime);
+      m_Export.m_generateMonthly(tmp,
+                               m_mainSQL.getStorage().getQueueQueries(),
+                               *it,
+                               m_mainSQL.getDatabase().getDatabase(),
+                               currentTime,
+                               count,
+                               m_generatedBy,
+                               true);
    }
 }

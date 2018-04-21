@@ -23,6 +23,22 @@ MonthlySchedule & Scheduling::getMonthly(){
 CustomSchedule & Scheduling::getCustom(){
    return m_Custom;
 }
+
+ShiftSchedule Scheduling::getShiftCopy(){
+   return m_Shift;
+}
+
+DailySchedule Scheduling::getDailyCopy(){
+   return m_Daily;
+}
+
+WeeklySchedule Scheduling::getWeeklyCopy(){
+   return m_Weekly;
+}
+
+MonthlySchedule Scheduling::getMonthlyCopy(){
+   return m_Monthly;
+}
 QString Scheduling::getName() const{
     return m_Name;
 }
