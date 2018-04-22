@@ -9,17 +9,27 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QThread>
 #include <QDir>
 
-class ExportXLS{
+class ExportXLS : public QObject{
+      Q_OBJECT
    public:
-      ExportXLS();
+      explicit ExportXLS(QObject *parent = 0);
+      ~ExportXLS() override;
+
       bool generateFile(const QString & templatePath,
                         const QString & genPath,
                         const QList<std::pair<QString, QString>> constants,
                         const QList<QStringList> queries);
       bool readResult();
       bool editIni();
+      QProcess * generateXLS;
+   signals:
+
+   public slots:
+      void sdLaunchError(QProcess::ProcessError error);
+
 };
 
 #endif // EXPORTXLS_H

@@ -17,9 +17,9 @@ class Export{
    public:
       Export();
       ~Export();
-      ExportXLS getXLS() const;
-      ExportHTML getHTML() const;
-      ExportCSV getCSV() const;
+      ExportXLS & getXLS();
+      ExportHTML & getHTML();
+      ExportCSV & getCSV();
       void handleExport(QQueue<Scheduling*> & intervalsToHandle,
                         QQueue<SQLquery> & queries,
                         QQueue<SQLParameter> & parameters,
@@ -68,8 +68,8 @@ class Export{
                              quint32 & count,
                              QString & generatedBy,
                              bool showInfo);
-   private:
       void m_shiftDayReset(ShiftSchedule & shift, const QDateTime & current);
+   private:
       bool validateQuery(QQueue<SQLquery> & query, SQLquery & currentQuery);
       ExportXLS m_XLS;
       ExportCSV m_CSV;

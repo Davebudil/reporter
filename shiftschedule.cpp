@@ -13,11 +13,10 @@ ShiftSchedule::ShiftSchedule()
      m_emailTemplatePath(" "),
      m_xlsTemplatePath(" "),
      m_csvTemplatePath(" "){
-   m_Days = new bool[7];
-   std::fill_n(m_Days, 7, false);
+   QVector<bool> falseIni = {false,false,false,false,false,false,false};
+   m_Days = falseIni;
 }
 ShiftSchedule::~ShiftSchedule(){
-   delete[] m_Days;
 }
 QString ShiftSchedule::getAttachName() const{
    return m_AttachName;
@@ -31,7 +30,7 @@ QString ShiftSchedule::getCsvTemplatePath() const{
 bool ShiftSchedule::getActive() const{
    return m_Active;
 }
-bool * ShiftSchedule::getDays() const{
+QVector<bool> ShiftSchedule::getDays() const{
    return m_Days;
 }
 void ShiftSchedule::setAttachName(const QString & AttachName){
@@ -145,6 +144,7 @@ void ShiftSchedule::setEmailTemplatePath(const QString & emailTemplatePath){
 
 bool ShiftSchedule::generateShiftData(const QDateTime & currentTime){
    if(m_Days[currentTime.date().dayOfWeek() - 1]){
+      qInfo(logInfo()) << "Current Day";
       return m_checkDoneInterval(currentTime);
    }
    return false;
@@ -155,6 +155,7 @@ bool ShiftSchedule::m_checkDoneInterval(const QDateTime & currentTime){
       m_Done0 = false;
       m_Done1 = false;
       m_Done2 = true;
+      qInfo(logInfo()) << "FIRST INTERVAL";
       return true;
       //first interval
    }
@@ -162,6 +163,7 @@ bool ShiftSchedule::m_checkDoneInterval(const QDateTime & currentTime){
       m_Done0 = true;
       m_Done1 = false;
       m_Done2 = false;
+      qInfo(logInfo()) << "SECOND INTERVAL";
       return true;
       //second interval
    }
@@ -169,8 +171,19 @@ bool ShiftSchedule::m_checkDoneInterval(const QDateTime & currentTime){
       m_Done0 = false;
       m_Done1 = true;
       m_Done2 = false;
+      qInfo(logInfo()) << "THIRD INTERVAL";
       return true;
       //third interval
+   }
+   return false;
+}
+
+bool ShiftSchedule::checkCustomInstantInterval(const QDateTime & currentTime){
+   if(m_Days[currentTime.date().dayOfWeek() - 1]){
+
+
+
+
    }
    return false;
 }

@@ -25,7 +25,7 @@ class ShiftSchedule{
       QDateTime getDate1() const;
       QDateTime getDate2() const;
       bool getActive() const;
-      bool * getDays() const;
+      QVector<bool> getDays() const;
       bool getCsvAttach() const;
       bool getXlsAttach() const;
       QStringList prepareSerialization();
@@ -51,6 +51,7 @@ class ShiftSchedule{
 
       void setEmailTemplatePath(const QString & emailTemplatePath);
       bool generateShiftData(const QDateTime & currentTime);
+      bool checkCustomInstantInterval(const QDateTime & currentTime);
 
       bool getDone0() const;
       void setDone0(bool Done0);
@@ -74,7 +75,7 @@ class ShiftSchedule{
       void m_timeInterval1();
       void m_timeInterval2();
       bool m_Active;
-      bool * m_Days;
+      QVector<bool> m_Days;
       bool m_csvAttach;
       bool m_xlsAttach;
       bool m_Done0;

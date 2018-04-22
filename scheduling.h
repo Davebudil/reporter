@@ -21,6 +21,10 @@ class Scheduling{
       WeeklySchedule & getWeekly();
       MonthlySchedule & getMonthly();
       CustomSchedule & getCustom();
+      ShiftSchedule getShiftCopy();
+      DailySchedule getDailyCopy();
+      WeeklySchedule getWeeklyCopy();
+      MonthlySchedule getMonthlyCopy();
       QMap<qint32, SQLParameter *> getParameters();
       QQueue<SQLParameter> getQueueParameters();
       qint32 getParamCount() const;

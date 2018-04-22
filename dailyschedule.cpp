@@ -12,11 +12,10 @@ DailySchedule::DailySchedule()
                m_xlsTemplatePath(" "),
                m_csvTemplatePath(" "),
                m_emailTemplatePath(" "){
-   m_Days = new bool[7];
-   std::fill_n(m_Days, 7, false);
+   QVector<bool> falseIni = {false,false,false,false,false,false,false};
+   m_Days = falseIni;
 }
 DailySchedule::~DailySchedule(){
-   delete[] m_Days;
 }
 QString DailySchedule::getCsvTemplatePath() const{
     return m_csvTemplatePath;
@@ -48,7 +47,7 @@ QTime DailySchedule::getTime() const{
 bool DailySchedule::getActive() const{
     return m_Active;
 }
-bool * DailySchedule::getDays() const{
+QVector<bool> DailySchedule::getDays() const{
    return m_Days;
 }
 QStringList DailySchedule::prepareSerialization(){

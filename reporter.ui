@@ -45,7 +45,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="basic">
      <attribute name="title">
@@ -63,21 +63,21 @@
       <widget class="QToolButton" name="paramNew">
        <property name="geometry">
         <rect>
-         <x>150</x>
-         <y>180</y>
-         <width>61</width>
+         <x>140</x>
+         <y>0</y>
+         <width>141</width>
          <height>31</height>
         </rect>
        </property>
        <property name="text">
-        <string>New</string>
+        <string>New Parameter</string>
        </property>
       </widget>
       <widget class="QToolButton" name="paramEdit">
        <property name="geometry">
         <rect>
-         <x>90</x>
-         <y>180</y>
+         <x>80</x>
+         <y>0</y>
          <width>51</width>
          <height>31</height>
         </rect>
@@ -90,7 +90,7 @@
        <property name="geometry">
         <rect>
          <x>220</x>
-         <y>10</y>
+         <y>40</y>
          <width>231</width>
          <height>21</height>
         </rect>
@@ -103,7 +103,7 @@
        <property name="geometry">
         <rect>
          <x>220</x>
-         <y>40</y>
+         <y>70</y>
          <width>231</width>
          <height>21</height>
         </rect>
@@ -116,7 +116,7 @@
        <property name="geometry">
         <rect>
          <x>220</x>
-         <y>70</y>
+         <y>100</y>
          <width>231</width>
          <height>21</height>
         </rect>
@@ -129,7 +129,7 @@
        <property name="geometry">
         <rect>
          <x>220</x>
-         <y>100</y>
+         <y>130</y>
          <width>231</width>
          <height>21</height>
         </rect>
@@ -142,7 +142,7 @@
        <property name="geometry">
         <rect>
          <x>220</x>
-         <y>130</y>
+         <y>160</y>
          <width>231</width>
          <height>21</height>
         </rect>
@@ -154,11 +154,14 @@
       <widget class="QToolButton" name="paramDelete">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>180</y>
+         <x>20</x>
+         <y>0</y>
          <width>51</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #d32f2f;</string>
        </property>
        <property name="text">
         <string>Delete</string>
@@ -168,7 +171,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>0</y>
+         <y>40</y>
          <width>191</width>
          <height>171</height>
         </rect>
@@ -212,7 +215,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Shift">
        <attribute name="title">
@@ -360,7 +363,7 @@
          <rect>
           <x>170</x>
           <y>100</y>
-          <width>201</width>
+          <width>251</width>
           <height>21</height>
          </rect>
         </property>
@@ -370,7 +373,7 @@
          <rect>
           <x>170</x>
           <y>130</y>
-          <width>201</width>
+          <width>251</width>
           <height>21</height>
          </rect>
         </property>
@@ -512,7 +515,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QToolButton" name="shiftBrEMAIL">
@@ -525,7 +528,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QToolButton" name="shiftBrCSV">
@@ -541,7 +544,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QTimeEdit" name="shiftFrom_2">
@@ -557,9 +560,9 @@
        <widget class="QScrollArea" name="shiftEmailScrollArea">
         <property name="geometry">
          <rect>
-          <x>380</x>
+          <x>440</x>
           <y>70</y>
-          <width>251</width>
+          <width>191</width>
           <height>171</height>
          </rect>
         </property>
@@ -574,7 +577,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
+           <width>189</width>
            <height>169</height>
           </rect>
          </property>
@@ -632,6 +635,9 @@
           <width>61</width>
           <height>22</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #d32f2f;</string>
         </property>
         <property name="text">
          <string>Delete</string>
@@ -739,7 +745,7 @@
          <rect>
           <x>170</x>
           <y>100</y>
-          <width>201</width>
+          <width>251</width>
           <height>21</height>
          </rect>
         </property>
@@ -814,7 +820,7 @@
          <rect>
           <x>170</x>
           <y>130</y>
-          <width>201</width>
+          <width>251</width>
           <height>21</height>
          </rect>
         </property>
@@ -972,7 +978,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QToolButton" name="dailyBrCSV">
@@ -988,7 +994,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>....</string>
         </property>
        </widget>
        <widget class="QToolButton" name="dailyBrEMAIL">
@@ -1001,15 +1007,15 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QScrollArea" name="dailyEmailScrollArea">
         <property name="geometry">
          <rect>
-          <x>380</x>
+          <x>440</x>
           <y>70</y>
-          <width>251</width>
+          <width>191</width>
           <height>171</height>
          </rect>
         </property>
@@ -1024,7 +1030,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
+           <width>189</width>
            <height>169</height>
           </rect>
          </property>
@@ -1069,6 +1075,9 @@
           <width>61</width>
           <height>22</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #d32f2f;</string>
         </property>
         <property name="text">
          <string>Delete</string>
@@ -1136,7 +1145,7 @@
          <rect>
           <x>170</x>
           <y>100</y>
-          <width>201</width>
+          <width>251</width>
           <height>21</height>
          </rect>
         </property>
@@ -1208,7 +1217,7 @@
          <rect>
           <x>170</x>
           <y>130</y>
-          <width>201</width>
+          <width>251</width>
           <height>21</height>
          </rect>
         </property>
@@ -1311,7 +1320,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QToolButton" name="weeklyBrCSV">
@@ -1327,7 +1336,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QToolButton" name="weeklyBrEMAIL">
@@ -1340,7 +1349,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QComboBox" name="weeklyDays">
@@ -1397,9 +1406,9 @@
        <widget class="QScrollArea" name="weeklyEmailScrollArea">
         <property name="geometry">
          <rect>
-          <x>380</x>
+          <x>440</x>
           <y>70</y>
-          <width>251</width>
+          <width>191</width>
           <height>171</height>
          </rect>
         </property>
@@ -1414,7 +1423,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
+           <width>189</width>
            <height>169</height>
           </rect>
          </property>
@@ -1459,6 +1468,9 @@
           <width>61</width>
           <height>22</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #d32f2f;</string>
         </property>
         <property name="text">
          <string>Delete</string>
@@ -1526,7 +1538,7 @@
          <rect>
           <x>170</x>
           <y>100</y>
-          <width>201</width>
+          <width>251</width>
           <height>21</height>
          </rect>
         </property>
@@ -1598,7 +1610,7 @@
          <rect>
           <x>170</x>
           <y>130</y>
-          <width>201</width>
+          <width>251</width>
           <height>21</height>
          </rect>
         </property>
@@ -1701,7 +1713,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QToolButton" name="monthlyBrCSV">
@@ -1717,7 +1729,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QToolButton" name="monthlyBrEMAIL">
@@ -1730,7 +1742,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Br</string>
+         <string>...</string>
         </property>
        </widget>
        <widget class="QComboBox" name="monthlyDays">
@@ -1904,9 +1916,9 @@
        <widget class="QScrollArea" name="monthlyEmailScrollArea">
         <property name="geometry">
          <rect>
-          <x>380</x>
+          <x>440</x>
           <y>70</y>
-          <width>251</width>
+          <width>191</width>
           <height>171</height>
          </rect>
         </property>
@@ -1921,7 +1933,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>249</width>
+           <width>189</width>
            <height>169</height>
           </rect>
          </property>
@@ -1966,6 +1978,9 @@
           <width>61</width>
           <height>22</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #d32f2f;</string>
         </property>
         <property name="text">
          <string>Delete</string>
@@ -2367,6 +2382,9 @@
         <height>41</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #d32f2f;</string>
+      </property>
       <property name="text">
        <string>Delete </string>
       </property>
@@ -2552,22 +2570,6 @@
        <string>Master Name</string>
       </property>
      </widget>
-     <widget class="QToolButton" name="clearQuery">
-      <property name="geometry">
-       <rect>
-        <x>680</x>
-        <y>130</y>
-        <width>181</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Clear text</string>
-      </property>
-     </widget>
      <widget class="QScrollArea" name="scrollArea">
       <property name="geometry">
        <rect>
@@ -2612,7 +2614,7 @@
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">background-color: #d32f2f;</string>
       </property>
       <property name="text">
        <string>Delete</string>
@@ -2735,7 +2737,6 @@
      <zorder>saveQuery</zorder>
      <zorder>queryNameEdit</zorder>
      <zorder>queryParamEdit</zorder>
-     <zorder>clearQuery</zorder>
      <zorder>scrollArea</zorder>
      <zorder>queryDelete</zorder>
      <zorder>queryActive</zorder>
@@ -2939,7 +2940,6 @@
   <tabstop>newQuery</tabstop>
   <tabstop>saveQuery</tabstop>
   <tabstop>queryDelete</tabstop>
-  <tabstop>clearQuery</tabstop>
   <tabstop>toolButton_3</tabstop>
   <tabstop>tableNames</tabstop>
   <tabstop>toolButton</tabstop>
