@@ -725,8 +725,8 @@ void Reporter::m_generateTemplateXLS(){
       xlsx.write(2, i + 1, tmpModel.value(i).toString());
    }
 
-   xlsx.saveAs("/home/dave/Documents/sielaff/project/reporter/reporter/templateFieldNamesXLSX.xlsx");
-   QDesktopServices::openUrl(QUrl("/home/dave/Documents/sielaff/project/reporter/reporter/templateFieldNamesXLSX.xlsx"));
+   xlsx.saveAs(QDir::currentPath() + "/templateFieldNamesXLSX.xls");
+   QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/templateFieldNamesXLSX.xls"));
    m_mainSQL.getStorage().getQueries()[m_nameKey]->finishQuery();
 }
 //Generates query data model that is displayed in table in application

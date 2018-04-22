@@ -19,6 +19,7 @@
 #include <log.h>
 #include <export.h>
 #include <QFileDialog>
+#include <QDir>
 #include <QPair>
 #include <xlsxdocument.h>
 #include <QDesktopServices>
