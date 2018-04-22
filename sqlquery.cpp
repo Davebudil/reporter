@@ -18,7 +18,10 @@ SQLquery::SQLquery(const QString & query,
      m_isActive(active){
 }
 SQLquery::~SQLquery(){
-   delete m_Result;
+//   Crashes app
+//   if(m_Result){
+//      delete m_Result;
+//   }
 }
 //Getter for query member
 QString SQLquery::getQuery(){

@@ -45,7 +45,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="basic">
      <attribute name="title">
@@ -2570,22 +2570,6 @@
        <string>Master Name</string>
       </property>
      </widget>
-     <widget class="QToolButton" name="clearQuery">
-      <property name="geometry">
-       <rect>
-        <x>680</x>
-        <y>130</y>
-        <width>181</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Clear text</string>
-      </property>
-     </widget>
      <widget class="QScrollArea" name="scrollArea">
       <property name="geometry">
        <rect>
@@ -2753,7 +2737,6 @@
      <zorder>saveQuery</zorder>
      <zorder>queryNameEdit</zorder>
      <zorder>queryParamEdit</zorder>
-     <zorder>clearQuery</zorder>
      <zorder>scrollArea</zorder>
      <zorder>queryDelete</zorder>
      <zorder>queryActive</zorder>
@@ -2957,7 +2940,6 @@
   <tabstop>newQuery</tabstop>
   <tabstop>saveQuery</tabstop>
   <tabstop>queryDelete</tabstop>
-  <tabstop>clearQuery</tabstop>
   <tabstop>toolButton_3</tabstop>
   <tabstop>tableNames</tabstop>
   <tabstop>toolButton</tabstop>

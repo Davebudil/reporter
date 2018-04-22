@@ -5,13 +5,13 @@ Export::Export() = default;
 
 Export::~Export() = default;
 
-ExportXLS Export::getXLS() const{
+ExportXLS & Export::getXLS(){
    return m_XLS;
 }
-ExportCSV Export::getCSV() const{
+ExportCSV & Export::getCSV(){
    return m_CSV;
 }
-ExportHTML Export::getHTML() const{
+ExportHTML & Export::getHTML(){
    return m_HTML;
 }
 void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
@@ -30,25 +30,25 @@ void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
 
          if(it->getShift().generateShiftData(currentTime) && it->getShift().getActive()){
             for(auto & itPar : it->getParameters()){
-//               qInfo(logInfo()) << "Generating with parameters: " + itPar->getParameters().join("-");
+               //               qInfo(logInfo()) << "Generating with parameters: " + itPar->getParameters().join("-");
                m_generateShift(it->getShift(), queries, *itPar, db, currentTime, exportCount, generatedBy, true);
             }
          }
          if(it->getDaily().generateDailyData(currentTime) && it->getDaily().getActive()){
             for(auto & itPar : it->getParameters()){
-//               qInfo(logInfo()) << "Generating with parameters: " + itPar->getParameters().join("-");
+               //               qInfo(logInfo()) << "Generating with parameters: " + itPar->getParameters().join("-");
                m_generateDaily(it->getDaily(), queries, *itPar, db, currentTime, exportCount, generatedBy, true);
             }
          }
          if(it->getWeekly().generateWeeklyData(currentTime) && it->getWeekly().getActive()){
             for(auto & itPar : it->getParameters()){
-//               qInfo(logInfo()) << "Generating with parameters: " + itPar->getParameters().join("-");
+               //               qInfo(logInfo()) << "Generating with parameters: " + itPar->getParameters().join("-");
                m_generateWeekly(it->getWeekly(), queries, *itPar, db, currentTime, exportCount, generatedBy, true);
             }
          }
          if(it->getMonthly().generateMonthlyData(currentTime) && it->getMonthly().getActive()){
             for(auto & itPar : it->getParameters()){
-//               qInfo(logInfo()) << "Generating with parameters: " + itPar->getParameters().join("-");
+               //               qInfo(logInfo()) << "Generating with parameters: " + itPar->getParameters().join("-");
                m_generateMonthly(it->getMonthly(), queries, *itPar, db, currentTime, exportCount, generatedBy, true);
             }
          }
@@ -293,43 +293,41 @@ bool Export::m_generateShift(ShiftSchedule shift,
       }
       shift.fixParameters(param, currentTime);
 
-
-      //TODO: fix this, not working corrrectly at this moment
       if(shift.getDone0()){
          tmp = shift.getDate1();
          tmp2 = shift.getDate2();
          tmp2 = tmp2.addSecs(-1);
-         genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
-                                       tmp.toString("dd.MM.yy.hh:mm") +
-                                       " " + tmp2.toString("dd.MM.yy.hh:mm")));
-         it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy.hh:mm"));
+         genInfo.append(std::make_pair("DateTimeFromTo",
+                                       tmp.toString("dd.MM.yy hh:mm") +
+                                       " " + tmp2.toString("dd.MM.yy hh:mm")));
+         it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy.hh:mm"));
       }else if(shift.getDone1()){
          tmp = shift.getDate2();
          tmp2 = shift.getDate3();
          tmp2 = tmp2.addSecs(-1);
-         genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
-                                       tmp.toString("dd.MM.yy.hh:mm") +
-                                       " " + tmp2.toString("dd.MM.yy.hh:mm")));
-         it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy.hh:mm"));
-         it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy.hh:mm"));
+         genInfo.append(std::make_pair("DateTimeFromTo",
+                                       tmp.toString("dd.MM.yy hh:mm") +
+                                       " " + tmp2.toString("dd.MM.yy hh:mm")));
+         it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+         it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
       }else if(shift.getDone2()){
          tmp = shift.getDate0();
          tmp = tmp.addDays(-2);
          tmp2 = shift.getDate1();
          tmp2 = tmp2.addSecs(-1);
 
-         genInfo.append(std::make_pair("DATE_TIME_FROM_TO\n",
-                                       tmp.toString("dd.MM.yy.hh:mm") +
-                                       " " + tmp2.toString("dd.MM.yy.hh:mm")));
-         it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy.hh:mm"));
-         it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy.hh:mm"));
+         genInfo.append(std::make_pair("DateTimeFromTo",
+                                       tmp.toString("dd.MM.yy hh:mm") +
+                                       " " + tmp2.toString("dd.MM.yy hh:mm")));
+         it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+         it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
       }
 
       QString tmpAttachName = shift.getAttachName();
       if(shift.getXlsAttach()){
          //NOT SURE ABOUT THIS LINE
-         genInfo.append(std::make_pair("GENERATED_BY", generatedBy));
+         genInfo.append(std::make_pair("vygeneroval", generatedBy));
          //
          QList<QStringList> finalQueries;
          if(!it.getParam().isEmpty()){
@@ -350,11 +348,7 @@ bool Export::m_generateShift(ShiftSchedule shift,
             qWarning(logWarning()) << "Failed to generate shift XLSX file.";
          }
 
-         if(m_XLS.readResult() && showInfo){
-            qInfo(logInfo()) << "Export to xlsx file succesful.";
-         }else if(showInfo){
-            qWarning(logWarning()) << "Export to xlsx file failed.";
-         }
+         m_XLS.readResult();
       }
       it.generateQuery(db);
       it.forceExecuteQuery();
@@ -414,15 +408,15 @@ bool Export::m_generateDaily(DailySchedule daily,
       tmp2.setTime(daily.getTime());
       tmp = tmp.addDays(-1);
       tmp2 = tmp2.addSecs(-1);
-      genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
-                                    tmp.toString("dd.MM.yy.hh:mm") +
-                                    " " + tmp2.toString("dd.MM.yy.hh:mm")));
+      genInfo.append(std::make_pair("DateTimeFromTo",
+                                    tmp.toString("dd.MM.yy hh:mm") +
+                                    " " + tmp2.toString("dd.MM.yy hh:mm")));
       it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
       it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
       QString tmpAttachName = daily.getAttachName();
       if(daily.getXlsAttach()){
-         genInfo.append(std::make_pair("GENERATED_BY", generatedBy));
+         genInfo.append(std::make_pair("vygeneroval", generatedBy));
 
          QList<QStringList> finalQueries;
 
@@ -446,11 +440,8 @@ bool Export::m_generateDaily(DailySchedule daily,
             qWarning(logWarning()) << "Failed to generate daily XLSX file.";
          }
 
-         if(m_XLS.readResult() && showInfo){
-            qInfo(logInfo()) << "Export to xlsx file succesful.";
-         }else if(showInfo){
-            qWarning(logWarning()) << "Export to xlsx file failed.";
-         }
+
+         m_XLS.readResult();
       }
       it.generateQuery(db);
       it.forceExecuteQuery();
@@ -509,16 +500,16 @@ bool Export::m_generateWeekly(WeeklySchedule weekly,
       tmp2.setTime(weekly.getTime());
       tmp = tmp.addDays(-7);
       tmp2 = tmp2.addSecs(-1);
-      genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
-                                    tmp.toString("dd.MM.yy.hh:mm") +
-                                    " " + tmp2.toString("dd.MM.yy.hh:mm")));
+      genInfo.append(std::make_pair("DateTimeFromTo",
+                                    tmp.toString("dd.MM.yy hh:mm") +
+                                    " " + tmp2.toString("dd.MM.yy hh:mm")));
       it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
       it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
-      QString tmpAttachName = weekly.getAttachName() + "_" + tmp.toString("dd.MM.yy_hh:mm");
+      QString tmpAttachName = weekly.getAttachName();
       if(weekly.getXlsAttach()){
          //NOT SURE ABOUT THIS LINE
-         genInfo.append(std::make_pair("GENERATED_BY", generatedBy));
+         genInfo.append(std::make_pair("vygeneroval", generatedBy));
          //
          QList<QStringList> finalQueries;
          if(!it.getParam().isEmpty()){
@@ -539,12 +530,7 @@ bool Export::m_generateWeekly(WeeklySchedule weekly,
             qWarning(logWarning()) << "Failed to generate weekly XLSX file.";
          }
 
-         if(m_XLS.readResult() && showInfo){
-            qInfo(logInfo()) << "Export to xlsx file succesful.";
-         }else if(showInfo){
-            qWarning(logWarning()) << "Export to xlsx file failed.";
-         }
-
+         m_XLS.readResult();
       }
 
       it.generateQuery(db);
@@ -605,16 +591,16 @@ bool Export::m_generateMonthly(MonthlySchedule monthly,
       tmp2.setTime(monthly.getTime());
       tmp = tmp.addMonths(-1);
       tmp2 = tmp2.addSecs(-1);
-      genInfo.append(std::make_pair("DATE_TIME_FROM_TO",
-                                    tmp.toString("dd.MM.yy.hh:mm") +
-                                    " " + tmp2.toString("dd.MM.yy.hh:mm")));
+      genInfo.append(std::make_pair("DateTimeFromTo",
+                                    tmp.toString("dd.MM.yy hh:mm") +
+                                    " " + tmp2.toString("dd.MM.yy hh:mm")));
       it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
       it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
-      QString tmpAttachName = monthly.getAttachName() + "_" + tmp.toString("dd.MM.yy_hh:mm");
+      QString tmpAttachName = monthly.getAttachName();
       if(monthly.getXlsAttach()){
          //NOT SURE ABOUT THIS LINE
-         genInfo.append(std::make_pair("GENERATED_BY", generatedBy));
+         genInfo.append(std::make_pair("vygeneroval", generatedBy));
          //
          QList<QStringList> finalQueries;
          if(!it.getParam().isEmpty()){
@@ -635,12 +621,7 @@ bool Export::m_generateMonthly(MonthlySchedule monthly,
             qWarning(logWarning()) << "Failed to generate monthly XLSX file.";
          }
 
-         if(m_XLS.readResult() && showInfo){
-            qInfo(logInfo()) << "Export to xlsx file succesful.";
-         }else if(showInfo){
-            qWarning(logWarning()) << "Export to xlsx file failed.";
-         }
-
+         m_XLS.readResult();
       }
 
       it.generateQuery(db);

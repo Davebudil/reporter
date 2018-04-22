@@ -82,8 +82,14 @@ void Reporter::m_displaySQLResult(const QString & name){
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
    if(m_validateQuerySelected()){
-      m_testingQueryGen();
-      m_saveQuery();
+      if(!m_mainSQL.getDatabase().getDatabase().open()){
+         qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
+         QMessageBox::critical(this, QObject::tr("Database error"),
+                               "Not connected to database");
+      }else{
+         m_testingQueryGen();
+         m_saveQuery();
+      }
    }
 }
 
@@ -444,13 +450,6 @@ void Reporter::closeEvent(QCloseEvent * event){
 void Reporter::m_defaultQuery(){
 
 }
-//Function to clear current text
-void Reporter::on_clearQuery_clicked(){
-   ui->queryEdit->clear();
-   ui->queryNameEdit->clear();
-   ui->queryParamEdit->clear();
-   ui->queryActive->setChecked(false);
-}
 //function to determine which button was clicked and select the stored query based on it
 void Reporter::m_scrollQueryClicked(){
    QObject * senderObj = sender();
@@ -736,12 +735,12 @@ void Reporter::m_testingQueryGen(){
    if(m_firstQuery){
       m_mainSQL.getModel()->clear();
       m_mainSQL.getModel()->query().clear();
-      //TODO: test this
-      for(auto & it : m_mainSQL.getStorage().getQueries()){
-         if(it != m_mainSQL.getStorage().getQueries()[m_nameKey]){
-            it->clearQueries();
-         }
-      }
+      //TODO: test this, crashes app
+//      for(auto & it : m_mainSQL.getStorage().getQueries()){
+//         if(it != m_mainSQL.getStorage().getQueries()[m_nameKey]){
+//            it->clearQueries();
+//         }
+//      }
    }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
       qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
@@ -1106,7 +1105,14 @@ void Reporter::on_paramDelete_clicked(){
 //Deletes selected query
 void Reporter::on_queryDelete_clicked(){
    if(m_validateQuerySelected()){
-      m_deleteQuery();
+      QMessageBox::StandardButton confirmSchedulingDelete;
+      confirmSchedulingDelete = QMessageBox::question(this, "Confirm",
+                                                      "Are you sure you want to delete selected query?",
+                                                      QMessageBox::Yes|QMessageBox::No);
+
+      if(confirmSchedulingDelete == QMessageBox::Yes){
+         m_deleteQuery();
+      }
    }
 }
 //Changes query state to active or inactive
@@ -1350,8 +1356,14 @@ void Reporter::on_toolButton_2_clicked(){
 }
 void Reporter::on_toolButton_3_clicked(){
    if(m_validateQuerySelected()){
-      m_generateTemplateXLS();
-      m_saveQuery();
+      if(!m_mainSQL.getDatabase().getDatabase().open()){
+         qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
+         QMessageBox::critical(this, QObject::tr("Database error"),
+                               "Not connected to database");
+      }else{
+         m_generateTemplateXLS();
+         m_saveQuery();
+      }
    }
 }
 void Reporter::on_newScheduling_clicked(){
@@ -1750,7 +1762,11 @@ void Reporter::on_shiftGenerate_clicked(){
       tmp.setDone0(false);
       tmp.setDone1(false);
       tmp.setDone2(false);
+      m_Export.m_shiftDayReset(tmp, currentTime);
+      qInfo(logInfo()) << "set shift constants";
       tmp.generateShiftData(currentTime);
+      qInfo(logInfo()) << "set shift intervals";
+
       m_Export.m_generateShift(tmp,
                                m_mainSQL.getStorage().getQueueQueries(),
                                *it,
@@ -1773,6 +1789,7 @@ void Reporter::on_dailyGenerate_clicked(){
       tmp = m_Schedule[m_scheduleKey]->getDailyCopy();
       tmp.setDone(false);
       tmp.generateDailyData(currentTime);
+
       m_Export.m_generateDaily(tmp,
                                m_mainSQL.getStorage().getQueueQueries(),
                                *it,
@@ -1795,13 +1812,13 @@ void Reporter::on_weeklyGenerate_clicked(){
       tmp.setDone(false);
       tmp.generateWeeklyData(currentTime);
       m_Export.m_generateWeekly(tmp,
-                               m_mainSQL.getStorage().getQueueQueries(),
-                               *it,
-                               m_mainSQL.getDatabase().getDatabase(),
-                               currentTime,
-                               count,
-                               m_generatedBy,
-                               true);
+                                m_mainSQL.getStorage().getQueueQueries(),
+                                *it,
+                                m_mainSQL.getDatabase().getDatabase(),
+                                currentTime,
+                                count,
+                                m_generatedBy,
+                                true);
    }
 }
 
@@ -1816,12 +1833,12 @@ void Reporter::on_monthlyGenerate_clicked(){
       tmp.setDone(false);
       tmp.generateMonthlyData(currentTime);
       m_Export.m_generateMonthly(tmp,
-                               m_mainSQL.getStorage().getQueueQueries(),
-                               *it,
-                               m_mainSQL.getDatabase().getDatabase(),
-                               currentTime,
-                               count,
-                               m_generatedBy,
-                               true);
+                                 m_mainSQL.getStorage().getQueueQueries(),
+                                 *it,
+                                 m_mainSQL.getDatabase().getDatabase(),
+                                 currentTime,
+                                 count,
+                                 m_generatedBy,
+                                 true);
    }
 }

@@ -62,7 +62,6 @@ class Reporter : public QMainWindow{
       //Function to save the edit of current query
       void on_saveQuery_clicked();
       //Function to clear current text
-      void on_clearQuery_clicked();
 
       void on_paramNew_clicked();
 

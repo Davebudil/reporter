@@ -51,6 +51,7 @@ class ShiftSchedule{
 
       void setEmailTemplatePath(const QString & emailTemplatePath);
       bool generateShiftData(const QDateTime & currentTime);
+      bool checkCustomInstantInterval(const QDateTime & currentTime);
 
       bool getDone0() const;
       void setDone0(bool Done0);
