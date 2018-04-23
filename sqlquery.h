@@ -53,6 +53,12 @@ class SQLquery{
       QString getMasterQueryString() const;
       void setMasterQueryString(const QString & masterQueryString);
 
+      QString getCustomParametersString() const;
+      void setCustomParametersString(const QString & CustomParametersString);
+
+      QSqlQuery * getCustomParameters() const;
+      void setCustomParameters(QSqlQuery * CustomParameters);
+
    private:
       //original text
       QString m_Query;
@@ -65,8 +71,10 @@ class SQLquery{
       //final string with no master
       QString m_finalString;
       QString m_masterQueryString;
+      QString m_CustomParametersString;
       //Final result
       QSqlQuery * m_Result;
+      QSqlQuery * m_CustomParameters;
       //master/detail
       bool m_Master;
       //is Active

@@ -725,8 +725,8 @@ void Reporter::m_generateTemplateXLS(){
       xlsx.write(2, i + 1, tmpModel.value(i).toString());
    }
 
-   xlsx.saveAs("/home/dave/Documents/sielaff/project/reporter/reporter/templateFieldNamesXLSX.xlsx");
-   QDesktopServices::openUrl(QUrl("/home/dave/Documents/sielaff/project/reporter/reporter/templateFieldNamesXLSX.xlsx"));
+   xlsx.saveAs(QDir::currentPath() + "/templateFieldNamesXLSX.xls");
+   QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/templateFieldNamesXLSX.xls"));
    m_mainSQL.getStorage().getQueries()[m_nameKey]->finishQuery();
 }
 //Generates query data model that is displayed in table in application
@@ -747,6 +747,7 @@ void Reporter::m_testingQueryGen(){
       QMessageBox::critical(this, QObject::tr("Database error"),
                             "Not connected to database");
    }else{
+      //TODO: add custom parameters
       m_loadMaster();
       m_generateQuery(m_nameKey);
       m_executeQuery(m_nameKey);
@@ -1841,4 +1842,22 @@ void Reporter::on_monthlyGenerate_clicked(){
                                  m_generatedBy,
                                  true);
    }
+}
+
+void Reporter::on_customParameters_clicked(){
+   auto tmpParameters = new customParametersQuery(this,
+                                                  m_CustomParameters,
+                                                  m_CustomParametersFrom,
+                                                  m_CustomParametersTo);
+   tmpParameters->setModal(true);
+
+   if(tmpParameters->exec()){
+      m_CustomParameters = tmpParameters->m_Parameters;
+      m_CustomParametersFrom = tmpParameters->m_From;
+      m_CustomParametersTo = tmpParameters->m_To;
+   }
+   for(const auto & it : m_CustomParameters){
+      qInfo(logInfo()) << m_CustomParameters.key(it) + " : " + it;
+   }
+   delete tmpParameters;
 }

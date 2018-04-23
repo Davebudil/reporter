@@ -2469,7 +2469,7 @@
        <rect>
         <x>10</x>
         <y>300</y>
-        <width>851</width>
+        <width>841</width>
         <height>241</height>
        </rect>
       </property>
@@ -2684,7 +2684,7 @@
      <widget class="QLabel" name="sqlDataCount_2">
       <property name="geometry">
        <rect>
-        <x>730</x>
+        <x>720</x>
         <y>550</y>
         <width>91</width>
         <height>20</height>
@@ -2729,6 +2729,22 @@
        <string>Table Names</string>
       </property>
      </widget>
+     <widget class="QToolButton" name="customParameters">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>130</y>
+        <width>181</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Custom Parameters</string>
+      </property>
+     </widget>
      <zorder>paramTest</zorder>
      <zorder>queryTable</zorder>
      <zorder>toolButton</zorder>
@@ -2745,6 +2761,7 @@
      <zorder>sqlDataCount</zorder>
      <zorder>sqlDataCount_2</zorder>
      <zorder>tableNames</zorder>
+     <zorder>customParameters</zorder>
     </widget>
     <widget class="QWidget" name="tab">
      <attribute name="title">

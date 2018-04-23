@@ -19,6 +19,7 @@
 #include <log.h>
 #include <export.h>
 #include <QFileDialog>
+#include <QDir>
 #include <QPair>
 #include <xlsxdocument.h>
 #include <QDesktopServices>
@@ -31,6 +32,7 @@
 #include "tableinfo.h"
 #include "customscheduling.h"
 #include <QCloseEvent>
+#include "customparametersquery.h"
 
 namespace Ui{
    class Reporter;
@@ -265,6 +267,8 @@ class Reporter : public QMainWindow{
 
       void on_monthlyGenerate_clicked();
 
+      void on_customParameters_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -289,6 +293,9 @@ class Reporter : public QMainWindow{
       QDate m_lastDay;
       QDateTime m_progressFrom;
       QDateTime m_progressTo;
+      QMap<QString, QString> m_CustomParameters;
+      QDateTime m_CustomParametersFrom;
+      QDateTime m_CustomParametersTo;
       bool m_queryActive;
 
       //Print query result to the table
