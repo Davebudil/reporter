@@ -19,7 +19,7 @@ bool ExportXLS::generateFile(const QString & templatePath,
                              const QList<QStringList> queries){
    //   qint32 randomInt = QRandomGenerator::global()->generate();
    //   QFile loadFile(QDir::currentPath() + "/export/tmp/ask_attachment_source" + QString::number(randomInt) + ".txt");
-   QFile loadFile(QDir::currentPath() + "/ASK/ask_ attachment_source.txt");
+   QFile loadFile(QDir::currentPath() + "/ASK/ask_attachment_source.txt");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QTextStream out(&loadFile);
       out << templatePath << "\r\n";

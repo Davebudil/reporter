@@ -1842,3 +1842,15 @@ void Reporter::on_monthlyGenerate_clicked(){
                                  true);
    }
 }
+
+void Reporter::on_customParameters_clicked(){
+   auto tmpParameters = new customParametersQuery(this, m_CustomParameters);
+   tmpParameters->setModal(true);
+
+   if(tmpParameters->exec()){
+      m_CustomParameters = tmpParameters->m_Parameters;
+   }
+   for(const auto & it : m_CustomParameters){
+      qInfo(logInfo()) << m_CustomParameters.key(it) + " : " + it;
+   }
+}

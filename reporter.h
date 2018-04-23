@@ -32,6 +32,7 @@
 #include "tableinfo.h"
 #include "customscheduling.h"
 #include <QCloseEvent>
+#include "customparametersquery.h"
 
 namespace Ui{
    class Reporter;
@@ -266,6 +267,8 @@ class Reporter : public QMainWindow{
 
       void on_monthlyGenerate_clicked();
 
+      void on_customParameters_clicked();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
@@ -290,6 +293,7 @@ class Reporter : public QMainWindow{
       QDate m_lastDay;
       QDateTime m_progressFrom;
       QDateTime m_progressTo;
+      QMap<QString, QString> m_CustomParameters;
       bool m_queryActive;
 
       //Print query result to the table
