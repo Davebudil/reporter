@@ -19,7 +19,7 @@ bool ExportXLS::generateFile(const QString & templatePath,
                              const QList<QStringList> queries){
    //   qint32 randomInt = QRandomGenerator::global()->generate();
    //   QFile loadFile(QDir::currentPath() + "/export/tmp/ask_attachment_source" + QString::number(randomInt) + ".txt");
-   QFile loadFile(QDir::currentPath() + "/ASK/ask_attachment_source.txt");
+   QFile loadFile(QDir::currentPath() + "/ASK/ask_ attachment_source.txt");
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QTextStream out(&loadFile);
       out << templatePath << "\r\n";
@@ -60,29 +60,34 @@ bool ExportXLS::readResult(){
 //   std::system(c_str2);
 //   QProcess::startDetached(QDir::currentPath() + "/ASK/ask_attachment.exe");
 
-   QFile loadFile(QDir::currentPath() + "/ASK/ask_attachment_final.txt");
+   QFile loadFile(QDir::currentPath() + "/ASK/ask_ attachment_final.txt");
    delete generateXLS;
 
    if(loadFile.open(QIODevice::ReadOnly)){
-      QDataStream in(&loadFile);
-      QStringList tmp;
+      QTextStream in(&loadFile);
+      QStringList tmplist;
+      QString tmp;
       while(!in.atEnd()){
          in >> tmp;
+         tmplist.append(tmp);
       }
-      if(tmp.at(0) == "0"){
+      if(tmplist.at(0) == "0"){
          qInfo(logInfo()) << "Export to xlsx file succesful.";
          //         QMessageBox::information(nullptr, QObject::tr("Export Result"),QObject::tr("Export to xls file successful."));
          return true;
       }else{
-         qWarning(logWarning()) << "Export to xlsx file failed: " + tmp.at(1);
+         QStringList tmpList = tmplist;
+         tmpList.removeFirst();
+         qWarning(logWarning()) << "Exit Code: " + tmplist.first() + " Export to xlsx file failed: " + tmpList.join(" ");
          //         QMessageBox::information(nullptr, QObject::tr("Export Error"),QObject::tr("Export to xls file failed."));
          return false;
       }
+   }else{
+      qWarning(logWarning()) << "Failed to open output file.";
+      return false;
    }
-   qWarning(logWarning()) << "Failed to open output file.";
-   return false;
 }
 
 void ExportXLS::sdLaunchError(QProcess::ProcessError error){
-   qWarning(logWarning()) << "PROCESS ERROR: " + QVariant(error).toString();
+   qDebug(logDebug()) << "PROCESS ERROR: " + QVariant(error).toString();
 }
