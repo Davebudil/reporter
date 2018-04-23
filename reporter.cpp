@@ -731,16 +731,18 @@ void Reporter::m_generateTemplateXLS(){
 }
 //Generates query data model that is displayed in table in application
 void Reporter::m_testingQueryGen(){
-   m_Timer->stop();
+   if(m_Timer->isActive()){
+      on_startTImer_clicked();
+   }
    if(m_firstQuery){
       m_mainSQL.getModel()->clear();
       m_mainSQL.getModel()->query().clear();
       //TODO: test this, crashes app
-//      for(auto & it : m_mainSQL.getStorage().getQueries()){
-//         if(it != m_mainSQL.getStorage().getQueries()[m_nameKey]){
-//            it->clearQueries();
-//         }
-//      }
+      //      for(auto & it : m_mainSQL.getStorage().getQueries()){
+      //         if(it != m_mainSQL.getStorage().getQueries()[m_nameKey]){
+      //            it->clearQueries();
+      //         }
+      //      }
    }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
       qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
@@ -756,7 +758,9 @@ void Reporter::m_testingQueryGen(){
       m_mainSQL.getStorage().getQueries()[m_nameKey]->clearQueries();
       m_firstQuery = true;
    }
-   m_Timer->start(m_TIMERINTERVAL);
+   if(!m_Timer->isActive()){
+      on_startTImer_clicked();
+   }
 }
 //Adds first schedule item
 bool Reporter::m_noSchedule(){

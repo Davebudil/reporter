@@ -350,8 +350,11 @@ bool Export::m_generateShift(ShiftSchedule shift,
 
          m_XLS.readResult();
       }
+      //TODO: generate email
+
       it.generateQuery(db);
       it.forceExecuteQuery();
+
 
       //export as CSV or XLSX...
       if(it.getResult().isActive()){
@@ -443,6 +446,9 @@ bool Export::m_generateDaily(DailySchedule daily,
 
          m_XLS.readResult();
       }
+
+      //TODO: generate email
+
       it.generateQuery(db);
       it.forceExecuteQuery();
       //export as CSV or XLSX...
@@ -532,6 +538,8 @@ bool Export::m_generateWeekly(WeeklySchedule weekly,
 
          m_XLS.readResult();
       }
+
+      //TODO: generate email
 
       it.generateQuery(db);
       it.forceExecuteQuery();
