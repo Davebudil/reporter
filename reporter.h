@@ -294,6 +294,8 @@ class Reporter : public QMainWindow{
       QDateTime m_progressFrom;
       QDateTime m_progressTo;
       QMap<QString, QString> m_CustomParameters;
+      QDateTime m_CustomParametersFrom;
+      QDateTime m_CustomParametersTo;
       bool m_queryActive;
 
       //Print query result to the table
