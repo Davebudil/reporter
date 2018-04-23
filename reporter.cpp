@@ -1762,15 +1762,12 @@ void Reporter::on_shiftGenerate_clicked(){
    QDateTime currentTime = QDateTime::currentDateTime();
 
    for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
-      qInfo(logInfo()) << "generating shift instant";
       tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
       tmp.setDone0(false);
       tmp.setDone1(false);
       tmp.setDone2(false);
       m_Export.m_shiftDayReset(tmp, currentTime);
-      qInfo(logInfo()) << "set shift constants";
       tmp.generateShiftData(currentTime);
-      qInfo(logInfo()) << "set shift intervals";
 
       m_Export.m_generateShift(tmp,
                                m_mainSQL.getStorage().getQueueQueries(),
