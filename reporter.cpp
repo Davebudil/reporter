@@ -654,14 +654,15 @@ void Reporter::m_saveSchedule(){
       return;
    }
    tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
-   delete tmp;
-   auto newSchedule = new QToolButton;
-   newSchedule->setText(ui->scheduleName->text());
-   newSchedule->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-   newSchedule->setObjectName(QString::number(m_scheduleKey));
-   ui->scrollLayour_3->addWidget(newSchedule);
+//   delete tmp;
+//   auto newSchedule = new QToolButton;
+//   TODO: not sure about this yet, test this more, seems like its working
+   tmp->setText(ui->scheduleName->text());
+   tmp->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
+   tmp->setObjectName(QString::number(m_scheduleKey));
+//   ui->scrollLayour_3->addWidget(newSchedule);
 
-   connect(newSchedule, &QToolButton::clicked, this, &Reporter::m_loadSchedule);
+   connect(tmp, &QToolButton::clicked, this, &Reporter::m_loadSchedule);
    m_Schedule[m_scheduleKey]->setName(ui->scheduleName->text());
    m_editShift(m_scheduleKey);
    m_editDay(m_scheduleKey);
