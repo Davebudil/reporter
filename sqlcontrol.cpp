@@ -2,14 +2,24 @@
 
 //Contructor
 SQLControl::SQLControl(QObject *parent)
-   : QObject(parent){
+   : QObject(parent),
+     m_queryModel(nullptr),
+     m_Result(nullptr){
 }
 //Destructor
 SQLControl::~SQLControl(){
    delete m_queryModel;
+   delete m_Result;
 }
 //Setter
 void SQLControl::setQueryModel(const QString & name){
+   if(m_queryModel){
+      delete m_queryModel;
+   }
+   if(m_Result){
+      delete m_Result;
+   }
+
    m_queryModel = new QSqlQueryModel;
    //not sure why, but the display table seems to be bugged, this is workaround
    if(m_Storage.getQueries()[name]->getIsMaster()){
@@ -17,6 +27,10 @@ void SQLControl::setQueryModel(const QString & name){
    }else{
       m_queryModel->setQuery(m_Storage.getQueries()[name]->getResult());
    }
+
+   m_Result = new QSortFilterProxyModel(this);
+   m_Result->setDynamicSortFilter(true);
+   m_Result->setSourceModel(m_queryModel);
 }
 //Getters
 QString SQLControl::getPassword(){
@@ -48,4 +62,12 @@ QStringList SQLControl::loadList(){
 void SQLControl::setTimeParameters(const QDate &from, const QDate &to, const QString &queryName){
    m_Storage.getQueries()[queryName]->bindParameter(":TIMEFROM",from.toString());
    m_Storage.getQueries()[queryName]->bindParameter(":TIMETO", to.toString());
+}
+
+QSortFilterProxyModel * SQLControl::getResult(){
+   return m_Result;
+}
+
+void SQLControl::setResult(QSortFilterProxyModel * Result){
+   m_Result = Result;
 }

@@ -75,7 +75,8 @@ void Reporter::on_dbConnect_clicked(){
 void Reporter::m_displaySQLResult(const QString & name){
    m_mainSQL.setQueryModel(name);
    ui->queryTable->clearSpans();
-   ui->queryTable->setModel(m_mainSQL.getModel());
+   ui->queryTable->setModel(m_mainSQL.getResult());
+   ui->queryTable->setSortingEnabled(true);
    ui->sqlDataCount->setText(QString::number(m_mainSQL.getStorage().getQueries()[name]->getQueryResultRows()));
 
 }
