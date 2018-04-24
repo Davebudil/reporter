@@ -187,16 +187,16 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
       m_selectedParam = m_paramKey;
       newParameter->setText(params.at(0));
       newParameter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      newParameter->setObjectName(QString::number(m_paramKey++));
+      newParameter->setObjectName(QString::number(m_paramKey));
       ui->scrollLayout_2->addWidget(newParameter);
+      m_paramKey++;
 
       connect(newParameter, &QToolButton::clicked, this, &Reporter::m_scrollParamClicked);
-      m_Schedule[m_scheduleKey]->setParamCount(m_paramKey);
       //TODO serialize parameters in schedule
 
-      m_serializeSchedule();
       qint32 paramCount = m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getCount();
       m_loadIndividualParameters(paramCount);
+      m_serializeSchedule();
    }
 }
 //Function to add schedule
@@ -323,6 +323,7 @@ void Reporter::m_scrollParamClicked(){
    QString senderObjID = senderObj->objectName();
 
    m_selectedParam = senderObjID.toInt();
+   qInfo(logInfo()) << "CLICKED ON PARAMETER WITH ID: " + QString::number(m_selectedParam);
    paramCount = m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getCount();
    m_loadIndividualParameters(paramCount);
    m_loadColorScheduleParam();
@@ -414,13 +415,14 @@ void Reporter::m_deleteParameters(){
 }
 //Function that deletes parameters
 void Reporter::m_deleteParam(){
-   m_Schedule[m_selectedParam]->deleteParameter(m_selectedParam);
+   m_Schedule[m_scheduleKey]->deleteParameter(m_selectedParam);
+
    tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString::number(m_selectedParam));
    delete tmp;
    m_selectedParam = -1;
    m_clearParam();
    m_serializeSchedule();
-   //   m_serializeParameters();
+   //   m_serializeParameters ();
 }
 //Sets up default settings of the app
 void Reporter::defaultSettings(){
@@ -539,7 +541,7 @@ void Reporter::m_loadColorSchedule(){
       tmpKey = m_Schedule.key(it);
       tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(tmpKey));
       if(tmpKey == m_scheduleKey){
-         tmp->setStyleSheet("background-color: #90A4AE;");
+         tmp->setStyleSheet("color: red;");
       }else{
          tmp->setStyleSheet(" ");
       }
@@ -550,7 +552,7 @@ void Reporter::m_loadColorScheduleEmail(){
    for(auto & it : m_Schedule[m_scheduleKey]->getShift().getEmailAdresses()){
       tmp = ui->shiftEmailScrollArea->findChild<QToolButton *>(it);
       if(it == m_emailKey){
-         tmp->setStyleSheet("background-color: #90A4AE;");
+         tmp->setStyleSheet("color: red;");
       }else{
          tmp->setStyleSheet(" ");
       }
@@ -558,7 +560,7 @@ void Reporter::m_loadColorScheduleEmail(){
    for(auto & it : m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses()){
       tmp = ui->dailyEmailScrollArea->findChild<QToolButton *>(it);
       if(it == m_emailKey){
-         tmp->setStyleSheet("background-color: #90A4AE;");
+         tmp->setStyleSheet("color: red;");
       }else{
          tmp->setStyleSheet(" ");
       }
@@ -566,7 +568,7 @@ void Reporter::m_loadColorScheduleEmail(){
    for(auto & it : m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses()){
       tmp = ui->weeklyEmailScrollArea->findChild<QToolButton *>(it);
       if(it == m_emailKey){
-         tmp->setStyleSheet("background-color: #90A4AE;");
+         tmp->setStyleSheet("color: red;");
       }else{
          tmp->setStyleSheet(" ");
       }
@@ -574,7 +576,7 @@ void Reporter::m_loadColorScheduleEmail(){
    for(auto & it : m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses()){
       tmp = ui->monthlyEmailScrollArea->findChild<QToolButton *>(it);
       if(it == m_emailKey){
-         tmp->setStyleSheet("background-color: #90A4AE;");
+         tmp->setStyleSheet("color: red;");
       }else{
          tmp->setStyleSheet(" ");
       }
@@ -587,7 +589,7 @@ void Reporter::m_loadColorScheduleParam(){
       tmpKey = m_Schedule[m_scheduleKey]->getParameters().key(it);
       tmp = ui->scrollAreaWidgetContents_2->findChild<QToolButton *>(QString::number(tmpKey));
       if(tmpKey == m_selectedParam){
-         tmp->setStyleSheet("background-color: #90A4AE;");
+         tmp->setStyleSheet("color: red;");
       }else{
          tmp->setStyleSheet(" ");
       }
@@ -600,7 +602,7 @@ void Reporter::m_loadColorQueries(){
       tmpKey = m_mainSQL.getStorage().getQueries().key(it);
       tmp = ui->scrollAreaWidgetContents->findChild<QToolButton *>(QString(tmpKey));
       if(tmpKey == m_nameKey){
-         tmp->setStyleSheet("background-color: #90A4AE;");
+         tmp->setStyleSheet("color: red;");
       }else{
          tmp->setStyleSheet(" ");
       }
@@ -655,13 +657,13 @@ void Reporter::m_saveSchedule(){
       return;
    }
    tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
-//   delete tmp;
-//   auto newSchedule = new QToolButton;
-//   TODO: not sure about this yet, test this more, seems like its working
+   //   delete tmp;
+   //   auto newSchedule = new QToolButton;
+   //   TODO: not sure about this yet, test this more, seems like its working
    tmp->setText(ui->scheduleName->text());
    tmp->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
    tmp->setObjectName(QString::number(m_scheduleKey));
-//   ui->scrollLayour_3->addWidget(newSchedule);
+   //   ui->scrollLayour_3->addWidget(newSchedule);
 
    connect(tmp, &QToolButton::clicked, this, &Reporter::m_loadSchedule);
    m_Schedule[m_scheduleKey]->setName(ui->scheduleName->text());
@@ -1413,7 +1415,6 @@ void Reporter::on_shiftdeleteEmailAdress_clicked(){
    delete tmp;
    m_emailKey = "";
    ui->shiftemailAdress->clear();
-   qDebug() << "test";
 }
 void Reporter::on_dailydeleteEmailAdress_clicked(){
    m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses().remove(m_emailKey);
@@ -1509,22 +1510,27 @@ void Reporter::on_toolButton_4_clicked(){
 }
 
 void Reporter::on_param1_textEdited(const QString &arg1){
+   //   m_saveParameter();
    //   m_saveSchedule();
 }
 
 void Reporter::on_param2_textEdited(const QString &arg1){
+   //   m_saveParameter();
    //   m_saveSchedule();
 }
 
 void Reporter::on_param3_textEdited(const QString &arg1){
+   //   m_saveParameter();
    //   m_saveSchedule();
 }
 
 void Reporter::on_param4_textEdited(const QString &arg1){
+   //   m_saveParameter();
    //   m_saveSchedule();
 }
 
 void Reporter::on_param5_textEdited(const QString &arg1){
+   //   m_saveParameter();
    //   m_saveSchedule();
 }
 
