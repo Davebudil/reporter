@@ -197,6 +197,7 @@ void Reporter::m_addParameters(const QStringList & params, const qint32 & count)
       qint32 paramCount = m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getCount();
       m_loadIndividualParameters(paramCount);
       m_serializeSchedule();
+      m_loadColorScheduleParam();
    }
 }
 //Function to add schedule
@@ -323,7 +324,6 @@ void Reporter::m_scrollParamClicked(){
    QString senderObjID = senderObj->objectName();
 
    m_selectedParam = senderObjID.toInt();
-   qInfo(logInfo()) << "CLICKED ON PARAMETER WITH ID: " + QString::number(m_selectedParam);
    paramCount = m_Schedule[m_scheduleKey]->getParameters()[m_selectedParam]->getCount();
    m_loadIndividualParameters(paramCount);
    m_loadColorScheduleParam();
@@ -1510,27 +1510,37 @@ void Reporter::on_toolButton_4_clicked(){
 }
 
 void Reporter::on_param1_textEdited(const QString &arg1){
-   //   m_saveParameter();
+   if(m_Schedule[m_scheduleKey]->getParamCount() != 0){
+      m_saveParameter();
+   }
    //   m_saveSchedule();
 }
 
 void Reporter::on_param2_textEdited(const QString &arg1){
-   //   m_saveParameter();
+   if(m_Schedule[m_scheduleKey]->getParamCount() != 0){
+      m_saveParameter();
+   }
    //   m_saveSchedule();
 }
 
 void Reporter::on_param3_textEdited(const QString &arg1){
-   //   m_saveParameter();
+   if(m_Schedule[m_scheduleKey]->getParamCount() != 0){
+      m_saveParameter();
+   }
    //   m_saveSchedule();
 }
 
 void Reporter::on_param4_textEdited(const QString &arg1){
-   //   m_saveParameter();
+   if(m_Schedule[m_scheduleKey]->getParamCount() != 0){
+      m_saveParameter();
+   }
    //   m_saveSchedule();
 }
 
 void Reporter::on_param5_textEdited(const QString &arg1){
-   //   m_saveParameter();
+   if(m_Schedule[m_scheduleKey]->getParamCount() != 0){
+      m_saveParameter();
+   }
    //   m_saveSchedule();
 }
 
