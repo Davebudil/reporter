@@ -99,28 +99,34 @@ void Setup::loadSettings(){
    QSettings settings(QDir::currentPath() +  "/settings/ReporterSettings.ini", QSettings::IniFormat);
    m_Settings.databaseType = settings.value("DatabaseType", "QMYSQL").toString();
    m_Settings.databaseName = settings.value("DatabaseName", "budil").toString();
-   m_Settings.userName = settings.value("Username", "root").toString();
-   m_Settings.userPassword = settings.value("UserPassword", "Blizazrd5").toString();
    m_Settings.host = settings.value("Host", "localhost").toString();
    m_Settings.port = settings.value("Port", 3306).toInt();
+   m_Settings.userName = settings.value("Username", "root").toString();
+   m_Settings.userPassword = settings.value("UserPassword", "Blizazrd5").toString();
+   m_Settings.hotKey = settings.value("Hotkey", "ctrl+alt+Q").toString();
    m_Settings.timerInterval = settings.value("TimerIntervalMS", 1800000).toInt();
    m_Settings.customInterval = settings.value("CustomIntervalMS", 1800000).toInt();
-   m_Settings.hotKey = settings.value("Hotkey", "ctrl+alt+Q").toString();
    m_Settings.generatedByUser = settings.value("GeneratedByUser", "David Budil").toString();
 }
 
 void Setup::saveSettings(){
    QSettings settings(QDir::currentPath() +  "/settings/ReporterSettings.ini", QSettings::IniFormat);
+   settings.beginGroup("GeneralSettings");
+   settings.setValue("GeneratedByUser", m_Settings.generatedByUser);
+   settings.setValue("Hotkey", m_Settings.hotKey);
+   settings.endGroup();
+   settings.beginGroup("Database");
    settings.setValue("DatabaseType", m_Settings.databaseType);
+   settings.setValue("DatabaseName", m_Settings.databaseName);
    settings.setValue("Host", m_Settings.host);
    settings.setValue("Port", m_Settings.port);
-   settings.setValue("DatabaseName", m_Settings.databaseName);
    settings.setValue("Username", m_Settings.userName);
    settings.setValue("UserPassword", m_Settings.userPassword);
-   settings.setValue("Hotkey", m_Settings.hotKey);
+   settings.endGroup();
+   settings.beginGroup("Intervals");
    settings.setValue("TimerIntervalMS", m_Settings.timerInterval);
    settings.setValue("CustomIntervalMS", m_Settings.customInterval);
-   settings.setValue("GeneratedByUser", m_Settings.generatedByUser);
+   settings.endGroup();
 }
 
 bool Setup::m_serializeQueries(const QStringList & queries){
