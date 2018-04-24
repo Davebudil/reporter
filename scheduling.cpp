@@ -60,6 +60,7 @@ QQueue<SQLParameter> Scheduling::getQueueParameters(){
 bool Scheduling::addParam(const QStringList & param, const qint32 & count, const qint32 & id){
    auto newParameter = new SQLParameter(param, count);
    m_Parameters[id] = newParameter;
+   m_paramCount++;
    //TODO
    return true;
 }
@@ -83,22 +84,19 @@ QStringList Scheduling::serializeParameters(){
 void Scheduling::deserializeParameters(QVector<QStringList> & Parameters){
    qint32 id = 0;
    for(auto & it : Parameters){
-      qInfo(logInfo()) << it;
       addParam(it, it.count(), id++);
    }
+   m_paramCount = Parameters.count();
 }
 
 void Scheduling::deleteParameter(const qint32 & parameterKey){
-   m_Parameters.remove(parameterKey);
-}
+   QString::number(m_Parameters.remove(parameterKey));}
 
-qint32 Scheduling::getParamCount() const
-{
+qint32 Scheduling::getParamCount() const{
    return m_paramCount;
 }
 
-void Scheduling::setParamCount(const qint32 & paramCount)
-{
+void Scheduling::setParamCount(const qint32 & paramCount){
    m_paramCount = paramCount;
 }
 
