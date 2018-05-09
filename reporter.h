@@ -297,6 +297,7 @@ class Reporter : public QMainWindow{
       QDateTime m_CustomParametersFrom;
       QDateTime m_CustomParametersTo;
       bool m_queryActive;
+      bool m_generate;
 
       //Print query result to the table
       void m_displaySQLResult(const QString & name);

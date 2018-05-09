@@ -14,7 +14,8 @@ Reporter::Reporter(QWidget *parent)
      m_daysSinceCleanUp(0),
      m_lastDay(QDate::currentDate()),
      m_queryActive(false),
-     m_firstQuery(false){
+     m_firstQuery(false),
+     m_generate(false){
    qInfo(logInfo()) << "Application started.";
    m_Setup.loadIni();
    m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
@@ -100,7 +101,7 @@ void Reporter::m_executeQuery(const QString & name){
 
 //used to generate result from current selected query
 void Reporter::m_generateQuery(const QString & name){
-   m_mainSQL.getStorage().generateQuery(name,m_mainSQL.getDatabase().getDatabase());
+   m_mainSQL.getStorage().generateQuery(name, m_mainSQL.getDatabase().getDatabase());
    //look into this
 }
 //Function to add new query
@@ -1874,9 +1875,13 @@ void Reporter::on_customParameters_clicked(){
       m_CustomParameters = tmpParameters->m_Parameters;
       m_CustomParametersFrom = tmpParameters->m_From;
       m_CustomParametersTo = tmpParameters->m_To;
+      m_generate = true;
    }
-   for(const auto & it : m_CustomParameters){
-      qInfo(logInfo()) << m_CustomParameters.key(it) + " : " + it;
+   if(m_generate){
+      //DEBUG
+      for(const auto & it : m_CustomParameters){
+         qInfo(logInfo()) << m_CustomParameters.key(it) + " : " + it;
+      }
    }
    delete tmpParameters;
 }

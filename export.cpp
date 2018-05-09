@@ -1,5 +1,6 @@
 #include "export.h"
 #include "log.h"
+#include "sqlstorage.h"
 
 Export::Export() = default;
 
@@ -299,7 +300,7 @@ bool Export::m_generateShift(ShiftSchedule shift,
          tmp2 = tmp2.addSecs(-1);
          genInfo.append(std::make_pair("DateTimeFromTo",
                                        tmp.toString("dd.MM.yy hh:mm") +
-                                       " " + tmp2.toString("dd.MM.yy hh:mm")));
+                                       " po " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy.hh:mm"));
       }else if(shift.getDone1()){
@@ -308,7 +309,7 @@ bool Export::m_generateShift(ShiftSchedule shift,
          tmp2 = tmp2.addSecs(-1);
          genInfo.append(std::make_pair("DateTimeFromTo",
                                        tmp.toString("dd.MM.yy hh:mm") +
-                                       " " + tmp2.toString("dd.MM.yy hh:mm")));
+                                       " po " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
       }else if(shift.getDone2()){
@@ -319,7 +320,7 @@ bool Export::m_generateShift(ShiftSchedule shift,
 
          genInfo.append(std::make_pair("DateTimeFromTo",
                                        tmp.toString("dd.MM.yy hh:mm") +
-                                       " " + tmp2.toString("dd.MM.yy hh:mm")));
+                                       " po " + tmp2.toString("dd.MM.yy hh:mm")));
          it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
          it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
       }
@@ -339,6 +340,8 @@ bool Export::m_generateShift(ShiftSchedule shift,
          }
          finalQueries.append(it.queryList());
 
+
+         //data template path
          if(m_XLS.generateFile(shift.getXlsTemplatePath(),
                                tmpAttachName,
                                genInfo,
@@ -346,6 +349,18 @@ bool Export::m_generateShift(ShiftSchedule shift,
             qInfo(logInfo()) << "Successfuly generated shift XLSX file.";
          }else if(showInfo){
             qWarning(logWarning()) << "Failed to generate shift XLSX file.";
+         }
+
+         m_XLS.readResult();
+         //html email template path
+         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
+         if(m_XLS.generateFile(shift.getEmailTemplatePath(),
+                               tmpAttachNameEmail,
+                               genInfo,
+                               finalQueries) && showInfo){
+            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
+         }else if(showInfo){
+            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
          }
 
          m_XLS.readResult();
@@ -413,7 +428,7 @@ bool Export::m_generateDaily(DailySchedule daily,
       tmp2 = tmp2.addSecs(-1);
       genInfo.append(std::make_pair("DateTimeFromTo",
                                     tmp.toString("dd.MM.yy hh:mm") +
-                                    " " + tmp2.toString("dd.MM.yy hh:mm")));
+                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
       it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
       it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
@@ -434,6 +449,7 @@ bool Export::m_generateDaily(DailySchedule daily,
 
          finalQueries.append(it.queryList());
 
+         //data template path
          if(m_XLS.generateFile(daily.getXlsTemplatePath(),
                                tmpAttachName,
                                genInfo,
@@ -441,6 +457,18 @@ bool Export::m_generateDaily(DailySchedule daily,
             qInfo(logInfo()) << "Successfuly generated daily XLSX file.";
          }else if(showInfo){
             qWarning(logWarning()) << "Failed to generate daily XLSX file.";
+         }
+
+         m_XLS.readResult();
+         //html email template path
+         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
+         if(m_XLS.generateFile(daily.getEmailTemplatePath(),
+                               tmpAttachNameEmail,
+                               genInfo,
+                               finalQueries) && showInfo){
+            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
+         }else if(showInfo){
+            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
          }
 
 
@@ -508,7 +536,7 @@ bool Export::m_generateWeekly(WeeklySchedule weekly,
       tmp2 = tmp2.addSecs(-1);
       genInfo.append(std::make_pair("DateTimeFromTo",
                                     tmp.toString("dd.MM.yy hh:mm") +
-                                    " " + tmp2.toString("dd.MM.yy hh:mm")));
+                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
       it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
       it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
@@ -527,6 +555,7 @@ bool Export::m_generateWeekly(WeeklySchedule weekly,
          }
          finalQueries.append(it.queryList());
 
+         //data template path
          if(m_XLS.generateFile(weekly.getXlsTemplatePath(),
                                tmpAttachName,
                                genInfo,
@@ -534,6 +563,18 @@ bool Export::m_generateWeekly(WeeklySchedule weekly,
             qInfo(logInfo()) << "Successfuly generated weekly XLSX file.";
          }else if(showInfo){
             qWarning(logWarning()) << "Failed to generate weekly XLSX file.";
+         }
+
+         m_XLS.readResult();
+         //html email template path
+         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
+         if(m_XLS.generateFile(weekly.getEmailTemplatePath(),
+                               tmpAttachNameEmail,
+                               genInfo,
+                               finalQueries) && showInfo){
+            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
+         }else if(showInfo){
+            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
          }
 
          m_XLS.readResult();
@@ -601,7 +642,7 @@ bool Export::m_generateMonthly(MonthlySchedule monthly,
       tmp2 = tmp2.addSecs(-1);
       genInfo.append(std::make_pair("DateTimeFromTo",
                                     tmp.toString("dd.MM.yy hh:mm") +
-                                    " " + tmp2.toString("dd.MM.yy hh:mm")));
+                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
       it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
       it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
@@ -620,6 +661,7 @@ bool Export::m_generateMonthly(MonthlySchedule monthly,
          }
          finalQueries.append(it.queryList());
 
+         //data template path
          if(m_XLS.generateFile(monthly.getXlsTemplatePath(),
                                tmpAttachName,
                                genInfo,
@@ -627,6 +669,18 @@ bool Export::m_generateMonthly(MonthlySchedule monthly,
             qInfo(logInfo()) << "Successfuly generated monthly XLSX file.";
          }else if(showInfo){
             qWarning(logWarning()) << "Failed to generate monthly XLSX file.";
+         }
+
+         m_XLS.readResult();
+         //html email template path
+         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
+         if(m_XLS.generateFile(monthly.getEmailTemplatePath(),
+                               tmpAttachNameEmail,
+                               genInfo,
+                               finalQueries) && showInfo){
+            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
+         }else if(showInfo){
+            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
          }
 
          m_XLS.readResult();
