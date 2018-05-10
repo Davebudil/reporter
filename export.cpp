@@ -393,6 +393,8 @@ bool Export::m_generateShift(ShiftSchedule shift,
       QStringList emailAdresses = shift.emailAdresses();
       for(const auto & it : emailAdresses){
          //SEND TO EMAIL/POSTMAN QUEUE
+         //send first
+
       }
    }
    return false;

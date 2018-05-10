@@ -135,24 +135,36 @@ void SQLquery::setMasterQueryString(const QString & masterQueryString){
    m_masterQueryString = masterQueryString;
 }
 
-QString SQLquery::getCustomParametersString() const
-{
+QString SQLquery::getCustomParametersString() const{
    return m_CustomParametersString;
 }
 
-void SQLquery::setCustomParametersString(const QString & CustomParametersString)
-{
+void SQLquery::setCustomParametersString(const QString & CustomParametersString){
    m_CustomParametersString = CustomParametersString;
 }
 
-QSqlQuery * SQLquery::getCustomParameters() const
-{
+QSqlQuery * SQLquery::getCustomParameters() const{
    return m_CustomParameters;
 }
 
-void SQLquery::setCustomParameters(QSqlQuery * CustomParameters)
-{
+void SQLquery::setCustomParameters(QSqlQuery * CustomParameters){
    m_CustomParameters = CustomParameters;
+}
+
+QSqlQuery * SQLquery::getParametrizedQuery() const{
+   return m_ParametrizedQuery;
+}
+
+void SQLquery::setParametrizedQuery(QSqlQuery * ParametrizedQuery){
+   m_ParametrizedQuery = ParametrizedQuery;
+}
+
+QString SQLquery::getParametrizedQueryString() const{
+   return m_parametrizedQueryString;
+}
+
+void SQLquery::setParametrizedQueryString(const QString & parametrizedQueryString){
+   m_parametrizedQueryString = parametrizedQueryString;
 }
 
 void SQLquery::setQueryResultRows(const qint32 & QueryResultRows){
@@ -162,4 +174,8 @@ void SQLquery::setQueryResultRows(const qint32 & QueryResultRows){
 void SQLquery::bindParameter(const QString & parameter, const QString & value){
    m_finalString.replace(QString(parameter), QString(value));
    m_masterfinalString.replace(QString(parameter), QString(value));
+}
+
+void SQLquery::bindCustomParameter(const QString & parameter, const QString & value){
+   m_parametrizedQueryString.replace(QString(parameter), QString(value));
 }

@@ -43,11 +43,14 @@ class SQLquery{
       void generateQuery(const QSqlDatabase & db);
       //binds time Parameters
       void bindParameter(const QString & parameter, const QString & value);
+      void bindCustomParameter(const QString & parameter, const QString & value);
       //function that executes the query
       void executeQuery();
+      void executeParametrizedQuery();
       void forceExecuteQuery();
       void clearQueries();
       void finishQuery();
+      void finishParemetrizedQuery();
       //
       QStringList queryList();
       QString getMasterQueryString() const;
@@ -58,6 +61,12 @@ class SQLquery{
 
       QSqlQuery * getCustomParameters() const;
       void setCustomParameters(QSqlQuery * CustomParameters);
+
+      QSqlQuery * getParametrizedQuery() const;
+      void setParametrizedQuery(QSqlQuery * ParametrizedQuery);
+
+      QString getParametrizedQueryString() const;
+      void setParametrizedQueryString(const QString & parametrizedQueryString);
 
    private:
       //original text
@@ -72,9 +81,11 @@ class SQLquery{
       QString m_finalString;
       QString m_masterQueryString;
       QString m_CustomParametersString;
+      QString m_parametrizedQueryString;
       //Final result
       QSqlQuery * m_Result;
       QSqlQuery * m_CustomParameters;
+      QSqlQuery * m_ParametrizedQuery;
       //master/detail
       bool m_Master;
       //is Active

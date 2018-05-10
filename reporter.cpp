@@ -106,11 +106,23 @@ void Reporter::m_generateQuery(const QString & name){
 }
 //Function to add new query
 void Reporter::on_newQuery_clicked(){
-   m_addQuery(ui->queryEdit->toPlainText(),
-              ui->queryNameEdit->text(),
-              ui->queryParamEdit->text(),
-              true,
-              m_queryActive);
+   if(m_mainSQL.getStorage().getQueries().count() == 0){
+      m_addQuery(ui->queryEdit->toPlainText(),
+                 ui->queryNameEdit->text(),
+                 ui->queryParamEdit->text(),
+                 true,
+                 m_queryActive);
+      m_loadColorQueries();
+   }else{
+      m_clearQuery();
+      m_addQuery("SQL query text",
+                 "New Query",
+                 ui->queryParamEdit->text(),
+                 true,
+                 m_queryActive);
+      m_nameKey = ui->queryNameEdit->text();
+      m_loadColorQueries();
+   }
 }
 //Function to save the edit of current query
 void Reporter::on_saveQuery_clicked(){
@@ -170,7 +182,7 @@ void Reporter::m_addQuery(const QString & queryText,
          ui->scrollLayout->addWidget(newQuery);
 
          connect(newQuery, &QToolButton::clicked, this, &Reporter::m_scrollQueryClicked);
-         m_clearQuery();
+//         m_clearQuery();
          m_nameKey = "";
          m_serializeQueries();
          m_loadColorQueries();
@@ -225,6 +237,17 @@ void Reporter::m_addSchedule(const QString & name){
    ui->scrollLayour_3->addWidget(newSchedule);
    connect(newSchedule, &QToolButton::clicked, this, &Reporter::m_loadSchedule);
    m_serializeSchedule();
+
+   m_deleteEmails();
+   m_displayShift(m_scheduleKey);
+   m_displayDay(m_scheduleKey);
+   m_displayWeekly(m_scheduleKey);
+   m_displayMonthly(m_scheduleKey);
+   m_displayCustom(m_scheduleKey);
+   ui->scheduleName->setText(m_Schedule[m_scheduleKey]->getName());
+   m_loadEmails();
+   m_loadScheduleParameters();
+   m_loadColorSchedule();
 }
 //Function to add email adress to shift schedule
 void Reporter::m_addShiftScheduleEmail(const QString & email){
@@ -1377,9 +1400,18 @@ void Reporter::on_toolButton_3_clicked(){
    }
 }
 void Reporter::on_newScheduling_clicked(){
-   if(m_validateScheduleName(ui->scheduleName->text())){
+//   if(m_validateScheduleName(ui->scheduleName->text())){
+//      m_deleteEmails();
+//      m_addSchedule(ui->scheduleName->text());
+//      m_serializeSchedule();
+//   }
+   if(m_scheduleCount == 0){
       m_deleteEmails();
       m_addSchedule(ui->scheduleName->text());
+      m_serializeSchedule();
+   }else{
+      m_deleteEmails();
+      m_addSchedule("New Schedule");
       m_serializeSchedule();
    }
 }
