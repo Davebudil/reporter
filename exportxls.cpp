@@ -23,7 +23,7 @@ bool ExportXLS::generateFile(const QString & templatePath,
    if(loadFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
       QTextStream out(&loadFile);
       out << templatePath << "\r\n";
-      out << QDir::currentPath() + "/" + genPath + ".xls" << "\r\n";
+      out << QDir::currentPath() + "/ASK/export/" + genPath + ".xls" << "\r\n";
       out << QString::number(constants.size()) << "\r\n";
       for(auto & it : constants){
          out << QString(it.first) << "\r\n";
