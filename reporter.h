@@ -55,8 +55,6 @@ class Reporter : public QMainWindow{
    private slots:
       //Shows or hides application
       void m_showHide();
-      //Function to connect to DB triggered by click connect button
-      void on_dbConnect_clicked();
       //Function to Generate selected query and print results to table
       void on_toolButton_clicked();
       //Function to add new query
@@ -268,6 +266,12 @@ class Reporter : public QMainWindow{
       void on_monthlyGenerate_clicked();
 
       void on_customParameters_clicked();
+
+      void on_queryNameEdit_textEdited(const QString &arg1);
+
+      void on_queryEdit_textChanged();
+
+      void on_scheduleName_textEdited(const QString &arg1);
 
    private:
       Ui::Reporter *ui;

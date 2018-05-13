@@ -25,8 +25,6 @@ Reporter::Reporter(QWidget *parent)
    //   ui->queryNameEdit->setText("Query Name");
    //   ui->queryParamEdit->setText("Master name");
    ui->queryTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-   ui->dbPassword->setEchoMode(QLineEdit::Password);
-   ui->dbPassword->setText(m_mainSQL.getPassword());
    //   QFont newFont("DejaVu Sans Mono", 11, QFont::Normal, true);
    //   setFont(newFont);
    ui->weeklyDays->setMaximumHeight(100);
@@ -63,15 +61,6 @@ void Reporter::m_showHide(){
    }
 }
 //Function to connect to DB triggered by click connect button
-void Reporter::on_dbConnect_clicked(){
-   if(ui->dbPassword->text().isEmpty()){
-      qWarning(logWarning()) << "Incorrect database password entered.";
-      QMessageBox::critical(this, "Password Error", "No password entered.");
-   }else{
-      m_ConnectDB();
-   }
-   ui->dbPassword->setText(m_mainSQL.getPassword());
-}
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
    m_mainSQL.setQueryModel(name);
@@ -1151,6 +1140,7 @@ void Reporter::on_queryDelete_clicked(){
 //Changes query state to active or inactive
 void Reporter::on_queryActive_stateChanged(int state){
    m_queryActive = state;
+   m_saveQuery();
 }
 //Function to display shift schedule values
 void Reporter::m_displayShift(qint32 keyString){
@@ -1477,7 +1467,7 @@ void Reporter::on_tableNames_clicked(){
       TableInfo * infoDisplay;
       infoDisplay = new TableInfo(this);
       QVector<QStringList> dbInfo;
-      m_saveQuery();
+//      m_saveQuery();
       dbNames = m_mainSQL.getDatabase().getDatabase().tables();
 
       for(auto & it : dbNames){
@@ -1504,13 +1494,13 @@ void Reporter::timerInterval(){
       m_lastDay = QDate::currentDate();
    }
 
-   if(m_daysSinceCleanUp >= 30){
+   if(m_daysSinceCleanUp >= 15){
       if(m_Setup.cleanUp()){
          qInfo(logInfo()) << "Successfuly deleted old logs.";
          m_daysSinceCleanUp = 0;
       }else{
          qWarning(logWarning()) << "Failed to delete old logs, trying again next day.";
-         m_daysSinceCleanUp = 29;
+         m_daysSinceCleanUp = 14;
       }
    }
 
@@ -1916,4 +1906,19 @@ void Reporter::on_customParameters_clicked(){
       }
    }
    delete tmpParameters;
+}
+
+void Reporter::on_queryNameEdit_textEdited(const QString &arg1){
+   if(!arg1.isEmpty()){
+      m_saveQuery();
+   }
+}
+
+void Reporter::on_queryEdit_textChanged(){
+}
+
+void Reporter::on_scheduleName_textEdited(const QString &arg1){
+   if(!arg1.isEmpty()){
+      m_saveSchedule();
+   }
 }

@@ -164,13 +164,14 @@ void WeeklySchedule::fixParameters(SQLParameter & param, QDateTime & currentTime
 }
 
 bool WeeklySchedule::m_checkDoneInterval(const QDateTime & currentDate){
+//   qInfo(logInfo()) << "DAY OF WEEK: " + QString::number(m_Day) + currentDate.date().dayOfWeek();
    if((currentDate.date().dayOfWeek() < m_Day + 1) && m_Done){
       m_Done = false;
    }else if((currentDate.date().dayOfWeek() == 7) && (m_Day == 0) && m_Done){
       m_Done = false;
    }
    if(((currentDate.time() > m_Time) && (currentDate.date().dayOfWeek() >= m_Day + 1) && !m_Done)
-      && currentDate.date().dayOfWeek() != 7){
+      /*&& currentDate.date().dayOfWeek() != 7*/){
       m_Done = true;
       m_weeklyInterval();
       //right interval
