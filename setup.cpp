@@ -272,7 +272,7 @@ bool Setup::cleanUp(){
    QDate currentDate = QDate::currentDate();
 
    if(loadFile.open(QIODevice::ReadOnly | QIODevice::Text)
-         && loadTMPFile.open(QIODevice::WriteOnly | QIODevice::Text)){
+      && loadTMPFile.open(QIODevice::WriteOnly | QIODevice::Text)){
       QTextStream in(&loadFile);
       QTextStream out(&loadTMPFile);
 
@@ -288,7 +288,7 @@ bool Setup::cleanUp(){
          tmp = tmp.addDays(14);
 
          if(tmp < currentDate){
-            out << tmpLine << "\n";
+            out << tmpLine << " - Log cleanup completed." << "\n";
          }
       }
       loadFile.remove();

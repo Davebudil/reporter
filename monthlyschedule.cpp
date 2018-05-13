@@ -1,4 +1,5 @@
 #include "monthlyschedule.h"
+#include "log.h"
 
 MonthlySchedule::MonthlySchedule()
                 :m_Active(false),
@@ -165,6 +166,7 @@ void MonthlySchedule::fixParameters(SQLParameter & param, QDateTime & currentTim
 }
 
 bool MonthlySchedule::m_checkDoneInterval(const QDateTime & currentDate){
+//   qInfo(logInfo()) << "TestMonthly " + QString::number(currentDate.date().day()) + " " + QString::number(m_Day) + " " + m_Done;
    if(currentDate.date().day() < m_Day + 1 && m_Done
       && m_lastMonth.date().month() != currentDate.date().month()){
       m_Done = false;

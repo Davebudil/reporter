@@ -287,6 +287,8 @@ bool Export::m_generateShift(ShiftSchedule shift,
          continue;
       }
 
+      qInfo(logInfo()) << "Generating shift";
+
       for(qint32 i = 0; i < param.getCount(); ++i){
          QString tmpParam1;
          tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
@@ -411,11 +413,15 @@ bool Export::m_generateDaily(DailySchedule daily,
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
+
+
       genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
 
       if(!validateQuery(queries, it)){
          continue;
       }
+
+      qInfo(logInfo()) << "Generating daily";
 
       for(qint32 i = 0; i < param.getCount(); ++i){
          QString tmpParam1;
@@ -525,6 +531,8 @@ bool Export::m_generateWeekly(WeeklySchedule weekly,
          continue;
       }
 
+      qInfo(logInfo()) << "Generating weekly";
+
       for(qint32 i = 0; i < param.getCount(); ++i){
          QString tmpParam1;
          tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
@@ -630,6 +638,8 @@ bool Export::m_generateMonthly(MonthlySchedule monthly,
       if(!validateQuery(queries, it)){
          continue;
       }
+
+      qInfo(logInfo()) << "Generating monthly";
 
       for(qint32 i = 0; i < param.getCount(); ++i){
          QString tmpParam1;
