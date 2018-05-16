@@ -110,6 +110,11 @@ void SQLStorage::fixMaster(){
    }
 }
 
+QMap<QString, QSharedPointer<ExportSQLQueryData> > SQLStorage::getExportQueries() const{
+   return m_ExportQueries;
+}
+
+
 void SQLStorage::generateQuery(const QString & name, const QSqlDatabase & db){
    m_Queries[name]->generateQuery(db);
 }

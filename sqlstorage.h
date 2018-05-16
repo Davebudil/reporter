@@ -3,11 +3,14 @@
 
 #include <QObject>
 #include <QtSql>
-#include <sqlquery.h>
+#include <QSharedPointer>
+#include "sqlquery.h"
+#include "exportsqlquery.h"
 /* SQLStorage class
  * used to manage storage of queries
  * and parameters
 */
+//PREPSAT SQLQUERY, asi oddelit testovani a provadeni query
 class SQLStorage : public QObject{
       Q_OBJECT
    public:
@@ -16,6 +19,7 @@ class SQLStorage : public QObject{
       ~SQLStorage() override;
       //Used to get list of queries member
       QMap<QString, SQLquery*> & getQueries();
+      QMap<QString, QSharedPointer<ExportSQLQueryData> > getExportQueries() const;
       //used to get list of parameters member
       //getter
       QSqlQuery getResultQuery();
@@ -28,6 +32,7 @@ class SQLStorage : public QObject{
       void executeQuery(const QString & name);
       void printQueryText();
       void fixMaster();
+
    signals:
 
    public slots:
@@ -35,6 +40,8 @@ class SQLStorage : public QObject{
    private:
       //list used to store queries
       QMap<QString, SQLquery*> m_Queries;
+      //      QMap<QString, QSharedPointer<SQLquery>> m_Queries;
+      QMap<QString, QSharedPointer<ExportSQLQueryData>> m_ExportQueries;
       //query used during SQL
       QSqlQuery m_Query;
 };

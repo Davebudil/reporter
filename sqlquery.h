@@ -7,6 +7,8 @@
 /*Class SQLquery
  *used to store and manage query
 */
+//PREPSAT, asi to staci mit jako uloziste a budu se zde starat jen praci se stringy,
+//dosazovani budu resit jinde, executovani, generovani a ostatni funkcionalitu budu resit jinde
 
 class SQLquery{
    public:

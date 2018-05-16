@@ -103,6 +103,7 @@ void Reporter::on_newQuery_clicked(){
                  m_queryActive);
       m_loadColorQueries();
    }else{
+      m_saveQuery();
       m_clearQuery();
       m_addQuery("SQL query text",
                  "New Query",
@@ -122,6 +123,7 @@ void Reporter::m_saveQuery(){
    QString queryText;
    QString queryName;
    QString paramName;
+   QString lastName;
 
    queryText = ui->queryEdit->toPlainText();
    queryName = ui->queryNameEdit->text();
@@ -131,11 +133,15 @@ void Reporter::m_saveQuery(){
       QMessageBox::critical(this, QObject::tr("New Query Error"), "No query with specified master param name exists.");
    }else if(m_nameKey.isEmpty()){
       QMessageBox::critical(this, QObject::tr("Query Edit Error"), "No query selected.");
+   /*}else if(queryName != m_mainSQL.getStorage().getQueries()[m_nameKey]->getName()
+            && m_mainSQL.getStorage().getQueries()){
+      QMessageBox::critical(this, QObject::tr("Master query name conflict."), "Another query is using this one as detail query, remove it before renaming this one.")*/
    }else{
-      if(m_mainSQL.getStorage().addQuery(queryText,queryName,paramName, m_queryActive, false, false)){
+      if(m_mainSQL.getStorage().addQuery(queryText, queryName, paramName, m_queryActive, false, false)){
          tmp = ui->scrollAreaWidgetContents->findChild<QToolButton *>(m_nameKey);
          tmp->setObjectName(queryName);
          tmp->setText(queryName);
+         lastName = m_mainSQL.getStorage().getQueries()[m_nameKey]->getName();
          m_mainSQL.getStorage().getQueries().remove(m_nameKey);
          m_nameKey = queryName;
       }else{
@@ -143,7 +149,14 @@ void Reporter::m_saveQuery(){
          m_mainSQL.getStorage().getQueries()[m_nameKey]->setQuery(queryText);
          m_mainSQL.getStorage().getQueries()[m_nameKey]->setActive(m_queryActive);
          ui->queryEdit->document()->setPlainText(queryText);
+         lastName = m_mainSQL.getStorage().getQueries()[m_nameKey]->getName();
          ui->queryParamEdit->setText(paramName);
+      }
+   }
+   //fixes master parameter names in detail queries if the name changes
+   for(auto & it : m_mainSQL.getStorage().getQueries()){
+      if(it->getParam() == lastName){
+         it->setParam(m_mainSQL.getStorage().getQueries()[m_nameKey]->getName());
       }
    }
    m_mainSQL.getStorage().fixMaster();
@@ -749,7 +762,7 @@ void Reporter::m_generateTemplateXLS(){
 //Generates query data model that is displayed in table in application
 void Reporter::m_testingQueryGen(){
    if(m_Timer->isActive()){
-      on_startTImer_clicked();
+      m_Timer->stop();
    }
    if(m_firstQuery){
       m_mainSQL.getModel()->clear();
@@ -776,7 +789,7 @@ void Reporter::m_testingQueryGen(){
       m_firstQuery = true;
    }
    if(!m_Timer->isActive()){
-      on_startTImer_clicked();
+      m_Timer->start(m_TIMERINTERVAL);
    }
 }
 //Adds first schedule item
@@ -1140,7 +1153,7 @@ void Reporter::on_queryDelete_clicked(){
 //Changes query state to active or inactive
 void Reporter::on_queryActive_stateChanged(int state){
    m_queryActive = state;
-   m_saveQuery();
+//   m_saveQuery();
 }
 //Function to display shift schedule values
 void Reporter::m_displayShift(qint32 keyString){
@@ -1909,16 +1922,16 @@ void Reporter::on_customParameters_clicked(){
 }
 
 void Reporter::on_queryNameEdit_textEdited(const QString &arg1){
-   if(!arg1.isEmpty()){
-      m_saveQuery();
-   }
+//   if(!arg1.isEmpty()){
+//      m_saveQuery();
+//   }
 }
 
 void Reporter::on_queryEdit_textChanged(){
 }
 
 void Reporter::on_scheduleName_textEdited(const QString &arg1){
-   if(!arg1.isEmpty()){
-      m_saveSchedule();
-   }
+//   if(!arg1.isEmpty()){
+//      m_saveSchedule();
+//   }
 }
