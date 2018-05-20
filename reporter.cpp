@@ -93,7 +93,7 @@ void Reporter::m_generateQuery(const QString & name){
 }
 //Function to add new query
 void Reporter::on_newQuery_clicked(){
-   if(m_mainSQL.getStorage().getQueries().isEmpty()){
+   if(m_mainSQL.getStorage().getQueries().count() == 0){
       m_addQuery(ui->queryEdit->toPlainText(),
                  ui->queryNameEdit->text(),
                  ui->queryParamEdit->text(),
@@ -101,8 +101,6 @@ void Reporter::on_newQuery_clicked(){
                  m_queryActive);
       m_loadColorQueries();
    }else{
-      m_saveQuery();
-      m_clearQuery();
       m_addQuery("SQL query text",
                  "New Query",
                  ui->queryParamEdit->text(),
@@ -110,6 +108,7 @@ void Reporter::on_newQuery_clicked(){
                  m_queryActive);
       m_loadColorQueries();
    }
+   m_loadMaster();
 }
 //Function to save the edit of current query
 void Reporter::on_saveQuery_clicked(){
@@ -151,14 +150,21 @@ void Reporter::m_saveQuery(){
       }
    }
    //fixes master parameter names in detail queries if the name changes
-//   for(auto & it : m_mainSQL.getStorage().getQueries()){
-//      if(it->getMasterQueryName() == lastName){
-//         it->setMasterQueryName(m_mainSQL.getStorage().getQueries()[m_nameKey]->getName());
-//         it->setMasterQuery(m_mainSQL.getStorage().getQueries()[it->getMasterQueryName()]->getOriginalQuery());
-//      }
-//   }
+   for(auto & it : m_mainSQL.getStorage().getQueries()){
+      if(!it->getMasterQueryName().isEmpty()){
+         if(it->getMasterQueryName() == lastName){
+            it->setMasterQueryName(m_mainSQL.getStorage().getQueries()[m_nameKey]->getName());
+//            it->setMasterQuery(m_mainSQL.getStorage().getQueries()[it->getMasterQueryName()]->getOriginalQuery());
+         }
+      }
+   }
+   m_loadMaster();
    m_serializeQueries();
    m_loadColorQueries();
+//   DEBUG
+//   for(const auto & it : m_mainSQL.getStorage().getQueries()){
+//      it->printQueryData();
+//   }
 }
 //function to add query
 void Reporter::m_addQuery(const QString & queryText,
@@ -185,7 +191,7 @@ void Reporter::m_addQuery(const QString & queryText,
          m_nameKey = "";
          m_serializeQueries();
          m_loadColorQueries();
-//         m_nameKey = ui->queryNameEdit->text();
+         //         m_nameKey = ui->queryNameEdit->text();
       }
    }else{
       QMessageBox::critical(nullptr, QObject::tr("Text error"), "No text entered.");
@@ -950,10 +956,17 @@ void Reporter::on_paramEdit_clicked(){
 }
 //Loads master parameter for master/detail system
 void Reporter::m_loadMaster(){
-   //   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
-   //      m_mainSQL.getStorage().masterQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getName(),
-   //                                         m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
-   //   }
+   for(auto & it : m_mainSQL.getStorage().getQueries()){
+      if(!it->getMasterQueryName().isEmpty()){
+         it->setMasterQuery(m_mainSQL.getStorage().getQueries()[it->getMasterQueryName()]->getOriginalQuery());
+         it->setIsMaster(true);
+      }else{
+         it->setMasterQuery("");
+         it->setIsMaster(false);
+      }
+   }
+   //   m_mainSQL.getStorage().getQueries()[m_nameKey]->setMasterQuery(m_mainSQL.getStorage().getQueries()[
+   //                                                                  m_mainSQL.getStorage().getQueries()[m_nameKey]->getMasterQueryName()]->getOriginalQuery());
 }
 //Loads emails to create mail buttons
 void Reporter::m_loadEmails(){
@@ -1917,4 +1930,12 @@ void Reporter::on_scheduleName_textEdited(const QString &arg1){
    //   if(!arg1.isEmpty()){
    //      m_saveSchedule();
    //   }
+}
+
+void Reporter::on_queryNameEdit_editingFinished(){
+   //   m_saveQuery();
+}
+
+void Reporter::on_queryParamEdit_editingFinished(){
+   //   m_saveQuery();
 }

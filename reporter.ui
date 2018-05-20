@@ -2774,13 +2774,13 @@
        <string>Custom Parameters</string>
       </property>
      </widget>
+     <zorder>queryNameEdit</zorder>
      <zorder>paramTest</zorder>
      <zorder>queryTable</zorder>
      <zorder>toolButton</zorder>
      <zorder>queryEdit</zorder>
      <zorder>newQuery</zorder>
      <zorder>saveQuery</zorder>
-     <zorder>queryNameEdit</zorder>
      <zorder>queryParamEdit</zorder>
      <zorder>scrollArea</zorder>
      <zorder>queryDelete</zorder>

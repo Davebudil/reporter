@@ -273,6 +273,10 @@ class Reporter : public QMainWindow{
 
       void on_scheduleName_textEdited(const QString &arg1);
 
+      void on_queryNameEdit_editingFinished();
+
+      void on_queryParamEdit_editingFinished();
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;

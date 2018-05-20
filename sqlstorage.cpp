@@ -73,7 +73,7 @@ void SQLStorage::printQueries(){
    }
 }
 
-QMap<QString, QSharedPointer<SQLquery> > SQLStorage::getQueries() const{
+QMap<QString, QSharedPointer<SQLquery>> & SQLStorage::getQueries(){
    return m_Queries;
 }
 

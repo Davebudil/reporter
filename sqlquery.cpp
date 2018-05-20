@@ -7,11 +7,11 @@ SQLquery::SQLquery(const QString & queryName,
                    const QString & queryText,
                    const bool & isMaster,
                    const bool & isActive)
-                   : m_Name(queryName),
-                     m_masterQueryName(masterName),
-                     m_originalQuery(queryText),
-                     m_isActive(isActive),
-                     m_isMaster(isMaster){
+   : m_Name(queryName),
+     m_masterQueryName(masterName),
+     m_originalQuery(queryText),
+     m_isActive(isActive),
+     m_isMaster(isMaster){
 
 }
 
@@ -63,6 +63,14 @@ QString SQLquery::getName() const{
 
 void SQLquery::setName(const QString & Name){
    m_Name = Name;
+}
+
+void SQLquery::printQueryData() const{
+   qInfo(logInfo()) << "-----------------------------------";
+   qInfo(logInfo()) << "Name: " + m_Name;
+   qInfo(logInfo()) << "Master: " + QString(m_masterQueryName);
+   qInfo(logInfo()) << "Master Query: " + QString(m_masterQuery);
+   qInfo(logInfo()) << "-----------------------------------";
 }
 //Getter for query member
 //QString SQLquery::getResultString(){

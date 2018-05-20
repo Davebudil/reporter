@@ -39,6 +39,8 @@ class SQLquery{
       QString getName() const;
       void setName(const QString & Name);
 
+      void printQueryData() const;
+
    private:
       QString m_Name;
       //master query name if exists

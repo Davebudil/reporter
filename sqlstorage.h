@@ -17,7 +17,7 @@ class SQLStorage : public QObject{
       explicit SQLStorage(QObject *parent = nullptr);
       ~SQLStorage() override;
       //Used to get list of queries member
-      QMap<QString, QSharedPointer<SQLquery> > getQueries() const;
+      QMap<QString, QSharedPointer<SQLquery>> & getQueries();
       //used to get list of parameters member
       //getter
       QQueue<SQLquery> getQueueQueries();
