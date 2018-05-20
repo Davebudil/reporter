@@ -287,7 +287,6 @@ class Reporter : public QMainWindow{
       QFuture<void> m_displayWatcher;
       Setup m_Setup;
       Export m_Export;
-      bool m_finished;
       QMap<qint32, Scheduling*> m_Schedule;
       QString m_nameKey;
       QString m_emailKey;

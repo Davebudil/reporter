@@ -64,12 +64,10 @@ void Reporter::m_showHide(){
 //Function to connect to DB triggered by click connect button
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
-   //   auto future = QtConcurrent::run(&m_mainSQL, &SQLControl::setQueryModel, name);
    m_mainSQL.setQueryModel(name);
    ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getResult().data());
    ui->queryTable->setSortingEnabled(true);
-   m_finished = true;
    return;
 }
 //Function to Generate selected query and print results to table
@@ -782,9 +780,8 @@ void Reporter::m_testingQueryGen(){
       QMessageBox::critical(this, QObject::tr("Database error"),
                             "Not connected to database");
    }else{
-      if(m_finished){
-         m_finished = false;
-         QtConcurrent::run(this, &Reporter::m_displaySQLResult, m_nameKey);
+      if(m_displayWatcher.isFinished()){
+         m_displayWatcher = QtConcurrent::run(this, &Reporter::m_displaySQLResult, m_nameKey);
       }
       //      if(m_displayWatcher.isFinished() && m_finished){
       //         m_finished = false;
