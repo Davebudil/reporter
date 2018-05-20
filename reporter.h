@@ -33,6 +33,9 @@
 #include "customscheduling.h"
 #include <QCloseEvent>
 #include "customparametersquery.h"
+#include "QtConcurrent"
+#include "QThread"
+#include "QFuture"
 
 namespace Ui{
    class Reporter;
@@ -277,11 +280,14 @@ class Reporter : public QMainWindow{
 
       void on_queryParamEdit_editingFinished();
 
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
+      QFuture<void> m_displayWatcher;
       Setup m_Setup;
       Export m_Export;
+      bool m_finished;
       QMap<qint32, Scheduling*> m_Schedule;
       QString m_nameKey;
       QString m_emailKey;

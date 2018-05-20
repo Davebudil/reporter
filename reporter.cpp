@@ -15,7 +15,8 @@ Reporter::Reporter(QWidget *parent)
      m_lastDay(QDate::currentDate()),
      m_queryActive(false),
      m_firstQuery(false),
-     m_generate(false){
+     m_generate(false),
+     m_finished(true){
    qInfo(logInfo()) << "Application started.";
    m_Setup.loadIni();
    m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
@@ -63,10 +64,13 @@ void Reporter::m_showHide(){
 //Function to connect to DB triggered by click connect button
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
+   //   auto future = QtConcurrent::run(&m_mainSQL, &SQLControl::setQueryModel, name);
    m_mainSQL.setQueryModel(name);
    ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getResult().data());
    ui->queryTable->setSortingEnabled(true);
+   m_finished = true;
+   return;
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
@@ -77,6 +81,9 @@ void Reporter::on_toolButton_clicked(){
                                "Not connected to database");
       }else{
          m_saveQuery();
+         //         if(m_displayWatcher.isFinished()){
+         //            m_displayWatcher = QtConcurrent::run(this, &Reporter::m_testingQueryGen);
+         //         }
          m_testingQueryGen();
       }
    }
@@ -154,17 +161,17 @@ void Reporter::m_saveQuery(){
       if(!it->getMasterQueryName().isEmpty()){
          if(it->getMasterQueryName() == lastName){
             it->setMasterQueryName(m_mainSQL.getStorage().getQueries()[m_nameKey]->getName());
-//            it->setMasterQuery(m_mainSQL.getStorage().getQueries()[it->getMasterQueryName()]->getOriginalQuery());
+            //            it->setMasterQuery(m_mainSQL.getStorage().getQueries()[it->getMasterQueryName()]->getOriginalQuery());
          }
       }
    }
    m_loadMaster();
    m_serializeQueries();
    m_loadColorQueries();
-//   DEBUG
-//   for(const auto & it : m_mainSQL.getStorage().getQueries()){
-//      it->printQueryData();
-//   }
+   //   DEBUG
+   //   for(const auto & it : m_mainSQL.getStorage().getQueries()){
+   //      it->printQueryData();
+   //   }
 }
 //function to add query
 void Reporter::m_addQuery(const QString & queryText,
@@ -767,19 +774,27 @@ void Reporter::m_generateTemplateXLS(){
 }
 //Generates query data model that is displayed in table in application
 void Reporter::m_testingQueryGen(){
-   if(m_Timer->isActive()){
-      m_Timer->stop();
-   }
+   //   if(m_Timer->isActive()){
+   //      m_Timer->stop();
+   //   }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
       qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
       QMessageBox::critical(this, QObject::tr("Database error"),
                             "Not connected to database");
    }else{
-      m_displaySQLResult(m_nameKey);
+      if(m_finished){
+         m_finished = false;
+         QtConcurrent::run(this, &Reporter::m_displaySQLResult, m_nameKey);
+      }
+      //      if(m_displayWatcher.isFinished() && m_finished){
+      //         m_finished = false;
+      //         m_displayWatcher = QtConcurrent::run(&m_mainSQL, &SQLControl::setQueryModel, m_nameKey);
+      //      }
+      //      m_displaySQLResult(m_nameKey);
    }
-   if(!m_Timer->isActive()){
-      m_Timer->start(m_TIMERINTERVAL);
-   }
+   //   if(!m_Timer->isActive()){
+   //      m_Timer->start(m_TIMERINTERVAL);
+   //   }
 }
 //Adds first schedule item
 bool Reporter::m_noSchedule(){

@@ -17,7 +17,9 @@ void SQLControl::setQueryModel(const QString & name){
 ////      displayResult.setForwardOnly(true);
 ////      displayResult.exec();
 //   }
-   displayResult.prepare(m_Storage.getQueries()[name]->getOriginalQuery());
+
+   //limited to 10000 query results, improves performance drastically
+   displayResult.prepare(QString(m_Storage.getQueries()[name]->getOriginalQuery() + " LIMIT 10000") );
    displayResult.exec();
    if(!displayResult.isActive()){
       QMessageBox::critical(nullptr, "Query Error", displayResult.lastError().text());

@@ -7,6 +7,7 @@
 QT       += core gui
 QT       += sql
 QT       += widgets
+QT       += concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
