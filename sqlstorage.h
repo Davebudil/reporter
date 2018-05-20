@@ -5,7 +5,6 @@
 #include <QtSql>
 #include <QSharedPointer>
 #include "sqlquery.h"
-#include "exportsqlquery.h"
 /* SQLStorage class
  * used to manage storage of queries
  * and parameters
@@ -18,20 +17,13 @@ class SQLStorage : public QObject{
       explicit SQLStorage(QObject *parent = nullptr);
       ~SQLStorage() override;
       //Used to get list of queries member
-      QMap<QString, SQLquery*> & getQueries();
-      QMap<QString, QSharedPointer<ExportSQLQueryData> > getExportQueries() const;
+      QMap<QString, QSharedPointer<SQLquery> > getQueries() const;
       //used to get list of parameters member
       //getter
-      QSqlQuery getResultQuery();
       QQueue<SQLquery> getQueueQueries();
       bool addQuery(const QString & query, const QString & name, const QString & param, bool active, bool display, bool mode);
-      bool masterQuery(const QString & detail, const QString & master);
-      void setParameter(const QString & parameter, const QString & value, const QString & queryName);
       void printQueries();
-      void generateQuery(const QString & name, const QSqlDatabase & db);
-      void executeQuery(const QString & name);
       void printQueryText();
-      void fixMaster();
 
    signals:
 
@@ -39,11 +31,7 @@ class SQLStorage : public QObject{
 
    private:
       //list used to store queries
-      QMap<QString, SQLquery*> m_Queries;
-      //      QMap<QString, QSharedPointer<SQLquery>> m_Queries;
-      QMap<QString, QSharedPointer<ExportSQLQueryData>> m_ExportQueries;
-      //query used during SQL
-      QSqlQuery m_Query;
+      QMap<QString, QSharedPointer<SQLquery>> m_Queries;
 };
 
 #endif // SQLSTORAGE_H

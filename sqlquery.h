@@ -13,86 +13,45 @@
 class SQLquery{
    public:
       //constuctor
-      explicit SQLquery(const QString & query,
-                        QString  name,
-                        QString  param,
-                        bool master,
-                        bool active);
+      explicit SQLquery(const QString & queryName,
+                        const QString & masterName,
+                        const QString & queryText,
+                        const bool & isMaster,
+                        const bool & isActive);
       ~SQLquery();
       //Getter for query member
-      QString getQuery();
-      QSqlQuery getResult();
-      QString getResultString();
-      QString getName();
-      QString & getParam();
-      QString getFinal();
-      QString getMasterFinal();
-      qint32 getQueryResultRows();
-      bool getIsMaster();
-      bool getActive();
-      //Setters for members
-      void setQuery(const QString & query);
-      void setName(const QString & name);
-      void setParam(const QString & param);
-      void setMasterFinal(const QString & finalString);
-      void setParamString(const QString & paramString);
-      void setQueryResultRows(const qint32 & QueryResultRows);
-      void setActive(bool active);
-      void setIsMaster(bool master);
-      //print for debugging
-      void printValue();
-      //Generate
-      void generateQuery(const QSqlDatabase & db);
-      //binds time Parameters
-      void bindParameter(const QString & parameter, const QString & value);
-      void bindCustomParameter(const QString & parameter, const QString & value);
-      //function that executes the query
-      void executeQuery();
-      void executeParametrizedQuery();
-      void forceExecuteQuery();
-      void clearQueries();
-      void finishQuery();
-      void finishParemetrizedQuery();
-      //
-      QStringList queryList();
-      QString getMasterQueryString() const;
-      void setMasterQueryString(const QString & masterQueryString);
 
-      QString getCustomParametersString() const;
-      void setCustomParametersString(const QString & CustomParametersString);
+      bool getIsMaster() const;
+      void setIsMaster(bool isMaster);
 
-      QSqlQuery * getCustomParameters() const;
-      void setCustomParameters(QSqlQuery * CustomParameters);
+      bool getIsActive() const;
+      void setIsActive(bool isActive);
 
-      QSqlQuery * getParametrizedQuery() const;
-      void setParametrizedQuery(QSqlQuery * ParametrizedQuery);
+      QString getMasterQuery() const;
+      void setMasterQuery(const QString & masterQuery);
 
-      QString getParametrizedQueryString() const;
-      void setParametrizedQueryString(const QString & parametrizedQueryString);
+      QString getOriginalQuery() const;
+      void setOriginalQuery(const QString & originalQuery);
+
+      QString getMasterQueryName() const;
+      void setMasterQueryName(const QString & masterQueryName);
+
+      QString getName() const;
+      void setName(const QString & Name);
 
    private:
-      //original text
-      QString m_Query;
-      //names
       QString m_Name;
-      //master name
-      QString m_mParameter;
-      //final edited query text with master
-      QString m_masterfinalString;
-      //final string with no master
-      QString m_finalString;
-      QString m_masterQueryString;
-      QString m_CustomParametersString;
-      QString m_parametrizedQueryString;
-      //Final result
-      QSqlQuery * m_Result;
-      QSqlQuery * m_CustomParameters;
-      QSqlQuery * m_ParametrizedQuery;
-      //master/detail
-      bool m_Master;
-      //is Active
+      //master query name if exists
+      QString m_masterQueryName;
+      //use this if no master
+      QString m_originalQuery;
+      //use this if master
+      QString m_masterQuery;
+      //indicates states
+      //if is active
       bool m_isActive;
-      qint32 m_QueryResultRows;
+      //if is master
+      bool m_isMaster;
 };
 
 #endif // SQLQUERY_H

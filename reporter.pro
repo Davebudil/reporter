@@ -64,8 +64,7 @@ SOURCES += \
     exporthtml.cpp \
     tableinfo.cpp \
     customscheduling.cpp \
-    customparametersquery.cpp \
-    exportsqlquery.cpp
+    customparametersquery.cpp
 
 HEADERS += \
         reporter.h \
@@ -89,8 +88,7 @@ HEADERS += \
     exporthtml.h \
     tableinfo.h \
     customscheduling.h \
-    customparametersquery.h \
-    exportsqlquery.h
+    customparametersquery.h
 
 FORMS += \
         reporter.ui \

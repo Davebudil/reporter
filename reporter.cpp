@@ -68,7 +68,6 @@ void Reporter::m_displaySQLResult(const QString & name){
    ui->queryTable->setModel(m_mainSQL.getResult());
    ui->queryTable->setSortingEnabled(true);
    ui->sqlDataCount->setText(QString::number(m_mainSQL.getStorage().getQueries()[name]->getQueryResultRows()));
-
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
@@ -85,12 +84,12 @@ void Reporter::on_toolButton_clicked(){
 }
 
 void Reporter::m_executeQuery(const QString & name){
-   m_mainSQL.getStorage().executeQuery(name);
+   //   m_mainSQL.getStorage().executeQuery(name);
 }
 
 //used to generate result from current selected query
 void Reporter::m_generateQuery(const QString & name){
-   m_mainSQL.getStorage().generateQuery(name, m_mainSQL.getDatabase().getDatabase());
+   //   m_mainSQL.getStorage().generateQuery(name, m_mainSQL.getDatabase().getDatabase());
    //look into this
 }
 //Function to add new query
@@ -133,7 +132,7 @@ void Reporter::m_saveQuery(){
       QMessageBox::critical(this, QObject::tr("New Query Error"), "No query with specified master param name exists.");
    }else if(m_nameKey.isEmpty()){
       QMessageBox::critical(this, QObject::tr("Query Edit Error"), "No query selected.");
-   /*}else if(queryName != m_mainSQL.getStorage().getQueries()[m_nameKey]->getName()
+      /*}else if(queryName != m_mainSQL.getStorage().getQueries()[m_nameKey]->getName()
             && m_mainSQL.getStorage().getQueries()){
       QMessageBox::critical(this, QObject::tr("Master query name conflict."), "Another query is using this one as detail query, remove it before renaming this one.")*/
    }else{
@@ -145,9 +144,9 @@ void Reporter::m_saveQuery(){
          m_mainSQL.getStorage().getQueries().remove(m_nameKey);
          m_nameKey = queryName;
       }else{
-         m_mainSQL.getStorage().getQueries()[m_nameKey]->setParam(paramName);
-         m_mainSQL.getStorage().getQueries()[m_nameKey]->setQuery(queryText);
-         m_mainSQL.getStorage().getQueries()[m_nameKey]->setActive(m_queryActive);
+         m_mainSQL.getStorage().getQueries()[m_nameKey]->setMasterQueryName(paramName);
+         m_mainSQL.getStorage().getQueries()[m_nameKey]->setOriginalQuery(queryText);
+         m_mainSQL.getStorage().getQueries()[m_nameKey]->setIsActive(m_queryActive);
          ui->queryEdit->document()->setPlainText(queryText);
          lastName = m_mainSQL.getStorage().getQueries()[m_nameKey]->getName();
          ui->queryParamEdit->setText(paramName);
@@ -155,11 +154,11 @@ void Reporter::m_saveQuery(){
    }
    //fixes master parameter names in detail queries if the name changes
    for(auto & it : m_mainSQL.getStorage().getQueries()){
-      if(it->getParam() == lastName){
-         it->setParam(m_mainSQL.getStorage().getQueries()[m_nameKey]->getName());
+      if(it->getMasterQueryName() == lastName){
+         it->setMasterQueryName(m_mainSQL.getStorage().getQueries()[m_nameKey]->getName());
+         it->setMasterQuery(m_mainSQL.getStorage().getQueries()[it->getMasterQueryName()]->getOriginalQuery());
       }
    }
-   m_mainSQL.getStorage().fixMaster();
    m_serializeQueries();
    m_loadColorQueries();
 }
@@ -176,7 +175,7 @@ void Reporter::m_addQuery(const QString & queryText,
       param = paramName;
    }
    if(!queryText.isEmpty() && !queryName.isEmpty()){
-      if(m_mainSQL.getStorage().addQuery(queryText,queryName,param, active, true, mode)){
+      if(m_mainSQL.getStorage().addQuery(queryText, queryName, param, active, true, mode)){
          auto newQuery = new QToolButton;
          newQuery->setText(queryName);
          newQuery->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
@@ -184,7 +183,7 @@ void Reporter::m_addQuery(const QString & queryText,
          ui->scrollLayout->addWidget(newQuery);
 
          connect(newQuery, &QToolButton::clicked, this, &Reporter::m_scrollQueryClicked);
-//         m_clearQuery();
+         //         m_clearQuery();
          m_nameKey = "";
          m_serializeQueries();
          m_loadColorQueries();
@@ -192,6 +191,8 @@ void Reporter::m_addQuery(const QString & queryText,
    }else{
       QMessageBox::critical(nullptr, QObject::tr("Text error"), "No text entered.");
    }
+   m_mainSQL.getStorage().getQueries()[m_nameKey]->setMasterQuery(m_mainSQL.getStorage().getQueries()[
+                                                                  m_mainSQL.getStorage().getQueries()[m_nameKey]->getMasterQueryName()]->getOriginalQuery());
 }
 //Function to add repeated parameters
 void Reporter::m_addParameters(const QStringList & params, const qint32 & count){
@@ -1153,7 +1154,7 @@ void Reporter::on_queryDelete_clicked(){
 //Changes query state to active or inactive
 void Reporter::on_queryActive_stateChanged(int state){
    m_queryActive = state;
-//   m_saveQuery();
+   //   m_saveQuery();
 }
 //Function to display shift schedule values
 void Reporter::m_displayShift(qint32 keyString){
@@ -1403,11 +1404,11 @@ void Reporter::on_toolButton_3_clicked(){
    }
 }
 void Reporter::on_newScheduling_clicked(){
-//   if(m_validateScheduleName(ui->scheduleName->text())){
-//      m_deleteEmails();
-//      m_addSchedule(ui->scheduleName->text());
-//      m_serializeSchedule();
-//   }
+   //   if(m_validateScheduleName(ui->scheduleName->text())){
+   //      m_deleteEmails();
+   //      m_addSchedule(ui->scheduleName->text());
+   //      m_serializeSchedule();
+   //   }
    if(m_scheduleCount == 0){
       m_deleteEmails();
       m_addSchedule(ui->scheduleName->text());
@@ -1480,7 +1481,7 @@ void Reporter::on_tableNames_clicked(){
       TableInfo * infoDisplay;
       infoDisplay = new TableInfo(this);
       QVector<QStringList> dbInfo;
-//      m_saveQuery();
+      //      m_saveQuery();
       dbNames = m_mainSQL.getDatabase().getDatabase().tables();
 
       for(auto & it : dbNames){
@@ -1922,16 +1923,16 @@ void Reporter::on_customParameters_clicked(){
 }
 
 void Reporter::on_queryNameEdit_textEdited(const QString &arg1){
-//   if(!arg1.isEmpty()){
-//      m_saveQuery();
-//   }
+   //   if(!arg1.isEmpty()){
+   //      m_saveQuery();
+   //   }
 }
 
 void Reporter::on_queryEdit_textChanged(){
 }
 
 void Reporter::on_scheduleName_textEdited(const QString &arg1){
-//   if(!arg1.isEmpty()){
-//      m_saveSchedule();
-//   }
+   //   if(!arg1.isEmpty()){
+   //      m_saveSchedule();
+   //   }
 }
