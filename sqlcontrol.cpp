@@ -1,4 +1,5 @@
 #include "sqlcontrol.h"
+#include "log.h"
 
 //Contructor
 SQLControl::SQLControl(QObject *parent)
@@ -19,7 +20,7 @@ void SQLControl::setQueryModel(const QString & name){
 //   }
 
    //limited to 10000 query results, improves performance drastically
-   displayResult.prepare(QString(m_Storage.getQueries()[name]->getOriginalQuery() + " LIMIT 10000") );
+   displayResult.prepare(QString(m_Storage.getQueries()[name]->getOriginalQuery()/* + " LIMIT 10000"*/) );
    displayResult.exec();
    if(!displayResult.isActive()){
       QMessageBox::critical(nullptr, "Query Error", displayResult.lastError().text());
@@ -31,11 +32,21 @@ void SQLControl::setQueryModel(const QString & name){
 //      m_queryModel->setQuery(m_Storage.getQueries()[name]->getResult());
 //   }
 
+//   QObject::connect(m_Result.data(), SIGNAL(&QAbstractProxyModel::dataChanged()), this, SLOT(&SQLControl::modelChanged()));
    m_queryModel->setQuery(displayResult);
    m_queryModel->blockSignals(true);
    m_Result = QSharedPointer<QSortFilterProxyModel>::create();
    m_Result.data()->setDynamicSortFilter(true);
    m_Result->setSourceModel(m_queryModel.data());
+   qInfo(logInfo()) << "GET TO SIGNAL";
+   emit modelChanged();
+   return;
+}
+
+void SQLControl::startQueryModelThread(const QString & name){
+   if(m_Future.isFinished()){
+      m_Future = QtConcurrent::run(this, &SQLControl::setQueryModel, name);
+   }
 }
 //Getters
 QString SQLControl::getPassword(){

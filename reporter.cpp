@@ -15,8 +15,7 @@ Reporter::Reporter(QWidget *parent)
      m_lastDay(QDate::currentDate()),
      m_queryActive(false),
      m_firstQuery(false),
-     m_generate(false),
-     m_finished(true){
+     m_generate(false){
    qInfo(logInfo()) << "Application started.";
    m_Setup.loadIni();
    m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
@@ -32,6 +31,8 @@ Reporter::Reporter(QWidget *parent)
    ui->monthlyDays->setMaximumHeight(100);
    m_shwHide = new QHotkey(QKeySequence(m_Setup.getSettings().hotKey), true);
    connect(m_shwHide, SIGNAL(activated()), this, SLOT(m_showHide()));
+//   connect(&m_mainSQL, SIGNAL(modelChanged()), this, SLOT(m_displaySQL()));
+   connect(&m_mainSQL, &SQLControl::modelChanged, this, &Reporter::displaySQL);
    ui->toolButton_2->setVisible(false);
    ui->paramTest->setVisible(false);
    ui->tabWidget_2->removeTab(4);
@@ -64,11 +65,12 @@ void Reporter::m_showHide(){
 //Function to connect to DB triggered by click connect button
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
-   m_mainSQL.setQueryModel(name);
+   //   m_mainSQL.startQueryModelThread(name);
+   //   m_mainSQL.setQueryModel(name);
+   qInfo(logInfo()) << "TEST DISPLAY";
    ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getResult().data());
    ui->queryTable->setSortingEnabled(true);
-   return;
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
@@ -780,14 +782,15 @@ void Reporter::m_testingQueryGen(){
       QMessageBox::critical(this, QObject::tr("Database error"),
                             "Not connected to database");
    }else{
-      if(m_displayWatcher.isFinished()){
-         m_displayWatcher = QtConcurrent::run(this, &Reporter::m_displaySQLResult, m_nameKey);
-      }
+      m_mainSQL.startQueryModelThread(m_nameKey);
+      //      m_displaySQLResult(m_nameKey);
+      //      if(m_displayWatcher.isFinished()){
+      //         m_displayWatcher = QtConcurrent::run(this, &Reporter::m_displaySQLResult, m_nameKey);
+      //   }
       //      if(m_displayWatcher.isFinished() && m_finished){
       //         m_finished = false;
       //         m_displayWatcher = QtConcurrent::run(&m_mainSQL, &SQLControl::setQueryModel, m_nameKey);
       //      }
-      //      m_displaySQLResult(m_nameKey);
    }
    //   if(!m_Timer->isActive()){
    //      m_Timer->start(m_TIMERINTERVAL);
@@ -1950,4 +1953,8 @@ void Reporter::on_queryNameEdit_editingFinished(){
 
 void Reporter::on_queryParamEdit_editingFinished(){
    //   m_saveQuery();
+}
+
+void Reporter::displaySQL(){
+   m_displaySQLResult(m_nameKey);
 }

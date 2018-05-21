@@ -280,6 +280,7 @@ class Reporter : public QMainWindow{
 
       void on_queryParamEdit_editingFinished();
 
+      void displaySQL();
 
    private:
       Ui::Reporter *ui;
