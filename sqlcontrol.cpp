@@ -35,10 +35,9 @@ void SQLControl::setQueryModel(const QString & name){
 //   QObject::connect(m_Result.data(), SIGNAL(&QAbstractProxyModel::dataChanged()), this, SLOT(&SQLControl::modelChanged()));
    m_queryModel->setQuery(displayResult);
    m_queryModel->blockSignals(true);
-   m_Result = QSharedPointer<QSortFilterProxyModel>::create();
-   m_Result.data()->setDynamicSortFilter(true);
-   m_Result->setSourceModel(m_queryModel.data());
-   qInfo(logInfo()) << "GET TO SIGNAL";
+//   m_Result = QSharedPointer<QSortFilterProxyModel>::create();
+//   m_Result.data()->setDynamicSortFilter(true);
+//   m_Result->setSourceModel(m_queryModel.data());
    emit modelChanged();
    return;
 }
@@ -82,4 +81,9 @@ QStringList SQLControl::loadList(){
 
 QSharedPointer<QSortFilterProxyModel> SQLControl::getResult() const{
    return m_Result;
+}
+
+QSharedPointer<QSqlQueryModel> SQLControl::getQueryModel() const
+{
+   return m_queryModel;
 }

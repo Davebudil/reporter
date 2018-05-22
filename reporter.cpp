@@ -66,11 +66,10 @@ void Reporter::m_showHide(){
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
    //   m_mainSQL.startQueryModelThread(name);
-   //   m_mainSQL.setQueryModel(name);
-   qInfo(logInfo()) << "TEST DISPLAY";
+//      m_mainSQL.setQueryModel(name);
    ui->queryTable->clearSpans();
-   ui->queryTable->setModel(m_mainSQL.getResult().data());
-   ui->queryTable->setSortingEnabled(true);
+   ui->queryTable->setModel(m_mainSQL.getQueryModel().data());
+//   ui->queryTable->setSortingEnabled(true);
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){

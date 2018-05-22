@@ -29,11 +29,12 @@ class SQLControl : public QObject{
       void setQueryModel(const QString & name);
       void startQueryModelThread(const QString & name);
 
-      QSharedPointer<QSortFilterProxyModel> getQueryModel() const;
       QSharedPointer<QSortFilterProxyModel> getResult() const;
 
+      QSharedPointer<QSqlQueryModel> getQueryModel() const;
+
    public slots:
-//      void modelChanged();
+      //      void modelChanged();
 
    signals:
       void modelChanged();
