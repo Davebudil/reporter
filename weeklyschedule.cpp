@@ -129,8 +129,8 @@ bool WeeklySchedule::generateWeeklyData(const QDateTime & currenDate){
    return m_checkDoneInterval(currenDate);
 }
 
-void WeeklySchedule::fixParameters(SQLParameter & param, QDateTime & currentTime){
-   QStringList tmp = param.getParameters();
+void WeeklySchedule::fixParameters(QSharedPointer<SQLParameter> & param, QDateTime & currentTime){
+   QStringList tmp = param->getParameters();
    for(qint32 i = 0; i < tmp.count(); ++i){
       m_AttachName.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);
       m_SubjName.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);

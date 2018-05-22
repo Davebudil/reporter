@@ -22,12 +22,12 @@ class Export{
       ExportCSV & getCSV();
       void handleExport(QQueue<Scheduling*> & intervalsToHandle,
                         QQueue<SQLquery> & queries,
-                        QQueue<SQLParameter> & parameters,
+                        QQueue<QSharedPointer<SQLParameter>> & parameters,
                         QSqlDatabase & db,
                         QString & generatedBy);
       void customExport(CustomScheduling & exportData,
                         QQueue<SQLquery> & queries,
-                        QQueue<SQLParameter> & parameters,
+                        QQueue<QSharedPointer<SQLParameter>> & parameters,
                         QSqlDatabase & db,
                         qint32 & customInterval,
                         QString & generatedBy);
@@ -38,7 +38,7 @@ class Export{
                                   MonthlySchedule & monthly);
       bool m_generateShift(ShiftSchedule shift,
                            QQueue<SQLquery> queries,
-                           SQLParameter param,
+                           QSharedPointer<SQLParameter> param,
                            QSqlDatabase & db,
                            QDateTime & currentTime,
                            quint32 & count,
@@ -46,7 +46,7 @@ class Export{
                            bool showInfo);
       bool m_generateDaily(DailySchedule daily,
                            QQueue<SQLquery> queries,
-                           SQLParameter param,
+                           QSharedPointer<SQLParameter> param,
                            QSqlDatabase & db,
                            QDateTime & currentTime,
                            quint32 & count,
@@ -54,7 +54,7 @@ class Export{
                            bool showInfo);
       bool m_generateWeekly(WeeklySchedule weekly,
                             QQueue<SQLquery> queries,
-                            SQLParameter param,
+                            QSharedPointer<SQLParameter> param,
                             QSqlDatabase & db,
                             QDateTime & currentTime,
                             quint32 & count,
@@ -62,7 +62,7 @@ class Export{
                             bool showInfo);
       bool m_generateMonthly(MonthlySchedule monthly,
                              QQueue<SQLquery> queries,
-                             SQLParameter param,
+                             QSharedPointer<SQLParameter> param,
                              QSqlDatabase & db,
                              QDateTime & currentTime,
                              quint32 & count,

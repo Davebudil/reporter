@@ -131,8 +131,8 @@ bool MonthlySchedule::generateMonthlyData(const QDateTime & currentData){
    return m_checkDoneInterval(currentData);
 }
 
-void MonthlySchedule::fixParameters(SQLParameter & param, QDateTime & currentTime){
-   QStringList tmp = param.getParameters();
+void MonthlySchedule::fixParameters(QSharedPointer<SQLParameter> & param, QDateTime & currentTime){
+   QStringList tmp = param->getParameters();
    for(qint32 i = 0; i < tmp.count(); ++i){
       m_AttachName.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);
       m_SubjName.replace(QString("#PARAMETER" + QVariant(i+1).toString()), tmp[i]);

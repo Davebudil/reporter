@@ -39,7 +39,7 @@ class MonthlySchedule
       void setCsvAttach(bool csvAttach);
       void setEmailTemplatePath(const QString & emailTemplatePath);
       bool generateMonthlyData(const QDateTime & currentData);
-      void fixParameters(SQLParameter & param, QDateTime & currentTime);
+      void fixParameters(QSharedPointer<SQLParameter> & param, QDateTime & currentTime);
       bool getDone() const;
       void setDone(bool Done);
 

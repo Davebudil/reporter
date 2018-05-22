@@ -5,12 +5,13 @@
 #include <QTime>
 #include <QDateTime>
 #include <QQueue>
-#include <shiftschedule.h>
-#include <dailyschedule.h>
-#include <weeklyschedule.h>
-#include <monthlyschedule.h>
-#include <customschedule.h>
-#include <sqlparameter.h>
+#include <QSharedPointer>
+#include "shiftschedule.h"
+#include "dailyschedule.h"
+#include "weeklyschedule.h"
+#include "monthlyschedule.h"
+#include "customschedule.h"
+#include "sqlparameter.h"
 
 class Scheduling{
    public:
@@ -25,8 +26,8 @@ class Scheduling{
       DailySchedule getDailyCopy();
       WeeklySchedule getWeeklyCopy();
       MonthlySchedule getMonthlyCopy();
-      QMap<qint32, SQLParameter *> getParameters();
-      QQueue<SQLParameter> getQueueParameters();
+      QMap<qint32, QSharedPointer<SQLParameter>> getParameters();
+      QQueue<QSharedPointer<SQLParameter>> getQueueParameters();
       qint32 getParamCount() const;
       //DEBUG
       void printParamTest();
@@ -34,7 +35,7 @@ class Scheduling{
       QString getName() const;
       void setParamCount(const qint32 & paramCount);
       void setName(const QString & Name);
-      void setParameters(const QMap<qint32, SQLParameter *> & Parameters);
+      void setParameters(const QMap<qint32, QSharedPointer<SQLParameter>> & Parameters);
       QStringList serializeParameters();
       void deserializeParameters(QVector<QStringList> & Parameters);
       void deleteParameter(const qint32 & parameterKey);
@@ -47,7 +48,7 @@ class Scheduling{
       WeeklySchedule m_Weekly;
       MonthlySchedule m_Monthly;
       CustomSchedule m_Custom;
-      QMap<qint32, SQLParameter*> m_Parameters;
+      QMap<qint32, QSharedPointer<SQLParameter>> m_Parameters;
 
 };
 

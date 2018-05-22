@@ -39,7 +39,7 @@ class WeeklySchedule
       void setCsvAttach(bool csvAttach);
       void setEmailTemplatePath(const QString & emailTemplatePath);
       bool generateWeeklyData(const QDateTime & currenDate);
-      void fixParameters(SQLParameter & param, QDateTime & currentTime);
+      void fixParameters(QSharedPointer<SQLParameter> & param, QDateTime & currentTime);
 
       bool getDone() const;
       void setDone(bool Done);

@@ -34,6 +34,7 @@
 #include <QCloseEvent>
 #include "customparametersquery.h"
 #include "QtConcurrent"
+#include "sqlparameter.h"
 #include "QThread"
 #include "QFuture"
 

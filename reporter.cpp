@@ -31,7 +31,7 @@ Reporter::Reporter(QWidget *parent)
    ui->monthlyDays->setMaximumHeight(100);
    m_shwHide = new QHotkey(QKeySequence(m_Setup.getSettings().hotKey), true);
    connect(m_shwHide, SIGNAL(activated()), this, SLOT(m_showHide()));
-//   connect(&m_mainSQL, SIGNAL(modelChanged()), this, SLOT(m_displaySQL()));
+   //   connect(&m_mainSQL, SIGNAL(modelChanged()), this, SLOT(m_displaySQL()));
    connect(&m_mainSQL, &SQLControl::modelChanged, this, &Reporter::displaySQL);
    ui->toolButton_2->setVisible(false);
    ui->paramTest->setVisible(false);
@@ -66,10 +66,10 @@ void Reporter::m_showHide(){
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
    //   m_mainSQL.startQueryModelThread(name);
-//      m_mainSQL.setQueryModel(name);
+   //      m_mainSQL.setQueryModel(name);
    ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getQueryModel().data());
-//   ui->queryTable->setSortingEnabled(true);
+   //   ui->queryTable->setSortingEnabled(true);
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
@@ -1510,7 +1510,7 @@ void Reporter::on_tableNames_clicked(){
 void Reporter::timerInterval(){
    QQueue<Scheduling*> tmpSch;
    QQueue<SQLquery> tmpQueries;
-   QQueue<SQLParameter> tmpParams;
+   QQueue<QSharedPointer<SQLParameter>> tmpParams;
 
    if(QDate::currentDate() != m_lastDay){
       m_daysSinceCleanUp++;
@@ -1539,7 +1539,7 @@ void Reporter::timerInterval(){
 
 void Reporter::on_toolButton_4_clicked(){
    QQueue<SQLquery> tmpQueries;
-   QQueue<SQLParameter> tmpParams;
+   QQueue<QSharedPointer<SQLParameter>> tmpParams;
    instantSchedule = new CustomScheduling(this);
    instantSchedule->setModal(true);
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
@@ -1820,28 +1820,35 @@ void Reporter::on_startTImer_clicked(){
 }
 
 void Reporter::on_shiftGenerate_clicked(){
-   quint32 count = 0;
-   ShiftSchedule tmp;
-   tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
-   QDateTime currentTime = QDateTime::currentDateTime();
-
-   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
+   QFuture<void> future = QtConcurrent::run([=](){
+      quint32 count = 0;
+      ShiftSchedule tmp;
       tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
-      tmp.setDone0(false);
-      tmp.setDone1(false);
-      tmp.setDone2(false);
-      m_Export.m_shiftDayReset(tmp, currentTime);
-      tmp.generateShiftData(currentTime);
+      QDateTime currentTime = QDateTime::currentDateTime();
+      //lazy to write type, its stored in a map
+      auto parameters = m_Schedule[m_scheduleKey]->getParameters();
+      if(m_Schedule[m_scheduleKey]->getParameters().isEmpty()){
+         parameters.insert(0, QSharedPointer<SQLParameter>::create(0));
+      }
 
-      m_Export.m_generateShift(tmp,
-                               m_mainSQL.getStorage().getQueueQueries(),
-                               *it,
-                               m_mainSQL.getDatabase().getDatabase(),
-                               currentTime,
-                               count,
-                               m_generatedBy,
-                               true);
-   }
+      for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
+         tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
+         tmp.setDone0(false);
+         tmp.setDone1(false);
+         tmp.setDone2(false);
+         m_Export.m_shiftDayReset(tmp, currentTime);
+         tmp.generateShiftData(currentTime);
+
+         m_Export.m_generateShift(tmp,
+                                  m_mainSQL.getStorage().getQueueQueries(),
+                                  it,
+                                  m_mainSQL.getDatabase().getDatabase(),
+                                  currentTime,
+                                  count,
+                                  m_generatedBy,
+                                  true);
+      }
+   });
 }
 
 void Reporter::on_dailyGenerate_clicked(){
@@ -1858,7 +1865,7 @@ void Reporter::on_dailyGenerate_clicked(){
 
       m_Export.m_generateDaily(tmp,
                                m_mainSQL.getStorage().getQueueQueries(),
-                               *it,
+                               it,
                                m_mainSQL.getDatabase().getDatabase(),
                                currentTime,
                                count,
@@ -1879,7 +1886,7 @@ void Reporter::on_weeklyGenerate_clicked(){
       tmp.generateWeeklyData(currentTime);
       m_Export.m_generateWeekly(tmp,
                                 m_mainSQL.getStorage().getQueueQueries(),
-                                *it,
+                                it,
                                 m_mainSQL.getDatabase().getDatabase(),
                                 currentTime,
                                 count,
@@ -1900,7 +1907,7 @@ void Reporter::on_monthlyGenerate_clicked(){
       tmp.generateMonthlyData(currentTime);
       m_Export.m_generateMonthly(tmp,
                                  m_mainSQL.getStorage().getQueueQueries(),
-                                 *it,
+                                 it,
                                  m_mainSQL.getDatabase().getDatabase(),
                                  currentTime,
                                  count,
