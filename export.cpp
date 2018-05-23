@@ -15,7 +15,7 @@ ExportCSV & Export::getCSV(){
 ExportHTML & Export::getHTML(){
    return m_HTML;
 }
-void Export::handleExport(QQueue<Scheduling*> & intervalsToHandle,
+void Export::handleExport(QQueue<QSharedPointer<Scheduling>> & intervalsToHandle,
                           QQueue<SQLquery> & queries,
                           QQueue<QSharedPointer<SQLParameter>> & parameters,
                           QSqlDatabase & db){

@@ -289,7 +289,7 @@ class Reporter : public QMainWindow{
       QFuture<void> m_displayWatcher;
       Setup m_Setup;
       Export m_Export;
-      QMap<qint32, Scheduling*> m_Schedule;
+      QMap<qint32, QSharedPointer<Scheduling>> m_Schedule;
       QString m_nameKey;
       QString m_emailKey;
       qint32 m_selectedParam;

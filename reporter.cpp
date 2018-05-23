@@ -51,7 +51,6 @@ Reporter::~Reporter(){
    m_Setup.saveIni();
    delete ui;
    delete m_shwHide;
-   qDeleteAll(m_Schedule);
    delete m_Timer;
    qInfo(logInfo()) << "Application shutdown.";
 }
@@ -239,7 +238,7 @@ void Reporter::m_addSchedule(const QString & name){
       return;
    }
 
-   auto tmp = new Scheduling;
+   auto tmp = QSharedPointer<Scheduling>::create();
    tmp->setName(name);
    m_Schedule.insert(m_scheduleCount, tmp);
    m_scheduleKey = m_scheduleCount++;
@@ -664,7 +663,7 @@ void Reporter::m_deserializeSchedule(){
    m_scheduleKey = 0;
    m_scheduleCount = 0;
    for(auto & it : scheduleNames){
-      auto tmp = new Scheduling;
+      auto tmp = QSharedPointer<Scheduling>::create();
       tmp->setName(it);
       m_Schedule.insert(m_scheduleCount, tmp);
       m_scheduleKey = m_scheduleCount++;
@@ -1513,7 +1512,7 @@ void Reporter::on_tableNames_clicked(){
 }
 
 void Reporter::timerInterval(){
-   QQueue<Scheduling*> tmpSch;
+   QQueue<QSharedPointer<Scheduling>> tmpSch;
    QQueue<SQLquery> tmpQueries;
    QQueue<QSharedPointer<SQLParameter>> tmpParams;
 

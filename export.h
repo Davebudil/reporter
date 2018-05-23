@@ -21,7 +21,7 @@ class Export{
       ExportXLS & getXLS();
       ExportHTML & getHTML();
       ExportCSV & getCSV();
-      void handleExport(QQueue<Scheduling*> & intervalsToHandle,
+      void handleExport(QQueue<QSharedPointer<Scheduling>> & intervalsToHandle,
                         QQueue<SQLquery> & queries,
                         QQueue<QSharedPointer<SQLParameter>> & parameters,
                         QSqlDatabase & db);
