@@ -303,7 +303,7 @@ class Reporter : public QMainWindow{
       qint32 m_TIMERINTERVAL;
       qint32 m_CUSTOMINTERVAL;
       QString m_generatedBy;
-      CustomScheduling * instantSchedule;
+      QSharedPointer<CustomScheduling> instantSchedule;
       quint32 m_daysSinceCleanUp;
       QDate m_lastDay;
       QDateTime m_progressFrom;
@@ -313,6 +313,7 @@ class Reporter : public QMainWindow{
       QDateTime m_CustomParametersTo;
       bool m_queryActive;
       bool m_generate;
+      bool m_FinishedQueryDisplay;
 
       //Print query result to the table
       void m_displaySQLResult(const QString & name);

@@ -33,6 +33,9 @@ class SQLControl : public QObject{
 
       QSharedPointer<QSqlQueryModel> getQueryModel() const;
 
+      QFuture<void> getFuture() const;
+      void setFuture(const QFuture<void> & Future);
+
    public slots:
       //      void modelChanged();
 

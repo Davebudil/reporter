@@ -87,3 +87,13 @@ QSharedPointer<QSqlQueryModel> SQLControl::getQueryModel() const
 {
    return m_queryModel;
 }
+
+QFuture<void> SQLControl::getFuture() const
+{
+   return m_Future;
+}
+
+void SQLControl::setFuture(const QFuture<void> & Future)
+{
+   m_Future = Future;
+}

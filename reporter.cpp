@@ -14,13 +14,15 @@ Reporter::Reporter(QWidget *parent)
      m_daysSinceCleanUp(0),
      m_lastDay(QDate::currentDate()),
      m_queryActive(false),
-     m_firstQuery(false),
-     m_generate(false){
+     m_generate(false),
+     m_FinishedQueryDisplay(true),
+     m_firstQuery(false){
    qInfo(logInfo()) << "Application started.";
    m_Setup.loadIni();
    m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
    m_CUSTOMINTERVAL = m_Setup.getSettings().customInterval;
    m_generatedBy = m_Setup.getSettings().generatedByUser;
+   m_Export.setGeneratedBy(m_generatedBy);
    ui->setupUi(this);
    //   ui->queryNameEdit->setText("Query Name");
    //   ui->queryParamEdit->setText("Master name");
@@ -51,7 +53,6 @@ Reporter::~Reporter(){
    delete m_shwHide;
    qDeleteAll(m_Schedule);
    delete m_Timer;
-   delete instantSchedule;
    qInfo(logInfo()) << "Application shutdown.";
 }
 //Shows or hides application on key shortcut pressed
@@ -69,21 +70,25 @@ void Reporter::m_displaySQLResult(const QString & name){
    //      m_mainSQL.setQueryModel(name);
    ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getQueryModel().data());
+   m_FinishedQueryDisplay = true;
    //   ui->queryTable->setSortingEnabled(true);
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
-   if(m_validateQuerySelected()){
-      if(!m_mainSQL.getDatabase().getDatabase().open()){
-         qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
-         QMessageBox::critical(this, QObject::tr("Database error"),
-                               "Not connected to database");
-      }else{
-         m_saveQuery();
-         //         if(m_displayWatcher.isFinished()){
-         //            m_displayWatcher = QtConcurrent::run(this, &Reporter::m_testingQueryGen);
-         //         }
-         m_testingQueryGen();
+   if(m_FinishedQueryDisplay){
+      if(m_validateQuerySelected()){
+         if(!m_mainSQL.getDatabase().getDatabase().open()){
+            qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
+            QMessageBox::critical(this, QObject::tr("Database error"),
+                                  "Not connected to database");
+         }else{
+            m_saveQuery();
+            m_FinishedQueryDisplay = false;
+            //         if(m_displayWatcher.isFinished()){
+            //            m_displayWatcher = QtConcurrent::run(this, &Reporter::m_testingQueryGen);
+            //         }
+            m_testingQueryGen();
+         }
       }
    }
 }
@@ -1534,24 +1539,26 @@ void Reporter::timerInterval(){
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
    tmpParams = m_Schedule[m_scheduleKey]->getQueueParameters();
 
-   m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase(), m_generatedBy);
+   m_Export.handleExport(tmpSch,
+                         tmpQueries,
+                         tmpParams,
+                         m_mainSQL.getDatabase().getDatabase());
 }
 
 void Reporter::on_toolButton_4_clicked(){
    QQueue<SQLquery> tmpQueries;
    QQueue<QSharedPointer<SQLParameter>> tmpParams;
-   instantSchedule = new CustomScheduling(this);
+   instantSchedule = QSharedPointer<CustomScheduling>::create();
    instantSchedule->setModal(true);
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
    //fix this to use custom parameters
 
    if(instantSchedule->exec()){
-      m_Export.customExport(*instantSchedule,
+      m_Export.customExport(instantSchedule,
                             tmpQueries,
                             tmpParams,
                             m_mainSQL.getDatabase().getDatabase(),
-                            m_CUSTOMINTERVAL,
-                            m_generatedBy);
+                            m_CUSTOMINTERVAL);
    }
 }
 
@@ -1820,35 +1827,30 @@ void Reporter::on_startTImer_clicked(){
 }
 
 void Reporter::on_shiftGenerate_clicked(){
-   QFuture<void> future = QtConcurrent::run([=](){
-      quint32 count = 0;
-      ShiftSchedule tmp;
+   ShiftSchedule tmp;
+   tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
+   QDateTime currentTime = QDateTime::currentDateTime();
+   //lazy to write type, its stored in a map
+   auto parameters = m_Schedule[m_scheduleKey]->getParameters();
+   if(m_Schedule[m_scheduleKey]->getParameters().isEmpty()){
+      parameters.insert(0, QSharedPointer<SQLParameter>::create(0));
+   }
+
+   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
       tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
-      QDateTime currentTime = QDateTime::currentDateTime();
-      //lazy to write type, its stored in a map
-      auto parameters = m_Schedule[m_scheduleKey]->getParameters();
-      if(m_Schedule[m_scheduleKey]->getParameters().isEmpty()){
-         parameters.insert(0, QSharedPointer<SQLParameter>::create(0));
-      }
+      tmp.setDone0(false);
+      tmp.setDone1(false);
+      tmp.setDone2(false);
+      m_Export.m_shiftDayReset(tmp, currentTime);
+      tmp.generateShiftData(currentTime);
 
-      for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
-         tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
-         tmp.setDone0(false);
-         tmp.setDone1(false);
-         tmp.setDone2(false);
-         m_Export.m_shiftDayReset(tmp, currentTime);
-         tmp.generateShiftData(currentTime);
-
-         m_Export.m_generateShift(tmp,
-                                  m_mainSQL.getStorage().getQueueQueries(),
-                                  it,
-                                  m_mainSQL.getDatabase().getDatabase(),
-                                  currentTime,
-                                  count,
-                                  m_generatedBy,
-                                  true);
-      }
-   });
+      m_Export.setGeneratedBy(m_generatedBy);
+      m_Export.asyncShiftGeneration(tmp,
+                                    m_mainSQL.getStorage().getQueueQueries(),
+                                    it,
+                                    m_mainSQL.getDatabase().getDatabase(),
+                                    currentTime);
+   }
 }
 
 void Reporter::on_dailyGenerate_clicked(){
@@ -1863,14 +1865,12 @@ void Reporter::on_dailyGenerate_clicked(){
       tmp.setDone(false);
       tmp.generateDailyData(currentTime);
 
-      m_Export.m_generateDaily(tmp,
-                               m_mainSQL.getStorage().getQueueQueries(),
-                               it,
-                               m_mainSQL.getDatabase().getDatabase(),
-                               currentTime,
-                               count,
-                               m_generatedBy,
-                               true);
+      m_Export.setGeneratedBy(m_generatedBy);
+      m_Export.asyncDailyGeneration(tmp,
+                                    m_mainSQL.getStorage().getQueueQueries(),
+                                    it,
+                                    m_mainSQL.getDatabase().getDatabase(),
+                                    currentTime);
    }
 }
 
@@ -1884,14 +1884,13 @@ void Reporter::on_weeklyGenerate_clicked(){
       qInfo(logInfo()) << "generating weekly instant";
       tmp.setDone(false);
       tmp.generateWeeklyData(currentTime);
-      m_Export.m_generateWeekly(tmp,
-                                m_mainSQL.getStorage().getQueueQueries(),
-                                it,
-                                m_mainSQL.getDatabase().getDatabase(),
-                                currentTime,
-                                count,
-                                m_generatedBy,
-                                true);
+
+      m_Export.setGeneratedBy(m_generatedBy);
+      m_Export.asyncWeeklyGeneration(tmp,
+                                     m_mainSQL.getStorage().getQueueQueries(),
+                                     it,
+                                     m_mainSQL.getDatabase().getDatabase(),
+                                     currentTime);
    }
 }
 
@@ -1905,14 +1904,13 @@ void Reporter::on_monthlyGenerate_clicked(){
       qInfo(logInfo()) << "generating monthly instant";
       tmp.setDone(false);
       tmp.generateMonthlyData(currentTime);
-      m_Export.m_generateMonthly(tmp,
-                                 m_mainSQL.getStorage().getQueueQueries(),
-                                 it,
-                                 m_mainSQL.getDatabase().getDatabase(),
-                                 currentTime,
-                                 count,
-                                 m_generatedBy,
-                                 true);
+
+      m_Export.setGeneratedBy(m_generatedBy);
+      m_Export.asyncMonthlGeneration(tmp,
+                                     m_mainSQL.getStorage().getQueueQueries(),
+                                     it,
+                                     m_mainSQL.getDatabase().getDatabase(),
+                                     currentTime);
    }
 }
 
