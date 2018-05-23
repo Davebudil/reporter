@@ -16,7 +16,8 @@ Reporter::Reporter(QWidget *parent)
      m_queryActive(false),
      m_generate(false),
      m_FinishedQueryDisplay(true),
-     m_firstQuery(false){
+     m_firstQuery(false),
+     m_tableViewBusy(nullptr){
    qInfo(logInfo()) << "Application started.";
    m_Setup.loadIni();
    m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
@@ -66,11 +67,9 @@ void Reporter::m_showHide(){
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
    //   m_mainSQL.startQueryModelThread(name);
-   //      m_mainSQL.setQueryModel(name);
    ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getQueryModel().data());
    m_FinishedQueryDisplay = true;
-   //   ui->queryTable->setSortingEnabled(true);
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
