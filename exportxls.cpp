@@ -4,7 +4,7 @@
 #include <QRandomGenerator>
 
 ExportXLS::ExportXLS(QObject * parent) : QObject(parent),
-                                         generateXLS(nullptr){
+   generateXLS(nullptr){
 }
 
 ExportXLS::~ExportXLS(){
@@ -43,22 +43,17 @@ bool ExportXLS::generateFile(const QString & templatePath,
 }
 bool ExportXLS::readResult(){
    generateXLS = new QProcess;
-   connect(generateXLS, SIGNAL (error(QProcess::ProcessError)), this,
-           SLOT(sdLaunchError(QProcess::ProcessError)));
-   connect(generateXLS, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-       [=](int exitCode, QProcess::ExitStatus exitStatus){
+
+   connect(generateXLS, SIGNAL (error(QProcess::ProcessError)), this, SLOT(sdLaunchError(QProcess::ProcessError)));
+   connect(generateXLS, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus){
       qInfo(logInfo()) << "Exit Code: " + QVariant(exitCode).toString()
                           + " Status: " + QVariant(exitStatus).toString();});
+
    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
    generateXLS->setProcessEnvironment(env);
    generateXLS->start(QDir::currentPath() + "/ASK/ask_attachment.exe");
    generateXLS->waitForFinished();
    generateXLS->close();
-//   QThread::sleep(1);
-//   QByteArray ba = QString(QDir::currentPath() + "/ASK/ask_attachment.exe").toLatin1();
-//   const char *c_str2 = ba.data();
-//   std::system(c_str2);
-//   QProcess::startDetached(QDir::currentPath() + "/ASK/ask_attachment.exe");
 
    QFile loadFile(QDir::currentPath() + "/ASK/ask_ attachment_final.txt");
    delete generateXLS;
@@ -89,5 +84,5 @@ bool ExportXLS::readResult(){
 }
 
 void ExportXLS::sdLaunchError(QProcess::ProcessError error){
-   qDebug(logDebug()) << "PROCESS ERROR: " + QVariant(error).toString();
+   qDebug(logDebug()) << "RUNNING PROCESS ERROR: " + QVariant(error).toString();
 }

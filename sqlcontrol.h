@@ -7,9 +7,11 @@
 #include "database.h"
 #include "sqlstorage.h"
 #include <QSortFilterProxyModel>
+#include <QSharedPointer>
+#include <QtConcurrent>
+#include <QFuture>
 
-class SQLControl : public QObject
-{
+class SQLControl : public QObject{
       Q_OBJECT
    public:
       //Constructor
@@ -18,25 +20,35 @@ class SQLControl : public QObject
       ~SQLControl() override;
       //Getters
       QString getPassword();
-      QSqlQueryModel * getModel();
+      QSharedPointer<QSqlQueryModel> getModel() const;
       Database & getDatabase();
       SQLStorage & getStorage();
       //loads list of queries info
       QStringList loadList();
       //Sets model to display the query result in table
       void setQueryModel(const QString & name);
-      void setTimeParameters(const QDate & from, const QDate & to, const QString & queryName);
+      void startQueryModelThread(const QString & name);
 
-      QSortFilterProxyModel * getQueryModel();
+      QSharedPointer<QSortFilterProxyModel> getResult() const;
 
-      QSortFilterProxyModel * getResult();
-      void setResult(QSortFilterProxyModel * Result);
+      QSharedPointer<QSqlQueryModel> getQueryModel() const;
+
+      QFuture<void> getFuture() const;
+      void setFuture(const QFuture<void> & Future);
+
+   public slots:
+      //      void modelChanged();
+
+   signals:
+      void modelChanged();
+      void modelFailed(QString errorName);
 
    private:
       Database m_DB;
+      QFuture<void> m_Future;
       SQLStorage m_Storage;
-      QSqlQueryModel * m_queryModel;
-      QSortFilterProxyModel * m_Result;
+      QSharedPointer<QSqlQueryModel> m_queryModel;
+      QSharedPointer<QSortFilterProxyModel> m_Result;
 };
 
 #endif // SQLCONTROL_H

@@ -33,6 +33,11 @@
 #include "customscheduling.h"
 #include <QCloseEvent>
 #include "customparametersquery.h"
+#include "QtConcurrent"
+#include "sqlparameter.h"
+#include "QThread"
+#include "QProgressBar"
+#include "QFuture"
 
 namespace Ui{
    class Reporter;
@@ -273,12 +278,21 @@ class Reporter : public QMainWindow{
 
       void on_scheduleName_textEdited(const QString &arg1);
 
+      void on_queryNameEdit_editingFinished();
+
+      void on_queryParamEdit_editingFinished();
+
+      void displaySQL();
+
+      void failedSQL(QString errorName);
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
+      QFuture<void> m_displayWatcher;
       Setup m_Setup;
       Export m_Export;
-      QMap<qint32, Scheduling*> m_Schedule;
+      QMap<qint32, QSharedPointer<Scheduling>> m_Schedule;
       QString m_nameKey;
       QString m_emailKey;
       qint32 m_selectedParam;
@@ -292,7 +306,7 @@ class Reporter : public QMainWindow{
       qint32 m_TIMERINTERVAL;
       qint32 m_CUSTOMINTERVAL;
       QString m_generatedBy;
-      CustomScheduling * instantSchedule;
+      QSharedPointer<CustomScheduling> instantSchedule;
       quint32 m_daysSinceCleanUp;
       QDate m_lastDay;
       QDateTime m_progressFrom;
@@ -302,6 +316,8 @@ class Reporter : public QMainWindow{
       QDateTime m_CustomParametersTo;
       bool m_queryActive;
       bool m_generate;
+      bool m_FinishedQueryDisplay;
+      QProgressBar * m_tableViewBusy;
 
       //Print query result to the table
       void m_displaySQLResult(const QString & name);

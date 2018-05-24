@@ -14,13 +14,16 @@ Reporter::Reporter(QWidget *parent)
      m_daysSinceCleanUp(0),
      m_lastDay(QDate::currentDate()),
      m_queryActive(false),
+     m_generate(false),
+     m_FinishedQueryDisplay(true),
      m_firstQuery(false),
-     m_generate(false){
+     m_tableViewBusy(nullptr){
    qInfo(logInfo()) << "Application started.";
    m_Setup.loadIni();
    m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
    m_CUSTOMINTERVAL = m_Setup.getSettings().customInterval;
    m_generatedBy = m_Setup.getSettings().generatedByUser;
+   m_Export.setGeneratedBy(m_generatedBy);
    ui->setupUi(this);
    //   ui->queryNameEdit->setText("Query Name");
    //   ui->queryParamEdit->setText("Master name");
@@ -30,7 +33,10 @@ Reporter::Reporter(QWidget *parent)
    ui->weeklyDays->setMaximumHeight(100);
    ui->monthlyDays->setMaximumHeight(100);
    m_shwHide = new QHotkey(QKeySequence(m_Setup.getSettings().hotKey), true);
+   //   connect(&m_mainSQL, SIGNAL(modelChanged()), this, SLOT(m_displaySQL()));
    connect(m_shwHide, SIGNAL(activated()), this, SLOT(m_showHide()));
+   connect(&m_mainSQL, &SQLControl::modelChanged, this, &Reporter::displaySQL);
+   connect(&m_mainSQL, &SQLControl::modelFailed, this, &Reporter::failedSQL);
    ui->toolButton_2->setVisible(false);
    ui->paramTest->setVisible(false);
    ui->tabWidget_2->removeTab(4);
@@ -47,9 +53,7 @@ Reporter::~Reporter(){
    m_Setup.saveIni();
    delete ui;
    delete m_shwHide;
-   qDeleteAll(m_Schedule);
    delete m_Timer;
-   delete instantSchedule;
    qInfo(logInfo()) << "Application shutdown.";
 }
 //Shows or hides application on key shortcut pressed
@@ -63,34 +67,38 @@ void Reporter::m_showHide(){
 //Function to connect to DB triggered by click connect button
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
-   m_mainSQL.setQueryModel(name);
+   //   m_mainSQL.startQueryModelThread(name);
+   qInfo(logInfo()) << "DOSTANU SE SEM";
    ui->queryTable->clearSpans();
-   ui->queryTable->setModel(m_mainSQL.getResult());
-   ui->queryTable->setSortingEnabled(true);
-   ui->sqlDataCount->setText(QString::number(m_mainSQL.getStorage().getQueries()[name]->getQueryResultRows()));
-
+   ui->queryTable->setModel(m_mainSQL.getQueryModel().data());
+   m_FinishedQueryDisplay = true;
 }
 //Function to Generate selected query and print results to table
 void Reporter::on_toolButton_clicked(){
-   if(m_validateQuerySelected()){
-      if(!m_mainSQL.getDatabase().getDatabase().open()){
-         qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
-         QMessageBox::critical(this, QObject::tr("Database error"),
-                               "Not connected to database");
-      }else{
-         m_testingQueryGen();
-         m_saveQuery();
+   if(m_FinishedQueryDisplay){
+      if(m_validateQuerySelected()){
+         if(!m_mainSQL.getDatabase().getDatabase().open()){
+            qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
+            QMessageBox::critical(this, QObject::tr("Database error"),
+                                  "Not connected to database");
+         }else{
+            m_saveQuery();
+            //         if(m_displayWatcher.isFinished()){
+            //            m_displayWatcher = QtConcurrent::run(this, &Reporter::m_testingQueryGen);
+            //         }
+            m_testingQueryGen();
+         }
       }
    }
 }
 
 void Reporter::m_executeQuery(const QString & name){
-   m_mainSQL.getStorage().executeQuery(name);
+   //   m_mainSQL.getStorage().executeQuery(name);
 }
 
 //used to generate result from current selected query
 void Reporter::m_generateQuery(const QString & name){
-   m_mainSQL.getStorage().generateQuery(name, m_mainSQL.getDatabase().getDatabase());
+   //   m_mainSQL.getStorage().generateQuery(name, m_mainSQL.getDatabase().getDatabase());
    //look into this
 }
 //Function to add new query
@@ -103,15 +111,14 @@ void Reporter::on_newQuery_clicked(){
                  m_queryActive);
       m_loadColorQueries();
    }else{
-      m_clearQuery();
       m_addQuery("SQL query text",
                  "New Query",
                  ui->queryParamEdit->text(),
                  true,
                  m_queryActive);
-      m_nameKey = ui->queryNameEdit->text();
       m_loadColorQueries();
    }
+   m_loadMaster();
 }
 //Function to save the edit of current query
 void Reporter::on_saveQuery_clicked(){
@@ -122,6 +129,7 @@ void Reporter::m_saveQuery(){
    QString queryText;
    QString queryName;
    QString paramName;
+   QString lastName;
 
    queryText = ui->queryEdit->toPlainText();
    queryName = ui->queryNameEdit->text();
@@ -131,24 +139,42 @@ void Reporter::m_saveQuery(){
       QMessageBox::critical(this, QObject::tr("New Query Error"), "No query with specified master param name exists.");
    }else if(m_nameKey.isEmpty()){
       QMessageBox::critical(this, QObject::tr("Query Edit Error"), "No query selected.");
+      /*}else if(queryName != m_mainSQL.getStorage().getQueries()[m_nameKey]->getName()
+            && m_mainSQL.getStorage().getQueries()){
+      QMessageBox::critical(this, QObject::tr("Master query name conflict."), "Another query is using this one as detail query, remove it before renaming this one.")*/
    }else{
-      if(m_mainSQL.getStorage().addQuery(queryText,queryName,paramName, m_queryActive, false, false)){
+      if(m_mainSQL.getStorage().addQuery(queryText, queryName, paramName, m_queryActive, false, false)){
          tmp = ui->scrollAreaWidgetContents->findChild<QToolButton *>(m_nameKey);
          tmp->setObjectName(queryName);
          tmp->setText(queryName);
+         lastName = m_mainSQL.getStorage().getQueries()[m_nameKey]->getName();
          m_mainSQL.getStorage().getQueries().remove(m_nameKey);
          m_nameKey = queryName;
       }else{
-         m_mainSQL.getStorage().getQueries()[m_nameKey]->setParam(paramName);
-         m_mainSQL.getStorage().getQueries()[m_nameKey]->setQuery(queryText);
-         m_mainSQL.getStorage().getQueries()[m_nameKey]->setActive(m_queryActive);
+         m_mainSQL.getStorage().getQueries()[m_nameKey]->setMasterQueryName(paramName);
+         m_mainSQL.getStorage().getQueries()[m_nameKey]->setOriginalQuery(queryText);
+         m_mainSQL.getStorage().getQueries()[m_nameKey]->setIsActive(m_queryActive);
          ui->queryEdit->document()->setPlainText(queryText);
+         lastName = m_mainSQL.getStorage().getQueries()[m_nameKey]->getName();
          ui->queryParamEdit->setText(paramName);
       }
    }
-   m_mainSQL.getStorage().fixMaster();
+   //fixes master parameter names in detail queries if the name changes
+   for(auto & it : m_mainSQL.getStorage().getQueries()){
+      if(!it->getMasterQueryName().isEmpty()){
+         if(it->getMasterQueryName() == lastName){
+            it->setMasterQueryName(m_mainSQL.getStorage().getQueries()[m_nameKey]->getName());
+            //            it->setMasterQuery(m_mainSQL.getStorage().getQueries()[it->getMasterQueryName()]->getOriginalQuery());
+         }
+      }
+   }
+   m_loadMaster();
    m_serializeQueries();
    m_loadColorQueries();
+   //   DEBUG
+   //   for(const auto & it : m_mainSQL.getStorage().getQueries()){
+   //      it->printQueryData();
+   //   }
 }
 //function to add query
 void Reporter::m_addQuery(const QString & queryText,
@@ -163,7 +189,7 @@ void Reporter::m_addQuery(const QString & queryText,
       param = paramName;
    }
    if(!queryText.isEmpty() && !queryName.isEmpty()){
-      if(m_mainSQL.getStorage().addQuery(queryText,queryName,param, active, true, mode)){
+      if(m_mainSQL.getStorage().addQuery(queryText, queryName, param, active, true, mode)){
          auto newQuery = new QToolButton;
          newQuery->setText(queryName);
          newQuery->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
@@ -171,14 +197,17 @@ void Reporter::m_addQuery(const QString & queryText,
          ui->scrollLayout->addWidget(newQuery);
 
          connect(newQuery, &QToolButton::clicked, this, &Reporter::m_scrollQueryClicked);
-//         m_clearQuery();
+         //         m_clearQuery();
          m_nameKey = "";
          m_serializeQueries();
          m_loadColorQueries();
+         //         m_nameKey = ui->queryNameEdit->text();
       }
    }else{
       QMessageBox::critical(nullptr, QObject::tr("Text error"), "No text entered.");
    }
+   //   m_mainSQL.getStorage().getQueries()[m_nameKey]->setMasterQuery(m_mainSQL.getStorage().getQueries()[
+   //                                                                  m_mainSQL.getStorage().getQueries()[m_nameKey]->getMasterQueryName()]->getOriginalQuery());
 }
 //Function to add repeated parameters
 void Reporter::m_addParameters(const QStringList & params, const qint32 & count){
@@ -209,7 +238,7 @@ void Reporter::m_addSchedule(const QString & name){
       return;
    }
 
-   auto tmp = new Scheduling;
+   auto tmp = QSharedPointer<Scheduling>::create();
    tmp->setName(name);
    m_Schedule.insert(m_scheduleCount, tmp);
    m_scheduleKey = m_scheduleCount++;
@@ -451,7 +480,7 @@ void Reporter::defaultSettings(){
    //   m_SetTimer(m_TIMERINTERVAL);
    //   m_PauseTimer();
    //   m_PauseTimer();
-   m_mainSQL.getStorage().fixMaster();
+   //   m_mainSQL.getStorage().fixMaster();
    m_loadColorSchedule();
    qInfo(logInfo()) << "Settings and data successfuly loaded.";
 }
@@ -476,10 +505,10 @@ void Reporter::m_scrollQueryClicked(){
    }
    m_nameKey = senderObjname;
 
-   ui->queryEdit->document()->setPlainText(m_mainSQL.getStorage().getQueries()[senderObjname]->getQuery());
+   ui->queryEdit->document()->setPlainText(m_mainSQL.getStorage().getQueries()[senderObjname]->getOriginalQuery());
    ui->queryNameEdit->setText(m_mainSQL.getStorage().getQueries()[senderObjname]->getName());
-   ui->queryParamEdit->setText(m_mainSQL.getStorage().getQueries()[senderObjname]->getParam());
-   ui->queryActive->setChecked(m_mainSQL.getStorage().getQueries()[senderObjname]->getActive());
+   ui->queryParamEdit->setText(m_mainSQL.getStorage().getQueries()[senderObjname]->getMasterQueryName());
+   ui->queryActive->setChecked(m_mainSQL.getStorage().getQueries()[senderObjname]->getIsActive());
    m_loadColorQueries();
 }
 //Setup connection to DB
@@ -634,7 +663,7 @@ void Reporter::m_deserializeSchedule(){
    m_scheduleKey = 0;
    m_scheduleCount = 0;
    for(auto & it : scheduleNames){
-      auto tmp = new Scheduling;
+      auto tmp = QSharedPointer<Scheduling>::create();
       tmp->setName(it);
       m_Schedule.insert(m_scheduleCount, tmp);
       m_scheduleKey = m_scheduleCount++;
@@ -692,92 +721,83 @@ void Reporter::m_saveSchedule(){
 //DEBUG
 //Generates CSV, mostly for testing
 void Reporter::m_generateCSV(){
-   //TESTING FOR SHIFT
-   QSqlQuery generateCSV;
-   generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult();
-   m_Export.getCSV().generateFile(m_Schedule[m_scheduleKey]->getShift().getCsvTemplatePath(),
-                                  m_Schedule[m_scheduleKey]->getShift().getAttachName(),
-                                  generateCSV);
+   //   //TESTING FOR SHIFT
+   //   QSqlQuery generateCSV;
+   //   generateCSV = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult();
+   //   m_Export.getCSV().generateFile(m_Schedule[m_scheduleKey]->getShift().getCsvTemplatePath(),
+   //                                  m_Schedule[m_scheduleKey]->getShift().getAttachName(),
+   //                                  generateCSV);
 }
 
 //DEBUG
 //Generates XLS, mostly for testing
 void Reporter::m_generateXLS(){
-   //TESTING FOR SHIFT
-   QList<std::pair<QString, QString>> tmp;
-   QList<QStringList> tmpQueries;
-   m_generateQuery(m_nameKey);
-   m_executeQuery(m_nameKey);
-   tmp.append(std::make_pair("CURRENT_DATE","15.12.2017"));
-   tmp.append(std::make_pair("DateTimeFromTo", "Od datumu A po datum B"));
-   tmp.append(std::make_pair("vygeneroval", "David Budil"));
-   //TOHLE ASI NIC NEDELA -> OTESTOVAT
-   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult().first()){
-      return;
-   }else{
-      tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
-      if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
-         m_generateQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
-         m_executeQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
-         tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
-      }
+   //   //TESTING FOR SHIFT
+   //   QList<std::pair<QString, QString>> tmp;
+   //   QList<QStringList> tmpQueries;
+   //   m_generateQuery(m_nameKey);
+   //   m_executeQuery(m_nameKey);
+   //   tmp.append(std::make_pair("CURRENT_DATE","15.12.2017"));
+   //   tmp.append(std::make_pair("DateTimeFromTo", "Od datumu A po datum B"));
+   //   tmp.append(std::make_pair("vygeneroval", "David Budil"));
+   //   //TOHLE ASI NIC NEDELA -> OTESTOVAT
+   //   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult().first()){
+   //      return;
+   //   }else{
+   //      tmpQueries.append(m_mainSQL.getStorage().getQueries()[m_nameKey]->queryList());
+   //      if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
+   //         m_generateQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+   //         m_executeQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+   //         tmpQueries.push_front(m_mainSQL.getStorage().getQueries()[m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam()]->queryList());
+   //      }
 
-      m_Export.getXLS().generateFile(m_Schedule[m_scheduleKey]->getShift().getXlsTemplatePath(),
-                                     m_Schedule[m_scheduleKey]->getShift().getAttachName(),
-                                     tmp,
-                                     tmpQueries);
-   }
+   //      m_Export.getXLS().generateFile(m_Schedule[m_scheduleKey]->getShift().getXlsTemplatePath(),
+   //                                     m_Schedule[m_scheduleKey]->getShift().getAttachName(),
+   //                                     tmp,
+   //                                     tmpQueries);
+   //   }
 }
 //Generates XLS template
 void Reporter::m_generateTemplateXLS(){
-   m_testingQueryGen();
-   QXlsx::Document xlsx;
-   QSqlQuery tmpModel = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult();
-   QSqlRecord rec = tmpModel.record();
+   //   m_testingQueryGen();
+   //   QXlsx::Document xlsx;
+   //   QSqlQuery tmpModel = m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult();
+   //   QSqlRecord rec = tmpModel.record();
 
-   for(qint32 i = 0; i < rec.count(); ++i){
-      QString tmp = rec.fieldName(i);
-      xlsx.write(1, i + 1, tmp);
-      tmpModel.next();
-      xlsx.write(2, i + 1, tmpModel.value(i).toString());
-   }
+   //   for(qint32 i = 0; i < rec.count(); ++i){
+   //      QString tmp = rec.fieldName(i);
+   //      xlsx.write(1, i + 1, tmp);
+   //      tmpModel.next();
+   //      xlsx.write(2, i + 1, tmpModel.value(i).toString());
+   //   }
 
-   xlsx.saveAs(QDir::currentPath() + "/templateFieldNamesXLSX.xls");
-   QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/templateFieldNamesXLSX.xls"));
-   m_mainSQL.getStorage().getQueries()[m_nameKey]->finishQuery();
+   //   xlsx.saveAs(QDir::currentPath() + "/templateFieldNamesXLSX.xls");
+   //   QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/templateFieldNamesXLSX.xls"));
+   //   m_mainSQL.getStorage().getQueries()[m_nameKey]->finishQuery();
 }
 //Generates query data model that is displayed in table in application
 void Reporter::m_testingQueryGen(){
-   if(m_Timer->isActive()){
-      on_startTImer_clicked();
-   }
-   if(m_firstQuery){
-      m_mainSQL.getModel()->clear();
-      m_mainSQL.getModel()->query().clear();
-      //TODO: test this, crashes app
-      //      for(auto & it : m_mainSQL.getStorage().getQueries()){
-      //         if(it != m_mainSQL.getStorage().getQueries()[m_nameKey]){
-      //            it->clearQueries();
-      //         }
-      //      }
-   }
+   //   if(m_Timer->isActive()){
+   //      m_Timer->stop();
+   //   }
    if(!m_mainSQL.getDatabase().getDatabase().open()){
       qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
       QMessageBox::critical(this, QObject::tr("Database error"),
                             "Not connected to database");
    }else{
-      //TODO: add custom parameters
-      m_loadMaster();
-      m_generateQuery(m_nameKey);
-      m_executeQuery(m_nameKey);
-      m_displaySQLResult(m_nameKey);
-      //TODO: tmp workaround, try to fix this in next version
-      m_mainSQL.getStorage().getQueries()[m_nameKey]->clearQueries();
-      m_firstQuery = true;
+      m_mainSQL.startQueryModelThread(m_nameKey);
+      //      m_displaySQLResult(m_nameKey);
+      //      if(m_displayWatcher.isFinished()){
+      //         m_displayWatcher = QtConcurrent::run(this, &Reporter::m_displaySQLResult, m_nameKey);
+      //   }
+      //      if(m_displayWatcher.isFinished() && m_finished){
+      //         m_finished = false;
+      //         m_displayWatcher = QtConcurrent::run(&m_mainSQL, &SQLControl::setQueryModel, m_nameKey);
+      //      }
    }
-   if(!m_Timer->isActive()){
-      on_startTImer_clicked();
-   }
+   //   if(!m_Timer->isActive()){
+   //      m_Timer->start(m_TIMERINTERVAL);
+   //   }
 }
 //Adds first schedule item
 bool Reporter::m_noSchedule(){
@@ -954,10 +974,17 @@ void Reporter::on_paramEdit_clicked(){
 }
 //Loads master parameter for master/detail system
 void Reporter::m_loadMaster(){
-   if(!m_mainSQL.getStorage().getQueries()[m_nameKey]->getIsMaster()){
-      m_mainSQL.getStorage().masterQuery(m_mainSQL.getStorage().getQueries()[m_nameKey]->getName(),
-                                         m_mainSQL.getStorage().getQueries()[m_nameKey]->getParam());
+   for(auto & it : m_mainSQL.getStorage().getQueries()){
+      if(!it->getMasterQueryName().isEmpty()){
+         it->setMasterQuery(m_mainSQL.getStorage().getQueries()[it->getMasterQueryName()]->getOriginalQuery());
+         it->setIsMaster(true);
+      }else{
+         it->setMasterQuery("");
+         it->setIsMaster(false);
+      }
    }
+   //   m_mainSQL.getStorage().getQueries()[m_nameKey]->setMasterQuery(m_mainSQL.getStorage().getQueries()[
+   //                                                                  m_mainSQL.getStorage().getQueries()[m_nameKey]->getMasterQueryName()]->getOriginalQuery());
 }
 //Loads emails to create mail buttons
 void Reporter::m_loadEmails(){
@@ -1140,7 +1167,7 @@ void Reporter::on_queryDelete_clicked(){
 //Changes query state to active or inactive
 void Reporter::on_queryActive_stateChanged(int state){
    m_queryActive = state;
-   m_saveQuery();
+   //   m_saveQuery();
 }
 //Function to display shift schedule values
 void Reporter::m_displayShift(qint32 keyString){
@@ -1367,15 +1394,15 @@ void Reporter::on_monthlyBrCSV_clicked(){
 }
 
 void Reporter::on_toolButton_2_clicked(){
-   if(m_nameKey.isEmpty() || m_nameKey.isNull()){
-      QMessageBox::warning(this, "Query error.", "No query selected.");
-   }else{
-      m_testingQueryGen();
-      if(m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult().isActive()){
-         m_generateXLS();
-         m_generateCSV();
-      }
-   }
+   //   if(m_nameKey.isEmpty() || m_nameKey.isNull()){
+   //      QMessageBox::warning(this, "Query error.", "No query selected.");
+   //   }else{
+   //      m_testingQueryGen();
+   //      if(m_mainSQL.getStorage().getQueries()[m_nameKey]->getResult().isActive()){
+   //         m_generateXLS();
+   //         m_generateCSV();
+   //      }
+   //   }
 }
 void Reporter::on_toolButton_3_clicked(){
    if(m_validateQuerySelected()){
@@ -1390,11 +1417,11 @@ void Reporter::on_toolButton_3_clicked(){
    }
 }
 void Reporter::on_newScheduling_clicked(){
-//   if(m_validateScheduleName(ui->scheduleName->text())){
-//      m_deleteEmails();
-//      m_addSchedule(ui->scheduleName->text());
-//      m_serializeSchedule();
-//   }
+   //   if(m_validateScheduleName(ui->scheduleName->text())){
+   //      m_deleteEmails();
+   //      m_addSchedule(ui->scheduleName->text());
+   //      m_serializeSchedule();
+   //   }
    if(m_scheduleCount == 0){
       m_deleteEmails();
       m_addSchedule(ui->scheduleName->text());
@@ -1467,7 +1494,7 @@ void Reporter::on_tableNames_clicked(){
       TableInfo * infoDisplay;
       infoDisplay = new TableInfo(this);
       QVector<QStringList> dbInfo;
-//      m_saveQuery();
+      //      m_saveQuery();
       dbNames = m_mainSQL.getDatabase().getDatabase().tables();
 
       for(auto & it : dbNames){
@@ -1485,9 +1512,9 @@ void Reporter::on_tableNames_clicked(){
 }
 
 void Reporter::timerInterval(){
-   QQueue<Scheduling*> tmpSch;
+   QQueue<QSharedPointer<Scheduling>> tmpSch;
    QQueue<SQLquery> tmpQueries;
-   QQueue<SQLParameter> tmpParams;
+   QQueue<QSharedPointer<SQLParameter>> tmpParams;
 
    if(QDate::currentDate() != m_lastDay){
       m_daysSinceCleanUp++;
@@ -1511,24 +1538,26 @@ void Reporter::timerInterval(){
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
    tmpParams = m_Schedule[m_scheduleKey]->getQueueParameters();
 
-   m_Export.handleExport(tmpSch, tmpQueries, tmpParams, m_mainSQL.getDatabase().getDatabase(), m_generatedBy);
+   m_Export.asyncExport(tmpSch,
+                         tmpQueries,
+                         tmpParams,
+                         m_mainSQL.getDatabase().getDatabase());
 }
 
 void Reporter::on_toolButton_4_clicked(){
    QQueue<SQLquery> tmpQueries;
-   QQueue<SQLParameter> tmpParams;
-   instantSchedule = new CustomScheduling(this);
+   QQueue<QSharedPointer<SQLParameter>> tmpParams;
+   instantSchedule = QSharedPointer<CustomScheduling>::create();
    instantSchedule->setModal(true);
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
    //fix this to use custom parameters
 
    if(instantSchedule->exec()){
-      m_Export.customExport(*instantSchedule,
+      m_Export.asyncCustomExport(instantSchedule,
                             tmpQueries,
                             tmpParams,
                             m_mainSQL.getDatabase().getDatabase(),
-                            m_CUSTOMINTERVAL,
-                            m_generatedBy);
+                            m_CUSTOMINTERVAL);
    }
 }
 
@@ -1797,10 +1826,14 @@ void Reporter::on_startTImer_clicked(){
 }
 
 void Reporter::on_shiftGenerate_clicked(){
-   quint32 count = 0;
    ShiftSchedule tmp;
    tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
    QDateTime currentTime = QDateTime::currentDateTime();
+   //lazy to write type, its stored in a map
+   auto parameters = m_Schedule[m_scheduleKey]->getParameters();
+   if(m_Schedule[m_scheduleKey]->getParameters().isEmpty()){
+      parameters.insert(0, QSharedPointer<SQLParameter>::create(0));
+   }
 
    for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
       tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
@@ -1810,14 +1843,12 @@ void Reporter::on_shiftGenerate_clicked(){
       m_Export.m_shiftDayReset(tmp, currentTime);
       tmp.generateShiftData(currentTime);
 
-      m_Export.m_generateShift(tmp,
-                               m_mainSQL.getStorage().getQueueQueries(),
-                               *it,
-                               m_mainSQL.getDatabase().getDatabase(),
-                               currentTime,
-                               count,
-                               m_generatedBy,
-                               true);
+      m_Export.setGeneratedBy(m_generatedBy);
+      m_Export.asyncShiftGeneration(tmp,
+                                    m_mainSQL.getStorage().getQueueQueries(),
+                                    it,
+                                    m_mainSQL.getDatabase().getDatabase(),
+                                    currentTime);
    }
 }
 
@@ -1833,14 +1864,12 @@ void Reporter::on_dailyGenerate_clicked(){
       tmp.setDone(false);
       tmp.generateDailyData(currentTime);
 
-      m_Export.m_generateDaily(tmp,
-                               m_mainSQL.getStorage().getQueueQueries(),
-                               *it,
-                               m_mainSQL.getDatabase().getDatabase(),
-                               currentTime,
-                               count,
-                               m_generatedBy,
-                               true);
+      m_Export.setGeneratedBy(m_generatedBy);
+      m_Export.asyncDailyGeneration(tmp,
+                                    m_mainSQL.getStorage().getQueueQueries(),
+                                    it,
+                                    m_mainSQL.getDatabase().getDatabase(),
+                                    currentTime);
    }
 }
 
@@ -1854,14 +1883,13 @@ void Reporter::on_weeklyGenerate_clicked(){
       qInfo(logInfo()) << "generating weekly instant";
       tmp.setDone(false);
       tmp.generateWeeklyData(currentTime);
-      m_Export.m_generateWeekly(tmp,
-                                m_mainSQL.getStorage().getQueueQueries(),
-                                *it,
-                                m_mainSQL.getDatabase().getDatabase(),
-                                currentTime,
-                                count,
-                                m_generatedBy,
-                                true);
+
+      m_Export.setGeneratedBy(m_generatedBy);
+      m_Export.asyncWeeklyGeneration(tmp,
+                                     m_mainSQL.getStorage().getQueueQueries(),
+                                     it,
+                                     m_mainSQL.getDatabase().getDatabase(),
+                                     currentTime);
    }
 }
 
@@ -1875,14 +1903,13 @@ void Reporter::on_monthlyGenerate_clicked(){
       qInfo(logInfo()) << "generating monthly instant";
       tmp.setDone(false);
       tmp.generateMonthlyData(currentTime);
-      m_Export.m_generateMonthly(tmp,
-                                 m_mainSQL.getStorage().getQueueQueries(),
-                                 *it,
-                                 m_mainSQL.getDatabase().getDatabase(),
-                                 currentTime,
-                                 count,
-                                 m_generatedBy,
-                                 true);
+
+      m_Export.setGeneratedBy(m_generatedBy);
+      m_Export.asyncMonthlGeneration(tmp,
+                                     m_mainSQL.getStorage().getQueueQueries(),
+                                     it,
+                                     m_mainSQL.getDatabase().getDatabase(),
+                                     currentTime);
    }
 }
 
@@ -1909,16 +1936,33 @@ void Reporter::on_customParameters_clicked(){
 }
 
 void Reporter::on_queryNameEdit_textEdited(const QString &arg1){
-   if(!arg1.isEmpty()){
-      m_saveQuery();
-   }
+   //   if(!arg1.isEmpty()){
+   //      m_saveQuery();
+   //   }
 }
 
 void Reporter::on_queryEdit_textChanged(){
 }
 
 void Reporter::on_scheduleName_textEdited(const QString &arg1){
-   if(!arg1.isEmpty()){
-      m_saveSchedule();
-   }
+   //   if(!arg1.isEmpty()){
+   //      m_saveSchedule();
+   //   }
+}
+
+void Reporter::on_queryNameEdit_editingFinished(){
+   //   m_saveQuery();
+}
+
+void Reporter::on_queryParamEdit_editingFinished(){
+   //   m_saveQuery();
+}
+
+void Reporter::displaySQL(){
+   m_FinishedQueryDisplay = false;
+   m_displaySQLResult(m_nameKey);
+}
+
+void Reporter::failedSQL(QString errorName){
+   QMessageBox::critical(this, "Query Error", errorName);
 }

@@ -111,22 +111,16 @@ void Setup::loadSettings(){
 
 void Setup::saveSettings(){
    QSettings settings(QDir::currentPath() +  "/settings/ReporterSettings.ini", QSettings::IniFormat);
-   settings.beginGroup("GeneralSettings");
    settings.setValue("GeneratedByUser", m_Settings.generatedByUser);
    settings.setValue("Hotkey", m_Settings.hotKey);
-   settings.endGroup();
-   settings.beginGroup("Database");
    settings.setValue("DatabaseType", m_Settings.databaseType);
    settings.setValue("DatabaseName", m_Settings.databaseName);
    settings.setValue("Host", m_Settings.host);
    settings.setValue("Port", m_Settings.port);
    settings.setValue("Username", m_Settings.userName);
    settings.setValue("UserPassword", m_Settings.userPassword);
-   settings.endGroup();
-   settings.beginGroup("Intervals");
    settings.setValue("TimerIntervalMS", m_Settings.timerInterval);
    settings.setValue("CustomIntervalMS", m_Settings.customInterval);
-   settings.endGroup();
 }
 
 bool Setup::m_serializeQueries(const QStringList & queries){
