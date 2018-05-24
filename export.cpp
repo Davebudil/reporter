@@ -12,6 +12,13 @@ ExportXLS & Export::getXLS(){
 ExportCSV & Export::getCSV(){
    return m_CSV;
 }
+
+void Export::asyncExport(QQueue<QSharedPointer<Scheduling> > & intervalsToHandle,
+                         QQueue<SQLquery> & queries,
+                         QQueue<QSharedPointer<SQLParameter> > & parameters,
+                         QSqlDatabase & db){
+   QtConcurrent::run(this, &Export::handleExport, intervalsToHandle, queries, parameters, db);
+}
 ExportHTML & Export::getHTML(){
    return m_HTML;
 }
@@ -73,6 +80,14 @@ void Export::handleExport(QQueue<QSharedPointer<Scheduling>> & intervalsToHandle
    if(exportCount != 0){
       qInfo(logInfo()) << "Succesfully generated " + QVariant(exportCount).toString() + " datasets.";
    }
+}
+
+void Export::asyncCustomExport(QSharedPointer<CustomScheduling> exportData,
+                               QQueue<SQLquery> & queries,
+                               QQueue<QSharedPointer<SQLParameter> > & parameters,
+                               QSqlDatabase & db,
+                               qint32 & customInterval){
+   QtConcurrent::run(this, &Export::customExport, exportData, queries, parameters, db, customInterval);
 }
 void Export::m_shiftDayReset(ShiftSchedule & shift, const QDateTime & current){
    QDateTime tmp = current;

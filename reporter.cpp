@@ -1538,7 +1538,7 @@ void Reporter::timerInterval(){
    tmpQueries = m_mainSQL.getStorage().getQueueQueries();
    tmpParams = m_Schedule[m_scheduleKey]->getQueueParameters();
 
-   m_Export.handleExport(tmpSch,
+   m_Export.asyncExport(tmpSch,
                          tmpQueries,
                          tmpParams,
                          m_mainSQL.getDatabase().getDatabase());
@@ -1553,7 +1553,7 @@ void Reporter::on_toolButton_4_clicked(){
    //fix this to use custom parameters
 
    if(instantSchedule->exec()){
-      m_Export.customExport(instantSchedule,
+      m_Export.asyncCustomExport(instantSchedule,
                             tmpQueries,
                             tmpParams,
                             m_mainSQL.getDatabase().getDatabase(),

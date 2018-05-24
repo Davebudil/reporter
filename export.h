@@ -21,15 +21,15 @@ class Export{
       ExportXLS & getXLS();
       ExportHTML & getHTML();
       ExportCSV & getCSV();
-      void handleExport(QQueue<QSharedPointer<Scheduling>> & intervalsToHandle,
+      void asyncExport(QQueue<QSharedPointer<Scheduling>> & intervalsToHandle,
                         QQueue<SQLquery> & queries,
                         QQueue<QSharedPointer<SQLParameter>> & parameters,
                         QSqlDatabase & db);
-      void customExport(QSharedPointer<CustomScheduling> exportData,
-                        QQueue<SQLquery> & queries,
-                        QQueue<QSharedPointer<SQLParameter>> & parameters,
-                        QSqlDatabase & db,
-                        qint32 & customInterval);
+      void asyncCustomExport(QSharedPointer<CustomScheduling> exportData,
+                             QQueue<SQLquery> & queries,
+                             QQueue<QSharedPointer<SQLParameter>> & parameters,
+                             QSqlDatabase & db,
+                             qint32 & customInterval);
       void m_createTempScheduling(QSharedPointer<CustomScheduling> exportData,
                                   ShiftSchedule & shift,
                                   DailySchedule & daily,
@@ -59,6 +59,15 @@ class Export{
       void setGeneratedBy(const QString & generatedBy);
 
    private:
+      void handleExport(QQueue<QSharedPointer<Scheduling>> & intervalsToHandle,
+                        QQueue<SQLquery> & queries,
+                        QQueue<QSharedPointer<SQLParameter>> & parameters,
+                        QSqlDatabase & db);
+      void customExport(QSharedPointer<CustomScheduling> exportData,
+                        QQueue<SQLquery> & queries,
+                        QQueue<QSharedPointer<SQLParameter>> & parameters,
+                        QSqlDatabase & db,
+                        qint32 & customInterval);
       bool m_generateShift(ShiftSchedule shift,
                            QQueue<SQLquery> queries,
                            QSharedPointer<SQLParameter> param,
