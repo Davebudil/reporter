@@ -33,9 +33,10 @@ Reporter::Reporter(QWidget *parent)
    ui->weeklyDays->setMaximumHeight(100);
    ui->monthlyDays->setMaximumHeight(100);
    m_shwHide = new QHotkey(QKeySequence(m_Setup.getSettings().hotKey), true);
-   connect(m_shwHide, SIGNAL(activated()), this, SLOT(m_showHide()));
    //   connect(&m_mainSQL, SIGNAL(modelChanged()), this, SLOT(m_displaySQL()));
+   connect(m_shwHide, SIGNAL(activated()), this, SLOT(m_showHide()));
    connect(&m_mainSQL, &SQLControl::modelChanged, this, &Reporter::displaySQL);
+   connect(&m_mainSQL, &SQLControl::modelFailed, this, &Reporter::failedSQL);
    ui->toolButton_2->setVisible(false);
    ui->paramTest->setVisible(false);
    ui->tabWidget_2->removeTab(4);
@@ -67,6 +68,7 @@ void Reporter::m_showHide(){
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
    //   m_mainSQL.startQueryModelThread(name);
+   qInfo(logInfo()) << "DOSTANU SE SEM";
    ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getQueryModel().data());
    m_FinishedQueryDisplay = true;
@@ -81,7 +83,6 @@ void Reporter::on_toolButton_clicked(){
                                   "Not connected to database");
          }else{
             m_saveQuery();
-            m_FinishedQueryDisplay = false;
             //         if(m_displayWatcher.isFinished()){
             //            m_displayWatcher = QtConcurrent::run(this, &Reporter::m_testingQueryGen);
             //         }
@@ -1958,5 +1959,10 @@ void Reporter::on_queryParamEdit_editingFinished(){
 }
 
 void Reporter::displaySQL(){
+   m_FinishedQueryDisplay = false;
    m_displaySQLResult(m_nameKey);
+}
+
+void Reporter::failedSQL(QString errorName){
+   QMessageBox::critical(this, "Query Error", errorName);
 }

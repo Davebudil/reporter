@@ -41,6 +41,7 @@ class SQLControl : public QObject{
 
    signals:
       void modelChanged();
+      void modelFailed(QString errorName);
 
    private:
       Database m_DB;

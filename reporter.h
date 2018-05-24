@@ -284,6 +284,8 @@ class Reporter : public QMainWindow{
 
       void displaySQL();
 
+      void failedSQL(QString errorName);
+
    private:
       Ui::Reporter *ui;
       SQLControl m_mainSQL;
