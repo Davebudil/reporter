@@ -16,8 +16,7 @@ Reporter::Reporter(QWidget *parent)
      m_queryActive(false),
      m_generate(false),
      m_FinishedQueryDisplay(true),
-     m_firstQuery(false),
-     m_tableViewBusy(nullptr){
+     m_firstQuery(false){
    qInfo(logInfo()) << "Application started.";
    m_Setup.loadIni();
    m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;

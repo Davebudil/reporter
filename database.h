@@ -5,7 +5,6 @@
 #include <QSqlDatabase>
 #include <QSql>
 #include "databaseconnector.h"
-#include <QSharedPointer>
 /*Class that manages database
  * and connection to it
  * */

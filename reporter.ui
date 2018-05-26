@@ -2748,6 +2748,16 @@
        <string>Custom Parameters</string>
       </property>
      </widget>
+     <widget class="QWidget" name="progressBar" native="true">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>330</y>
+        <width>371</width>
+        <height>51</height>
+       </rect>
+      </property>
+     </widget>
      <zorder>queryNameEdit</zorder>
      <zorder>paramTest</zorder>
      <zorder>queryTable</zorder>
@@ -2763,6 +2773,7 @@
      <zorder>toolButton_3</zorder>
      <zorder>tableNames</zorder>
      <zorder>customParameters</zorder>
+     <zorder>progressBar</zorder>
     </widget>
     <widget class="QWidget" name="tab">
      <attribute name="title">
