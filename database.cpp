@@ -14,7 +14,7 @@ Database::Database(QObject *parent)
 bool Database::createConnection(){
    if(m_DB.isOpen()){
       return true;
-   }else if(m_DBConnect.connectDB(m_DB)){
+   }else if(m_DBConnect.connectDB(m_DB, "Default")){
       return true;
    }else{
       m_DB.close();
@@ -28,4 +28,13 @@ DatabaseConnector & Database::getDatabaseConnector(){
 //Getter
 QSqlDatabase & Database::getDatabase(){
    return m_DB;
+}
+
+QSqlDatabase Database::m_createDatabaseConnection(){
+   QSqlDatabase tmp;
+   qint32 peak = 100000;
+   qint32 randNumber = qrand() % peak;
+
+   m_DBConnect.connectDB(tmp, QString::number(randNumber));
+   return tmp;
 }

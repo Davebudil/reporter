@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include <QSql>
 #include "databaseconnector.h"
+#include <QSharedPointer>
 /*Class that manages database
  * and connection to it
  * */
@@ -19,6 +20,7 @@ class Database : public QObject
       //getters
       DatabaseConnector & getDatabaseConnector();
       QSqlDatabase & getDatabase();
+      QSqlDatabase m_createDatabaseConnection();
 
    signals:
 

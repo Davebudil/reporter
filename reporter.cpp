@@ -67,8 +67,6 @@ void Reporter::m_showHide(){
 //Function to connect to DB triggered by click connect button
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
-   //   m_mainSQL.startQueryModelThread(name);
-   qInfo(logInfo()) << "DOSTANU SE SEM";
    ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getQueryModel().data());
    m_FinishedQueryDisplay = true;

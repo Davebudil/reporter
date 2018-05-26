@@ -5,11 +5,11 @@ DatabaseConnector::DatabaseConnector(QObject *parent)
    : QObject(parent){
 }
 //Connects to database
-bool DatabaseConnector::connectDB(QSqlDatabase & db){
+bool DatabaseConnector::connectDB(QSqlDatabase & db, const QString & name){
    if(!db.open()){
       QSqlDatabase::removeDatabase(db.connectionName());
    }
-   db = QSqlDatabase::addDatabase(m_dbType, "Default");
+   db = QSqlDatabase::addDatabase(m_dbType, name);
    db.setHostName(m_hostName);
    db.setPort(m_port);
    db.setDatabaseName(m_dbName);

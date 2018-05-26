@@ -12,7 +12,7 @@ class DatabaseConnector : public QObject{
       //Constructor
       explicit DatabaseConnector(QObject *parent = nullptr);
       //Connects to DB
-      bool connectDB(QSqlDatabase & db);
+      bool connectDB(QSqlDatabase & db, const QString & name);
       //Sets info
       void setInfo(const QString & dbType,
                    const QString & host,

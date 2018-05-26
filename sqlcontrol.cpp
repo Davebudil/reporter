@@ -10,7 +10,7 @@ SQLControl::~SQLControl(){}
 //Setter
 void SQLControl::setQueryModel(const QString & name){
     m_queryModel = QSharedPointer<QSqlQueryModel>::create();
-    QSqlQuery displayResult(m_DB.getDatabase());
+    QSqlQuery displayResult(m_DB.m_createDatabaseConnection());
 
     //limited to 10000 query results, improves performance drastically
     displayResult.prepare(QString(m_Storage.getQueries()[name]->getOriginalQuery()/* + " LIMIT 10000"*/) );
