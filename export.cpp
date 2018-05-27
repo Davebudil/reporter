@@ -16,7 +16,7 @@ ExportCSV & Export::getCSV(){
 void Export::asyncExport(QQueue<QSharedPointer<Scheduling> > & intervalsToHandle,
                          QQueue<SQLquery> & queries,
                          QQueue<QSharedPointer<SQLParameter> > & parameters,
-                         QSqlDatabase & db){
+                         QSqlDatabase db){
    QtConcurrent::run(this, &Export::handleExport, intervalsToHandle, queries, parameters, db);
 }
 ExportHTML & Export::getHTML(){
@@ -25,7 +25,7 @@ ExportHTML & Export::getHTML(){
 void Export::handleExport(QQueue<QSharedPointer<Scheduling>> & intervalsToHandle,
                           QQueue<SQLquery> & queries,
                           QQueue<QSharedPointer<SQLParameter>> & parameters,
-                          QSqlDatabase & db){
+                          QSqlDatabase db){
    QDateTime currentTime = QDateTime().currentDateTime();
    quint32 exportCount = 0;
    QFile resultFile(QDir::currentPath() + "/ask_attachment_final.txt");
@@ -85,7 +85,7 @@ void Export::handleExport(QQueue<QSharedPointer<Scheduling>> & intervalsToHandle
 void Export::asyncCustomExport(QSharedPointer<CustomScheduling> exportData,
                                QQueue<SQLquery> & queries,
                                QQueue<QSharedPointer<SQLParameter> > & parameters,
-                               QSqlDatabase & db,
+                               QSqlDatabase db,
                                qint32 & customInterval){
    QtConcurrent::run(this, &Export::customExport, exportData, queries, parameters, db, customInterval);
 }
@@ -125,7 +125,7 @@ void Export::setGeneratedBy(const QString & generatedBy){
 void Export::asyncShiftGeneration(ShiftSchedule shift,
                                   QQueue<SQLquery> queries,
                                   QSharedPointer<SQLParameter> param,
-                                  QSqlDatabase & db,
+                                  QSqlDatabase db,
                                   QDateTime & currentTime){
    QtConcurrent::run(this, &Export::m_generateShift, shift, queries, param, db, currentTime);
 }
@@ -133,7 +133,7 @@ void Export::asyncShiftGeneration(ShiftSchedule shift,
 void Export::asyncDailyGeneration(DailySchedule daily,
                                   QQueue<SQLquery> queries,
                                   QSharedPointer<SQLParameter> param,
-                                  QSqlDatabase & db,
+                                  QSqlDatabase db,
                                   QDateTime & currentTime){
    QtConcurrent::run(this, &Export::m_generateDaily, daily, queries, param, db, currentTime);
 }
@@ -141,7 +141,7 @@ void Export::asyncDailyGeneration(DailySchedule daily,
 void Export::asyncWeeklyGeneration(WeeklySchedule weekly,
                                    QQueue<SQLquery> queries,
                                    QSharedPointer<SQLParameter> param,
-                                   QSqlDatabase & db,
+                                   QSqlDatabase db,
                                    QDateTime & currentTime){
    QtConcurrent::run(this, &Export::m_generateWeekly, weekly, queries, param, db, currentTime);
 }
@@ -149,14 +149,14 @@ void Export::asyncWeeklyGeneration(WeeklySchedule weekly,
 void Export::asyncMonthlGeneration(MonthlySchedule monthly,
                                    QQueue<SQLquery> queries,
                                    QSharedPointer<SQLParameter> param,
-                                   QSqlDatabase & db,
+                                   QSqlDatabase db,
                                    QDateTime & currentTime){
    QtConcurrent::run(this, &Export::m_generateMonthly, monthly, queries, param, db, currentTime);
 }
 void Export::customExport(QSharedPointer<CustomScheduling> exportData,
                           QQueue<SQLquery> & queries,
                           QQueue<QSharedPointer<SQLParameter>> & parameters,
-                          QSqlDatabase & db,
+                          QSqlDatabase db,
                           qint32 & customInterval){
    QDateTime from;
    QDateTime to;
@@ -318,138 +318,149 @@ void Export::m_createTempScheduling(QSharedPointer<CustomScheduling> exportData,
 bool Export::m_generateShift(ShiftSchedule shift,
                              QQueue<SQLquery> queries,
                              QSharedPointer<SQLParameter> param,
-                             QSqlDatabase & db,
+                             QSqlDatabase db,
                              QDateTime & currentTime){
-   //need to define which way to format parameters . using #parameter1 - 5 for now
-   //   for(auto it : queries){
-   //      QList<std::pair<QString, QString>> genInfo;
-   //      QDateTime tmp(currentTime);
-   //      QDateTime tmp2(currentTime);
+//   need to define which way to format parameters . using #parameter1 - 5 for now
+      for(auto it : queries){
+         QList<std::pair<QString, QString>> genInfo;
+         QDateTime tmp(currentTime);
+         QDateTime tmp2(currentTime);
 
-   //      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+         genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
 
-   //      if(!validateQuery(queries, it)){
-   //         continue;
-   //      }
+         if(!validateQuery(queries, it)){
+            continue;
+         }
 
-   //      qInfo(logInfo()) << "Generating shift";
+         qInfo(logInfo()) << "Generating shift";
 
-   //      for(qint32 i = 0; i < param.getCount(); ++i){
-   //         QString tmpParam1;
-   //         tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
-   //         it.bindParameter(tmpParam1, param.getParameters()[i]);
-   //      }
-   //      shift.fixParameters(param, currentTime);
+         for(qint32 i = 0; i < param->getCount(); ++i){
+            QString tmpParam1;
+            tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
+            it.getOriginalQuery().replace(tmpParam1, param->getParameters()[i]);
+            it.getMasterQuery().replace(tmpParam1, param->getParameters()[i]);
+         }
+         shift.fixParameters(param, currentTime);
 
-   //      if(shift.getDone0()){
-   //         tmp = shift.getDate1();
-   //         tmp2 = shift.getDate2();
-   //         tmp2 = tmp2.addSecs(-1);
-   //         genInfo.append(std::make_pair("DateTimeFromTo",
-   //                                       tmp.toString("dd.MM.yy hh:mm") +
-   //                                       " po " + tmp2.toString("dd.MM.yy hh:mm")));
-   //         it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-   //         it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy.hh:mm"));
-   //      }else if(shift.getDone1()){
-   //         tmp = shift.getDate2();
-   //         tmp2 = shift.getDate3();
-   //         tmp2 = tmp2.addSecs(-1);
-   //         genInfo.append(std::make_pair("DateTimeFromTo",
-   //                                       tmp.toString("dd.MM.yy hh:mm") +
-   //                                       " po " + tmp2.toString("dd.MM.yy hh:mm")));
-   //         it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-   //         it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-   //      }else if(shift.getDone2()){
-   //         tmp = shift.getDate0();
-   //         tmp = tmp.addDays(-2);
-   //         tmp2 = shift.getDate1();
-   //         tmp2 = tmp2.addSecs(-1);
+         if(shift.getDone0()){
+            tmp = shift.getDate1();
+            tmp2 = shift.getDate2();
+            tmp2 = tmp2.addSecs(-1);
+            genInfo.append(std::make_pair("DateTimeFromTo",
+                                          tmp.toString("dd.MM.yy hh:mm") +
+                                          " po " + tmp2.toString("dd.MM.yy hh:mm")));
+            //TODO: FIX SQL DATE FORMAT
+            it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+            it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+            it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+            it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+         }else if(shift.getDone1()){
+            tmp = shift.getDate2();
+            tmp2 = shift.getDate3();
+            tmp2 = tmp2.addSecs(-1);
+            genInfo.append(std::make_pair("DateTimeFromTo",
+                                          tmp.toString("dd.MM.yy hh:mm") +
+                                          " po " + tmp2.toString("dd.MM.yy hh:mm")));
+            it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+            it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+            it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+            it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+         }else if(shift.getDone2()){
+            tmp = shift.getDate0();
+            tmp = tmp.addDays(-2);
+            tmp2 = shift.getDate1();
+            tmp2 = tmp2.addSecs(-1);
 
-   //         genInfo.append(std::make_pair("DateTimeFromTo",
-   //                                       tmp.toString("dd.MM.yy hh:mm") +
-   //                                       " po " + tmp2.toString("dd.MM.yy hh:mm")));
-   //         it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-   //         it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-   //      }
+            genInfo.append(std::make_pair("DateTimeFromTo",
+                                          tmp.toString("dd.MM.yy hh:mm") +
+                                          " po " + tmp2.toString("dd.MM.yy hh:mm")));
+            it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+            it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+            it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+            it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+         }
 
-   //      QString tmpAttachName = shift.getAttachName();
-   //      if(shift.getXlsAttach()){
-   //         //NOT SURE ABOUT THIS LINE
-   //         genInfo.append(std::make_pair("vygeneroval", generatedBy));
-   //         //
-   //         QList<QStringList> finalQueries;
-   //         if(!it.getParam().isEmpty()){
-   //            QStringList tmpList;
-   //            tmpList.append(it.getParam());
-   //            tmpList.append("");
-   //            tmpList.append(it.getMasterQueryString());
-   //            finalQueries.append(tmpList);
-   //         }
-   //         finalQueries.append(it.queryList());
+         QString tmpAttachName = shift.getAttachName();
+         if(shift.getXlsAttach()){
+            //NOT SURE ABOUT THIS LINE
+            genInfo.append(std::make_pair("vygeneroval", generatedBy));
+            //
+            QList<QStringList> finalQueries;
+            if(!it.getMasterQuery().isEmpty()){
+               QStringList tmpList;
+               tmpList.append(it.getMasterQueryName());
+               tmpList.append("");
+               tmpList.append(it.getMasterQuery());
+               finalQueries.append(tmpList);
+            }
 
-
-   //         //data template path
-   //         if(m_XLS.generateFile(shift.getXlsTemplatePath(),
-   //                               tmpAttachName,
-   //                               genInfo,
-   //                               finalQueries) && showInfo){
-   //            qInfo(logInfo()) << "Successfuly generated shift XLSX file.";
-   //         }else if(showInfo){
-   //            qWarning(logWarning()) << "Failed to generate shift XLSX file.";
-   //         }
-
-   //         m_XLS.readResult();
-   //         //html email template path
-   //         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
-   //         if(m_XLS.generateFile(shift.getEmailTemplatePath(),
-   //                               tmpAttachNameEmail,
-   //                               genInfo,
-   //                               finalQueries) && showInfo){
-   //            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
-   //         }else if(showInfo){
-   //            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
-   //         }
-
-   //         m_XLS.readResult();
-   //      }
-   //      //TODO: generate email
-
-   //      it.generateQuery(db);
-   //      it.forceExecuteQuery();
+            QStringList tmpList;
+            tmpList.append(it.getName());
+            tmpList.append(it.getMasterQueryName());
+            tmpList.append(it.getOriginalQuery());
+            finalQueries.append(tmpList);
 
 
-   //      //export as CSV or XLSX...
-   //      if(it.getResult().isActive()){
-   //         QSqlQuery resultCSV = it.getResult();
+            //data template path
+            if(m_XLS.generateFile(shift.getXlsTemplatePath(),
+                                  tmpAttachName,
+                                  genInfo,
+                                  finalQueries)){
+               qInfo(logInfo()) << "Successfuly generated shift XLSX file.";
+            }else{
+               qWarning(logWarning()) << "Failed to generate shift XLSX file.";
+            }
 
-   //         if(shift.getCsvAttach()){
-   //            m_CSV.generateFile(shift.getCsvTemplatePath(),
-   //                               tmpAttachName,
-   //                               resultCSV);
-   //         }
-   //         if(shift.getXlsAttach() || shift.getCsvAttach()){
-   //            ++count;
-   //         }
-   //         //         m_HTML.generateFile(resultCSV, tmpAttachName);
+            m_XLS.readResult();
+            //html email template path
+            QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
+            if(m_XLS.generateFile(shift.getEmailTemplatePath(),
+                                  tmpAttachNameEmail,
+                                  genInfo,
+                                  finalQueries)){
+               qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
+            }else{
+               qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
+            }
 
-   //      }else{
-   //         qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
-   //         return false;
-   //      }
+            m_XLS.readResult();
+         }
+         //TODO: generate email
+         QSqlQuery resultQuery(db);
 
-   //      QStringList emailAdresses = shift.emailAdresses();
-   //      for(const auto & it : emailAdresses){
-   //         //SEND TO EMAIL/POSTMAN QUEUE
-   //         //send first
+//         it.generateQuery(db);
+//         it.forceExecuteQuery();
 
-   //      }
-   //   }
-   //   return false;
+
+         //export as CSV or XLSX...
+//         if(it.getResult().isActive()){
+//            QSqlQuery resultCSV = it.getResult();
+
+//            if(shift.getCsvAttach()){
+//               m_CSV.generateFile(shift.getCsvTemplatePath(),
+//                                  tmpAttachName,
+//                                  resultCSV);
+//            }
+//            //         m_HTML.generateFile(resultCSV, tmpAttachName);
+
+//         }else{
+//            qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
+//            return false;
+//         }
+
+         QStringList emailAdresses = shift.emailAdresses();
+         for(const auto & it : emailAdresses){
+            //SEND TO EMAIL/POSTMAN QUEUE
+            //send first
+
+         }
+      }
+      return false;
 }
 bool Export::m_generateDaily(DailySchedule daily,
                              QQueue<SQLquery> queries,
                              QSharedPointer<SQLParameter> param,
-                             QSqlDatabase & db,
+                             QSqlDatabase db,
                              QDateTime & currentTime){
    //   for(auto & it : queries){
    //      QList<std::pair<QString, QString>> genInfo;
@@ -558,7 +569,7 @@ bool Export::m_generateDaily(DailySchedule daily,
 bool Export::m_generateWeekly(WeeklySchedule weekly,
                               QQueue<SQLquery> queries,
                               QSharedPointer<SQLParameter> param,
-                              QSqlDatabase & db,
+                              QSqlDatabase db,
                               QDateTime & currentTime){
    //   for(auto & it : queries){
    //      QList<std::pair<QString, QString>> genInfo;
@@ -663,7 +674,7 @@ bool Export::m_generateWeekly(WeeklySchedule weekly,
 bool Export::m_generateMonthly(MonthlySchedule monthly,
                                QQueue<SQLquery> queries,
                                QSharedPointer<SQLParameter> param,
-                               QSqlDatabase & db,
+                               QSqlDatabase db,
                                QDateTime & currentTime){
    //   for(auto & it : queries){
    //      QList<std::pair<QString, QString>> genInfo;

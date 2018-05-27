@@ -24,11 +24,11 @@ class Export{
       void asyncExport(QQueue<QSharedPointer<Scheduling>> & intervalsToHandle,
                         QQueue<SQLquery> & queries,
                         QQueue<QSharedPointer<SQLParameter>> & parameters,
-                        QSqlDatabase & db);
+                        QSqlDatabase db);
       void asyncCustomExport(QSharedPointer<CustomScheduling> exportData,
                              QQueue<SQLquery> & queries,
                              QQueue<QSharedPointer<SQLParameter>> & parameters,
-                             QSqlDatabase & db,
+                             QSqlDatabase db,
                              qint32 & customInterval);
       void m_createTempScheduling(QSharedPointer<CustomScheduling> exportData,
                                   ShiftSchedule & shift,
@@ -39,22 +39,22 @@ class Export{
       void asyncShiftGeneration(ShiftSchedule shift,
                                 QQueue<SQLquery> queries,
                                 QSharedPointer<SQLParameter> param,
-                                QSqlDatabase & db,
+                                QSqlDatabase db,
                                 QDateTime & currentTime);
       void asyncDailyGeneration(DailySchedule daily,
                                 QQueue<SQLquery> queries,
                                 QSharedPointer<SQLParameter> param,
-                                QSqlDatabase & db,
+                                QSqlDatabase db,
                                 QDateTime & currentTime);
       void asyncWeeklyGeneration(WeeklySchedule weekly,
                                  QQueue<SQLquery> queries,
                                  QSharedPointer<SQLParameter> param,
-                                 QSqlDatabase & db,
+                                 QSqlDatabase db,
                                  QDateTime & currentTime);
       void asyncMonthlGeneration(MonthlySchedule monthly,
                                  QQueue<SQLquery> queries,
                                  QSharedPointer<SQLParameter> param,
-                                 QSqlDatabase & db,
+                                 QSqlDatabase db,
                                  QDateTime & currentTime);
       void setGeneratedBy(const QString & generatedBy);
 
@@ -62,31 +62,31 @@ class Export{
       void handleExport(QQueue<QSharedPointer<Scheduling>> & intervalsToHandle,
                         QQueue<SQLquery> & queries,
                         QQueue<QSharedPointer<SQLParameter>> & parameters,
-                        QSqlDatabase & db);
+                        QSqlDatabase db);
       void customExport(QSharedPointer<CustomScheduling> exportData,
                         QQueue<SQLquery> & queries,
                         QQueue<QSharedPointer<SQLParameter>> & parameters,
-                        QSqlDatabase & db,
+                        QSqlDatabase db,
                         qint32 & customInterval);
       bool m_generateShift(ShiftSchedule shift,
                            QQueue<SQLquery> queries,
                            QSharedPointer<SQLParameter> param,
-                           QSqlDatabase & db,
+                           QSqlDatabase db,
                            QDateTime & currentTime);
       bool m_generateDaily(DailySchedule daily,
                            QQueue<SQLquery> queries,
                            QSharedPointer<SQLParameter> param,
-                           QSqlDatabase & db,
+                           QSqlDatabase db,
                            QDateTime & currentTime);
       bool m_generateWeekly(WeeklySchedule weekly,
                             QQueue<SQLquery> queries,
                             QSharedPointer<SQLParameter> param,
-                            QSqlDatabase & db,
+                            QSqlDatabase db,
                             QDateTime & currentTime);
       bool m_generateMonthly(MonthlySchedule monthly,
                              QQueue<SQLquery> queries,
                              QSharedPointer<SQLParameter> param,
-                             QSqlDatabase & db,
+                             QSqlDatabase db,
                              QDateTime & currentTime);
       bool validateQuery(QQueue<SQLquery> & query, SQLquery & currentQuery);
       ExportXLS m_XLS;

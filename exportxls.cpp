@@ -42,18 +42,20 @@ bool ExportXLS::generateFile(const QString & templatePath,
    return false;
 }
 bool ExportXLS::readResult(){
-   generateXLS = new QProcess;
+   generateXLS = new QProcess(this);
 
    connect(generateXLS, SIGNAL (error(QProcess::ProcessError)), this, SLOT(sdLaunchError(QProcess::ProcessError)));
    connect(generateXLS, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus){
-      qInfo(logInfo()) << "Exit Code: " + QVariant(exitCode).toString()
-                          + " Status: " + QVariant(exitStatus).toString();});
+      qInfo(logInfo()) << "XLS Convert Exit Code: " + QVariant(exitCode).toString() + " Status: " + QVariant(exitStatus).toString();
+   });
 
    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
    generateXLS->setProcessEnvironment(env);
    generateXLS->start(QDir::currentPath() + "/ASK/ask_attachment.exe");
-   generateXLS->waitForFinished();
-   generateXLS->close();
+   //figure this out
+   //TODO: make this into signal, wait for finished process
+//   generateXLS->waitForFinished();
+//   generateXLS->close();
 
    QFile loadFile(QDir::currentPath() + "/ASK/ask_ attachment_final.txt");
    delete generateXLS;

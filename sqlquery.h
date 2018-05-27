@@ -27,10 +27,10 @@ class SQLquery{
       bool getIsActive() const;
       void setIsActive(bool isActive);
 
-      QString getMasterQuery() const;
+      QString & getMasterQuery();
       void setMasterQuery(const QString & masterQuery);
 
-      QString getOriginalQuery() const;
+      QString & getOriginalQuery();
       void setOriginalQuery(const QString & originalQuery);
 
       QString getMasterQueryName() const;
