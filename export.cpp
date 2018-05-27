@@ -454,6 +454,19 @@ bool Export::m_generateShift(ShiftSchedule shift,
       //TODO: generate email
       QSqlQuery resultQuery(db.m_createDatabaseConnection());
 
+      if(!it.getMasterQueryName().isEmpty()){
+         QString master;
+         QString detail;
+
+
+//         it.setMasterQuery(masterQuery());
+         resultQuery.prepare(it.getMasterQuery());
+      }else{
+         resultQuery.prepare(it.getOriginalQuery());
+      }
+      resultQuery.exec();
+
+
       //PREPARE MASTER QUERY
 
       //         it.generateQuery(db);
