@@ -8,22 +8,16 @@
 /*Class that manages database
  * and connection to it
  * */
-class Database : public QObject
-{
-      Q_OBJECT
+class Database{
    public:
       //constructor
-      explicit Database(QObject *parent = nullptr);
+      Database();
       //Creates connection to database
       bool createConnection();
       //getters
       DatabaseConnector & getDatabaseConnector();
       QSqlDatabase & getDatabase();
       QSqlDatabase m_createDatabaseConnection();
-
-   signals:
-
-   public slots:
 
    private:
       QSqlDatabase m_DB;

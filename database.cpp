@@ -1,8 +1,7 @@
 #include "database.h"
 #include "log.h"
 //Constructor
-Database::Database(QObject *parent)
-   : QObject(parent){
+Database::Database(){
 //   m_DBConnect.setInfo("QMYSQL",
 //                       "localhost",
 //                       3306,
@@ -11,6 +10,7 @@ Database::Database(QObject *parent)
 //                       "Blizazrd5");
 }
 //Creates connection to DB
+
 bool Database::createConnection(){
    if(m_DB.isOpen()){
       return true;

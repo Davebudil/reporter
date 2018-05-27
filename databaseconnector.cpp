@@ -1,8 +1,7 @@
 #include "databaseconnector.h"
 #include <QtSql>
 //Constructor
-DatabaseConnector::DatabaseConnector(QObject *parent)
-   : QObject(parent){
+DatabaseConnector::DatabaseConnector(){
 }
 //Connects to database
 bool DatabaseConnector::connectDB(QSqlDatabase & db, const QString & name){

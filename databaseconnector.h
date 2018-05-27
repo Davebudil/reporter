@@ -6,11 +6,10 @@
 #include <QSql>
 #include <QMessageBox>
 
-class DatabaseConnector : public QObject{
-      Q_OBJECT
+class DatabaseConnector{
    public:
       //Constructor
-      explicit DatabaseConnector(QObject *parent = nullptr);
+      explicit DatabaseConnector();
       //Connects to DB
       bool connectDB(QSqlDatabase & db, const QString & name);
       //Sets info
@@ -22,9 +21,6 @@ class DatabaseConnector : public QObject{
                    const QString & usrPass);
       //getter
       QString getPassword() const;
-   signals:
-
-   public slots:
 
    private:
       qint32 m_port;

@@ -1538,7 +1538,7 @@ void Reporter::timerInterval(){
    m_Export.asyncExport(tmpSch,
                         tmpQueries,
                         tmpParams,
-                        m_mainSQL.getDatabase().m_createDatabaseConnection());
+                        m_mainSQL.getDatabase());
 }
 
 void Reporter::on_toolButton_4_clicked(){
@@ -1553,7 +1553,7 @@ void Reporter::on_toolButton_4_clicked(){
       m_Export.asyncCustomExport(instantSchedule,
                                  tmpQueries,
                                  tmpParams,
-                                 m_mainSQL.getDatabase().m_createDatabaseConnection(),
+                                 m_mainSQL.getDatabase(),
                                  m_CUSTOMINTERVAL);
    }
 }
@@ -1844,7 +1844,7 @@ void Reporter::on_shiftGenerate_clicked(){
       m_Export.asyncShiftGeneration(tmp,
                                     m_mainSQL.getStorage().getQueueQueries(),
                                     it,
-                                    m_mainSQL.getDatabase().m_createDatabaseConnection(),
+                                    m_mainSQL.getDatabase(),
                                     currentTime);
    }
 }
@@ -1865,7 +1865,7 @@ void Reporter::on_dailyGenerate_clicked(){
       m_Export.asyncDailyGeneration(tmp,
                                     m_mainSQL.getStorage().getQueueQueries(),
                                     it,
-                                    m_mainSQL.getDatabase().m_createDatabaseConnection(),
+                                    m_mainSQL.getDatabase(),
                                     currentTime);
    }
 }
@@ -1885,7 +1885,7 @@ void Reporter::on_weeklyGenerate_clicked(){
       m_Export.asyncWeeklyGeneration(tmp,
                                      m_mainSQL.getStorage().getQueueQueries(),
                                      it,
-                                     m_mainSQL.getDatabase().m_createDatabaseConnection(),
+                                     m_mainSQL.getDatabase(),
                                      currentTime);
    }
 }
@@ -1905,7 +1905,7 @@ void Reporter::on_monthlyGenerate_clicked(){
       m_Export.asyncMonthlGeneration(tmp,
                                      m_mainSQL.getStorage().getQueueQueries(),
                                      it,
-                                     m_mainSQL.getDatabase().m_createDatabaseConnection(),
+                                     m_mainSQL.getDatabase(),
                                      currentTime);
    }
 }
