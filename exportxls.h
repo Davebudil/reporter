@@ -22,14 +22,14 @@ class ExportXLS : public QObject{
                         const QString & genPath,
                         const QList<std::pair<QString, QString>> constants,
                         const QList<QStringList> queries);
-      bool readResult();
+      void readResult();
       bool editIni();
       QProcess * generateXLS;
    signals:
 
    public slots:
       void sdLaunchError(QProcess::ProcessError error);
-
+      void processFinished();
 };
 
 #endif // EXPORTXLS_H

@@ -16,8 +16,7 @@ Reporter::Reporter(QWidget *parent)
      m_queryActive(false),
      m_generate(false),
      m_FinishedQueryDisplay(true),
-     m_firstQuery(false),
-     m_tableViewBusy(nullptr){
+     m_firstQuery(false){
    qInfo(logInfo()) << "Application started.";
    m_Setup.loadIni();
    m_TIMERINTERVAL = m_Setup.getSettings().timerInterval;
@@ -67,8 +66,6 @@ void Reporter::m_showHide(){
 //Function to connect to DB triggered by click connect button
 //Print query result to the table
 void Reporter::m_displaySQLResult(const QString & name){
-   //   m_mainSQL.startQueryModelThread(name);
-   qInfo(logInfo()) << "DOSTANU SE SEM";
    ui->queryTable->clearSpans();
    ui->queryTable->setModel(m_mainSQL.getQueryModel().data());
    m_FinishedQueryDisplay = true;
@@ -558,6 +555,18 @@ void Reporter::m_Deserialize(){
                  tmpDeserializeQueries.at(i+2),
                  false,
                  (tmpDeserializeQueries.at(i+3) == "0" ? false : true));
+   }
+
+   for(auto & firstIT : m_mainSQL.getStorage().getQueries()){
+      for(auto & secondIT: m_mainSQL.getStorage().getQueries()){
+         if(firstIT != secondIT){
+            if(!firstIT->getMasterQueryName().isEmpty()){
+               if(firstIT->getMasterQueryName() == secondIT->getName()){
+                  firstIT->setMasterQuery(secondIT->getOriginalQuery());
+               }
+            }
+         }
+      }
    }
 
    QStringList tmpDeserializeParameters;
@@ -1539,9 +1548,9 @@ void Reporter::timerInterval(){
    tmpParams = m_Schedule[m_scheduleKey]->getQueueParameters();
 
    m_Export.asyncExport(tmpSch,
-                         tmpQueries,
-                         tmpParams,
-                         m_mainSQL.getDatabase().getDatabase());
+                        tmpQueries,
+                        tmpParams,
+                        m_mainSQL.getDatabase());
 }
 
 void Reporter::on_toolButton_4_clicked(){
@@ -1554,10 +1563,10 @@ void Reporter::on_toolButton_4_clicked(){
 
    if(instantSchedule->exec()){
       m_Export.asyncCustomExport(instantSchedule,
-                            tmpQueries,
-                            tmpParams,
-                            m_mainSQL.getDatabase().getDatabase(),
-                            m_CUSTOMINTERVAL);
+                                 tmpQueries,
+                                 tmpParams,
+                                 m_mainSQL.getDatabase(),
+                                 m_CUSTOMINTERVAL);
    }
 }
 
@@ -1847,7 +1856,7 @@ void Reporter::on_shiftGenerate_clicked(){
       m_Export.asyncShiftGeneration(tmp,
                                     m_mainSQL.getStorage().getQueueQueries(),
                                     it,
-                                    m_mainSQL.getDatabase().getDatabase(),
+                                    m_mainSQL.getDatabase(),
                                     currentTime);
    }
 }
@@ -1868,7 +1877,7 @@ void Reporter::on_dailyGenerate_clicked(){
       m_Export.asyncDailyGeneration(tmp,
                                     m_mainSQL.getStorage().getQueueQueries(),
                                     it,
-                                    m_mainSQL.getDatabase().getDatabase(),
+                                    m_mainSQL.getDatabase(),
                                     currentTime);
    }
 }
@@ -1888,7 +1897,7 @@ void Reporter::on_weeklyGenerate_clicked(){
       m_Export.asyncWeeklyGeneration(tmp,
                                      m_mainSQL.getStorage().getQueueQueries(),
                                      it,
-                                     m_mainSQL.getDatabase().getDatabase(),
+                                     m_mainSQL.getDatabase(),
                                      currentTime);
    }
 }
@@ -1908,7 +1917,7 @@ void Reporter::on_monthlyGenerate_clicked(){
       m_Export.asyncMonthlGeneration(tmp,
                                      m_mainSQL.getStorage().getQueueQueries(),
                                      it,
-                                     m_mainSQL.getDatabase().getDatabase(),
+                                     m_mainSQL.getDatabase(),
                                      currentTime);
    }
 }

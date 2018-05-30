@@ -12,7 +12,6 @@ SQLquery::SQLquery(const QString & queryName,
      m_originalQuery(queryText),
      m_isActive(isActive),
      m_isMaster(isMaster){
-
 }
 
 SQLquery::~SQLquery(){}
@@ -33,7 +32,7 @@ void SQLquery::setIsActive(bool isActive){
    m_isActive = isActive;
 }
 
-QString SQLquery::getMasterQuery() const{
+QString & SQLquery::getMasterQuery(){
    return m_masterQuery;
 }
 
@@ -41,7 +40,7 @@ void SQLquery::setMasterQuery(const QString & masterQuery){
    m_masterQuery = masterQuery;
 }
 
-QString SQLquery::getOriginalQuery() const{
+QString & SQLquery::getOriginalQuery(){
    return m_originalQuery;
 }
 

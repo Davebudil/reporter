@@ -317,7 +317,6 @@ class Reporter : public QMainWindow{
       bool m_queryActive;
       bool m_generate;
       bool m_FinishedQueryDisplay;
-      QProgressBar * m_tableViewBusy;
 
       //Print query result to the table
       void m_displaySQLResult(const QString & name);
