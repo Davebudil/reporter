@@ -118,30 +118,35 @@ bool Export::validateQuery(QQueue<SQLquery> & query, SQLquery & currentQuery){
    return true;
 }
 
-QString Export::masterQuery(SQLquery & detail, SQLquery & master){
-   //   QString detailQuery;
-   //      QString masterQuery;
-   //      QString tmp;
-   //      QString tempDetail;
-   //      qint32 index;
-   //      detailQuery = m_Queries[detail]->getFinal();
-   //      masterQuery = m_Queries[master]->getFinal();
-   //      index = detailQuery.lastIndexOf("WHERE", -1, Qt::CaseInsensitive) -1;
-   //      tempDetail = "JOIN\n";
-   //      tempDetail += '(' + QString(masterQuery);
-   //      tempDetail += ") AS T2\n";
-   //      detailQuery.insert(index + 1, tempDetail);
-   //      index = detailQuery.lastIndexOf("AS T2\nWHERE", -1, Qt::CaseInsensitive) + 11;
-   //      tmp = detailQuery.mid(index);
-   //      tmp.replace(":","T2.");
-   //      detailQuery.remove(index, 111);
-   //      detailQuery.insert(index, tmp);
-   //      if((index = masterQuery.lastIndexOf("\nORDER BY ")) != -1){
-   //         tmp = masterQuery.mid(index + 1);
-   //         detailQuery += '\n';
-   //         detailQuery.append(tmp);
-   //      }
-   //      m_Queries[detail]->setMasterFinal(detailQuery);
+//Prepares master/query system
+QString Export::masterQuery(SQLquery & detail){
+   QString detailQuery;
+   QString masterQuery;
+   QString tmp;
+   QString tempDetail;
+   qint32 index;
+
+   detailQuery = detail.getOriginalQuery();
+   masterQuery = detail.getMasterQuery();
+   qInfo(logInfo()) << masterQuery;
+
+   index = detailQuery.lastIndexOf("WHERE", -1, Qt::CaseInsensitive) -1;
+   tempDetail = "JOIN\n";
+   tempDetail += '(' + QString(masterQuery);
+   tempDetail += ") AS T2\n";
+   detailQuery.insert(index + 1, tempDetail);
+   index = detailQuery.lastIndexOf("AS T2\nWHERE", -1, Qt::CaseInsensitive) + 11;
+   tmp = detailQuery.mid(index);
+   tmp.replace(":","T2.");
+   detailQuery.remove(index, 111);
+   detailQuery.insert(index, tmp);
+   if((index = masterQuery.lastIndexOf("\nORDER BY ")) != -1){
+      tmp = masterQuery.mid(index + 1);
+      detailQuery += '\n';
+      detailQuery.append(tmp);
+   }
+
+   return detailQuery;
 }
 
 void Export::setGeneratedBy(const QString & generatedBy){
@@ -451,43 +456,38 @@ bool Export::m_generateShift(ShiftSchedule shift,
 
          m_XLS.readResult();
       }
-      //TODO: generate email
-      QSqlQuery resultQuery(db.m_createDatabaseConnection());
 
-      if(!it.getMasterQueryName().isEmpty()){
-         QString master;
-         QString detail;
+      if(shift.getCsvAttach()){
+         QSqlQuery resultQuery(db.m_createDatabaseConnection());
 
+         if(!it.getMasterQueryName().isEmpty()){
+            QString master;
+            QString detail;
 
-//         it.setMasterQuery(masterQuery());
-         resultQuery.prepare(it.getMasterQuery());
-      }else{
-         resultQuery.prepare(it.getOriginalQuery());
+            it.setMasterQuery(masterQuery(it));
+            resultQuery.prepare(it.getMasterQuery());
+
+            qInfo(logInfo()) << it.getMasterQuery();
+            qInfo(logInfo()) << it.getOriginalQuery();
+         }else{
+            resultQuery.prepare(it.getOriginalQuery());
+         }
+
+         resultQuery.exec();
+
+         //export as CSV or XLSX...
+         if(resultQuery.isActive()){
+            m_CSV.generateFile(shift.getCsvTemplatePath(),
+                               tmpAttachName,
+                               resultQuery);
+         }else{
+            qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + resultQuery.lastError().text();
+            return false;
+         }
+
       }
-      resultQuery.exec();
-
-
-      //PREPARE MASTER QUERY
-
-      //         it.generateQuery(db);
-      //         it.forceExecuteQuery();
-
-
-      //export as CSV or XLSX...
-      //         if(it.getResult().isActive()){
-      //            QSqlQuery resultCSV = it.getResult();
-
-      //            if(shift.getCsvAttach()){
-      //               m_CSV.generateFile(shift.getCsvTemplatePath(),
-      //                                  tmpAttachName,
-      //                                  resultCSV);
-      //            }
-      //            //         m_HTML.generateFile(resultCSV, tmpAttachName);
-
-      //         }else{
-      //            qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
-      //            return false;
-      //         }
+      //         m_HTML.generateFile(resultCSV, tmpAttachName);
+      //TODO: generate email
 
       QStringList emailAdresses = shift.emailAdresses();
       for(const auto & it : emailAdresses){
@@ -503,314 +503,363 @@ bool Export::m_generateDaily(DailySchedule daily,
                              QSharedPointer<SQLParameter> param,
                              Database & db,
                              QDateTime & currentTime){
-   //   for(auto & it : queries){
-   //      QList<std::pair<QString, QString>> genInfo;
-   //      QDateTime tmp(currentTime);
-   //      QDateTime tmp2(currentTime);
+   for(auto & it : queries){
+      QList<std::pair<QString, QString>> genInfo;
+      QDateTime tmp(currentTime);
+      QDateTime tmp2(currentTime);
 
 
-   //      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
 
-   //      if(!validateQuery(queries, it)){
-   //         continue;
-   //      }
+      if(!validateQuery(queries, it)){
+         continue;
+      }
 
-   //      qInfo(logInfo()) << "Generating daily";
+      qInfo(logInfo()) << "Generating daily";
 
-   //      for(qint32 i = 0; i < param.getCount(); ++i){
-   //         QString tmpParam1;
-   //         tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
-   //         it.bindParameter(tmpParam1, param.getParameters()[i]);
-   //      }
-   //      daily.fixParameters(param, currentTime);
+      for(qint32 i = 0; i < param->getCount(); ++i){
+         QString tmpParam1;
+         tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
+         it.getOriginalQuery().replace(tmpParam1, param->getParameters()[i]);
+         it.getMasterQuery().replace(tmpParam1, param->getParameters()[i]);
+      }
 
-   //      tmp.setTime(daily.getTime());
-   //      tmp2.setTime(daily.getTime());
-   //      tmp = tmp.addDays(-1);
-   //      tmp2 = tmp2.addSecs(-1);
-   //      genInfo.append(std::make_pair("DateTimeFromTo",
-   //                                    tmp.toString("dd.MM.yy hh:mm") +
-   //                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
-   //      it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-   //      it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+      daily.fixParameters(param, currentTime);
 
-   //      QString tmpAttachName = daily.getAttachName();
-   //      if(daily.getXlsAttach()){
-   //         genInfo.append(std::make_pair("vygeneroval", generatedBy));
+      tmp.setTime(daily.getTime());
+      tmp2.setTime(daily.getTime());
+      tmp = tmp.addDays(-1);
+      tmp2 = tmp2.addSecs(-1);
+      genInfo.append(std::make_pair("DateTimeFromTo",
+                                    tmp.toString("dd.MM.yy hh:mm") +
+                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
+      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
-   //         QList<QStringList> finalQueries;
+      QString tmpAttachName = daily.getAttachName();
+      if(daily.getXlsAttach()){
 
-   //         if(!it.getParam().isEmpty()){
-   //            QStringList tmpList;
+         genInfo.append(std::make_pair("vygeneroval", generatedBy));
+         //
+         QList<QStringList> finalQueries;
+         if(!it.getMasterQuery().isEmpty()){
+            QStringList tmpList;
+            tmpList.append(it.getMasterQueryName());
+            tmpList.append("");
+            tmpList.append(it.getMasterQuery());
+            finalQueries.append(tmpList);
+         }
 
-   //            tmpList.append(it.getParam());
-   //            tmpList.append("");
-   //            tmpList.append(it.getMasterQueryString());
-   //            finalQueries.append(tmpList);
-   //         }
+         QStringList tmpList;
+         tmpList.append(it.getName());
+         tmpList.append(it.getMasterQueryName());
+         tmpList.append(it.getOriginalQuery());
+         finalQueries.append(tmpList);
 
-   //         finalQueries.append(it.queryList());
+         //data template path
+         if(m_XLS.generateFile(daily.getXlsTemplatePath(),
+                               tmpAttachName,
+                               genInfo,
+                               finalQueries)){
+            qInfo(logInfo()) << "Successfuly generated daily XLSX file.";
+         }else{
+            qWarning(logWarning()) << "Failed to generate daily XLSX file.";
+         }
 
-   //         //data template path
-   //         if(m_XLS.generateFile(daily.getXlsTemplatePath(),
-   //                               tmpAttachName,
-   //                               genInfo,
-   //                               finalQueries) && showInfo){
-   //            qInfo(logInfo()) << "Successfuly generated daily XLSX file.";
-   //         }else if(showInfo){
-   //            qWarning(logWarning()) << "Failed to generate daily XLSX file.";
-   //         }
-
-   //         m_XLS.readResult();
-   //         //html email template path
-   //         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
-   //         if(m_XLS.generateFile(daily.getEmailTemplatePath(),
-   //                               tmpAttachNameEmail,
-   //                               genInfo,
-   //                               finalQueries) && showInfo){
-   //            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
-   //         }else if(showInfo){
-   //            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
-   //         }
+         m_XLS.readResult();
+         //html email template path
+         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
+         if(m_XLS.generateFile(daily.getEmailTemplatePath(),
+                               tmpAttachNameEmail,
+                               genInfo,
+                               finalQueries)){
+            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
+         }else{
+            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
+         }
 
 
-   //         m_XLS.readResult();
-   //      }
+         m_XLS.readResult();
+      }
 
-   //      //TODO: generate email
+      if(daily.getCsvAttach()){
+         QSqlQuery resultQuery(db.m_createDatabaseConnection());
 
-   //      it.generateQuery(db);
-   //      it.forceExecuteQuery();
-   //      //export as CSV or XLSX...
-   //      if(it.getResult().isActive()){
-   //         QSqlQuery resultCSV = it.getResult();
+         if(!it.getMasterQueryName().isEmpty()){
+            QString master;
+            QString detail;
 
-   //         if(daily.getCsvAttach()){
-   //            m_CSV.generateFile(daily.getCsvTemplatePath(),
-   //                               tmpAttachName,
-   //                               resultCSV);
-   //         }
-   //         if(daily.getXlsAttach() || daily.getCsvAttach()){
-   //            ++count;
-   //         }
-   //         //         m_HTML.generateFile(resultCSV, tmpAttachName);
+            it.setMasterQuery(masterQuery(it));
+            resultQuery.prepare(it.getMasterQuery());
 
-   //      }else{
-   //         qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
-   //         return false;
-   //      }
+            qInfo(logInfo()) << it.getMasterQuery();
+            qInfo(logInfo()) << it.getOriginalQuery();
+         }else{
+            resultQuery.prepare(it.getOriginalQuery());
+         }
 
-   //      QStringList emailAdresses = daily.emailAdresses();
-   //      for(auto & it : emailAdresses){
-   //         //SEND TO EMAIL/POSTMAN QUEUE
-   //      }
-   //   }
-   //   return false;
+         resultQuery.exec();
+
+         //export as CSV or XLSX...
+         if(resultQuery.isActive()){
+            m_CSV.generateFile(daily.getCsvTemplatePath(),
+                               tmpAttachName,
+                               resultQuery);
+         }else{
+            qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + resultQuery.lastError().text();
+            return false;
+         }
+
+      }
+      //         m_HTML.generateFile(resultCSV, tmpAttachName);
+      //TODO: generate email
+
+      QStringList emailAdresses = daily.emailAdresses();
+      for(auto & it : emailAdresses){
+         //SEND TO EMAIL/POSTMAN QUEUE
+      }
+   }
+   return false;
 }
 bool Export::m_generateWeekly(WeeklySchedule weekly,
                               QQueue<SQLquery> queries,
                               QSharedPointer<SQLParameter> param,
                               Database & db,
                               QDateTime & currentTime){
-   //   for(auto & it : queries){
-   //      QList<std::pair<QString, QString>> genInfo;
-   //      QDateTime tmp(currentTime);
-   //      QDateTime tmp2(currentTime);
-   //      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+   for(auto & it : queries){
+      QList<std::pair<QString, QString>> genInfo;
+      QDateTime tmp(currentTime);
+      QDateTime tmp2(currentTime);
+      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
 
-   //      if(!validateQuery(queries, it)){
-   //         continue;
-   //      }
+      if(!validateQuery(queries, it)){
+         continue;
+      }
 
-   //      qInfo(logInfo()) << "Generating weekly";
+      qInfo(logInfo()) << "Generating weekly";
 
-   //      for(qint32 i = 0; i < param.getCount(); ++i){
-   //         QString tmpParam1;
-   //         tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
-   //         it.bindParameter(tmpParam1, param.getParameters()[i]);
-   //      }
-   //      weekly.fixParameters(param, currentTime);
+      for(qint32 i = 0; i < param->getCount(); ++i){
+         QString tmpParam1;
+         tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
+         it.getOriginalQuery().replace(tmpParam1, param->getParameters()[i]);
+         it.getMasterQuery().replace(tmpParam1, param->getParameters()[i]);
+      }
+      weekly.fixParameters(param, currentTime);
 
-   //      tmp.setTime(weekly.getTime());
-   //      tmp2.setTime(weekly.getTime());
-   //      tmp = tmp.addDays(-7);
-   //      tmp2 = tmp2.addSecs(-1);
-   //      genInfo.append(std::make_pair("DateTimeFromTo",
-   //                                    tmp.toString("dd.MM.yy hh:mm") +
-   //                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
-   //      it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-   //      it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+      tmp.setTime(weekly.getTime());
+      tmp2.setTime(weekly.getTime());
+      tmp = tmp.addDays(-7);
+      tmp2 = tmp2.addSecs(-1);
+      genInfo.append(std::make_pair("DateTimeFromTo",
+                                    tmp.toString("dd.MM.yy hh:mm") +
+                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
+      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
-   //      QString tmpAttachName = weekly.getAttachName();
-   //      if(weekly.getXlsAttach()){
-   //         //NOT SURE ABOUT THIS LINE
-   //         genInfo.append(std::make_pair("vygeneroval", generatedBy));
-   //         //
-   //         QList<QStringList> finalQueries;
-   //         if(!it.getParam().isEmpty()){
-   //            QStringList tmpList;
-   //            tmpList.append(it.getParam());
-   //            tmpList.append("");
-   //            tmpList.append(it.getMasterQueryString());
-   //            finalQueries.append(tmpList);
-   //         }
-   //         finalQueries.append(it.queryList());
+      QString tmpAttachName = weekly.getAttachName();
+      if(weekly.getXlsAttach()){
+         //NOT SURE ABOUT THIS LINE
+         genInfo.append(std::make_pair("vygeneroval", generatedBy));
+         //
+         QList<QStringList> finalQueries;
+         if(!it.getMasterQuery().isEmpty()){
+            QStringList tmpList;
+            tmpList.append(it.getMasterQueryName());
+            tmpList.append("");
+            tmpList.append(it.getMasterQuery());
+            finalQueries.append(tmpList);
+         }
 
-   //         //data template path
-   //         if(m_XLS.generateFile(weekly.getXlsTemplatePath(),
-   //                               tmpAttachName,
-   //                               genInfo,
-   //                               finalQueries) && showInfo){
-   //            qInfo(logInfo()) << "Successfuly generated weekly XLSX file.";
-   //         }else if(showInfo){
-   //            qWarning(logWarning()) << "Failed to generate weekly XLSX file.";
-   //         }
+         QStringList tmpList;
+         tmpList.append(it.getName());
+         tmpList.append(it.getMasterQueryName());
+         tmpList.append(it.getOriginalQuery());
+         finalQueries.append(tmpList);
 
-   //         m_XLS.readResult();
-   //         //html email template path
-   //         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
-   //         if(m_XLS.generateFile(weekly.getEmailTemplatePath(),
-   //                               tmpAttachNameEmail,
-   //                               genInfo,
-   //                               finalQueries) && showInfo){
-   //            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
-   //         }else if(showInfo){
-   //            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
-   //         }
+         //data template path
+         if(m_XLS.generateFile(weekly.getXlsTemplatePath(),
+                               tmpAttachName,
+                               genInfo,
+                               finalQueries)){
+            qInfo(logInfo()) << "Successfuly generated weekly XLSX file.";
+         }else{
+            qWarning(logWarning()) << "Failed to generate weekly XLSX file.";
+         }
 
-   //         m_XLS.readResult();
-   //      }
+         m_XLS.readResult();
+         //html email template path
+         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
+         if(m_XLS.generateFile(weekly.getEmailTemplatePath(),
+                               tmpAttachNameEmail,
+                               genInfo,
+                               finalQueries)){
+            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
+         }else{
+            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
+         }
 
-   //      //TODO: generate email
+         m_XLS.readResult();
+      }
 
-   //      it.generateQuery(db);
-   //      it.forceExecuteQuery();
+      //TODO: generate email
 
-   //      //export as CSV or XLSX...
-   //      if(it.getResult().isActive()){
-   //         QSqlQuery resultCSV = it.getResult();
+      if(weekly.getCsvAttach()){
+         QSqlQuery resultQuery(db.m_createDatabaseConnection());
 
-   //         if(weekly.getCsvAttach()){
-   //            m_CSV.generateFile(weekly.getCsvTemplatePath(),
-   //                               tmpAttachName,
-   //                               resultCSV);
-   //         }
-   //         if(weekly.getXlsAttach() || weekly.getCsvAttach()){
-   //            ++count;
-   //         }
-   //         //         m_HTML.generateFile(resultCSV, tmpAttachName);
+         if(!it.getMasterQueryName().isEmpty()){
+            QString master;
+            QString detail;
 
-   //      }else{
-   //         qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
-   //         return false;
-   //      }
+            it.setMasterQuery(masterQuery(it));
+            resultQuery.prepare(it.getMasterQuery());
 
-   //      QStringList emailAdresses = weekly.emailAdresses();
-   //      for(auto & it : emailAdresses){
-   //         //SEND TO EMAIL/POSTMAN QUEUE
-   //      }
-   //   }
-   //   return false;
+            qInfo(logInfo()) << it.getMasterQuery();
+            qInfo(logInfo()) << it.getOriginalQuery();
+         }else{
+            resultQuery.prepare(it.getOriginalQuery());
+         }
+
+         resultQuery.exec();
+
+         //export as CSV or XLSX...
+         if(resultQuery.isActive()){
+            m_CSV.generateFile(weekly.getCsvTemplatePath(),
+                               tmpAttachName,
+                               resultQuery);
+         }else{
+            qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + resultQuery.lastError().text();
+            return false;
+         }
+      }
+      //         m_HTML.generateFile(resultCSV, tmpAttachName);
+
+      QStringList emailAdresses = weekly.emailAdresses();
+      for(auto & it : emailAdresses){
+         //SEND TO EMAIL/POSTMAN QUEUE
+      }
+   }
+   return false;
 }
 bool Export::m_generateMonthly(MonthlySchedule monthly,
                                QQueue<SQLquery> queries,
                                QSharedPointer<SQLParameter> param,
                                Database & db,
                                QDateTime & currentTime){
-   //   for(auto & it : queries){
-   //      QList<std::pair<QString, QString>> genInfo;
-   //      QDateTime tmp(currentTime);
-   //      QDateTime tmp2(currentTime);
-   //      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+   for(auto & it : queries){
+      QList<std::pair<QString, QString>> genInfo;
+      QDateTime tmp(currentTime);
+      QDateTime tmp2(currentTime);
+      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
 
-   //      if(!validateQuery(queries, it)){
-   //         continue;
-   //      }
+      if(!validateQuery(queries, it)){
+         continue;
+      }
 
-   //      qInfo(logInfo()) << "Generating monthly";
+      qInfo(logInfo()) << "Generating monthly";
 
-   //      for(qint32 i = 0; i < param.getCount(); ++i){
-   //         QString tmpParam1;
-   //         tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
-   //         it.bindParameter(tmpParam1, param.getParameters()[i]);
-   //      }
-   //      monthly.fixParameters(param, currentTime);
+      for(qint32 i = 0; i < param->getCount(); ++i){
+         QString tmpParam1;
+         tmpParam1 = "#PARAMETER" + QVariant(i+1).toString();
+         it.getOriginalQuery().replace(tmpParam1, param->getParameters()[i]);
+         it.getMasterQuery().replace(tmpParam1, param->getParameters()[i]);
+      }
+      monthly.fixParameters(param, currentTime);
 
-   //      tmp.setTime(monthly.getTime());
-   //      tmp2.setTime(monthly.getTime());
-   //      tmp = tmp.addMonths(-1);
-   //      tmp2 = tmp2.addSecs(-1);
-   //      genInfo.append(std::make_pair("DateTimeFromTo",
-   //                                    tmp.toString("dd.MM.yy hh:mm") +
-   //                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
-   //      it.bindParameter("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-   //      it.bindParameter("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+      tmp.setTime(monthly.getTime());
+      tmp2.setTime(monthly.getTime());
+      tmp = tmp.addMonths(-1);
+      tmp2 = tmp2.addSecs(-1);
+      genInfo.append(std::make_pair("DateTimeFromTo",
+                                    tmp.toString("dd.MM.yy hh:mm") +
+                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
+      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
+      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
 
-   //      QString tmpAttachName = monthly.getAttachName();
-   //      if(monthly.getXlsAttach()){
-   //         //NOT SURE ABOUT THIS LINE
-   //         genInfo.append(std::make_pair("vygeneroval", generatedBy));
-   //         //
-   //         QList<QStringList> finalQueries;
-   //         if(!it.getParam().isEmpty()){
-   //            QStringList tmpList;
-   //            tmpList.append(it.getParam());
-   //            tmpList.append("");
-   //            tmpList.append(it.getMasterQueryString());
-   //            finalQueries.append(tmpList);
-   //         }
-   //         finalQueries.append(it.queryList());
+      QString tmpAttachName = monthly.getAttachName();
+      if(monthly.getXlsAttach()){
+         //NOT SURE ABOUT THIS LINE
+         genInfo.append(std::make_pair("vygeneroval", generatedBy));
+         //
+         QList<QStringList> finalQueries;
+         if(!it.getMasterQuery().isEmpty()){
+            QStringList tmpList;
+            tmpList.append(it.getMasterQueryName());
+            tmpList.append("");
+            tmpList.append(it.getMasterQuery());
+            finalQueries.append(tmpList);
+         }
 
-   //         //data template path
-   //         if(m_XLS.generateFile(monthly.getXlsTemplatePath(),
-   //                               tmpAttachName,
-   //                               genInfo,
-   //                               finalQueries) && showInfo){
-   //            qInfo(logInfo()) << "Successfuly generated monthly XLSX file.";
-   //         }else if(showInfo){
-   //            qWarning(logWarning()) << "Failed to generate monthly XLSX file.";
-   //         }
+         QStringList tmpList;
+         tmpList.append(it.getName());
+         tmpList.append(it.getMasterQueryName());
+         tmpList.append(it.getOriginalQuery());
+         finalQueries.append(tmpList);
 
-   //         m_XLS.readResult();
-   //         //html email template path
-   //         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
-   //         if(m_XLS.generateFile(monthly.getEmailTemplatePath(),
-   //                               tmpAttachNameEmail,
-   //                               genInfo,
-   //                               finalQueries) && showInfo){
-   //            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
-   //         }else if(showInfo){
-   //            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
-   //         }
+         //data template path
+         if(m_XLS.generateFile(monthly.getXlsTemplatePath(),
+                               tmpAttachName,
+                               genInfo,
+                               finalQueries)){
+            qInfo(logInfo()) << "Successfuly generated monthly XLSX file.";
+         }else{
+            qWarning(logWarning()) << "Failed to generate monthly XLSX file.";
+         }
 
-   //         m_XLS.readResult();
-   //      }
+         m_XLS.readResult();
+         //html email template path
+         QString tmpAttachNameEmail = tmpAttachName + "EMAIL";
+         if(m_XLS.generateFile(monthly.getEmailTemplatePath(),
+                               tmpAttachNameEmail,
+                               genInfo,
+                               finalQueries)){
+            qInfo(logInfo()) << "Successfuly generated shift XLSX html file.";
+         }else{
+            qWarning(logWarning()) << "Failed to generate shift XLSX html file.";
+         }
 
-   //      it.generateQuery(db);
-   //      it.forceExecuteQuery();
-   //      //export as CSV or XLSX...
-   //      if(it.getResult().isActive()){
-   //         QSqlQuery resultCSV = it.getResult();
+         m_XLS.readResult();
+      }
 
-   //         if(monthly.getCsvAttach()){
-   //            m_CSV.generateFile(monthly.getCsvTemplatePath(),
-   //                               tmpAttachName,
-   //                               resultCSV);
-   //         }
-   //         if(monthly.getXlsAttach() || monthly.getCsvAttach()){
-   //            ++count;
-   //         }
-   //         //         m_HTML.generateFile(resultCSV, tmpAttachName);
+      if(monthly.getCsvAttach()){
+         QSqlQuery resultQuery(db.m_createDatabaseConnection());
 
-   //      }else{
-   //         qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + it.getResult().lastError().text();
-   //         return false;
-   //      }
+         if(!it.getMasterQueryName().isEmpty()){
+            QString master;
+            QString detail;
 
-   //      QStringList emailAdresses = monthly.emailAdresses();
-   //      for(auto & it : emailAdresses){
-   //         //SEND TO EMAIL/POSTMAN QUEUE
-   //      }
-   //   }
-   //   return false;
+            it.setMasterQuery(masterQuery(it));
+            resultQuery.prepare(it.getMasterQuery());
+
+            qInfo(logInfo()) << it.getMasterQuery();
+            qInfo(logInfo()) << it.getOriginalQuery();
+         }else{
+            resultQuery.prepare(it.getOriginalQuery());
+         }
+
+         resultQuery.exec();
+
+         //export as CSV or XLSX...
+         if(resultQuery.isActive()){
+            m_CSV.generateFile(monthly.getCsvTemplatePath(),
+                               tmpAttachName,
+                               resultQuery);
+         }else{
+            qInfo(logInfo()) << "Failed to generate query: " + it.getName() + " : " + resultQuery.lastError().text();
+            return false;
+         }
+
+      }
+      //         m_HTML.generateFile(resultCSV, tmpAttachName);
+      QStringList emailAdresses = monthly.emailAdresses();
+      for(auto & it : emailAdresses){
+         //SEND TO EMAIL/POSTMAN QUEUE
+      }
+   }
+   return false;
 }

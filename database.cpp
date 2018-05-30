@@ -32,8 +32,7 @@ QSqlDatabase & Database::getDatabase(){
 
 QSqlDatabase Database::m_createDatabaseConnection(){
    QSqlDatabase tmp;
-   qint32 peak = 100000;
-   qint32 randNumber = qrand() % peak;
+   qint32 randNumber = qrand();
 
    m_DBConnect.connectDB(tmp, QString::number(randNumber));
    return tmp;

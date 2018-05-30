@@ -557,6 +557,18 @@ void Reporter::m_Deserialize(){
                  (tmpDeserializeQueries.at(i+3) == "0" ? false : true));
    }
 
+   for(auto & firstIT : m_mainSQL.getStorage().getQueries()){
+      for(auto & secondIT: m_mainSQL.getStorage().getQueries()){
+         if(firstIT != secondIT){
+            if(!firstIT->getMasterQueryName().isEmpty()){
+               if(firstIT->getMasterQueryName() == secondIT->getName()){
+                  firstIT->setMasterQuery(secondIT->getOriginalQuery());
+               }
+            }
+         }
+      }
+   }
+
    QStringList tmpDeserializeParameters;
    QVector<qint32> tmpDeserializeCounts;
    qint32 drivingI = 0;

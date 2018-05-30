@@ -90,7 +90,7 @@ class Export{
                              Database & db,
                              QDateTime & currentTime);
       bool validateQuery(QQueue<SQLquery> & query, SQLquery & currentQuery);
-      QString masterQuery(SQLquery & detail, SQLquery & master);
+      QString masterQuery(SQLquery & detail);
       ExportXLS m_XLS;
       ExportCSV m_CSV;
       ExportHTML m_HTML;
