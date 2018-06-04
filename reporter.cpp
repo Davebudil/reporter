@@ -398,8 +398,6 @@ void Reporter::m_deleteSchedule(){
    m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses().clear();
    m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses().clear();
    m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses().clear();
-   m_deleteEmails();
-   m_deleteParameters();
    m_Schedule.remove(m_scheduleKey);
    tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
    delete tmp;
@@ -1448,6 +1446,8 @@ void Reporter::on_deleteScheduling_clicked(){
                                                    QMessageBox::Yes|QMessageBox::No);
 
    if(confirmSchedulingDelete == QMessageBox::Yes){
+      m_deleteEmails();
+      m_deleteParameters();
       m_deleteSchedule();
       m_serializeSchedule();
    }
@@ -1863,7 +1863,6 @@ void Reporter::on_shiftGenerate_clicked(){
 }
 
 void Reporter::on_dailyGenerate_clicked(){
-   quint32 count = 0;
    DailySchedule tmp;
    tmp = m_Schedule[m_scheduleKey]->getDailyCopy();
    QDateTime currentTime = QDateTime::currentDateTime();
