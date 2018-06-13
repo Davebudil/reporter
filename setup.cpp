@@ -166,7 +166,6 @@ bool Setup::deserializeParameters(QStringList & parameters, QVector<qint32> & co
    }
    return false;
 }
-//DODELAT TODO
 bool Setup::deserializeSchedule(QList<QStringList> & deserializeData,
                                 QStringList & scheduleName,
                                 QMap<QString, QVector<QStringList>> & parameters){

@@ -9,6 +9,8 @@
 #include <QSortFilterProxyModel>
 #include <QSharedPointer>
 #include <QtConcurrent>
+#include <QMap>
+#include <QDateTime>
 #include <QFuture>
 
 class SQLControl : public QObject{
@@ -26,8 +28,14 @@ class SQLControl : public QObject{
       //loads list of queries info
       QStringList loadList();
       //Sets model to display the query result in table
-      void setQueryModel(const QString & name);
-      void startQueryModelThread(const QString & name);
+      void setQueryModel(const QString & name,
+                         const QMap<QString, QString> & parameters,
+                         const QDateTime & from,
+                         const QDateTime & to);
+      void startQueryModelThread(const QString & name,
+                                 const QMap<QString, QString> & parameters,
+                                 const QDateTime & from,
+                                 const QDateTime & to);
 
       QSharedPointer<QSortFilterProxyModel> getResult() const;
 

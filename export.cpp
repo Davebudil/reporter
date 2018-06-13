@@ -373,6 +373,8 @@ bool Export::m_generateShift(ShiftSchedule shift,
       }
       shift.fixParameters(param, currentTime);
 
+
+      //TODO FIX DATE TYPE STRING
       if(shift.getDone0()){
          tmp = shift.getDate1();
          tmp2 = shift.getDate2();
