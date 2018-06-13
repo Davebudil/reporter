@@ -108,8 +108,6 @@ class Reporter : public QMainWindow{
 
       void on_toolButton_2_clicked();
 
-      void on_toolButton_3_clicked();
-
       void on_newScheduling_clicked();
 
       void on_deleteScheduling_clicked();
@@ -285,6 +283,8 @@ class Reporter : public QMainWindow{
       void displaySQL();
 
       void failedSQL(QString errorName);
+
+      void on_queryCustomParameters_stateChanged(int arg1);
 
    private:
       Ui::Reporter *ui;

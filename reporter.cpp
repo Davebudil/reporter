@@ -792,7 +792,14 @@ void Reporter::m_testingQueryGen(){
       QMessageBox::critical(this, QObject::tr("Database error"),
                             "Not connected to database");
    }else{
-      m_mainSQL.startQueryModelThread(m_nameKey);
+      QMap<QString, QString> parametersCopy;
+      if(m_generate){
+         parametersCopy = m_CustomParameters;
+      }
+      m_mainSQL.startQueryModelThread(m_nameKey,
+                                      parametersCopy,
+                                      m_CustomParametersFrom,
+                                      m_CustomParametersTo);
       //      m_displaySQLResult(m_nameKey);
       //      if(m_displayWatcher.isFinished()){
       //         m_displayWatcher = QtConcurrent::run(this, &Reporter::m_displaySQLResult, m_nameKey);
@@ -1411,18 +1418,6 @@ void Reporter::on_toolButton_2_clicked(){
    //      }
    //   }
 }
-void Reporter::on_toolButton_3_clicked(){
-   if(m_validateQuerySelected()){
-      if(!m_mainSQL.getDatabase().getDatabase().open()){
-         qWarning(logWarning()) << "Can not run SQL query due to no Database connection.";
-         QMessageBox::critical(this, QObject::tr("Database error"),
-                               "Not connected to database");
-      }else{
-         m_generateTemplateXLS();
-         m_saveQuery();
-      }
-   }
-}
 void Reporter::on_newScheduling_clicked(){
    //   if(m_validateScheduleName(ui->scheduleName->text())){
    //      m_deleteEmails();
@@ -1946,14 +1941,8 @@ void Reporter::on_customParameters_clicked(){
       m_CustomParameters = tmpParameters->m_Parameters;
       m_CustomParametersFrom = tmpParameters->m_From;
       m_CustomParametersTo = tmpParameters->m_To;
-      m_generate = true;
    }
-   if(m_generate){
-      //DEBUG
-      for(const auto & it : m_CustomParameters){
-         qInfo(logInfo()) << m_CustomParameters.key(it) + " : " + it;
-      }
-   }
+
    delete tmpParameters;
 }
 
@@ -1987,4 +1976,8 @@ void Reporter::displaySQL(){
 
 void Reporter::failedSQL(QString errorName){
    QMessageBox::critical(this, "Query Error", errorName);
+}
+
+void Reporter::on_queryCustomParameters_stateChanged(int arg1){
+   m_generate = arg1;
 }
