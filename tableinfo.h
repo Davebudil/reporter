@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QObject>
 #include <QDebug>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 namespace Ui {
    class TableInfo;

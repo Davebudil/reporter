@@ -12,13 +12,18 @@ TableInfo::~TableInfo(){
 }
 
 void TableInfo::getInfo(const QVector<QStringList> & dbInfo){
-   QString tableView;
-   for(auto & it : dbInfo){
-      QStringList tmp = it;
-      tmp[0] = "Table name: " + tmp[0];
-      tableView += tmp.join("\n");
-      tableView += "\n";
-      tableView += "\n";
+   auto w = new QTreeWidget(this);
+   w->setMinimumWidth(461);
+   w->setMinimumHeight(461);
+   w->setHeaderLabel("Database Detail");
+   for(auto it : dbInfo){
+      auto t = new QTreeWidgetItem(QStringList() << it[0]);
+      it.removeFirst();
+      for(auto & itRest : it){
+         auto i = new QTreeWidgetItem(QStringList() << itRest);
+         t->addChild(i);
+      }
+      w->addTopLevelItem(t);
    }
-   ui->tablesVIew->setText(tableView);
+   w->show();
 }

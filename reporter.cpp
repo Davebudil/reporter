@@ -110,7 +110,7 @@ void Reporter::on_newQuery_clicked(){
    }else{
       m_addQuery("SQL query text",
                  "New Query",
-                 ui->queryParamEdit->text(),
+                 "",
                  true,
                  m_queryActive);
       m_loadColorQueries();
@@ -398,8 +398,6 @@ void Reporter::m_deleteSchedule(){
    m_Schedule[m_scheduleKey]->getDaily().getEmailAdresses().clear();
    m_Schedule[m_scheduleKey]->getWeekly().getEmailAdresses().clear();
    m_Schedule[m_scheduleKey]->getMonthly().getEmailAdresses().clear();
-   m_deleteEmails();
-   m_deleteParameters();
    m_Schedule.remove(m_scheduleKey);
    tmp = ui->scrollSchedule->findChild<QToolButton *>(QString::number(m_scheduleKey));
    delete tmp;
@@ -1448,6 +1446,8 @@ void Reporter::on_deleteScheduling_clicked(){
                                                    QMessageBox::Yes|QMessageBox::No);
 
    if(confirmSchedulingDelete == QMessageBox::Yes){
+      m_deleteEmails();
+      m_deleteParameters();
       m_deleteSchedule();
       m_serializeSchedule();
    }
@@ -1840,11 +1840,12 @@ void Reporter::on_shiftGenerate_clicked(){
    QDateTime currentTime = QDateTime::currentDateTime();
    //lazy to write type, its stored in a map
    auto parameters = m_Schedule[m_scheduleKey]->getParameters();
-   if(m_Schedule[m_scheduleKey]->getParameters().isEmpty()){
+
+   if(parameters.isEmpty()){
       parameters.insert(0, QSharedPointer<SQLParameter>::create(0));
    }
 
-   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
+   for(auto & it : parameters){
       tmp = m_Schedule[m_scheduleKey]->getShiftCopy();
       tmp.setDone0(false);
       tmp.setDone1(false);
@@ -1862,13 +1863,16 @@ void Reporter::on_shiftGenerate_clicked(){
 }
 
 void Reporter::on_dailyGenerate_clicked(){
-   quint32 count = 0;
    DailySchedule tmp;
    tmp = m_Schedule[m_scheduleKey]->getDailyCopy();
    QDateTime currentTime = QDateTime::currentDateTime();
+   auto parameters = m_Schedule[m_scheduleKey]->getParameters();
 
-   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
-      qInfo(logInfo()) << "generating daily instant";
+   if(parameters.isEmpty()){
+      parameters.insert(0, QSharedPointer<SQLParameter>::create(0));
+   }
+
+   for(auto & it : parameters){
       tmp = m_Schedule[m_scheduleKey]->getDailyCopy();
       tmp.setDone(false);
       tmp.generateDailyData(currentTime);
@@ -1887,9 +1891,13 @@ void Reporter::on_weeklyGenerate_clicked(){
    WeeklySchedule tmp;
    tmp = m_Schedule[m_scheduleKey]->getWeeklyCopy();
    QDateTime currentTime = QDateTime::currentDateTime();
+   auto parameters = m_Schedule[m_scheduleKey]->getParameters();
 
-   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
-      qInfo(logInfo()) << "generating weekly instant";
+   if(parameters.isEmpty()){
+      parameters.insert(0, QSharedPointer<SQLParameter>::create(0));
+   }
+
+   for(auto & it : parameters){
       tmp.setDone(false);
       tmp.generateWeeklyData(currentTime);
 
@@ -1908,8 +1916,13 @@ void Reporter::on_monthlyGenerate_clicked(){
    tmp = m_Schedule[m_scheduleKey]->getMonthlyCopy();
    QDateTime currentTime = QDateTime::currentDateTime();
 
-   for(auto & it : m_Schedule[m_scheduleKey]->getParameters()){
-      qInfo(logInfo()) << "generating monthly instant";
+   auto parameters = m_Schedule[m_scheduleKey]->getParameters();
+
+   if(parameters.isEmpty()){
+      parameters.insert(0, QSharedPointer<SQLParameter>::create(0));
+   }
+
+   for(auto & it : parameters){
       tmp.setDone(false);
       tmp.generateMonthlyData(currentTime);
 

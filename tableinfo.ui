@@ -32,22 +32,6 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QTextBrowser" name="tablesVIew">
-   <property name="geometry">
-    <rect>
-     <x>5</x>
-     <y>1</y>
-     <width>451</width>
-     <height>461</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>DejaVu Sans</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections>

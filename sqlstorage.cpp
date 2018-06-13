@@ -10,7 +10,10 @@ SQLStorage::~SQLStorage(){}
 QQueue<SQLquery> SQLStorage::getQueueQueries(){
    QQueue<SQLquery> tmp;
    for(auto & it : m_Queries){
-      tmp.append(*it);
+      //copy only active queries
+      if(it->getIsActive()){
+         tmp.append(*it);
+      }
    }
    return tmp;
 }
