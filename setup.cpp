@@ -96,8 +96,8 @@ SPreferences Setup::getSettings(){
 }
 
 void Setup::loadSettings(){
+   m_Settings.databaseType = "QMYSQL";
    QSettings settings(QDir::currentPath() +  "/settings/ReporterSettings.ini", QSettings::IniFormat);
-   m_Settings.databaseType = settings.value("DatabaseType", "QMYSQL").toString();
    m_Settings.databaseName = settings.value("DatabaseName", "budil").toString();
    m_Settings.host = settings.value("Host", "localhost").toString();
    m_Settings.port = settings.value("Port", 3306).toInt();
@@ -113,7 +113,6 @@ void Setup::saveSettings(){
    QSettings settings(QDir::currentPath() +  "/settings/ReporterSettings.ini", QSettings::IniFormat);
    settings.setValue("GeneratedByUser", m_Settings.generatedByUser);
    settings.setValue("Hotkey", m_Settings.hotKey);
-   settings.setValue("DatabaseType", m_Settings.databaseType);
    settings.setValue("DatabaseName", m_Settings.databaseName);
    settings.setValue("Host", m_Settings.host);
    settings.setValue("Port", m_Settings.port);
