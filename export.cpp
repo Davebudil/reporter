@@ -356,8 +356,7 @@ bool Export::m_generateShift(ShiftSchedule shift,
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
-
-      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+      genInfo.append(std::make_pair("CURRENT_DATE", QDateTime().currentDateTime().toString("yyyy-MM-dd hh:mm:ss")));
 
       if(!validateQuery(queries, it)){
          continue;
@@ -380,24 +379,35 @@ bool Export::m_generateShift(ShiftSchedule shift,
          tmp2 = shift.getDate2();
          tmp2 = tmp2.addSecs(-1);
          genInfo.append(std::make_pair("DateTimeFromTo",
-                                       tmp.toString("dd.MM.yy hh:mm") +
-                                       " po " + tmp2.toString("dd.MM.yy hh:mm")));
+                                       tmp.toString("yyyy-MM-dd hh:mm:ss") +
+                                       " po " + tmp2.toString("yyyy-MM-dd hh:mm:ss")));
+
+
+         it.getOriginalQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+         it.getOriginalQuery().replace("#TIMETO", "'#TIMETO'");
+         it.getMasterQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+         it.getMasterQuery().replace("#TIMETO", "'#TIMETO'");
          //TODO: FIX SQL DATE FORMAT
-         it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-         it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-         it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-         it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+         it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+         it.getOriginalQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
+         it.getMasterQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+         it.getMasterQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
       }else if(shift.getDone1()){
          tmp = shift.getDate2();
          tmp2 = shift.getDate3();
          tmp2 = tmp2.addSecs(-1);
          genInfo.append(std::make_pair("DateTimeFromTo",
-                                       tmp.toString("dd.MM.yy hh:mm") +
-                                       " po " + tmp2.toString("dd.MM.yy hh:mm")));
-         it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-         it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-         it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-         it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+                                       tmp.toString("yyyy-MM-dd hh:mm:ss") +
+                                       " po " + tmp2.toString("yyyy-MM-dd hh:mm:ss")));
+
+         it.getOriginalQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+         it.getOriginalQuery().replace("#TIMETO", "'#TIMETO'");
+         it.getMasterQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+         it.getMasterQuery().replace("#TIMETO", "'#TIMETO'");
+         it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+         it.getOriginalQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
+         it.getMasterQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+         it.getMasterQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
       }else if(shift.getDone2()){
          tmp = shift.getDate0();
          tmp = tmp.addDays(-2);
@@ -405,12 +415,17 @@ bool Export::m_generateShift(ShiftSchedule shift,
          tmp2 = tmp2.addSecs(-1);
 
          genInfo.append(std::make_pair("DateTimeFromTo",
-                                       tmp.toString("dd.MM.yy hh:mm") +
-                                       " po " + tmp2.toString("dd.MM.yy hh:mm")));
-         it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-         it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-         it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-         it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+                                       tmp.toString("yyyy-MM-dd hh:mm:ss") +
+                                       " po " + tmp2.toString("yyyy-MM-dd hh:mm:ss")));
+
+         it.getOriginalQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+         it.getOriginalQuery().replace("#TIMETO", "'#TIMETO'");
+         it.getMasterQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+         it.getMasterQuery().replace("#TIMETO", "'#TIMETO'");
+         it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+         it.getOriginalQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
+         it.getMasterQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+         it.getMasterQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
       }
 
       QString tmpAttachName = shift.getAttachName();
@@ -509,9 +524,7 @@ bool Export::m_generateDaily(DailySchedule daily,
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
-
-
-      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+      genInfo.append(std::make_pair("CURRENT_DATE", QDateTime().currentDateTime().toString("yyyy-MM-dd hh:mm:ss")));
 
       if(!validateQuery(queries, it)){
          continue;
@@ -533,12 +546,17 @@ bool Export::m_generateDaily(DailySchedule daily,
       tmp = tmp.addDays(-1);
       tmp2 = tmp2.addSecs(-1);
       genInfo.append(std::make_pair("DateTimeFromTo",
-                                    tmp.toString("dd.MM.yy hh:mm") +
-                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
-      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+                                    tmp.toString("yyyy-MM-dd hh:mm:ss") +
+                                    " po " + tmp2.toString("yyyy-MM-dd hh:mm:ss")));
+
+      it.getOriginalQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+      it.getOriginalQuery().replace("#TIMETO", "'#TIMETO'");
+      it.getMasterQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+      it.getMasterQuery().replace("#TIMETO", "'#TIMETO'");
+      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
+      it.getMasterQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+      it.getMasterQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
 
       QString tmpAttachName = daily.getAttachName();
       if(daily.getXlsAttach()){
@@ -634,7 +652,7 @@ bool Export::m_generateWeekly(WeeklySchedule weekly,
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
-      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+      genInfo.append(std::make_pair("CURRENT_DATE", QDateTime().currentDateTime().toString("yyyy-MM-dd hh:mm:ss")));
 
       if(!validateQuery(queries, it)){
          continue;
@@ -655,12 +673,17 @@ bool Export::m_generateWeekly(WeeklySchedule weekly,
       tmp = tmp.addDays(-7);
       tmp2 = tmp2.addSecs(-1);
       genInfo.append(std::make_pair("DateTimeFromTo",
-                                    tmp.toString("dd.MM.yy hh:mm") +
-                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
-      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+                                    tmp.toString("yyyy-MM-dd hh:mm:ss") +
+                                    " po " + tmp2.toString("yyyy-MM-dd hh:mm:ss")));
+
+      it.getOriginalQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+      it.getOriginalQuery().replace("#TIMETO", "'#TIMETO'");
+      it.getMasterQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+      it.getMasterQuery().replace("#TIMETO", "'#TIMETO'");
+      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
+      it.getMasterQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+      it.getMasterQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
 
       QString tmpAttachName = weekly.getAttachName();
       if(weekly.getXlsAttach()){
@@ -755,7 +778,7 @@ bool Export::m_generateMonthly(MonthlySchedule monthly,
       QList<std::pair<QString, QString>> genInfo;
       QDateTime tmp(currentTime);
       QDateTime tmp2(currentTime);
-      genInfo.append(std::make_pair("CURRENT_DATE", QDate().currentDate().toString("dd.MM.yyyy")));
+      genInfo.append(std::make_pair("CURRENT_DATE", QDateTime().currentDateTime().toString("yyyy-MM-dd hh:mm:ss")));
 
       if(!validateQuery(queries, it)){
          continue;
@@ -776,12 +799,17 @@ bool Export::m_generateMonthly(MonthlySchedule monthly,
       tmp = tmp.addMonths(-1);
       tmp2 = tmp2.addSecs(-1);
       genInfo.append(std::make_pair("DateTimeFromTo",
-                                    tmp.toString("dd.MM.yy hh:mm") +
-                                    " po " + tmp2.toString("dd.MM.yy hh:mm")));
-      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
-      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("dd.MM.yy hh:mm"));
-      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("dd.MM.yy hh:mm"));
+                                    tmp.toString("yyyy-MM-dd hh:mm:ss") +
+                                    " po " + tmp2.toString("yyyy-MM-dd hh:mm:ss")));
+
+      it.getOriginalQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+      it.getOriginalQuery().replace("#TIMETO", "'#TIMETO'");
+      it.getMasterQuery().replace("#TIMEFROM", "'#TIMEFROM'");
+      it.getMasterQuery().replace("#TIMETO", "'#TIMETO'");
+      it.getOriginalQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+      it.getOriginalQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
+      it.getMasterQuery().replace("#TIMEFROM", tmp.toString("yyyy-MM-dd hh:mm:ss"));
+      it.getMasterQuery().replace("#TIMETO", tmp2.toString("yyyy-MM-dd hh:mm:ss"));
 
       QString tmpAttachName = monthly.getAttachName();
       if(monthly.getXlsAttach()){
