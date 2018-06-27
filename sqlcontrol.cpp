@@ -27,8 +27,11 @@ void SQLControl::setQueryModel(const QString & name,
          parametrizedQuery.replace(parameters.key(it), it);
       }
 
-      parametrizedQuery.replace("#TIMEFROM", from.toString("dd.MM.yy hh:mm"));
-      parametrizedQuery.replace("#TIMETO", to.toString("dd.MM.yy hh:mm"));
+      parametrizedQuery.replace("#TIMEFROM", "'#TIMEFROM'");
+      parametrizedQuery.replace("#TIMETO", "'#TIMETO'");
+
+      parametrizedQuery.replace("#TIMEFROM", from.toString("yyyy-MM-dd hh:mm:ss"));
+      parametrizedQuery.replace("#TIMETO", to.toString("yyyy-MM-dd hh:mm:ss"));
 
       qInfo(logInfo()) << "Parametrized Query: " + parametrizedQuery;
 

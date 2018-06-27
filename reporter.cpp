@@ -100,6 +100,10 @@ void Reporter::m_generateQuery(const QString & name){
 }
 //Function to add new query
 void Reporter::on_newQuery_clicked(){
+   //   if(m_mainSQL.getStorage().getQueries().contains(ui->queryNameEdit->text())){
+   //      QMessageBox::warning(this, QObject::tr("New Query Error"), "Query with this name already exists.");
+   //      return;
+   //   }else{
    if(m_mainSQL.getStorage().getQueries().count() == 0){
       m_addQuery(ui->queryEdit->toPlainText(),
                  ui->queryNameEdit->text(),
@@ -116,6 +120,7 @@ void Reporter::on_newQuery_clicked(){
       m_loadColorQueries();
    }
    m_loadMaster();
+   //   }
 }
 //Function to save the edit of current query
 void Reporter::on_saveQuery_clicked(){
@@ -198,6 +203,7 @@ void Reporter::m_addQuery(const QString & queryText,
          m_nameKey = "";
          m_serializeQueries();
          m_loadColorQueries();
+         m_clearQuery();
          //         m_nameKey = ui->queryNameEdit->text();
       }
    }else{
